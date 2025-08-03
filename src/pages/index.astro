@@ -10,124 +10,159 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-gradient-to-br from-slate-50 via-white to-blue-50 min-h-screen">
 		<Header />
 		<main>
 			<!-- Hero Section -->
-			<section id="hero" class="hero">
-				<div class="hero-content">
-					<div class="hero-text animate-slide-up">
-						<h1 class="hero-title">Transform Your Business with Next-Gen Solutions</h1>
-						<p class="hero-subtitle">We deliver enterprise-grade technology and strategic consulting to drive unprecedented growth and innovation for Fortune 500 companies.</p>
-						<div class="hero-buttons">
-							<a href="#contact" class="btn btn-primary">Get Started</a>
-							<a href="#about" class="btn btn-secondary">Learn More</a>
-						</div>
-					</div>
-					<div class="hero-visual animate-fade-in-delay">
-						<div class="floating-elements">
-							<div class="element element-1"></div>
-							<div class="element element-2"></div>
-							<div class="element element-3"></div>
+			<section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+				<!-- Background Effects -->
+				<div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
+				<div class="absolute inset-0 opacity-20 bg-gray-100" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23e2e8f0%22 fill-opacity=%220.3%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+				
+				<div class="relative max-w-7xl mx-auto text-center">
+					<div class="space-y-8 animate-fade-in">
+						<h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
+							Transform Your 
+							<span class="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+								Business
+							</span>
+						</h1>
+						<p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+							We deliver enterprise-grade technology and strategic consulting to drive unprecedented growth and innovation for Fortune 500 companies.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+							<a href="#contact" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+								Get Started
+								<svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+								</svg>
+							</a>
+							<a href="#about" class="inline-flex items-center px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-500 hover:text-blue-600 transform hover:scale-105 transition-all duration-300">
+								Learn More
+							</a>
 						</div>
 					</div>
 				</div>
+
+				<!-- Floating Elements -->
+				<div class="absolute top-20 left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-float"></div>
+				<div class="absolute top-40 right-20 w-16 h-16 bg-purple-200 rounded-full opacity-30 animate-bounce"></div>
+				<div class="absolute bottom-40 left-20 w-12 h-12 bg-indigo-200 rounded-full opacity-25 animate-pulse"></div>
 			</section>
 
 			<!-- About Section -->
-			<section id="about" class="about">
-				<div class="container">
-					<div class="section-header animate-on-scroll">
-						<h2>About Our Company</h2>
-						<p class="section-subtitle">25+ years of excellence in enterprise solutions</p>
+			<section id="about" class="py-20 bg-white">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="text-center mb-16">
+						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About Our Company</h2>
+						<p class="text-xl text-gray-600 max-w-3xl mx-auto">25+ years of excellence in enterprise solutions</p>
 					</div>
-					<div class="about-content">
-						<div class="about-text animate-on-scroll">
-							<h3>Industry-Leading Expertise</h3>
-							<p>Founded in 1998, we've been at the forefront of digital transformation, helping organizations across industries modernize their operations and achieve sustainable growth.</p>
-							<div class="stats">
-								<div class="stat-item">
-									<span class="stat-number">500+</span>
-									<span class="stat-label">Projects Delivered</span>
+					
+					<div class="grid lg:grid-cols-2 gap-12 items-center">
+						<div class="space-y-6">
+							<h3 class="text-3xl font-bold text-gray-900">Industry-Leading Expertise</h3>
+							<p class="text-lg text-gray-600 leading-relaxed">
+								Founded in 1998, we've been at the forefront of digital transformation, helping organizations across industries modernize their operations and achieve sustainable growth.
+							</p>
+							
+							<div class="grid grid-cols-3 gap-6 pt-8">
+								<div class="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
+									<div class="text-3xl font-bold text-blue-600 mb-2">500+</div>
+									<div class="text-sm text-gray-600">Projects Delivered</div>
 								</div>
-								<div class="stat-item">
-									<span class="stat-number">98%</span>
-									<span class="stat-label">Client Satisfaction</span>
+								<div class="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
+									<div class="text-3xl font-bold text-purple-600 mb-2">98%</div>
+									<div class="text-sm text-gray-600">Client Satisfaction</div>
 								</div>
-								<div class="stat-item">
-									<span class="stat-number">50+</span>
-									<span class="stat-label">Team Members</span>
+								<div class="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
+									<div class="text-3xl font-bold text-green-600 mb-2">50+</div>
+									<div class="text-sm text-gray-600">Team Members</div>
 								</div>
 							</div>
 						</div>
-						<div class="about-image animate-on-scroll">
-							<div class="image-placeholder">
-								<span>Professional Team Photo</span>
+						
+						<div class="relative">
+							<div class="aspect-square bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 rounded-2xl flex items-center justify-center text-gray-500 text-lg font-medium shadow-xl">
+								Professional Team Photo
 							</div>
+							<div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-20"></div>
+							<div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-15"></div>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- Services Section -->
-			<section id="services" class="services">
-				<div class="container">
-					<div class="section-header animate-on-scroll">
-						<h2>Our Services</h2>
-						<p class="section-subtitle">Comprehensive solutions tailored to your needs</p>
+			<section id="services" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="text-center mb-16">
+						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
+						<p class="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive solutions tailored to your needs</p>
 					</div>
-					<div class="services-grid">
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					
+					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+						<!-- Service Card 1 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
 									<line x1="8" y1="21" x2="16" y2="21"></line>
 									<line x1="12" y1="17" x2="12" y2="21"></line>
 								</svg>
 							</div>
-							<h3>Custom Software Development</h3>
-							<p>Tailored applications that perfectly align with your business processes and strategic objectives.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Custom Software Development</h3>
+							<p class="text-gray-600 leading-relaxed">Tailored applications that perfectly align with your business processes and strategic objectives.</p>
 						</div>
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+						<!-- Service Card 2 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
 								</svg>
 							</div>
-							<h3>Cloud Migration & Integration</h3>
-							<p>Seamless migration to cloud platforms with optimized performance and security.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Cloud Migration & Integration</h3>
+							<p class="text-gray-600 leading-relaxed">Seamless migration to cloud platforms with optimized performance and security.</p>
 						</div>
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+						<!-- Service Card 3 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
 								</svg>
 							</div>
-							<h3>Data Analytics & AI</h3>
-							<p>Advanced analytics and machine learning solutions to drive data-driven decisions.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Data Analytics & AI</h3>
+							<p class="text-gray-600 leading-relaxed">Advanced analytics and machine learning solutions to drive data-driven decisions.</p>
 						</div>
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+						<!-- Service Card 4 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<circle cx="12" cy="12" r="3"></circle>
 									<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
 								</svg>
 							</div>
-							<h3>Digital Transformation</h3>
-							<p>Complete business process optimization and technology modernization strategies.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Digital Transformation</h3>
+							<p class="text-gray-600 leading-relaxed">Complete business process optimization and technology modernization strategies.</p>
 						</div>
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+						<!-- Service Card 5 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
 								</svg>
 							</div>
-							<h3>Cybersecurity Solutions</h3>
-							<p>Enterprise-grade security infrastructure to protect your digital assets and data.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Cybersecurity Solutions</h3>
+							<p class="text-gray-600 leading-relaxed">Enterprise-grade security infrastructure to protect your digital assets and data.</p>
 						</div>
-						<div class="service-card animate-on-scroll">
-							<div class="service-icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+						<!-- Service Card 6 -->
+						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+							<div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
 									<polyline points="14,2 14,8 20,8"></polyline>
 									<line x1="16" y1="13" x2="8" y2="13"></line>
@@ -135,88 +170,103 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 									<polyline points="10,9 9,9 8,9"></polyline>
 								</svg>
 							</div>
-							<h3>Strategic Consulting</h3>
-							<p>Expert guidance on technology roadmaps and business strategy optimization.</p>
+							<h3 class="text-xl font-bold text-gray-900 mb-4">Strategic Consulting</h3>
+							<p class="text-gray-600 leading-relaxed">Expert guidance on technology roadmaps and business strategy optimization.</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- Contact Section -->
-			<section id="contact" class="contact">
-				<div class="container">
-					<div class="section-header animate-on-scroll">
-						<h2>Get In Touch</h2>
-						<p class="section-subtitle">Ready to transform your business? Let's discuss your project.</p>
+			<section id="contact" class="py-20 bg-white">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="text-center mb-16">
+						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+						<p class="text-xl text-gray-600 max-w-3xl mx-auto">Ready to transform your business? Let's discuss your project.</p>
 					</div>
-					<div class="contact-content">
-						<div class="contact-info animate-on-scroll">
-							<div class="contact-item">
-								<div class="contact-icon">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					
+					<div class="grid lg:grid-cols-2 gap-12">
+						<!-- Contact Info -->
+						<div class="space-y-8">
+							<div class="flex items-start space-x-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
 										<circle cx="12" cy="10" r="3"></circle>
 									</svg>
 								</div>
 								<div>
-									<h4>Office Location</h4>
-									<p>123 Business Plaza<br>New York, NY 10001</p>
+									<h4 class="text-lg font-semibold text-gray-900 mb-1">Office Location</h4>
+									<p class="text-gray-600">123 Business Plaza<br>New York, NY 10001</p>
 								</div>
 							</div>
-							<div class="contact-item">
-								<div class="contact-icon">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+							<div class="flex items-start space-x-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
 									</svg>
 								</div>
 								<div>
-									<h4>Phone</h4>
-									<p>+1 (555) 123-4567</p>
+									<h4 class="text-lg font-semibold text-gray-900 mb-1">Phone</h4>
+									<p class="text-gray-600">+1 (555) 123-4567</p>
 								</div>
 							</div>
-							<div class="contact-item">
-								<div class="contact-icon">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+							<div class="flex items-start space-x-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
 										<polyline points="22,6 12,13 2,6"></polyline>
 									</svg>
 								</div>
 								<div>
-									<h4>Email</h4>
-									<p>contact@company.com</p>
+									<h4 class="text-lg font-semibold text-gray-900 mb-1">Email</h4>
+									<p class="text-gray-600">contact@company.com</p>
 								</div>
 							</div>
-							<div class="map-container animate-on-scroll">
+
+							<!-- Map -->
+							<div class="rounded-2xl overflow-hidden shadow-lg">
 								<iframe 
 									src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9476519598093!2d-73.99251688459394!3d40.74881197932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1672531600000!5m2!1sen!2sus"
 									width="100%" 
 									height="200" 
-									style="border:0; border-radius: 8px;" 
+									style="border:0;" 
 									allowfullscreen="" 
 									loading="lazy" 
 									referrerpolicy="no-referrer-when-downgrade">
 								</iframe>
 							</div>
 						</div>
-						<div class="contact-form-container animate-on-scroll">
-							<form action="/api/contact" method="POST" class="contact-form">
-								<div class="form-group">
-									<label for="name">Full Name</label>
-									<input type="text" id="name" name="name" required />
+
+						<!-- Contact Form -->
+						<div class="bg-gradient-to-br from-gray-50 to-blue-50 p-8 rounded-2xl">
+							<form action="/api/contact" method="POST" class="space-y-6">
+								<div>
+									<label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+									<input type="text" id="name" name="name" required 
+										class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" />
 								</div>
-								<div class="form-group">
-									<label for="email">Email Address</label>
-									<input type="email" id="email" name="email" required />
+								<div>
+									<label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+									<input type="email" id="email" name="email" required 
+										class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" />
 								</div>
-								<div class="form-group">
-									<label for="company">Company</label>
-									<input type="text" id="company" name="company" />
+								<div>
+									<label for="company" class="block text-sm font-semibold text-gray-700 mb-2">Company</label>
+									<input type="text" id="company" name="company" 
+										class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" />
 								</div>
-								<div class="form-group">
-									<label for="message">Message</label>
-									<textarea id="message" name="message" rows="5" required></textarea>
+								<div>
+									<label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+									<textarea id="message" name="message" rows="5" required 
+										class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"></textarea>
 								</div>
-								<button type="submit" class="btn btn-primary btn-full">Send Message</button>
+								<button type="submit" 
+									class="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+									Send Message
+								</button>
 							</form>
 						</div>
 					</div>
@@ -227,35 +277,21 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		
 		<script>
 			// Smooth scrolling for anchor links
-			document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+			document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 				anchor.addEventListener('click', function (e) {
 					e.preventDefault();
-					const target = document.querySelector(this.getAttribute('href'));
-					if (target) {
-						target.scrollIntoView({
-							behavior: 'smooth',
-							block: 'start'
-						});
+					const element = e.currentTarget as HTMLAnchorElement;
+					const href = element.getAttribute('href');
+					if (href) {
+						const target = document.querySelector(href);
+						if (target) {
+							target.scrollIntoView({
+								behavior: 'smooth',
+								block: 'start'
+							});
+						}
 					}
 				});
-			});
-
-			// Animate elements on scroll
-			const observerOptions = {
-				threshold: 0.1,
-				rootMargin: '0px 0px -50px 0px'
-			};
-
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('animate-visible');
-					}
-				});
-			}, observerOptions);
-
-			document.querySelectorAll('.animate-on-scroll').forEach(el => {
-				observer.observe(el);
 			});
 		</script>
 	</body>

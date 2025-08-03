@@ -62,7 +62,8 @@ export default {
         '128': '32rem',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'fade-in': 'fadeIn 0.6s ease-out',
+        'fade-in-delay': 'fadeIn 0.8s ease-out 0.2s both',
         'fade-in-up': 'fadeInUp 0.5s ease-out',
         'slide-down': 'slideDown 0.3s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
