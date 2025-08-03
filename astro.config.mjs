@@ -11,7 +11,7 @@ export default defineConfig({
   base: '/Test2025/',
   site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
   integrations: [mdx(), sitemap()],
-  output: 'hybrid',
+  output: 'server',
   adapter: node({
     mode: 'standalone'
   })
