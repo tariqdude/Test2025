@@ -13,36 +13,44 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- Hero Section -->
+			<section class="hero container fade-in">
+				<h1 class="display-1">Empower Your Business with Next-Gen Solutions</h1>
+				<p class="lead">We deliver enterprise-grade services and cutting-edge technology to drive growth and innovation.</p>
+				<a href="/contact" class="btn">Get Started Today</a>
+			</section>
+
+			<!-- Features Section -->
+			<section class="features container">
+				<div class="feature-item">
+					<h3>Custom Software</h3>
+					<p>Tailored applications that align perfectly with your business processes and goals.</p>
+				</div>
+				<div class="feature-item">
+					<h3>Cloud Integration</h3>
+					<p>Seamlessly migrate and optimize your infrastructure on leading cloud platforms.</p>
+				</div>
+				<div class="feature-item">
+					<h3>Data Analytics</h3>
+					<p>Leverage actionable insights and AI-powered analytics to stay ahead of the competition.</p>
+				</div>
+			</section>
+
+			<!-- Testimonials Section -->
+			<section class="testimonials container fade-in">
+				<h2>Trusted by Industry Leaders</h2>
+				<blockquote>
+					"Their expertise transformed our operations. We saw a 40% increase in efficiency within 6 months."<br/>
+					<cite>— Jane Doe, CEO of Acme Corp</cite>
+				</blockquote>
+			</section>
+
+			<!-- Call to Action Section -->
+			<section class="cta container fade-in">
+				<h2>Ready to Scale Your Business?</h2>
+				<p>Contact our team for a free consultation and learn how we can help you achieve your vision.</p>
+				<a href="/contact" class="btn">Schedule a Consultation</a>
+			</section>
 		</main>
 		<Footer />
 	</body>
