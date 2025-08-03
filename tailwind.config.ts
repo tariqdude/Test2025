@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 import typography from '@tailwindcss/typography'
-import headlessui from '@headlessui/tailwindcss'
 
 export default {
   content: [
@@ -12,8 +11,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter Variable', 'Inter', ...defaultTheme.fontFamily.sans],
-        mono: ['JetBrains Mono Variable', 'JetBrains Mono', ...defaultTheme.fontFamily.mono],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        mono: ['JetBrains Mono', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         primary: {
@@ -125,6 +124,5 @@ export default {
     typography({
       className: 'prose',
     }),
-    headlessui,
   ],
 } satisfies Config
