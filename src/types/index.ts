@@ -361,7 +361,7 @@ export interface CustomElementProps {
 
 // Extend global namespace for better TypeScript support
 declare global {
-  interface App {
+  namespace App {
     interface Locals {
       user?: {
         id: string;
