@@ -6,10 +6,22 @@
 export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 // Color variants for design system
-export type ColorVariant = 'primary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error' | 'info';
+export type ColorVariant =
+  | 'primary'
+  | 'accent'
+  | 'neutral'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info';
 
 // Animation types
-export type AnimationType = 'fade-in' | 'slide-in' | 'scale-in' | 'bounce-in' | 'float';
+export type AnimationType =
+  | 'fade-in'
+  | 'slide-in'
+  | 'scale-in'
+  | 'bounce-in'
+  | 'float';
 
 // Responsive breakpoints
 export type Breakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -240,9 +252,13 @@ export type DeepPartial<T> = {
 };
 
 // Require at least one property
-export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = 
-  Pick<T, Exclude<keyof T, Keys>> & 
-  { [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>> }[Keys];
+export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
+  }[Keys];
 
 // Make object properties prettier in IDE
 export type Prettify<T> = {
@@ -252,39 +268,45 @@ export type Prettify<T> = {
 /* ==================== TYPE GUARDS ==================== */
 
 // Runtime type checking utilities
-export const isString = (value: unknown): value is string => 
+export const isString = (value: unknown): value is string =>
   typeof value === 'string';
 
-export const isNumber = (value: unknown): value is number => 
+export const isNumber = (value: unknown): value is number =>
   typeof value === 'number' && !isNaN(value);
 
-export const isBoolean = (value: unknown): value is boolean => 
+export const isBoolean = (value: unknown): value is boolean =>
   typeof value === 'boolean';
 
-export const isObject = (value: unknown): value is Record<string, unknown> => 
+export const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-export const isArray = <T = unknown>(value: unknown): value is T[] => 
+export const isArray = <T = unknown>(value: unknown): value is T[] =>
   Array.isArray(value);
 
-export const isDefined = <T>(value: T | undefined | null): value is T => 
+export const isDefined = <T>(value: T | undefined | null): value is T =>
   value !== undefined && value !== null;
 
 /* ==================== ASSERTION UTILITIES ==================== */
 
 // Type assertion with error handling
-export const assertString = (value: unknown, message = 'Expected string'): string => {
+export const assertString = (
+  value: unknown,
+  message = 'Expected string'
+): string => {
   if (!isString(value)) throw new Error(message);
   return value;
 };
 
-export const assertNumber = (value: unknown, message = 'Expected number'): number => {
+export const assertNumber = (
+  value: unknown,
+  message = 'Expected number'
+): number => {
   if (!isNumber(value)) throw new Error(message);
   return value;
 };
 
 export const assertObject = <T extends Record<string, unknown>>(
-  value: unknown, 
+  value: unknown,
   message = 'Expected object'
 ): T => {
   if (!isObject(value)) throw new Error(message);

@@ -80,12 +80,15 @@ export function capitalizeWords(str: string): string {
 
 // Array utilities
 export function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
-  return array.reduce((groups, item) => {
-    const groupKey = String(item[key]);
-    groups[groupKey] = groups[groupKey] || [];
-    groups[groupKey].push(item);
-    return groups;
-  }, {} as Record<string, T[]>);
+  return array.reduce(
+    (groups, item) => {
+      const groupKey = String(item[key]);
+      groups[groupKey] = groups[groupKey] || [];
+      groups[groupKey].push(item);
+      return groups;
+    },
+    {} as Record<string, T[]>
+  );
 }
 
 export function sortBy<T>(

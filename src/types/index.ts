@@ -11,16 +11,54 @@ export interface BaseComponentProps {
 
 // Modern design system types
 export interface ThemeVariant {
-  primary: 'primary-50' | 'primary-100' | 'primary-200' | 'primary-300' | 'primary-400' | 'primary-500' | 'primary-600' | 'primary-700' | 'primary-800' | 'primary-900' | 'primary-950';
-  accent: 'accent-50' | 'accent-100' | 'accent-200' | 'accent-300' | 'accent-400' | 'accent-500' | 'accent-600' | 'accent-700' | 'accent-800' | 'accent-900' | 'accent-950';
-  neutral: 'neutral-50' | 'neutral-100' | 'neutral-200' | 'neutral-300' | 'neutral-400' | 'neutral-500' | 'neutral-600' | 'neutral-700' | 'neutral-800' | 'neutral-900' | 'neutral-950';
+  primary:
+    | 'primary-50'
+    | 'primary-100'
+    | 'primary-200'
+    | 'primary-300'
+    | 'primary-400'
+    | 'primary-500'
+    | 'primary-600'
+    | 'primary-700'
+    | 'primary-800'
+    | 'primary-900'
+    | 'primary-950';
+  accent:
+    | 'accent-50'
+    | 'accent-100'
+    | 'accent-200'
+    | 'accent-300'
+    | 'accent-400'
+    | 'accent-500'
+    | 'accent-600'
+    | 'accent-700'
+    | 'accent-800'
+    | 'accent-900'
+    | 'accent-950';
+  neutral:
+    | 'neutral-50'
+    | 'neutral-100'
+    | 'neutral-200'
+    | 'neutral-300'
+    | 'neutral-400'
+    | 'neutral-500'
+    | 'neutral-600'
+    | 'neutral-700'
+    | 'neutral-800'
+    | 'neutral-900'
+    | 'neutral-950';
 }
 
 // Component size variants
 export type ComponentSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 // Animation types
-export type AnimationType = 'fade-in' | 'slide-in' | 'scale-in' | 'bounce-in' | 'float';
+export type AnimationType =
+  | 'fade-in'
+  | 'slide-in'
+  | 'scale-in'
+  | 'bounce-in'
+  | 'float';
 
 // Responsive breakpoint types
 export type Breakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -32,9 +70,13 @@ export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = 
-  Pick<T, Exclude<keyof T, Keys>> & 
-  { [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>> }[Keys];
+export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
+  }[Keys];
 
 export type Prettify<T> = {
   [K in keyof T]: T[K];
@@ -265,7 +307,10 @@ export interface ThemeConfig {
       serif: string[];
       mono: string[];
     };
-    fontSize: Record<string, [string, { lineHeight: string; letterSpacing?: string }]>;
+    fontSize: Record<
+      string,
+      [string, { lineHeight: string; letterSpacing?: string }]
+    >;
     fontWeight: Record<string, string>;
   };
   spacing: Record<string, string>;
@@ -294,11 +339,16 @@ export interface CustomEvents {
   'search:query': { query: string; filters: SearchFilters };
   'modal:open': { id: string };
   'modal:close': { id: string };
-  'toast:show': { message: string; type: 'success' | 'error' | 'warning' | 'info' };
+  'toast:show': {
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  };
 }
 
 // Event handler types
-export type EventHandler<T extends keyof CustomEvents> = (detail: CustomEvents[T]) => void;
+export type EventHandler<T extends keyof CustomEvents> = (
+  detail: CustomEvents[T]
+) => void;
 
 /* ==================== PERFORMANCE TYPES ==================== */
 
@@ -412,27 +462,38 @@ declare global {
 export type FunctionType = (...args: unknown[]) => unknown;
 
 // Type guards for runtime type checking
-export const isString = (value: unknown): value is string => typeof value === 'string';
-export const isNumber = (value: unknown): value is number => typeof value === 'number';
-export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';
-export const isObject = (value: unknown): value is Record<string, unknown> => 
+export const isString = (value: unknown): value is string =>
+  typeof value === 'string';
+export const isNumber = (value: unknown): value is number =>
+  typeof value === 'number';
+export const isBoolean = (value: unknown): value is boolean =>
+  typeof value === 'boolean';
+export const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
-export const isArray = <T = unknown>(value: unknown): value is T[] => Array.isArray(value);
-export const isFunction = (value: unknown): value is FunctionType => typeof value === 'function';
+export const isArray = <T = unknown>(value: unknown): value is T[] =>
+  Array.isArray(value);
+export const isFunction = (value: unknown): value is FunctionType =>
+  typeof value === 'function';
 
 // Enhanced type assertion utilities
-export const assertString = (value: unknown, message = 'Expected string'): string => {
+export const assertString = (
+  value: unknown,
+  message = 'Expected string'
+): string => {
   if (!isString(value)) throw new Error(message);
   return value;
 };
 
-export const assertNumber = (value: unknown, message = 'Expected number'): number => {
+export const assertNumber = (
+  value: unknown,
+  message = 'Expected number'
+): number => {
   if (!isNumber(value)) throw new Error(message);
   return value;
 };
 
 export const assertObject = <T extends Record<string, unknown>>(
-  value: unknown, 
+  value: unknown,
   message = 'Expected object'
 ): T => {
   if (!isObject(value)) throw new Error(message);

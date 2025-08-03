@@ -12,7 +12,7 @@ export const PERFORMANCE_CONFIG = {
     'critical-css',
     'above-fold-images',
   ],
-  
+
   // Image Optimization Settings
   IMAGE_FORMATS: ['avif', 'webp', 'jpg', 'png'] as const,
   IMAGE_SIZES: [320, 640, 768, 1024, 1280, 1536, 1920] as const,
@@ -21,28 +21,28 @@ export const PERFORMANCE_CONFIG = {
     medium: 75,
     low: 60,
   },
-  
+
   // Caching Strategies
   CACHE_STRATEGIES: {
     static: 'max-age=31536000, immutable', // 1 year
     dynamic: 'max-age=3600, stale-while-revalidate=86400', // 1 hour
     api: 'max-age=300, stale-while-revalidate=600', // 5 minutes
   },
-  
+
   // Bundle Optimization
   CHUNK_SPLITTING: {
     vendor: ['react', 'vue', 'svelte'],
     utils: ['lodash', 'date-fns', 'axios'],
     ui: ['@headlessui', '@heroicons'],
   },
-  
+
   // Lazy Loading Thresholds
   LAZY_LOADING: {
     rootMargin: '50px',
     threshold: 0.1,
     enableNative: true,
   },
-  
+
   // Critical CSS Configuration
   CRITICAL_CSS: {
     width: 1300,
@@ -77,14 +77,17 @@ export class PerformanceMonitor {
     // Largest Contentful Paint
     if ('PerformanceObserver' in window) {
       try {
-        const lcpObserver = new PerformanceObserver((list) => {
+        const lcpObserver = new PerformanceObserver(list => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1] as PerformanceEntry & {
             startTime: number;
           };
           this.metrics.lcp = lastEntry.startTime;
         });
-        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+        lcpObserver.observe({
+          type: 'largest-contentful-paint',
+          buffered: true,
+        });
         this.observers.push(lcpObserver);
       } catch (e) {
         console.warn('LCP observer not supported');
@@ -92,11 +95,17 @@ export class PerformanceMonitor {
 
       // First Input Delay
       try {
-        const fidObserver = new PerformanceObserver((list) => {
+        const fidObserver = new PerformanceObserver(list => {
           const entries = list.getEntries();
-          entries.forEach((entry) => {
+          entries.forEach(entry => {
             if (entry.entryType === 'first-input') {
-              this.metrics.fid = (entry as PerformanceEntry & { processingStart: number; startTime: number }).processingStart - entry.startTime;
+              this.metrics.fid =
+                (
+                  entry as PerformanceEntry & {
+                    processingStart: number;
+                    startTime: number;
+                  }
+                ).processingStart - entry.startTime;
             }
           });
         });
@@ -108,11 +117,15 @@ export class PerformanceMonitor {
 
       // Cumulative Layout Shift
       try {
-        const clsObserver = new PerformanceObserver((list) => {
+        const clsObserver = new PerformanceObserver(list => {
           let clsValue = 0;
           const entries = list.getEntries();
-          entries.forEach((entry) => {
-            if (entry.entryType === 'layout-shift' && !(entry as PerformanceEntry & { hadRecentInput: boolean }).hadRecentInput) {
+          entries.forEach(entry => {
+            if (
+              entry.entryType === 'layout-shift' &&
+              !(entry as PerformanceEntry & { hadRecentInput: boolean })
+                .hadRecentInput
+            ) {
               clsValue += (entry as PerformanceEntry & { value: number }).value;
             }
           });
@@ -127,10 +140,13 @@ export class PerformanceMonitor {
 
     // Navigation Timing metrics
     if ('performance' in window && 'getEntriesByType' in performance) {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
       if (navigation) {
         this.metrics.ttfb = navigation.responseStart - navigation.fetchStart;
-        this.metrics.fcp = navigation.domContentLoadedEventEnd - navigation.fetchStart;
+        this.metrics.fcp =
+          navigation.domContentLoadedEventEnd - navigation.fetchStart;
       }
     }
   }
@@ -179,7 +195,7 @@ export class ResourceOptimizer {
     const exists = this.resourceHints.some(
       existing => existing.rel === hint.rel && existing.href === hint.href
     );
-    
+
     if (!exists) {
       this.resourceHints.push(hint);
     }
@@ -189,7 +205,10 @@ export class ResourceOptimizer {
     return [...this.resourceHints];
   }
 
-  public generatePreloadLink(resource: string, type: ResourceHint['as']): string {
+  public generatePreloadLink(
+    resource: string,
+    type: ResourceHint['as']
+  ): string {
     return `<link rel="preload" href="${resource}" as="${type}">`;
   }
 
@@ -223,7 +242,10 @@ export class ImageOptimizer {
   ): string {
     return widths
       .map(width => {
-        const optimizedSrc = baseSrc.replace(/\.(jpg|jpeg|png|webp)$/i, `_${width}w.$1`);
+        const optimizedSrc = baseSrc.replace(
+          /\.(jpg|jpeg|png|webp)$/i,
+          `_${width}w.$1`
+        );
         return `${optimizedSrc} ${width}w`;
       })
       .join(', ');
@@ -235,7 +257,7 @@ export class ImageOptimizer {
       .slice(0, -1)
       .map(([breakpoint, size]) => `(max-width: ${breakpoint}) ${size}`)
       .join(', ');
-    
+
     const fallback = entries[entries.length - 1][1];
     return mediaQueries ? `${mediaQueries}, ${fallback}` : fallback;
   }
@@ -276,10 +298,12 @@ export class LazyLoader {
   private observer: IntersectionObserver | null = null;
   private elements: Set<Element> = new Set();
 
-  constructor(options: IntersectionObserverInit = PERFORMANCE_CONFIG.LAZY_LOADING) {
+  constructor(
+    options: IntersectionObserverInit = PERFORMANCE_CONFIG.LAZY_LOADING
+  ) {
     if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      this.observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             this.loadElement(entry.target);
             this.observer?.unobserve(entry.target);
@@ -361,8 +385,10 @@ export class CriticalCSSExtractor {
     try {
       // Extract above-the-fold CSS rules
       const criticalSelectors = this.extractCriticalSelectors(html);
-      const criticalCSS = this.filterCSSRules(css, criticalSelectors, [...ignore]);
-      
+      const criticalCSS = this.filterCSSRules(css, criticalSelectors, [
+        ...ignore,
+      ]);
+
       return criticalCSS;
     } catch (error) {
       console.warn('Critical CSS extraction failed:', error);
@@ -372,7 +398,7 @@ export class CriticalCSSExtractor {
 
   private static extractCriticalSelectors(html: string): string[] {
     const selectors: string[] = [];
-    
+
     // Extract class names from HTML
     const classMatches = html.match(/class="([^"]+)"/g) || [];
     classMatches.forEach(match => {
@@ -395,7 +421,11 @@ export class CriticalCSSExtractor {
     return selectors;
   }
 
-  private static filterCSSRules(css: string, selectors: string[], ignore: string[]): string {
+  private static filterCSSRules(
+    css: string,
+    selectors: string[],
+    ignore: string[]
+  ): string {
     const lines = css.split('\n');
     const criticalLines: string[] = [];
     let inCriticalRule = false;
@@ -403,7 +433,7 @@ export class CriticalCSSExtractor {
 
     for (const line of lines) {
       const trimmedLine = line.trim();
-      
+
       // Skip ignored patterns
       if (ignore.some(pattern => trimmedLine.includes(pattern))) {
         continue;
@@ -412,19 +442,21 @@ export class CriticalCSSExtractor {
       // Check if this line starts a rule we care about
       if (!inCriticalRule && trimmedLine.includes('{')) {
         const selectorPart = trimmedLine.split('{')[0].trim();
-        const isClientRule = selectors.some(selector => 
+        const isClientRule = selectors.some(selector =>
           selectorPart.includes(selector)
         );
-        
+
         if (isClientRule) {
           inCriticalRule = true;
           criticalLines.push(line);
-          braceDepth = (line.match(/{/g) || []).length - (line.match(/}/g) || []).length;
+          braceDepth =
+            (line.match(/{/g) || []).length - (line.match(/}/g) || []).length;
         }
       } else if (inCriticalRule) {
         criticalLines.push(line);
-        braceDepth += (line.match(/{/g) || []).length - (line.match(/}/g) || []).length;
-        
+        braceDepth +=
+          (line.match(/{/g) || []).length - (line.match(/}/g) || []).length;
+
         if (braceDepth <= 0) {
           inCriticalRule = false;
           braceDepth = 0;
@@ -461,7 +493,7 @@ export const performanceUtils = {
       if (!inThrottle) {
         func(...args);
         inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
+        setTimeout(() => (inThrottle = false), limit);
       }
     };
   },
@@ -474,33 +506,35 @@ export const performanceUtils = {
     const start = performance.now();
     const result = await operation();
     const duration = performance.now() - start;
-    
+
     if (label) {
       console.log(`${label}: ${duration.toFixed(2)}ms`);
     }
-    
+
     return { result, duration };
   },
 
   // Check if device supports webp
   supportsWebP(): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const webP = new Image();
       webP.onload = webP.onerror = () => {
         resolve(webP.height === 2);
       };
-      webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+      webP.src =
+        'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
     });
   },
 
   // Check if device supports avif
   supportsAVIF(): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const avif = new Image();
       avif.onload = avif.onerror = () => {
         resolve(avif.height === 2);
       };
-      avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABcAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAMAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB9tZGF0EgAKCBgABogQEDQgMgkQAAAAB8dSLfI=';
+      avif.src =
+        'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABcAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAMAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB9tZGF0EgAKCBgABogQEDQgMgkQAAAAB8dSLfI=';
     });
   },
 
@@ -517,11 +551,11 @@ export const performanceUtils = {
       const link = document.createElement('link');
       link.rel = resource.rel;
       link.href = resource.href;
-      
+
       if (resource.as) link.as = resource.as;
       if (resource.type) link.type = resource.type;
       if (resource.crossOrigin) link.crossOrigin = resource.crossOrigin;
-      
+
       document.head.appendChild(link);
     });
   },
@@ -539,7 +573,7 @@ export const criticalCSSExtractor = CriticalCSSExtractor;
 if (typeof window !== 'undefined') {
   // Start performance monitoring
   performanceMonitor;
-  
+
   // Log metrics after page load
   window.addEventListener('load', () => {
     setTimeout(() => {

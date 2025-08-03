@@ -1,10 +1,6 @@
 // Modern utility functions for enhanced development experience
 
-import type {
-  BlogPost,
-  SearchFilters,
-  ColorScheme,
-} from '../types/modern';
+import type { BlogPost, SearchFilters, ColorScheme } from '../types/modern';
 
 /* ==================== FORMATTING UTILITIES ==================== */
 
@@ -34,9 +30,9 @@ export const formatRelativeTime = (
   const dateObj = new Date(date);
   const now = new Date();
   const diffInSeconds = Math.floor((dateObj.getTime() - now.getTime()) / 1000);
-  
+
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-  
+
   const intervals = [
     { label: 'year', seconds: 31536000 },
     { label: 'month', seconds: 2592000 },
@@ -46,9 +42,11 @@ export const formatRelativeTime = (
     { label: 'minute', seconds: 60 },
     { label: 'second', seconds: 1 },
   ] as const;
-  
+
   for (const interval of intervals) {
-    const intervalCount = Math.floor(Math.abs(diffInSeconds) / interval.seconds);
+    const intervalCount = Math.floor(
+      Math.abs(diffInSeconds) / interval.seconds
+    );
     if (intervalCount >= 1) {
       return rtf.format(
         diffInSeconds < 0 ? -intervalCount : intervalCount,
@@ -56,7 +54,7 @@ export const formatRelativeTime = (
       );
     }
   }
-  
+
   return rtf.format(0, 'second');
 };
 
@@ -76,13 +74,13 @@ export const formatNumber = (
  */
 export const formatFileSize = (bytes: number, decimals = 2): string => {
   if (bytes === 0) return '0 Bytes';
-  
+
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-  
+
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
@@ -109,14 +107,14 @@ export const truncate = (
   suffix = '...'
 ): string => {
   if (text.length <= maxLength) return text;
-  
+
   const truncated = text.substring(0, maxLength - suffix.length);
   const lastSpace = truncated.lastIndexOf(' ');
-  
+
   if (lastSpace > 0) {
     return truncated.substring(0, lastSpace) + suffix;
   }
-  
+
   return truncated + suffix;
 };
 
@@ -124,8 +122,9 @@ export const truncate = (
  * Capitalize first letter of each word
  */
 export const titleCase = (text: string): string => {
-  return text.replace(/\w\S*/g, (txt) => 
-    txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+  return text.replace(
+    /\w\S*/g,
+    txt => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
   );
 };
 
@@ -156,11 +155,14 @@ export const groupBy = <T, K extends string | number | symbol>(
   array: T[],
   keyFn: (item: T) => K
 ): Record<K, T[]> => {
-  return array.reduce((groups, item) => {
-    const key = keyFn(item);
-    (groups[key] = groups[key] || []).push(item);
-    return groups;
-  }, {} as Record<K, T[]>);
+  return array.reduce(
+    (groups, item) => {
+      const key = keyFn(item);
+      (groups[key] = groups[key] || []).push(item);
+      return groups;
+    },
+    {} as Record<K, T[]>
+  );
 };
 
 /**
@@ -168,7 +170,7 @@ export const groupBy = <T, K extends string | number | symbol>(
  */
 export const chunk = <T>(array: T[], size: number): T[][] => {
   if (size <= 0) throw new Error('Chunk size must be positive');
-  
+
   const chunks: T[][] = [];
   for (let i = 0; i < array.length; i += size) {
     chunks.push(array.slice(i, i + size));
@@ -204,7 +206,10 @@ export const deepMerge = <T extends Record<string, unknown>>(
     for (const key in source) {
       if (isObject(source[key])) {
         if (!target[key]) Object.assign(target, { [key]: {} });
-        deepMerge(target[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
+        deepMerge(
+          target[key] as Record<string, unknown>,
+          source[key] as Record<string, unknown>
+        );
       } else {
         Object.assign(target, { [key]: source[key] });
       }
@@ -254,13 +259,13 @@ export const buildUrl = (
   params: Record<string, string | number | boolean | undefined>
 ): string => {
   const url = new URL(baseUrl);
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined) {
       url.searchParams.set(key, String(value));
     }
   });
-  
+
   return url.toString();
 };
 
@@ -270,11 +275,11 @@ export const buildUrl = (
 export const parseQuery = (queryString: string): Record<string, string> => {
   const params = new URLSearchParams(queryString);
   const result: Record<string, string> = {};
-  
+
   params.forEach((value, key) => {
     result[key] = value;
   });
-  
+
   return result;
 };
 
@@ -283,7 +288,9 @@ export const parseQuery = (queryString: string): Record<string, string> => {
 /**
  * Combine CSS class names conditionally
  */
-export const cn = (...classes: (string | undefined | null | false)[]): string => {
+export const cn = (
+  ...classes: (string | undefined | null | false)[]
+): string => {
   return classes.filter(Boolean).join(' ');
 };
 
@@ -294,11 +301,11 @@ export const cssVariables = (
   variables: Record<string, string | number>
 ): Record<string, string> => {
   const result: Record<string, string> = {};
-  
+
   Object.entries(variables).forEach(([key, value]) => {
     result[`--${key}`] = String(value);
   });
-  
+
   return result;
 };
 
@@ -329,7 +336,7 @@ export const extractExcerpt = (
     .replace(/<[^>]*>/g, '') // HTML tags
     .replace(/\n+/g, ' ') // Line breaks
     .trim();
-  
+
   return truncate(plainText, maxLength, suffix);
 };
 
@@ -341,55 +348,61 @@ export const filterPosts = (
   filters: SearchFilters
 ): BlogPost[] => {
   let filtered = [...posts];
-  
+
   // Filter by query
   if (filters.query) {
     const query = filters.query.toLowerCase();
-    filtered = filtered.filter(post =>
-      post.frontmatter.title.toLowerCase().includes(query) ||
-      post.frontmatter.description.toLowerCase().includes(query) ||
-      post.frontmatter.tags?.some(tag => tag.toLowerCase().includes(query))
+    filtered = filtered.filter(
+      post =>
+        post.frontmatter.title.toLowerCase().includes(query) ||
+        post.frontmatter.description.toLowerCase().includes(query) ||
+        post.frontmatter.tags?.some(tag => tag.toLowerCase().includes(query))
     );
   }
-  
+
   // Filter by category
   if (filters.category) {
-    filtered = filtered.filter(post => post.frontmatter.category === filters.category);
+    filtered = filtered.filter(
+      post => post.frontmatter.category === filters.category
+    );
   }
-  
+
   // Filter by tags
   if (filters.tags && filters.tags.length > 0) {
     filtered = filtered.filter(post =>
       filters.tags?.some(tag => post.frontmatter.tags?.includes(tag))
     );
   }
-  
+
   // Filter by date range
   if (filters.dateFrom) {
     const dateFrom = filters.dateFrom;
     filtered = filtered.filter(post => post.frontmatter.pubDate >= dateFrom);
   }
-  
+
   if (filters.dateTo) {
     const dateTo = filters.dateTo;
     filtered = filtered.filter(post => post.frontmatter.pubDate <= dateTo);
   }
-  
+
   // Filter by author
   if (filters.author) {
-    filtered = filtered.filter(post => post.frontmatter.author === filters.author);
+    filtered = filtered.filter(
+      post => post.frontmatter.author === filters.author
+    );
   }
-  
+
   // Sort posts
   const sortBy = filters.sortBy || 'date';
   const sortOrder = filters.sortOrder || 'desc';
-  
+
   filtered.sort((a, b) => {
     let comparison = 0;
-    
+
     switch (sortBy) {
       case 'date':
-        comparison = a.frontmatter.pubDate.getTime() - b.frontmatter.pubDate.getTime();
+        comparison =
+          a.frontmatter.pubDate.getTime() - b.frontmatter.pubDate.getTime();
         break;
       case 'title':
         comparison = a.frontmatter.title.localeCompare(b.frontmatter.title);
@@ -397,10 +410,10 @@ export const filterPosts = (
       default:
         comparison = 0;
     }
-    
+
     return sortOrder === 'desc' ? -comparison : comparison;
   });
-  
+
   return filtered;
 };
 
@@ -411,13 +424,15 @@ export const filterPosts = (
  */
 export const getPreferredColorScheme = (): ColorScheme => {
   if (typeof window === 'undefined') return 'light';
-  
+
   const stored = localStorage.getItem('color-scheme') as ColorScheme;
   if (stored && ['light', 'dark', 'system'].includes(stored)) {
     return stored;
   }
-  
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 };
 
 /**
@@ -425,16 +440,18 @@ export const getPreferredColorScheme = (): ColorScheme => {
  */
 export const applyColorScheme = (scheme: ColorScheme): void => {
   if (typeof document === 'undefined') return;
-  
+
   const root = document.documentElement;
-  
+
   if (scheme === 'system') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
     root.classList.toggle('dark', prefersDark);
   } else {
     root.classList.toggle('dark', scheme === 'dark');
   }
-  
+
   localStorage.setItem('color-scheme', scheme);
 };
 
@@ -448,7 +465,7 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
   wait: number
 ): ((...args: Parameters<T>) => void) => {
   let timeout: NodeJS.Timeout;
-  
+
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -463,12 +480,12 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
   limit: number
 ): ((...args: Parameters<T>) => void) => {
   let inThrottle: boolean;
-  
+
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 };
@@ -483,11 +500,11 @@ export const measureTime = async <T>(
   const start = performance.now();
   const result = await fn();
   const duration = performance.now() - start;
-  
+
   if (label) {
     console.log(`${label}: ${duration.toFixed(2)}ms`);
   }
-  
+
   return { result, duration };
 };
 
@@ -549,21 +566,21 @@ export const retry = async <T>(
   delay = 1000
 ): Promise<T> => {
   let lastError: Error | undefined;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      
+
       if (attempt === maxAttempts) {
         throw lastError;
       }
-      
+
       await sleep(delay * Math.pow(2, attempt - 1));
     }
   }
-  
+
   // This should never be reached due to the throw above, but TypeScript needs it
   throw lastError || new Error('Unknown error in retry function');
 };
@@ -577,51 +594,51 @@ const utils = {
   formatRelativeTime,
   formatNumber,
   formatFileSize,
-  
+
   // Strings
   slugify,
   truncate,
   titleCase,
   getInitials,
-  
+
   // Arrays
   unique,
   groupBy,
   chunk,
   shuffle,
-  
+
   // Objects
   deepMerge,
   pick,
   omit,
-  
+
   // URLs
   buildUrl,
   parseQuery,
-  
+
   // CSS
   cn,
   cssVariables,
-  
+
   // Blog
   calculateReadingTime,
   extractExcerpt,
   filterPosts,
-  
+
   // Theme
   getPreferredColorScheme,
   applyColorScheme,
-  
+
   // Performance
   debounce,
   throttle,
   measureTime,
-  
+
   // Validation
   isValidEmail,
   isValidUrl,
   isEmpty,
-  
+
   // Async
   sleep,
   retry,

@@ -10,9 +10,5 @@ export default defineConfig({
   // Base path only for production builds (GitHub Pages)
   base: import.meta.env.PROD ? '/Test2025/' : '/',
   site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
-  integrations: [
-    mdx(), 
-    sitemap(),
-    tailwind(),
-  ],
+  integrations: [mdx(), sitemap(), tailwind()],
 });
