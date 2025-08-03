@@ -58,7 +58,9 @@ function checkRateLimit(ip: string): boolean {
 }
 
 // Send email notification (placeholder - integrate with your email service)
-async function sendEmailNotification(formData: ContactFormData): Promise<boolean> {
+async function sendEmailNotification(
+  formData: ContactFormData
+): Promise<boolean> {
   try {
     // In production, integrate with email service like SendGrid, AWS SES, etc.
     console.log('Email notification would be sent:', {
@@ -71,8 +73,8 @@ async function sendEmailNotification(formData: ContactFormData): Promise<boolean
         company: formData.company,
         phone: formData.phone,
         budget: formData.budget,
-        timeline: formData.timeline
-      }
+        timeline: formData.timeline,
+      },
     });
 
     return true;
@@ -93,30 +95,30 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Too many requests. Please wait before submitting again.'
+          message: 'Too many requests. Please wait before submitting again.',
         }),
         {
           status: 429,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
 
     // Parse form data
     const formData = await request.formData();
-    
+
     const contactData: ContactFormData = {
-      firstName: sanitizeInput(formData.get('firstName') as string || ''),
-      lastName: sanitizeInput(formData.get('lastName') as string || ''),
-      email: sanitizeInput(formData.get('email') as string || ''),
-      company: sanitizeInput(formData.get('company') as string || ''),
-      phone: sanitizeInput(formData.get('phone') as string || ''),
-      subject: sanitizeInput(formData.get('subject') as string || ''),
-      budget: sanitizeInput(formData.get('budget') as string || ''),
-      timeline: sanitizeInput(formData.get('timeline') as string || ''),
-      message: sanitizeInput(formData.get('message') as string || ''),
+      firstName: sanitizeInput((formData.get('firstName') as string) || ''),
+      lastName: sanitizeInput((formData.get('lastName') as string) || ''),
+      email: sanitizeInput((formData.get('email') as string) || ''),
+      company: sanitizeInput((formData.get('company') as string) || ''),
+      phone: sanitizeInput((formData.get('phone') as string) || ''),
+      subject: sanitizeInput((formData.get('subject') as string) || ''),
+      budget: sanitizeInput((formData.get('budget') as string) || ''),
+      timeline: sanitizeInput((formData.get('timeline') as string) || ''),
+      message: sanitizeInput((formData.get('message') as string) || ''),
       newsletter: formData.get('newsletter') === 'on',
-      terms: formData.get('terms') === 'on'
+      terms: formData.get('terms') === 'on',
     };
 
     // Validation
@@ -127,7 +129,8 @@ export const POST: APIRoute = async ({ request }) => {
     if (!contactData.email) errors.push('Email is required');
     if (!contactData.subject) errors.push('Subject is required');
     if (!contactData.message) errors.push('Message is required');
-    if (!contactData.terms) errors.push('You must agree to the terms and conditions');
+    if (!contactData.terms)
+      errors.push('You must agree to the terms and conditions');
 
     if (contactData.email && !validateEmail(contactData.email)) {
       errors.push('Invalid email address');
@@ -141,11 +144,11 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Please correct the following errors: ' + errors.join(', ')
+          message: 'Please correct the following errors: ' + errors.join(', '),
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
@@ -157,11 +160,11 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Failed to process your request. Please try again later.'
+          message: 'Failed to process your request. Please try again later.',
         }),
         {
           status: 500,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
@@ -170,25 +173,25 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Thank you! Your message has been sent successfully. We\'ll get back to you within 2 hours.'
+        message:
+          "Thank you! Your message has been sent successfully. We'll get back to you within 2 hours.",
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
-
   } catch (error) {
     console.error('Contact form error:', error);
-    
+
     return new Response(
       JSON.stringify({
         success: false,
-        message: 'An unexpected error occurred. Please try again later.'
+        message: 'An unexpected error occurred. Please try again later.',
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
   }

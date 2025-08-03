@@ -1,10 +1,13 @@
 // Date utilities
-export function formatDate(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
+export function formatDate(
+  date: Date | string,
+  options?: Intl.DateTimeFormatOptions
+): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   };
   return dateObj.toLocaleDateString('en-US', { ...defaultOptions, ...options });
 }
@@ -21,7 +24,7 @@ export function getRelativeTime(date: Date | string): string {
     { label: 'day', seconds: 86400 },
     { label: 'hour', seconds: 3600 },
     { label: 'minute', seconds: 60 },
-    { label: 'second', seconds: 1 }
+    { label: 'second', seconds: 1 },
   ];
 
   for (const interval of intervals) {
@@ -35,7 +38,11 @@ export function getRelativeTime(date: Date | string): string {
 }
 
 // URL utilities
-export function buildUrl(base: string, path: string, params?: Record<string, string>): string {
+export function buildUrl(
+  base: string,
+  path: string,
+  params?: Record<string, string>
+): string {
   const url = new URL(path, base);
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -54,7 +61,11 @@ export function getSlugFromTitle(title: string): string {
 }
 
 // String utilities
-export function truncateText(text: string, maxLength: number, suffix = '...'): string {
+export function truncateText(
+  text: string,
+  maxLength: number,
+  suffix = '...'
+): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - suffix.length) + suffix;
 }
@@ -77,11 +88,15 @@ export function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
   }, {} as Record<string, T[]>);
 }
 
-export function sortBy<T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] {
+export function sortBy<T>(
+  array: T[],
+  key: keyof T,
+  direction: 'asc' | 'desc' = 'asc'
+): T[] {
   return [...array].sort((a, b) => {
     const aVal = a[key];
     const bVal = b[key];
-    
+
     if (aVal < bVal) return direction === 'asc' ? -1 : 1;
     if (aVal > bVal) return direction === 'asc' ? 1 : -1;
     return 0;
@@ -112,9 +127,7 @@ export function validatePhone(phone: string): boolean {
 }
 
 export function sanitizeInput(input: string): string {
-  return input
-    .replace(/[<>]/g, '')
-    .trim();
+  return input.replace(/[<>]/g, '').trim();
 }
 
 // Animation utilities
@@ -178,23 +191,27 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 }
 
 // Color utilities
-export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+export function hexToRgb(
+  hex: string
+): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
 }
 
 export function rgbToHex(r: number, g: number, b: number): string {
-  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 // API utilities
@@ -215,7 +232,7 @@ export async function fetchWithTimeout<T>(
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
@@ -223,20 +240,20 @@ export async function fetchWithTimeout<T>(
     if (!response.ok) {
       return {
         success: false,
-        error: `HTTP error! status: ${response.status}`
+        error: `HTTP error! status: ${response.status}`,
       };
     }
 
     const data = await response.json();
     return {
       success: true,
-      data
+      data,
     };
   } catch (error) {
     clearTimeout(timeoutId);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
