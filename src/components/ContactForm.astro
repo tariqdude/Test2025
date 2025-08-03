@@ -1,0 +1,528 @@
+---
+import Button from './ui/Button.astro';
+import Card from './ui/Card.astro';
+import Icon from './ui/Icon.astro';
+import Animate from './ui/Animate.astro';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  showContactInfo?: boolean;
+}
+
+const { 
+  title = "Get In Touch",
+  subtitle = "Ready to transform your business? Let's discuss your needs.",
+  showContactInfo = true
+} = Astro.props;
+---
+
+<section class="contact-section section">
+  <div class="container">
+    <div class="section-header">
+      <Animate animation="fadeIn" delay={200}>
+        <h2 class="heading-2 text-center">{title}</h2>
+        <p class="text-large text-muted text-center max-w-2xl mx-auto">{subtitle}</p>
+      </Animate>
+    </div>
+
+    <div class="contact-grid grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Contact Form -->
+      <Animate animation="slideRight" delay={400}>
+        <Card className="h-full">
+          <form id="contact-form" class="contact-form">
+            <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label for="firstName" class="form-label">First Name *</label>
+                <input 
+                  type="text" 
+                  id="firstName" 
+                  name="firstName" 
+                  class="form-input" 
+                  required 
+                  autocomplete="given-name"
+                />
+                <div class="form-error hidden"></div>
+              </div>
+              
+              <div class="form-group">
+                <label for="lastName" class="form-label">Last Name *</label>
+                <input 
+                  type="text" 
+                  id="lastName" 
+                  name="lastName" 
+                  class="form-input" 
+                  required 
+                  autocomplete="family-name"
+                />
+                <div class="form-error hidden"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email Address *</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="form-input" 
+                required 
+                autocomplete="email"
+              />
+              <div class="form-error hidden"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="company" class="form-label">Company</label>
+              <input 
+                type="text" 
+                id="company" 
+                name="company" 
+                class="form-input" 
+                autocomplete="organization"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                class="form-input" 
+                autocomplete="tel"
+              />
+              <div class="form-error hidden"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="subject" class="form-label">Subject *</label>
+              <select id="subject" name="subject" class="form-select" required>
+                <option value="">Please select a topic</option>
+                <option value="general">General Inquiry</option>
+                <option value="consulting">Consulting Services</option>
+                <option value="technology">Technology Solutions</option>
+                <option value="partnership">Partnership Opportunities</option>
+                <option value="support">Support Request</option>
+                <option value="other">Other</option>
+              </select>
+              <div class="form-error hidden"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="budget" class="form-label">Project Budget</label>
+              <select id="budget" name="budget" class="form-select">
+                <option value="">Select budget range</option>
+                <option value="under-25k">Under $25,000</option>
+                <option value="25k-50k">$25,000 - $50,000</option>
+                <option value="50k-100k">$50,000 - $100,000</option>
+                <option value="100k-250k">$100,000 - $250,000</option>
+                <option value="250k-500k">$250,000 - $500,000</option>
+                <option value="over-500k">Over $500,000</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="timeline" class="form-label">Project Timeline</label>
+              <select id="timeline" name="timeline" class="form-select">
+                <option value="">Select timeline</option>
+                <option value="asap">ASAP</option>
+                <option value="1-3months">1-3 months</option>
+                <option value="3-6months">3-6 months</option>
+                <option value="6-12months">6-12 months</option>
+                <option value="over-12months">Over 12 months</option>
+                <option value="exploring">Just exploring</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">Message *</label>
+              <textarea 
+                id="message" 
+                name="message" 
+                class="form-textarea" 
+                required 
+                rows="5"
+                placeholder="Tell us about your project, goals, and how we can help..."
+              ></textarea>
+              <div class="form-error hidden"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="flex items-start gap-3">
+                <input 
+                  type="checkbox" 
+                  name="newsletter" 
+                  class="form-checkbox mt-1"
+                />
+                <span class="text-small text-muted">
+                  I'd like to receive updates about new services and industry insights
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="flex items-start gap-3">
+                <input 
+                  type="checkbox" 
+                  name="terms" 
+                  class="form-checkbox mt-1" 
+                  required
+                />
+                <span class="text-small text-muted">
+                  I agree to the <a href="/privacy" class="link">Privacy Policy</a> and <a href="/terms" class="link">Terms of Service</a> *
+                </span>
+              </label>
+              <div class="form-error hidden"></div>
+            </div>
+
+            <div class="form-actions">
+              <Button 
+                type="submit" 
+                variant="primary" 
+                size="lg" 
+                className="w-full"
+                icon="arrow"
+                iconPosition="right"
+              >
+                Send Message
+              </Button>
+              
+              <div class="form-status hidden mt-4 p-4 rounded-md"></div>
+            </div>
+          </form>
+        </Card>
+      </Animate>
+
+      <!-- Contact Information -->
+      {showContactInfo && (
+        <Animate animation="slideLeft" delay={600}>
+          <div class="contact-info space-y-8">
+            <Card>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <Icon name="mapPin" size={24} color="white" />
+                </div>
+                <div class="contact-details">
+                  <h4 class="heading-6">Visit Our Office</h4>
+                  <p class="text-muted">
+                    123 Business District<br>
+                    Suite 500<br>
+                    New York, NY 10001
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <Icon name="phone" size={24} color="white" />
+                </div>
+                <div class="contact-details">
+                  <h4 class="heading-6">Call Us</h4>
+                  <p class="text-muted">
+                    Main: <a href="tel:+1-555-123-4567" class="link">+1 (555) 123-4567</a><br>
+                    Support: <a href="tel:+1-555-123-4568" class="link">+1 (555) 123-4568</a>
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <Icon name="mail" size={24} color="white" />
+                </div>
+                <div class="contact-details">
+                  <h4 class="heading-6">Email Us</h4>
+                  <p class="text-muted">
+                    General: <a href="mailto:hello@company.com" class="link">hello@company.com</a><br>
+                    Support: <a href="mailto:support@company.com" class="link">support@company.com</a>
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <h4 class="heading-6 mb-4">Business Hours</h4>
+              <div class="business-hours space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-muted">Monday - Friday</span>
+                  <span class="font-medium">9:00 AM - 6:00 PM EST</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted">Saturday</span>
+                  <span class="font-medium">10:00 AM - 4:00 PM EST</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-muted">Sunday</span>
+                  <span class="font-medium">Closed</span>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <h4 class="heading-6 mb-4">Response Time</h4>
+              <div class="response-times space-y-3">
+                <div class="flex items-center gap-3">
+                  <Icon name="check" size={16} color="var(--color-green-600)" />
+                  <span class="text-small">Email inquiries: Within 2 hours</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <Icon name="check" size={16} color="var(--color-green-600)" />
+                  <span class="text-small">Phone calls: Immediately</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <Icon name="check" size={16} color="var(--color-green-600)" />
+                  <span class="text-small">Project proposals: Within 24 hours</span>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </Animate>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  class ContactForm {
+    private form: HTMLFormElement;
+    private submitButton: HTMLButtonElement;
+    private statusDiv: HTMLDivElement;
+
+    constructor() {
+      this.form = document.getElementById('contact-form') as HTMLFormElement;
+      this.submitButton = this.form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+      this.statusDiv = this.form?.querySelector('.form-status') as HTMLDivElement;
+      
+      if (this.form) {
+        this.init();
+      }
+    }
+
+    private init() {
+      this.form.addEventListener('submit', this.handleSubmit.bind(this));
+      this.form.addEventListener('input', this.handleInput.bind(this));
+      this.form.addEventListener('blur', this.handleBlur.bind(this), true);
+    }
+
+    private async handleSubmit(event: Event) {
+      event.preventDefault();
+      
+      if (!this.validateForm()) {
+        return;
+      }
+
+      this.setLoading(true);
+      
+      try {
+        const formData = new FormData(this.form);
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          this.showStatus('success', 'Thank you! Your message has been sent successfully. We\'ll get back to you within 2 hours.');
+          this.form.reset();
+        } else {
+          this.showStatus('error', result.message || 'Something went wrong. Please try again.');
+        }
+      } catch (error) {
+        this.showStatus('error', 'Network error. Please check your connection and try again.');
+      } finally {
+        this.setLoading(false);
+      }
+    }
+
+    private handleInput(event: Event) {
+      const target = event.target as HTMLInputElement;
+      if (target.classList.contains('form-input') || target.classList.contains('form-textarea') || target.classList.contains('form-select')) {
+        this.clearError(target);
+      }
+    }
+
+    private handleBlur(event: Event) {
+      const target = event.target as HTMLInputElement;
+      if (target.classList.contains('form-input') || target.classList.contains('form-textarea') || target.classList.contains('form-select')) {
+        this.validateField(target);
+      }
+    }
+
+    private validateForm(): boolean {
+      const inputs = this.form.querySelectorAll('input[required], textarea[required], select[required]');
+      let isValid = true;
+
+      inputs.forEach((input) => {
+        if (!this.validateField(input as HTMLInputElement)) {
+          isValid = false;
+        }
+      });
+
+      return isValid;
+    }
+
+    private validateField(field: HTMLInputElement): boolean {
+      const value = field.value.trim();
+      let isValid = true;
+      let errorMessage = '';
+
+      // Required field validation
+      if (field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
+      }
+
+      // Email validation
+      if (field.type === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          isValid = false;
+          errorMessage = 'Please enter a valid email address';
+        }
+      }
+
+      // Phone validation
+      if (field.name === 'phone' && value) {
+        const phoneRegex = /^[+]?[\d\s\-()]{10,}$/;
+        if (!phoneRegex.test(value)) {
+          isValid = false;
+          errorMessage = 'Please enter a valid phone number';
+        }
+      }
+
+      // Terms checkbox validation
+      if (field.name === 'terms' && field.type === 'checkbox') {
+        if (!field.checked) {
+          isValid = false;
+          errorMessage = 'You must agree to the terms and conditions';
+        }
+      }
+
+      if (isValid) {
+        this.clearError(field);
+      } else {
+        this.showError(field, errorMessage);
+      }
+
+      return isValid;
+    }
+
+    private showError(field: HTMLInputElement, message: string) {
+      field.classList.add('error');
+      const errorDiv = field.parentElement?.querySelector('.form-error') as HTMLDivElement;
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    private clearError(field: HTMLInputElement) {
+      field.classList.remove('error');
+      const errorDiv = field.parentElement?.querySelector('.form-error') as HTMLDivElement;
+      if (errorDiv) {
+        errorDiv.textContent = '';
+        errorDiv.classList.add('hidden');
+      }
+    }
+
+    private setLoading(loading: boolean) {
+      if (this.submitButton) {
+        this.submitButton.disabled = loading;
+        this.submitButton.textContent = loading ? 'Sending...' : 'Send Message';
+      }
+    }
+
+    private showStatus(type: 'success' | 'error', message: string) {
+      if (this.statusDiv) {
+        this.statusDiv.className = `form-status alert alert-${type === 'success' ? 'success' : 'error'}`;
+        this.statusDiv.textContent = message;
+        this.statusDiv.classList.remove('hidden');
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          this.statusDiv.classList.add('hidden');
+        }, 5000);
+      }
+    }
+  }
+
+  // Initialize contact form when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new ContactForm();
+  });
+</script>
+
+<style>
+  .contact-section {
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, white 100%);
+  }
+
+  .contact-grid {
+    align-items: start;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .form-checkbox {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    background: white;
+    cursor: pointer;
+  }
+
+  .form-checkbox:checked {
+    background: var(--color-primary-600);
+    border-color: var(--color-primary-600);
+  }
+
+  .form-input.error,
+  .form-textarea.error,
+  .form-select.error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+
+  .business-hours > div,
+  .response-times > div {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-gray-100);
+  }
+
+  .business-hours > div:last-child,
+  .response-times > div:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

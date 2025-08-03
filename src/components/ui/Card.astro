@@ -1,0 +1,69 @@
+---
+interface Props {
+  variant?: 'default' | 'elevated' | 'outline' | 'ghost';
+  className?: string;
+  padding?: 'sm' | 'md' | 'lg' | 'xl';
+  rounded?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  shadow?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  hover?: boolean;
+  border?: boolean;
+}
+
+const {
+  variant = 'default',
+  className = '',
+  padding = 'md',
+  rounded = 'lg',
+  shadow = 'sm',
+  hover = true,
+  border = false,
+  ...rest
+} = Astro.props;
+
+const baseClasses = 'relative overflow-hidden';
+
+const variants = {
+  default: 'bg-white',
+  elevated: 'bg-white shadow-lg',
+  outline: 'bg-white border border-gray-200',
+  ghost: 'bg-transparent'
+};
+
+const paddings = {
+  sm: 'p-4',
+  md: 'p-6',
+  lg: 'p-8',
+  xl: 'p-10'
+};
+
+const roundedStyles = {
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  full: 'rounded-full'
+};
+
+const shadows = {
+  none: '',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl'
+};
+
+const classes = [
+  baseClasses,
+  variants[variant],
+  paddings[padding],
+  roundedStyles[rounded],
+  shadows[shadow],
+  hover ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1' : '',
+  border ? 'border border-gray-200' : '',
+  className
+].filter(Boolean).join(' ');
+---
+
+<div class={classes} {...rest}>
+  <slot />
+</div>

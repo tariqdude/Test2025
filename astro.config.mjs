@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
@@ -10,4 +11,8 @@ export default defineConfig({
   base: '/Test2025/',
   site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
   integrations: [mdx(), sitemap()],
+  output: 'hybrid',
+  adapter: node({
+    mode: 'standalone'
+  })
 });

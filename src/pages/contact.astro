@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 <!DOCTYPE html>
@@ -13,22 +14,229 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     <Header />
     <main class="container fade-in">
       <section class="contact">
-        <h1>Contact Us</h1>
-        <p>Fill out the form below and we'll get back to you within 24 hours.</p>
-        <form action="/api/contact" method="POST" class="contact-form">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required />
+        <div class="contact-header">
+          <h1>Contact Our Team</h1>
+          <p class="lead">Ready to transform your business? Get in touch with our experts today for a personalized consultation.</p>
+        </div>
+        
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-cards">
+              <div class="contact-card">
+                <div class="contact-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>Phone Support</h3>
+                <p>Speak directly with our consultants</p>
+                <a href="tel:+1-555-0123">+1 (555) 012-3456</a>
+              </div>
 
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required />
+              <div class="contact-card">
+                <div class="contact-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>Email Support</h3>
+                <p>Get detailed responses within 2 hours</p>
+                <a href="mailto:hello@company.com">hello@company.com</a>
+              </div>
 
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="6" required></textarea>
+              <div class="contact-card">
+                <div class="contact-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <h3>Office Location</h3>
+                <p>Visit our headquarters</p>
+                <address>123 Business Ave<br>Tech City, TC 12345</address>
+              </div>
+            </div>
 
-          <button type="submit" class="btn">Submit</button>
-        </form>
+            <div class="response-time">
+              <h3>Response Times</h3>
+              <ul>
+                <li><strong>Emergency Support:</strong> Within 1 hour</li>
+                <li><strong>General Inquiries:</strong> Within 2 hours</li>
+                <li><strong>Project Consultation:</strong> Within 24 hours</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="contact-form-container">
+            <ContactForm />
+          </div>
+        </div>
       </section>
     </main>
     <Footer />
+
+    <style>
+      .contact {
+        padding: 2rem 0 4rem;
+      }
+
+      .contact-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .contact-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .lead {
+        font-size: 1.125rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: start;
+      }
+
+      .contact-cards {
+        display: grid;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .contact-card {
+        padding: 1.5rem;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+
+      .contact-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        border-color: var(--primary-color);
+      }
+
+      .contact-card-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-bottom: 1rem;
+      }
+
+      .contact-card h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .contact-card p {
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+      }
+
+      .contact-card a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .contact-card a:hover {
+        color: var(--secondary-color);
+      }
+
+      .contact-card address {
+        color: var(--primary-color);
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.5;
+      }
+
+      .response-time {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+      }
+
+      .response-time h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      }
+
+      .response-time ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .response-time li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      .response-time li:last-child {
+        border-bottom: none;
+      }
+
+      .response-time strong {
+        color: var(--text-primary);
+      }
+
+      .contact-form-container {
+        position: sticky;
+        top: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        .contact-grid {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .contact-header h1 {
+          font-size: 2rem;
+        }
+
+        .contact-form-container {
+          position: static;
+        }
+
+        .contact-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .contact-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </body>
 </html>

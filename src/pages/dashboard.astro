@@ -1,0 +1,497 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+import ClientPortal from '../components/ClientPortal.astro';
+import PerformanceMonitor from '../components/PerformanceMonitor.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${SITE_TITLE} | Enterprise Dashboard`} description="Comprehensive business intelligence and performance monitoring dashboard" />
+  </head>
+  <body>
+    <Header />
+    <main class="dashboard-main">
+      <!-- Dashboard Header -->
+      <section class="dashboard-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1>Enterprise Dashboard</h1>
+            <p class="hero-description">
+              Real-time business intelligence, performance monitoring, and client management 
+              in one comprehensive platform. Monitor your business metrics, track performance, 
+              and manage client relationships with advanced analytics and insights.
+            </p>
+            <div class="hero-stats">
+              <div class="stat-item">
+                <span class="stat-value">99.98%</span>
+                <span class="stat-label">Uptime</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">1.2s</span>
+                <span class="stat-label">Load Time</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">4.6/5</span>
+                <span class="stat-label">Satisfaction</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">342</span>
+                <span class="stat-label">Active Projects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Content -->
+      <div class="container dashboard-container">
+        <!-- Analytics Section -->
+        <section class="dashboard-section" id="analytics">
+          <div class="section-header">
+            <h2>Business Analytics</h2>
+            <p>Track key performance indicators and business metrics in real-time</p>
+          </div>
+          <Analytics className="dashboard-analytics" />
+        </section>
+
+        <!-- Performance Monitoring Section -->
+        <section class="dashboard-section" id="performance">
+          <div class="section-header">
+            <h2>Performance Monitoring</h2>
+            <p>Monitor Core Web Vitals, server metrics, and optimization scores</p>
+          </div>
+          <PerformanceMonitor className="dashboard-performance" />
+        </section>
+
+        <!-- Client Portal Section -->
+        <section class="dashboard-section" id="clients">
+          <div class="section-header">
+            <h2>Client Management</h2>
+            <p>Manage client relationships, projects, and communications</p>
+          </div>
+          <ClientPortal className="dashboard-clients" />
+        </section>
+
+        <!-- Quick Actions Section -->
+        <section class="dashboard-section" id="actions">
+          <div class="section-header">
+            <h2>Quick Actions</h2>
+            <p>Frequently used tools and shortcuts for efficient workflow</p>
+          </div>
+          
+          <div class="actions-grid">
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
+                  <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>Generate Report</h3>
+              <p>Create detailed analytics and performance reports</p>
+              <button class="action-btn">Generate</button>
+            </div>
+
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" stroke-width="2"/>
+                  <path d="m9 14 2 2 4-4" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>New Project</h3>
+              <p>Create and configure a new client project</p>
+              <button class="action-btn">Create Project</button>
+            </div>
+
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <polygon points="10,8 16,12 10,16 10,8" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>Schedule Meeting</h3>
+              <p>Book consultation calls and team meetings</p>
+              <button class="action-btn">Schedule</button>
+            </div>
+
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2 2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>System Settings</h3>
+              <p>Configure dashboard preferences and integrations</p>
+              <button class="action-btn">Configure</button>
+            </div>
+
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>Team Chat</h3>
+              <p>Communicate with team members and clients</p>
+              <button class="action-btn">Open Chat</button>
+            </div>
+
+            <div class="action-card">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <h3>Security Center</h3>
+              <p>Monitor security alerts and access controls</p>
+              <button class="action-btn">View Security</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Activity Feed -->
+        <section class="dashboard-section" id="activity">
+          <div class="section-header">
+            <h2>Recent Activity</h2>
+            <p>Latest updates and system events</p>
+          </div>
+          
+          <div class="activity-feed">
+            <div class="activity-item">
+              <div class="activity-icon success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <h4>Project Milestone Completed</h4>
+                <p>E-commerce Platform Redesign reached 75% completion</p>
+                <span class="activity-time">2 hours ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon info">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <h4>Performance Alert</h4>
+                <p>Core Web Vitals improved by 15% this week</p>
+                <span class="activity-time">4 hours ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon warning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/>
+                  <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <h4>New Client Message</h4>
+                <p>Sarah Johnson sent a project update for Acme Corporation</p>
+                <span class="activity-time">6 hours ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <h4>New Team Member</h4>
+                <p>Mike Chen joined the development team</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <Footer />
+
+    <style>
+      .dashboard-main {
+        min-height: 100vh;
+        background: linear-gradient(135deg, 
+          rgba(99, 102, 241, 0.02) 0%, 
+          rgba(168, 85, 247, 0.02) 100%);
+      }
+
+      .dashboard-hero {
+        background: linear-gradient(135deg, 
+          rgba(99, 102, 241, 0.05) 0%, 
+          rgba(168, 85, 247, 0.05) 100%);
+        padding: 4rem 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero-content h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-description {
+        font-size: 1.125rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .dashboard-container {
+        padding: 3rem 0;
+      }
+
+      .dashboard-section {
+        margin-bottom: 4rem;
+      }
+
+      .dashboard-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .section-header p {
+        font-size: 1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .action-card {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        border-color: var(--primary-color);
+      }
+
+      .action-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin: 0 auto 1rem;
+      }
+
+      .action-card h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .action-card p {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        line-height: 1.4;
+      }
+
+      .action-btn {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .activity-feed {
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        transition: background 0.3s ease;
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+
+      .activity-item:hover {
+        background: rgba(99, 102, 241, 0.02);
+      }
+
+      .activity-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .activity-icon.success {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+      }
+
+      .activity-icon.info {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+
+      .activity-icon.warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+
+      .activity-content {
+        flex: 1;
+      }
+
+      .activity-content h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-content p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-time {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        .hero-content h1 {
+          font-size: 2rem;
+        }
+
+        .hero-stats {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+        }
+
+        .stat-value {
+          font-size: 1.5rem;
+        }
+
+        .dashboard-container {
+          padding: 2rem 0;
+        }
+
+        .section-header h2 {
+          font-size: 1.5rem;
+        }
+
+        .actions-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .activity-item {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </body>
+</html>
