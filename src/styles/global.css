@@ -46,16 +46,29 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 
-h1 { font-size: 3.5rem; }
-h2 { font-size: 2.5rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.25rem; }
+h1 {
+  font-size: 3.5rem;
+}
+h2 {
+  font-size: 2.5rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
 
 p {
   margin-bottom: 1rem;
@@ -79,7 +92,11 @@ p {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
   color: white;
   box-shadow: var(--shadow-md);
 }
@@ -110,7 +127,11 @@ p {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg) 0%,
+    var(--color-bg-alt) 100%
+  );
   position: relative;
   overflow: hidden;
 }
@@ -129,7 +150,11 @@ p {
 .hero-title {
   font-size: 4rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -196,8 +221,13 @@ p {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(180deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
 }
 
 /* Section Styles */
@@ -260,7 +290,11 @@ section {
 .image-placeholder {
   width: 100%;
   height: 300px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -445,11 +479,11 @@ section {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .hero-title {
     font-size: 3rem;
   }
-  
+
   .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
@@ -459,34 +493,39 @@ section {
   .container {
     padding: 0 1rem;
   }
-  
+
   .hero {
     min-height: 80vh;
     padding: 2rem 0;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
   }
-  
+
   .stats {
     justify-content: space-between;
   }
-  
+
   section {
     padding: 4rem 0;
   }
-  
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
 }
 
 /* Legacy compatibility for Astro blog styles */
-a, button {
+a,
+button {
   font-family: var(--font-family);
 }
 
@@ -497,7 +536,8 @@ main {
   padding: 0;
 }
 
-strong, b {
+strong,
+b {
   font-weight: 700;
 }
 

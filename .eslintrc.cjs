@@ -1,5 +1,9 @@
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true,
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: { sourceType: 'module' },
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
@@ -7,12 +11,19 @@ module.exports = {
     {
       files: ['*.astro'],
       parser: 'astro-eslint-parser',
-      parserOptions: { parser: '@typescript-eslint/parser' },
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.astro'],
+      },
       extends: ['plugin:astro/recommended'],
-      rules: {}
-    }
+      env: {
+        browser: true,
+        node: true,
+      },
+      rules: {},
+    },
   ],
   rules: {
     // your custom rules
-  }
+  },
 };

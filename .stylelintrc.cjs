@@ -4,9 +4,15 @@ module.exports = {
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen']
-      }
+        ignoreAtRules: [
+          'tailwind',
+          'apply',
+          'variants',
+          'responsive',
+          'screen',
+        ],
+      },
     ],
-    'no-descending-specificity': null
-  }
+    'no-descending-specificity': null,
+  },
 };
