@@ -379,7 +379,7 @@ declare global {
   }
 
   // Custom element types for web components
-  interface JSX {
+  namespace JSX {
     interface IntrinsicElements {
       'theme-toggle': CustomElementProps;
       'search-modal': CustomElementProps;
