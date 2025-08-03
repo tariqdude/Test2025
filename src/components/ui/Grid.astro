@@ -1,48 +1,143 @@
 ---
-interface Props {
-  columns?: 1 | 2 | 3 | 4 | 5 | 6;
-  gap?: 'sm' | 'md' | 'lg' | 'xl';
+export interface GridProps {
+  columns?: 1 | 2 | 3 | 4 | 5 | 6 | 'auto-fit' | 'auto-fill';
+  rows?: 'auto' | 1 | 2 | 3 | 4 | 5 | 6;
+  gap?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  gapX?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  gapY?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   className?: string;
   responsive?: boolean;
+  alignItems?: 'start' | 'center' | 'end' | 'stretch';
+  justifyItems?: 'start' | 'center' | 'end' | 'stretch';
+  placeItems?: 'start' | 'center' | 'end' | 'stretch';
+  minColWidth?: string;
+  maxColWidth?: string;
+  autoRows?: 'auto' | 'min' | 'max' | 'fr';
+  dense?: boolean;
 }
 
 const {
   columns = 3,
+  rows = 'auto',
   gap = 'md',
+  gapX,
+  gapY,
   className = '',
   responsive = true,
+  alignItems,
+  justifyItems,
+  placeItems,
+  minColWidth,
+  maxColWidth,
+  autoRows,
+  dense = false,
   ...rest
-} = Astro.props;
+} = Astro.props as GridProps;
 
 const baseClasses = 'grid';
 
-const columnClasses = responsive ? {
-  1: 'grid-cols-1',
-  2: 'grid-cols-1 md:grid-cols-2',
-  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-  5: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5',
-  6: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6'
-} : {
-  1: 'grid-cols-1',
-  2: 'grid-cols-2',
-  3: 'grid-cols-3',
-  4: 'grid-cols-4',
-  5: 'grid-cols-5',
-  6: 'grid-cols-6'
+// Handle responsive column classes
+const getColumnClasses = () => {
+  if (columns === 'auto-fit' || columns === 'auto-fill') {
+    const minWidth = minColWidth || '250px';
+    const maxWidth = maxColWidth || '1fr';
+    return `grid-cols-[repeat(${columns},minmax(${minWidth},${maxWidth}))]`;
+  }
+  
+  if (responsive && typeof columns === 'number') {
+    const responsiveMap = {
+      1: 'grid-cols-1',
+      2: 'grid-cols-1 sm:grid-cols-2',
+      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+      4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+      5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      6: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
+    };
+    return responsiveMap[columns] || 'grid-cols-3';
+  }
+  
+  return `grid-cols-${columns}`;
 };
 
+// Handle row classes
+const getRowClasses = () => {
+  if (rows === 'auto') return '';
+  return `grid-rows-${rows}`;
+};
+
+// Gap classes
 const gaps = {
+  none: '',
+  xs: 'gap-2',
   sm: 'gap-4',
   md: 'gap-6',
   lg: 'gap-8',
-  xl: 'gap-12'
+  xl: 'gap-12',
+  '2xl': 'gap-16'
+};
+
+const gapXClasses = {
+  none: '',
+  xs: 'gap-x-2',
+  sm: 'gap-x-4',
+  md: 'gap-x-6',
+  lg: 'gap-x-8',
+  xl: 'gap-x-12',
+  '2xl': 'gap-x-16'
+};
+
+const gapYClasses = {
+  none: '',
+  xs: 'gap-y-2',
+  sm: 'gap-y-4',
+  md: 'gap-y-6',
+  lg: 'gap-y-8',
+  xl: 'gap-y-12',
+  '2xl': 'gap-y-16'
+};
+
+// Alignment classes
+const alignItemsClasses = {
+  start: 'items-start',
+  center: 'items-center',
+  end: 'items-end',
+  stretch: 'items-stretch'
+};
+
+const justifyItemsClasses = {
+  start: 'justify-items-start',
+  center: 'justify-items-center',
+  end: 'justify-items-end',
+  stretch: 'justify-items-stretch'
+};
+
+const placeItemsClasses = {
+  start: 'place-items-start',
+  center: 'place-items-center',
+  end: 'place-items-end',
+  stretch: 'place-items-stretch'
+};
+
+// Auto rows classes
+const autoRowsClasses = {
+  auto: 'auto-rows-auto',
+  min: 'auto-rows-min',
+  max: 'auto-rows-max',
+  fr: 'auto-rows-fr'
 };
 
 const classes = [
   baseClasses,
-  columnClasses[columns],
-  gaps[gap],
+  getColumnClasses(),
+  getRowClasses(),
+  // Use specific gap classes if provided, otherwise use general gap
+  gapX ? gapXClasses[gapX] : gaps[gap],
+  gapY ? gapYClasses[gapY] : (gapX ? '' : gaps[gap]), // Only apply gapY if gapX is used
+  alignItems && alignItemsClasses[alignItems],
+  justifyItems && justifyItemsClasses[justifyItems],
+  placeItems && placeItemsClasses[placeItems],
+  autoRows && autoRowsClasses[autoRows],
+  dense && 'grid-flow-dense',
   className
 ].filter(Boolean).join(' ');
 ---

@@ -1,12 +1,15 @@
 ---
 interface Props {
-  variant?: 'default' | 'elevated' | 'outline' | 'ghost';
+  variant?: 'default' | 'elevated' | 'outline' | 'ghost' | 'gradient' | 'glass';
   className?: string;
-  padding?: 'sm' | 'md' | 'lg' | 'xl';
-  rounded?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  shadow?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   hover?: boolean;
   border?: boolean;
+  clickable?: boolean;
+  href?: string;
+  target?: '_blank' | '_self';
 }
 
 const {
@@ -17,19 +20,25 @@ const {
   shadow = 'sm',
   hover = true,
   border = false,
+  clickable = false,
+  href,
+  target = '_self',
   ...rest
 } = Astro.props;
 
-const baseClasses = 'relative overflow-hidden';
+const baseClasses = 'relative overflow-hidden transition-all duration-300';
 
 const variants = {
   default: 'bg-white',
   elevated: 'bg-white shadow-lg',
   outline: 'bg-white border border-gray-200',
-  ghost: 'bg-transparent'
+  ghost: 'bg-transparent',
+  gradient: 'bg-gradient-to-br from-white to-gray-50 border border-gray-100',
+  glass: 'bg-white/80 backdrop-blur-md border border-white/20'
 };
 
 const paddings = {
+  none: '',
   sm: 'p-4',
   md: 'p-6',
   lg: 'p-8',
@@ -37,10 +46,13 @@ const paddings = {
 };
 
 const roundedStyles = {
+  none: '',
   sm: 'rounded-sm',
   md: 'rounded-md',
   lg: 'rounded-lg',
   xl: 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  '3xl': 'rounded-3xl',
   full: 'rounded-full'
 };
 
@@ -49,8 +61,13 @@ const shadows = {
   sm: 'shadow-sm',
   md: 'shadow-md',
   lg: 'shadow-lg',
-  xl: 'shadow-xl'
+  xl: 'shadow-xl',
+  '2xl': 'shadow-2xl'
 };
+
+const hoverStyles = hover ? 'hover:shadow-lg hover:-translate-y-1 hover:scale-105' : '';
+const clickableStyles = clickable || href ? 'cursor-pointer' : '';
+const borderStyles = border ? 'border border-gray-200' : '';
 
 const classes = [
   baseClasses,
@@ -58,12 +75,16 @@ const classes = [
   paddings[padding],
   roundedStyles[rounded],
   shadows[shadow],
-  hover ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1' : '',
-  border ? 'border border-gray-200' : '',
+  hoverStyles,
+  clickableStyles,
+  borderStyles,
   className
 ].filter(Boolean).join(' ');
+
+const Component = href ? 'a' : 'div';
+const linkProps = href ? { href, target } : {};
 ---
 
-<div class={classes} {...rest}>
+<Component class={classes} {...linkProps} {...rest}>
   <slot />
-</div>
+</Component>

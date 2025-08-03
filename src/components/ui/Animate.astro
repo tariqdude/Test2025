@@ -1,30 +1,80 @@
 ---
-interface Props {
-  animation?: 'fadeIn' | 'slideUp' | 'slideLeft' | 'slideRight' | 'scaleIn' | 'rotateIn';
+export interface AnimateProps {
+  animation?: 'fadeIn' | 'fadeInUp' | 'fadeInDown' | 'fadeInLeft' | 'fadeInRight' |
+             'slideUp' | 'slideDown' | 'slideLeft' | 'slideRight' |
+             'scaleIn' | 'scaleInUp' | 'scaleInDown' |
+             'rotateIn' | 'rotateInLeft' | 'rotateInRight' |
+             'flipIn' | 'flipInX' | 'flipInY' |
+             'bounceIn' | 'bounceInUp' | 'bounceInDown' |
+             'zoomIn' | 'zoomInUp' | 'zoomInDown' |
+             'rollIn' | 'lightSpeedIn' | 'pulse' | 'wiggle';
   delay?: number;
   duration?: number;
-  trigger?: 'scroll' | 'load' | 'hover' | 'manual';
+  easing?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'bounce' | 'elastic' | 'back';
+  trigger?: 'scroll' | 'load' | 'hover' | 'click' | 'focus' | 'manual';
   once?: boolean;
+  threshold?: number;
+  rootMargin?: string;
   className?: string;
+  onAnimationStart?: () => void;
+  onAnimationEnd?: () => void;
 }
 
 const {
   animation = 'fadeIn',
   delay = 0,
   duration = 0.8,
+  easing = 'ease-out',
   trigger = 'scroll',
   once = true,
+  threshold = 0.1,
+  rootMargin = '50px',
   className = '',
+  onAnimationStart,
+  onAnimationEnd,
   ...rest
-} = Astro.props;
+} = Astro.props as AnimateProps;
 
 const animationClasses = {
   fadeIn: 'animate-fade-in',
+  fadeInUp: 'animate-fade-in-up',
+  fadeInDown: 'animate-fade-in-down',
+  fadeInLeft: 'animate-fade-in-left',
+  fadeInRight: 'animate-fade-in-right',
   slideUp: 'animate-slide-up',
+  slideDown: 'animate-slide-down',
   slideLeft: 'animate-slide-left',
   slideRight: 'animate-slide-right',
   scaleIn: 'animate-scale-in',
-  rotateIn: 'animate-rotate-in'
+  scaleInUp: 'animate-scale-in-up',
+  scaleInDown: 'animate-scale-in-down',
+  rotateIn: 'animate-rotate-in',
+  rotateInLeft: 'animate-rotate-in-left',
+  rotateInRight: 'animate-rotate-in-right',
+  flipIn: 'animate-flip-in',
+  flipInX: 'animate-flip-in-x',
+  flipInY: 'animate-flip-in-y',
+  bounceIn: 'animate-bounce-in',
+  bounceInUp: 'animate-bounce-in-up',
+  bounceInDown: 'animate-bounce-in-down',
+  zoomIn: 'animate-zoom-in',
+  zoomInUp: 'animate-zoom-in-up',
+  zoomInDown: 'animate-zoom-in-down',
+  rollIn: 'animate-roll-in',
+  lightSpeedIn: 'animate-light-speed-in',
+  pulse: 'animate-pulse-custom',
+  wiggle: 'animate-wiggle'
+};
+
+const easingFunctions = {
+  linear: 'linear',
+  ease: 'ease',
+  'ease-in': 'ease-in',
+  'ease-out': 'ease-out',
+  'ease-in-out': 'ease-in-out',
+  bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  elastic: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  back: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
 };
 
 const baseClasses = 'transition-all';
@@ -32,7 +82,8 @@ const classes = [baseClasses, animationClasses[animation], className].filter(Boo
 
 const style = {
   '--animation-delay': `${delay}ms`,
-  '--animation-duration': `${duration}s`
+  '--animation-duration': `${duration}s`,
+  '--animation-easing': easingFunctions[easing]
 };
 ---
 
@@ -42,6 +93,10 @@ const style = {
   data-animation={animation}
   data-trigger={trigger}
   data-once={once}
+  data-threshold={threshold}
+  data-root-margin={rootMargin}
+  data-on-start={onAnimationStart ? 'true' : 'false'}
+  data-on-end={onAnimationEnd ? 'true' : 'false'}
   {...rest}
 >
   <slot />
@@ -93,11 +148,24 @@ const style = {
         if (!this.elements.has(element)) {
           const animation = element.getAttribute('data-animation') || 'fadeIn';
           const trigger = element.getAttribute('data-trigger') || 'scroll';
+          const threshold = parseFloat(element.getAttribute('data-threshold') || '0.1');
+          const rootMargin = element.getAttribute('data-root-margin') || '50px';
           
           this.elements.set(element, { animation, triggered: false });
           
           if (trigger === 'scroll') {
-            this.observer.observe(element);
+            // Create observer with custom settings for each element
+            const customObserver = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    this.triggerAnimation(entry.target);
+                  }
+                });
+              },
+              { threshold, rootMargin }
+            );
+            customObserver.observe(element);
           } else if (trigger === 'load') {
             this.triggerAnimation(element);
           }
@@ -105,9 +173,17 @@ const style = {
           // Set initial state
           element.classList.add('opacity-0', 'transform');
           
-          // Add hover trigger if specified
+          // Add event triggers
           if (trigger === 'hover') {
             element.addEventListener('mouseenter', () => {
+              this.triggerAnimation(element);
+            });
+          } else if (trigger === 'click') {
+            element.addEventListener('click', () => {
+              this.triggerAnimation(element);
+            });
+          } else if (trigger === 'focus') {
+            element.addEventListener('focus', () => {
               this.triggerAnimation(element);
             });
           }
@@ -121,14 +197,27 @@ const style = {
 
       const once = element.getAttribute('data-once') === 'true';
       const delay = parseInt(element.getAttribute('style')?.match(/--animation-delay:\s*(\d+)ms/)?.[1] || '0');
+      const onStart = element.getAttribute('data-on-start') === 'true';
+      const onEnd = element.getAttribute('data-on-end') === 'true';
+      
+      if (onStart) {
+        element.dispatchEvent(new CustomEvent('animationstart'));
+      }
       
       setTimeout(() => {
         element.classList.remove('opacity-0');
         element.classList.add('animate-in');
         
+        if (onEnd) {
+          // Wait for animation to complete
+          const duration = parseFloat(element.getAttribute('style')?.match(/--animation-duration:\s*([\d.]+)s/)?.[1] || '0.8') * 1000;
+          setTimeout(() => {
+            element.dispatchEvent(new CustomEvent('animationend'));
+          }, duration);
+        }
+        
         if (once) {
           elementData.triggered = true;
-          this.observer.unobserve(element);
         }
       }, delay);
     }
@@ -144,10 +233,65 @@ const style = {
     to { opacity: 1; }
   }
 
+  @keyframes fadeInUp {
+    from { 
+      opacity: 0; 
+      transform: translateY(30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from { 
+      opacity: 0; 
+      transform: translateY(-30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    from { 
+      opacity: 0; 
+      transform: translateX(-30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInRight {
+    from { 
+      opacity: 0; 
+      transform: translateX(30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0);
+    }
+  }
+
   @keyframes slideUp {
     from { 
       opacity: 0; 
       transform: translateY(30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from { 
+      opacity: 0; 
+      transform: translateY(-30px);
     }
     to { 
       opacity: 1; 
@@ -188,6 +332,28 @@ const style = {
     }
   }
 
+  @keyframes scaleInUp {
+    from { 
+      opacity: 0; 
+      transform: scale(0.9) translateY(30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes scaleInDown {
+    from { 
+      opacity: 0; 
+      transform: scale(0.9) translateY(-30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1) translateY(0);
+    }
+  }
+
   @keyframes rotateIn {
     from { 
       opacity: 0; 
@@ -199,27 +365,275 @@ const style = {
     }
   }
 
+  @keyframes rotateInLeft {
+    from { 
+      opacity: 0; 
+      transform: rotate(-90deg) scale(0.9);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotate(0deg) scale(1);
+    }
+  }
+
+  @keyframes rotateInRight {
+    from { 
+      opacity: 0; 
+      transform: rotate(90deg) scale(0.9);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotate(0deg) scale(1);
+    }
+  }
+
+  @keyframes flipIn {
+    from { 
+      opacity: 0; 
+      transform: rotateY(-90deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotateY(0deg);
+    }
+  }
+
+  @keyframes flipInX {
+    from { 
+      opacity: 0; 
+      transform: rotateX(-90deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotateX(0deg);
+    }
+  }
+
+  @keyframes flipInY {
+    from { 
+      opacity: 0; 
+      transform: rotateY(-90deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: rotateY(0deg);
+    }
+  }
+
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 1; transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes bounceInUp {
+    0% { opacity: 0; transform: translateY(100px) scale(0.3); }
+    50% { opacity: 1; transform: translateY(-30px) scale(1.05); }
+    70% { transform: translateY(10px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes bounceInDown {
+    0% { opacity: 0; transform: translateY(-100px) scale(0.3); }
+    50% { opacity: 1; transform: translateY(30px) scale(1.05); }
+    70% { transform: translateY(-10px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes zoomIn {
+    from { 
+      opacity: 0; 
+      transform: scale(0.5);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1);
+    }
+  }
+
+  @keyframes zoomInUp {
+    from { 
+      opacity: 0; 
+      transform: scale(0.5) translateY(30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes zoomInDown {
+    from { 
+      opacity: 0; 
+      transform: scale(0.5) translateY(-30px);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes rollIn {
+    from { 
+      opacity: 0; 
+      transform: translateX(-100px) rotate(-120deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  @keyframes lightSpeedIn {
+    from { 
+      opacity: 0; 
+      transform: translateX(100px) skewX(-30deg);
+    }
+    60% {
+      opacity: 1;
+      transform: translateX(-20px) skewX(20deg);
+    }
+    80% {
+      transform: translateX(5px) skewX(-5deg);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0) skewX(0deg);
+    }
+  }
+
+  @keyframes pulseCustom {
+    0%, 100% { 
+      opacity: 1; 
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.7; 
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes wiggle {
+    0%, 7% { transform: rotateZ(0deg); }
+    15% { transform: rotateZ(-15deg); }
+    20% { transform: rotateZ(10deg); }
+    25% { transform: rotateZ(-10deg); }
+    30% { transform: rotateZ(6deg); }
+    35% { transform: rotateZ(-4deg); }
+    40%, 100% { transform: rotateZ(0deg); }
+  }
+
+  /* Animation classes */
   .animate-fade-in.animate-in {
-    animation: fadeIn var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: fadeIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-fade-in-up.animate-in {
+    animation: fadeInUp var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-fade-in-down.animate-in {
+    animation: fadeInDown var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-fade-in-left.animate-in {
+    animation: fadeInLeft var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-fade-in-right.animate-in {
+    animation: fadeInRight var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
   }
 
   .animate-slide-up.animate-in {
-    animation: slideUp var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: slideUp var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-slide-down.animate-in {
+    animation: slideDown var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
   }
 
   .animate-slide-left.animate-in {
-    animation: slideLeft var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: slideLeft var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
   }
 
   .animate-slide-right.animate-in {
-    animation: slideRight var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: slideRight var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
   }
 
   .animate-scale-in.animate-in {
-    animation: scaleIn var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: scaleIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-scale-in-up.animate-in {
+    animation: scaleInUp var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-scale-in-down.animate-in {
+    animation: scaleInDown var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
   }
 
   .animate-rotate-in.animate-in {
-    animation: rotateIn var(--animation-duration, 0.8s) ease-out var(--animation-delay, 0ms);
+    animation: rotateIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-rotate-in-left.animate-in {
+    animation: rotateInLeft var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-rotate-in-right.animate-in {
+    animation: rotateInRight var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-flip-in.animate-in {
+    animation: flipIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-flip-in-x.animate-in {
+    animation: flipInX var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-flip-in-y.animate-in {
+    animation: flipInY var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-bounce-in.animate-in {
+    animation: bounceIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-bounce-in-up.animate-in {
+    animation: bounceInUp var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-bounce-in-down.animate-in {
+    animation: bounceInDown var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-zoom-in.animate-in {
+    animation: zoomIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-zoom-in-up.animate-in {
+    animation: zoomInUp var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-zoom-in-down.animate-in {
+    animation: zoomInDown var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-roll-in.animate-in {
+    animation: rollIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-light-speed-in.animate-in {
+    animation: lightSpeedIn var(--animation-duration, 0.8s) var(--animation-easing, ease-out) var(--animation-delay, 0ms);
+  }
+
+  .animate-pulse-custom.animate-in {
+    animation: pulseCustom var(--animation-duration, 2s) var(--animation-easing, ease-in-out) var(--animation-delay, 0ms) infinite;
+  }
+
+  .animate-wiggle.animate-in {
+    animation: wiggle var(--animation-duration, 1s) var(--animation-easing, ease-in-out) var(--animation-delay, 0ms);
   }
 </style>
