@@ -1,10 +1,11 @@
 // @ts-check
+import 'dotenv/config';
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://example.com',
+  site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
   integrations: [mdx(), sitemap()],
 });
