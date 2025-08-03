@@ -1,11 +1,5 @@
 import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [tailwindcss()],
-  css: {
-    postcss: {
-      plugins: [tailwindcss],
-    },
-  },
+  // Vite configuration - Tailwind CSS is handled by Astro integration
 });
