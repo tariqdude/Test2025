@@ -203,3 +203,86 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+/* Features grid */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.feature-item {
+  background: var(--color-bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+/* Testimonials */
+.testimonials {
+  margin: 4rem 0;
+}
+.testimonials blockquote {
+  font-size: 1.125rem;
+  font-style: italic;
+  margin: 0 auto 2rem;
+  max-width: 600px;
+}
+.testimonials cite {
+  display: block;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* CTA */
+.cta {
+  margin: 4rem 0;
+  text-align: center;
+}
+
+/* Contact Form Styles */
+.contact {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.contact-form label {
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(10, 37, 64, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    text-align: center;
+    padding: 0 1rem;
+  }
+  .display-1 {
+    font-size: 2rem;
+  }
+}

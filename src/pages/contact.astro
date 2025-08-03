@@ -1,0 +1,34 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${SITE_TITLE} | Contact`} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main class="container fade-in">
+      <section class="contact">
+        <h1>Contact Us</h1>
+        <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+        <form action="#" method="POST" class="contact-form">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+
+          <button type="submit" class="btn">Submit</button>
+        </form>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
