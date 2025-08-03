@@ -1,3 +1,6 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 /* Import modular CSS files */
 @import './base.css';
 @import './typography.css';
@@ -561,8 +564,7 @@ main {
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
-} Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+}
 
 /* Corporate Theme Variables */
 :root {
