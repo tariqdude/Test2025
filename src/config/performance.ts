@@ -1,5 +1,6 @@
-// Performance Configuration and Optimization Utilities
-import type { AstroIntegration } from 'astro';
+// Performance optimization configuration for Astro
+
+import type { AstroIntegration as _AstroIntegration } from 'astro';
 
 /* ==================== PERFORMANCE CONSTANTS ==================== */
 
@@ -249,7 +250,7 @@ export class ImageOptimizer {
       loading = 'lazy',
       decoding = 'async',
       fetchPriority = 'auto',
-      quality = 'medium',
+      quality: _quality = 'medium',
     } = options;
 
     return {
@@ -349,9 +350,9 @@ export class CriticalCSSExtractor {
     const {
       html,
       css,
-      width = PERFORMANCE_CONFIG.CRITICAL_CSS.width,
-      height = PERFORMANCE_CONFIG.CRITICAL_CSS.height,
-      timeout = PERFORMANCE_CONFIG.CRITICAL_CSS.timeout,
+      width: _width = PERFORMANCE_CONFIG.CRITICAL_CSS.width,
+      height: _height = PERFORMANCE_CONFIG.CRITICAL_CSS.height,
+      timeout: _timeout = PERFORMANCE_CONFIG.CRITICAL_CSS.timeout,
       ignore = PERFORMANCE_CONFIG.CRITICAL_CSS.ignore,
     } = options;
 
@@ -360,7 +361,7 @@ export class CriticalCSSExtractor {
     try {
       // Extract above-the-fold CSS rules
       const criticalSelectors = this.extractCriticalSelectors(html);
-      const criticalCSS = this.filterCSSRules(css, criticalSelectors, ignore);
+      const criticalCSS = this.filterCSSRules(css, criticalSelectors, [...ignore]);
       
       return criticalCSS;
     } catch (error) {
@@ -527,8 +528,6 @@ export const performanceUtils = {
 };
 
 /* ==================== DEFAULT EXPORTS ==================== */
-
-export { PerformanceMonitor, ResourceOptimizer, ImageOptimizer, LazyLoader, CriticalCSSExtractor };
 
 // Create global instances
 export const performanceMonitor = new PerformanceMonitor();

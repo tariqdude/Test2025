@@ -24,6 +24,21 @@ module.exports = {
     },
   ],
   rules: {
-    // your custom rules
+    // Allow namespaces in global declarations
+    '@typescript-eslint/no-namespace': [
+      'error',
+      {
+        allowDeclarations: true,
+        allowDefinitionFiles: true,
+      },
+    ],
+    // Allow unused vars that start with underscore
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
   },
 };

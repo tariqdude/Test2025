@@ -5,7 +5,7 @@
 // Enhanced Component Props with modern patterns
 export interface BaseComponentProps {
   className?: string;
-  children?: React.ReactNode;
+  children?: string | HTMLElement | HTMLElement[];
   'data-testid'?: string;
 }
 
@@ -102,9 +102,9 @@ export interface ButtonProps extends BaseComponentProps {
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
-  leftIcon?: React.ComponentType;
-  rightIcon?: React.ComponentType;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  leftIcon?: string;
+  rightIcon?: string;
+  onClick?: (event: MouseEvent) => void;
   type?: 'button' | 'submit' | 'reset';
   href?: string;
   target?: '_blank' | '_self' | '_parent' | '_top';
@@ -124,7 +124,7 @@ export interface CardProps extends BaseComponentProps {
 export interface NavigationItem {
   label: string;
   href: string;
-  icon?: React.ComponentType;
+  icon?: string;
   badge?: string | number;
   active?: boolean;
   disabled?: boolean;
@@ -407,25 +407,6 @@ declare global {
 }
 
 /* ==================== UTILITY EXPORTS ==================== */
-
-// Re-export common types for convenience
-export type {
-  BaseComponentProps,
-  ButtonProps,
-  CardProps,
-  ModalProps,
-  NavigationProps,
-  BlogPost,
-  BlogPostFrontmatter,
-  ThemeConfig,
-  ColorScheme,
-  ApiResponse,
-  SearchFilters,
-  SearchResult,
-  PerformanceMetrics,
-  LoadingState,
-  A11yProps,
-};
 
 // Function type for better type safety
 export type FunctionType = (...args: unknown[]) => unknown;
