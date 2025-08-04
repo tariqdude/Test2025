@@ -1,0 +1,512 @@
+---
+export interface Props {
+  variant?: 'quantum-grid' | 'neural-matrix' | 'cosmic-mesh' | 'holographic-array' | 'plasma-field' | 'crystalline-lattice' | 'void-scatter' | 'dimensional-web' | 'infinity-pattern' | 'consciousness-nodes';
+  cols?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'auto' | 'fit' | 'fill';
+  rows?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'auto' | 'fit' | 'fill';
+  gap?: 'none' | 'micro' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'quantum' | 'dimensional';
+  align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline' | 'quantum-align' | 'neural-balance' | 'cosmic-harmony';
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly' | 'stretch' | 'quantum-distribute' | 'neural-space' | 'cosmic-flow';
+  responsive?: boolean;
+  interactive?: boolean;
+  animated?: boolean;
+  energyLevel?: 'dormant' | 'awakening' | 'active' | 'charged' | 'energized' | 'supercharged' | 'quantum' | 'cosmic' | 'transcendent' | 'godmode';
+  dimension?: '2d' | '2.5d' | '3d' | '4d' | 'quantum' | 'multidimensional';
+  morphology?: 'static' | 'fluid' | 'organic' | 'crystalline' | 'plasma' | 'liquid' | 'gas' | 'energy' | 'consciousness' | 'void';
+  className?: string;
+  id?: string;
+}
+
+const {
+  variant = 'quantum-grid',
+  cols = 'auto',
+  rows = 'auto',
+  gap = 'md',
+  align = 'stretch',
+  justify = 'start',
+  responsive = true,
+  interactive = false,
+  animated = true,
+  energyLevel = 'active',
+  dimension = '2d',
+  morphology = 'static',
+  className = '',
+  id,
+} = Astro.props;
+
+const variantClasses = {
+  'quantum-grid': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-slate-900/20 via-blue-900/10 to-purple-900/20
+    backdrop-blur-sm border border-blue-500/20
+    shadow-[0_0_30px_rgba(59,130,246,0.15)]
+    before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-blue-500/5 before:to-transparent
+    before:animate-[quantum-scan_3s_ease-in-out_infinite]
+    hover:shadow-[0_0_50px_rgba(59,130,246,0.3)] hover:border-blue-400/40
+    transition-all duration-700 ease-out
+  `,
+  'neural-matrix': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-emerald-900/20 via-teal-900/10 to-cyan-900/20
+    backdrop-blur-sm border border-emerald-500/20
+    shadow-[0_0_30px_rgba(16,185,129,0.15)]
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_50%)]
+    before:animate-[neural-pulse_2s_ease-in-out_infinite]
+    hover:shadow-[0_0_50px_rgba(16,185,129,0.3)] hover:border-emerald-400/40
+    transition-all duration-700 ease-out
+  `,
+  'cosmic-mesh': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-violet-900/20 via-purple-900/10 to-fuchsia-900/20
+    backdrop-blur-sm border border-violet-500/20
+    shadow-[0_0_30px_rgba(139,92,246,0.15)]
+    before:absolute before:inset-0 before:bg-[conic-gradient(from_0deg,transparent,rgba(139,92,246,0.1),transparent_360deg)]
+    before:animate-[cosmic-rotate_4s_linear_infinite]
+    hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:border-violet-400/40
+    transition-all duration-700 ease-out
+  `,
+  'holographic-array': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-pink-900/20 via-rose-900/10 to-red-900/20
+    backdrop-blur-sm border border-pink-500/20
+    shadow-[0_0_30px_rgba(236,72,153,0.15)]
+    before:absolute before:inset-0 before:bg-gradient-to-r 
+    before:from-transparent before:via-pink-500/10 before:to-transparent
+    before:animate-[holographic-shimmer_2.5s_ease-in-out_infinite]
+    hover:shadow-[0_0_50px_rgba(236,72,153,0.3)] hover:border-pink-400/40
+    transition-all duration-700 ease-out
+  `,
+  'plasma-field': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-orange-900/20 via-yellow-900/10 to-amber-900/20
+    backdrop-blur-sm border border-orange-500/20
+    shadow-[0_0_30px_rgba(249,115,22,0.15)]
+    before:absolute before:inset-0 before:bg-gradient-to-br
+    before:from-orange-500/5 before:via-yellow-500/5 before:to-amber-500/5
+    before:animate-[plasma-flow_3s_ease-in-out_infinite_alternate]
+    hover:shadow-[0_0_50px_rgba(249,115,22,0.3)] hover:border-orange-400/40
+    transition-all duration-700 ease-out
+  `,
+  'crystalline-lattice': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-indigo-900/20 via-blue-900/10 to-sky-900/20
+    backdrop-blur-sm border border-indigo-500/20
+    shadow-[0_0_30px_rgba(99,102,241,0.15)]
+    before:absolute before:inset-0 before:bg-[linear-gradient(45deg,transparent_25%,rgba(99,102,241,0.05)_25%,rgba(99,102,241,0.05)_50%,transparent_50%,transparent_75%,rgba(99,102,241,0.05)_75%)]
+    before:bg-[length:20px_20px] before:animate-[crystalline-shift_4s_linear_infinite]
+    hover:shadow-[0_0_50px_rgba(99,102,241,0.3)] hover:border-indigo-400/40
+    transition-all duration-700 ease-out
+  `,
+  'void-scatter': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-gray-900/40 via-slate-900/20 to-zinc-900/40
+    backdrop-blur-lg border border-gray-500/30
+    shadow-[0_0_30px_rgba(75,85,99,0.3)]
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_25%_25%,rgba(75,85,99,0.2),transparent_30%),radial-gradient(circle_at_75%_75%,rgba(75,85,99,0.2),transparent_30%)]
+    before:animate-[void-drift_6s_ease-in-out_infinite_alternate]
+    hover:shadow-[0_0_50px_rgba(75,85,99,0.5)] hover:border-gray-400/50
+    transition-all duration-700 ease-out
+  `,
+  'dimensional-web': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-teal-900/20 via-cyan-900/10 to-blue-900/20
+    backdrop-blur-sm border border-teal-500/20
+    shadow-[0_0_30px_rgba(20,184,166,0.15)]
+    before:absolute before:inset-0 before:bg-[linear-gradient(0deg,transparent_40%,rgba(20,184,166,0.1)_50%,transparent_60%),linear-gradient(90deg,transparent_40%,rgba(20,184,166,0.1)_50%,transparent_60%)]
+    before:animate-[dimensional-weave_5s_ease-in-out_infinite]
+    hover:shadow-[0_0_50px_rgba(20,184,166,0.3)] hover:border-teal-400/40
+    transition-all duration-700 ease-out
+  `,
+  'infinity-pattern': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-blue-900/20
+    backdrop-blur-sm border border-purple-500/20
+    shadow-[0_0_30px_rgba(147,51,234,0.15)]
+    before:absolute before:inset-0 before:bg-[conic-gradient(from_0deg_at_25%_25%,transparent,rgba(147,51,234,0.1),transparent),conic-gradient(from_180deg_at_75%_75%,transparent,rgba(147,51,234,0.1),transparent)]
+    before:animate-[infinity-spin_8s_linear_infinite]
+    hover:shadow-[0_0_50px_rgba(147,51,234,0.3)] hover:border-purple-400/40
+    transition-all duration-700 ease-out
+  `,
+  'consciousness-nodes': `
+    grid relative overflow-hidden
+    bg-gradient-to-br from-rose-900/20 via-pink-900/10 to-purple-900/20
+    backdrop-blur-sm border border-rose-500/20
+    shadow-[0_0_30px_rgba(244,63,94,0.15)]
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_20%_20%,rgba(244,63,94,0.1),transparent_25%),radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.1),transparent_25%),radial-gradient(circle_at_50%_80%,rgba(244,63,94,0.1),transparent_25%)]
+    before:animate-[consciousness-pulse_3s_ease-in-out_infinite]
+    hover:shadow-[0_0_50px_rgba(244,63,94,0.3)] hover:border-rose-400/40
+    transition-all duration-700 ease-out
+  `,
+};
+
+const gapClasses = {
+  none: 'gap-0',
+  micro: 'gap-0.5',
+  xs: 'gap-1',
+  sm: 'gap-2',
+  md: 'gap-4',
+  lg: 'gap-6',
+  xl: 'gap-8',
+  '2xl': 'gap-12',
+  '3xl': 'gap-16',
+  quantum: 'gap-4 md:gap-6 lg:gap-8',
+  dimensional: 'gap-2 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-12',
+};
+
+const colsClasses = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+  5: 'grid-cols-5',
+  6: 'grid-cols-6',
+  7: 'grid-cols-7',
+  8: 'grid-cols-8',
+  9: 'grid-cols-9',
+  10: 'grid-cols-10',
+  11: 'grid-cols-11',
+  12: 'grid-cols-12',
+  auto: 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))]',
+  fit: 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))]',
+  fill: 'grid-cols-[repeat(auto-fill,minmax(300px,1fr))]',
+};
+
+const rowsClasses = {
+  1: 'grid-rows-1',
+  2: 'grid-rows-2',
+  3: 'grid-rows-3',
+  4: 'grid-rows-4',
+  5: 'grid-rows-5',
+  6: 'grid-rows-6',
+  7: 'grid-rows-7',
+  8: 'grid-rows-8',
+  9: 'grid-rows-9',
+  10: 'grid-rows-10',
+  11: 'grid-rows-11',
+  12: 'grid-rows-12',
+  auto: 'grid-rows-[auto]',
+  fit: 'grid-rows-[repeat(auto-fit,minmax(150px,auto))]',
+  fill: 'grid-rows-[repeat(auto-fill,minmax(200px,auto))]',
+};
+
+const alignClasses = {
+  start: 'items-start',
+  center: 'items-center',
+  end: 'items-end',
+  stretch: 'items-stretch',
+  baseline: 'items-baseline',
+  'quantum-align': 'items-center justify-items-center',
+  'neural-balance': 'items-stretch justify-items-stretch',
+  'cosmic-harmony': 'items-center justify-items-center place-content-center',
+};
+
+const justifyClasses = {
+  start: 'justify-start',
+  center: 'justify-center',
+  end: 'justify-end',
+  between: 'justify-between',
+  around: 'justify-around',
+  evenly: 'justify-evenly',
+  stretch: 'justify-stretch',
+  'quantum-distribute': 'justify-evenly place-content-evenly',
+  'neural-space': 'justify-between place-content-between',
+  'cosmic-flow': 'justify-center place-content-center',
+};
+
+const energyClasses = {
+  dormant: 'opacity-60 brightness-75',
+  awakening: 'opacity-70 brightness-85',
+  active: 'opacity-100 brightness-100',
+  charged: 'opacity-100 brightness-110 contrast-105',
+  energized: 'opacity-100 brightness-125 contrast-110 saturate-110',
+  supercharged: 'opacity-100 brightness-150 contrast-125 saturate-125',
+  quantum: 'opacity-100 brightness-175 contrast-150 saturate-150 hue-rotate-15',
+  cosmic: 'opacity-100 brightness-200 contrast-175 saturate-175 hue-rotate-30',
+  transcendent: 'opacity-100 brightness-250 contrast-200 saturate-200 hue-rotate-45',
+  godmode: 'opacity-100 brightness-300 contrast-250 saturate-250 hue-rotate-90',
+};
+
+const dimensionClasses = {
+  '2d': '',
+  '2.5d': 'transform-style-preserve-3d perspective-1000',
+  '3d': 'transform-style-preserve-3d perspective-1000 transform-gpu',
+  '4d': 'transform-style-preserve-3d perspective-1000 transform-gpu filter-3d',
+  quantum: 'transform-style-preserve-3d perspective-1000 transform-gpu filter-3d quantum-dimension',
+  multidimensional: 'transform-style-preserve-3d perspective-1000 transform-gpu filter-3d quantum-dimension reality-bend',
+};
+
+const morphologyClasses = {
+  static: '',
+  fluid: 'transition-all duration-1000 ease-fluid',
+  organic: 'transition-all duration-1500 ease-organic animate-pulse',
+  crystalline: 'transition-all duration-500 ease-crystalline',
+  plasma: 'transition-all duration-800 ease-plasma animate-flow',
+  liquid: 'transition-all duration-2000 ease-liquid animate-wave',
+  gas: 'transition-all duration-3000 ease-gas animate-float',
+  energy: 'transition-all duration-100 ease-energy animate-shimmer',
+  consciousness: 'transition-all duration-5000 ease-consciousness animate-breathe',
+  void: 'transition-all duration-10000 ease-void animate-drift',
+};
+
+const responsiveClasses = responsive ? `
+  sm:${colsClasses[cols]} md:${colsClasses[cols]} lg:${colsClasses[cols]} xl:${colsClasses[cols]}
+  ${typeof rows !== 'string' ? `sm:${rowsClasses[rows]} md:${rowsClasses[rows]} lg:${rowsClasses[rows]} xl:${rowsClasses[rows]}` : ''}
+` : '';
+
+const interactiveClasses = interactive ? `
+  cursor-pointer select-none
+  hover:scale-105 hover:rotate-1 hover:brightness-110
+  active:scale-95 active:rotate-0 active:brightness-90
+  focus:outline-none focus:ring-4 focus:ring-blue-500/30
+  transition-all duration-300 ease-out
+` : '';
+
+const animatedClasses = animated ? `
+  animate-fade-in-up
+  [&>*]:animate-fade-in-up
+  [&>*:nth-child(even)]:animation-delay-200
+  [&>*:nth-child(3n)]:animation-delay-400
+  [&>*:nth-child(4n)]:animation-delay-600
+` : '';
+
+const combinedClasses = [
+  variantClasses[variant],
+  colsClasses[cols],
+  typeof rows !== 'string' ? rowsClasses[rows] : '',
+  gapClasses[gap],
+  alignClasses[align],
+  justifyClasses[justify],
+  energyClasses[energyLevel],
+  dimensionClasses[dimension],
+  morphologyClasses[morphology],
+  responsiveClasses,
+  interactiveClasses,
+  animatedClasses,
+  className,
+].join(' ').replace(/\s+/g, ' ').trim();
+---
+
+<div
+  class={combinedClasses}
+  id={id}
+  data-variant={variant}
+  data-energy-level={energyLevel}
+  data-dimension={dimension}
+  data-morphology={morphology}
+  data-interactive={interactive}
+  data-animated={animated}
+>
+  <slot />
+</div>
+
+<style>
+  @keyframes quantum-scan {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes neural-pulse {
+    0%, 100% {
+      opacity: 0.1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes cosmic-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes holographic-shimmer {
+    0% {
+      transform: translateX(-100%) skew(-12deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%) skew(-12deg);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes plasma-flow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes crystalline-shift {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 20px 20px;
+    }
+  }
+  
+  @keyframes void-drift {
+    0% {
+      background-position: 0% 0%, 100% 100%;
+    }
+    50% {
+      background-position: 50% 50%, 50% 50%;
+    }
+    100% {
+      background-position: 100% 100%, 0% 0%;
+    }
+  }
+  
+  @keyframes dimensional-weave {
+    0% {
+      background-position: 0% 0%, 0% 0%;
+    }
+    25% {
+      background-position: 100% 0%, 0% 100%;
+    }
+    50% {
+      background-position: 100% 100%, 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%, 100% 0%;
+    }
+    100% {
+      background-position: 0% 0%, 0% 0%;
+    }
+  }
+  
+  @keyframes infinity-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes consciousness-pulse {
+    0%, 100% {
+      opacity: 0.1;
+      transform: scale(0.8);
+    }
+    33% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    66% {
+      opacity: 0.2;
+      transform: scale(0.9);
+    }
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Enhanced easing functions */
+  .ease-fluid {
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .ease-organic {
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .ease-crystalline {
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .ease-plasma {
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .ease-liquid {
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  .ease-gas {
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  
+  .ease-energy {
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .ease-consciousness {
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .ease-void {
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  /* Animation delays */
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  
+  /* 3D and dimensional effects */
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .transform-gpu {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  .filter-3d {
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+  }
+  
+  .quantum-dimension {
+    transform: rotateX(5deg) rotateY(5deg);
+  }
+  
+  .reality-bend {
+    transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(2deg);
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+  }
+</style>

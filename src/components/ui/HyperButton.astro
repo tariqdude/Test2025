@@ -1,0 +1,352 @@
+---
+export interface Props {
+  variant?: 'quantum' | 'holographic' | 'neural' | 'cosmic' | 'liquid' | 'crystalline' | 'plasma' | 'ethereal' | 'matrix' | 'void';
+  size?: 'nano' | 'micro' | 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'massive' | 'titan' | 'xl';
+  shape?: 'rectangle' | 'rounded' | 'pill' | 'circle' | 'hexagon' | 'diamond' | 'organic' | 'morphing' | 'fluid';
+  energy?: 'dormant' | 'low' | 'medium' | 'high' | 'maximum' | 'overdrive' | 'godmode' | 'cosmic' | 'transcendent';
+  effect?: 'none' | 'ripple' | 'particle' | 'magnetic' | 'quantum' | 'dimensional' | 'holographic' | 'neural';
+  interaction?: 'static' | 'hover' | 'magnetic' | 'gravitational' | 'quantum' | 'telepathic' | 'dimensional' | 'particle' | 'ripple';
+  state?: 'normal' | 'loading' | 'success' | 'error' | 'disabled' | 'quantum-locked';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  className?: string;
+  id?: string;
+}
+
+const {
+  variant = 'quantum',
+  size = 'medium',
+  shape = 'rounded',
+  energy = 'medium',
+  effect = 'ripple',
+  state = 'normal',
+  href,
+  target,
+  type = 'button',
+  disabled = false,
+  className = '',
+  id,
+  onClick,
+} = Astro.props;
+
+const variantClasses = {
+  quantum: `
+    bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600
+    hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500
+    text-white font-bold
+    shadow-glow hover:shadow-glow-lg
+    border border-white/20
+    backdrop-blur-sm
+    before:absolute before:inset-0 before:bg-gradient-to-r before:from-cyan-400/20 before:via-blue-500/20 before:to-purple-600/20
+    before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500
+    after:absolute after:inset-0 after:bg-noise after:opacity-10 after:mix-blend-overlay
+  `,
+  plasma: `
+    bg-gradient-to-r from-pink-500 via-red-500 to-orange-500
+    hover:from-pink-400 hover:via-red-400 hover:to-orange-400
+    text-white font-bold
+    shadow-neon hover:shadow-neon-lg
+    border border-pink-400/30
+    before:absolute before:inset-0 before:bg-gradient-to-r before:from-pink-300/30 before:via-red-400/30 before:to-orange-300/30
+    before:animate-gradient-shift before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-700
+  `,
+  neural: `
+    bg-gradient-mesh
+    hover:bg-gradient-to-br hover:from-emerald-500 hover:via-blue-500 hover:to-purple-600
+    text-white font-semibold
+    shadow-glass hover:shadow-floating
+    border border-emerald-400/20
+    before:absolute before:inset-0 before:bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_4px)]
+    before:animate-slide-right before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-600
+  `,
+  holographic: `
+    bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600
+    hover:from-cyan-300 hover:via-blue-400 hover:to-purple-500
+    text-white font-bold
+    shadow-glass hover:shadow-glow
+    border border-cyan-300/30
+    before:absolute before:inset-0 before:bg-gradient-conic before:from-transparent before:via-white/30 before:to-transparent
+    before:animate-spin-slow before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-1000
+  `,
+  crystalline: `
+    bg-gradient-to-br from-white/90 via-gray-100/90 to-gray-200/90
+    hover:from-white hover:via-gray-50 hover:to-gray-100
+    text-gray-800 font-semibold
+    shadow-neumorphism hover:shadow-floating
+    border border-white/60
+    backdrop-blur-xl
+    before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/40 before:to-transparent
+    before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500
+  `,
+  void: `
+    bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90
+    hover:from-gray-900 hover:via-gray-800 hover:to-gray-900
+    text-white font-medium
+    shadow-floating hover:shadow-glow
+    border border-white/10
+    backdrop-blur-xl
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-white/10 before:to-transparent
+    before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-800
+  `,
+  cosmic: `
+    bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900
+    hover:from-purple-800 hover:via-blue-800 hover:to-indigo-800
+    text-white font-bold
+    shadow-glow hover:shadow-glow-lg
+    border border-purple-400/30
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.4),transparent_70%)]
+    before:animate-pulse-slow
+  `,
+  ethereal: `
+    bg-gradient-to-br from-indigo-400/60 via-purple-400/60 to-pink-400/60
+    hover:from-indigo-300/80 hover:via-purple-300/80 hover:to-pink-300/80
+    text-white font-medium
+    shadow-glass hover:shadow-glow
+    border border-white/20
+    backdrop-blur-4xl
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-white/20 before:to-transparent
+    before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-1000
+  `,
+  matrix: `
+    bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900
+    hover:from-green-800 hover:via-emerald-800 hover:to-teal-800
+    text-green-300 font-mono font-bold
+    shadow-neon hover:shadow-neon-lg
+    border border-green-400/30
+    before:absolute before:inset-0 before:bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,255,0,0.1)_2px,rgba(0,255,0,0.1)_4px)]
+    before:animate-slide-down before:opacity-40
+  `,
+  infinity: `
+    bg-gradient-to-r from-indigo-600 via-purple-600 via-pink-600 via-red-600 via-orange-600 via-yellow-600 via-green-600 via-teal-600 via-cyan-600 via-blue-600 to-indigo-600
+    bg-size-400 animate-gradient-shift
+    text-white font-bold
+    shadow-glow hover:shadow-glow-lg
+    border-2 border-white/30
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-white/20 before:to-transparent
+    before:animate-pulse-slow
+  `,
+};
+
+const sizeClasses = {
+  nano: 'px-2 py-1 text-2xs min-w-8 min-h-6',
+  micro: 'px-3 py-1.5 text-xs min-w-12 min-h-8',
+  tiny: 'px-4 py-2 text-sm min-w-16 min-h-10',
+  small: 'px-6 py-3 text-base min-w-20 min-h-12',
+  medium: 'px-8 py-4 text-lg min-w-24 min-h-14',
+  large: 'px-12 py-6 text-xl min-w-32 min-h-16',
+  huge: 'px-16 py-8 text-2xl min-w-40 min-h-20',
+  massive: 'px-24 py-12 text-3xl min-w-48 min-h-24',
+  titan: 'px-32 py-16 text-4xl min-w-64 min-h-32',
+};
+
+const shapeClasses = {
+  rectangle: 'rounded-none',
+  rounded: 'rounded-xl',
+  pill: 'rounded-full',
+  circle: 'rounded-full aspect-square',
+  hexagon: 'clip-path-hexagon',
+  diamond: 'clip-path-diamond transform rotate-45',
+  morphing: 'rounded-3xl animate-morph',
+  organic: 'rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-morph',
+};
+
+const energyClasses = {
+  dormant: 'opacity-60',
+  low: 'opacity-80',
+  medium: 'opacity-90',
+  high: 'opacity-100 hover:animate-glow',
+  maximum: 'opacity-100 animate-pulse hover:animate-glow hover:animate-neon-pulse',
+  overdrive: 'opacity-100 animate-pulse-slow animate-glow hover:animate-neon-pulse hover:scale-110',
+  godmode: 'opacity-100 animate-gradient-shift animate-glow animate-neon-pulse hover:scale-115 hover:animate-morph',
+};
+
+const effectClasses = {
+  none: '',
+  ripple: 'overflow-hidden relative',
+  wave: 'overflow-hidden relative hover:animate-wave',
+  particle: 'overflow-hidden relative',
+  magnetic: 'overflow-hidden relative hover:animate-magnetic',
+  gravitational: 'overflow-hidden relative hover:scale-110 hover:shadow-glow-lg',
+  quantum: 'overflow-hidden relative hover:animate-glitch hover:filter hover:hue-rotate-180',
+  dimensional: 'overflow-hidden relative perspective-1000 hover:rotateY-12 hover:rotateX-6',
+};
+
+const stateClasses = {
+  normal: '',
+  loading: 'animate-pulse cursor-wait',
+  success: 'bg-success-500 hover:bg-success-400 text-white',
+  error: 'bg-error-500 hover:bg-error-400 text-white',
+  disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
+  pulsing: 'animate-pulse-slow',
+  glitching: 'animate-glitch',
+};
+
+const combinedClasses = [
+  'relative inline-flex items-center justify-center',
+  'font-medium text-center',
+  'transition-all duration-500 ease-out',
+  'transform-gpu cursor-pointer select-none',
+  'focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-transparent',
+  !disabled && 'hover:scale-105 active:scale-95',
+  variantClasses[variant],
+  sizeClasses[size],
+  shapeClasses[shape],
+  energyClasses[energy],
+  effectClasses[effect],
+  stateClasses[state],
+  className,
+].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+
+const Component = href ? 'a' : 'button';
+---
+
+<Component
+  class={combinedClasses}
+  id={id}
+  href={href}
+  target={target}
+  type={!href ? type : undefined}
+  disabled={disabled}
+  onclick={onClick}
+  data-variant={variant}
+  data-size={size}
+  data-shape={shape}
+  data-energy={energy}
+  data-effect={effect}
+  data-state={state}
+>
+  {state === 'loading' && (
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  )}
+  
+  {effect === 'ripple' && (
+    <div class="absolute inset-0 overflow-hidden rounded-inherit">
+      <div class="ripple-effect"></div>
+    </div>
+  )}
+  
+  {effect === 'particle' && (
+    <div class="absolute inset-0 overflow-hidden rounded-inherit pointer-events-none">
+      <div class="particle particle-1"></div>
+      <div class="particle particle-2"></div>
+      <div class="particle particle-3"></div>
+    </div>
+  )}
+  
+  <span class={`relative z-10 flex items-center gap-2 ${state === 'loading' ? 'invisible' : ''}`}>
+    <slot />
+  </span>
+</Component>
+
+<style>
+  .bg-size-400 {
+    background-size: 400% 400%;
+  }
+  
+  .clip-path-hexagon {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+  }
+  
+  .clip-path-diamond {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+  
+  .ripple-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  button:hover .ripple-effect,
+  a:hover .ripple-effect {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    opacity: 0;
+  }
+  
+  .particle-1 {
+    top: 20%;
+    left: 20%;
+    animation: particle-float 3s ease-in-out infinite;
+  }
+  
+  .particle-2 {
+    top: 60%;
+    left: 80%;
+    animation: particle-float 3s ease-in-out infinite 1s;
+  }
+  
+  .particle-3 {
+    top: 80%;
+    left: 40%;
+    animation: particle-float 3s ease-in-out infinite 2s;
+  }
+  
+  button:hover .particle,
+  a:hover .particle {
+    opacity: 0.8;
+  }
+  
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.5);
+      opacity: 0.8;
+    }
+  }
+  
+  [data-variant="infinity"] {
+    animation: 
+      gradient-shift 3s ease-in-out infinite,
+      glow 2s ease-in-out infinite alternate;
+  }
+  
+  [data-effect="quantum"]:hover {
+    animation: 
+      glitch 0.3s ease-in-out infinite,
+      neon-pulse 1s ease-in-out infinite;
+  }
+  
+  [data-effect="dimensional"] {
+    transform-style: preserve-3d;
+  }
+  
+  [data-effect="dimensional"]:hover {
+    transform: perspective(1000px) rotateY(15deg) rotateX(10deg) scale(1.05);
+  }
+  
+  [data-energy="godmode"] {
+    filter: 
+      drop-shadow(0 0 10px currentColor) 
+      drop-shadow(0 0 20px currentColor) 
+      drop-shadow(0 0 30px currentColor);
+  }
+  
+  [data-energy="godmode"]:hover {
+    filter: 
+      drop-shadow(0 0 15px currentColor) 
+      drop-shadow(0 0 30px currentColor) 
+      drop-shadow(0 0 45px currentColor)
+      hue-rotate(45deg);
+  }
+</style>

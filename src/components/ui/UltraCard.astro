@@ -1,0 +1,308 @@
+---
+export interface Props {
+  variant?: 'quantum' | 'holographic' | 'neural' | 'cosmic' | 'liquid' | 'crystalline' | 'plasma' | 'ethereal' | 'matrix' | 'void';
+  size?: 'micro' | 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'massive' | 'colossal' | 'lg' | 'xl';
+  dimension?: '2d' | '3d' | '4d' | 'infinite';
+  interaction?: 'static' | 'hover' | 'magnetic' | 'gravitational' | 'quantum' | 'telepathic' | 'dimensional' | 'particle' | 'ripple';
+  energy?: 'low' | 'medium' | 'high' | 'nuclear' | 'cosmic' | 'supercharged' | 'transcendent' | 'godmode';
+  glowIntensity?: 'none' | 'subtle' | 'moderate' | 'high' | 'extreme' | 'reality-breaking';
+  className?: string;
+  id?: string;
+  href?: string;
+  target?: string;
+  onClick?: string;
+}
+
+const {
+  variant = 'quantum',
+  size = 'medium',
+  dimension = '3d',
+  interaction = 'hover',
+  energy = 'medium',
+  className = '',
+  id,
+  href,
+  target,
+  onClick,
+} = Astro.props;
+
+const variantClasses = {
+  quantum: `
+    relative overflow-hidden
+    bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20
+    backdrop-blur-xl border border-white/20
+    before:absolute before:inset-0 before:bg-gradient-to-br before:from-cyan-500/10 before:via-blue-500/10 before:to-purple-500/10
+    before:animate-gradient-shift before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-700
+    after:absolute after:inset-0 after:bg-noise after:opacity-5 after:mix-blend-overlay
+    shadow-glass hover:shadow-glow-lg
+    transform-gpu perspective-1000 hover:scale-102
+    transition-all duration-700 ease-out
+  `,
+  holographic: `
+    relative overflow-hidden
+    bg-gradient-to-br from-cyan-400/30 via-blue-500/30 to-purple-600/30
+    backdrop-blur-2xl border border-white/30
+    before:absolute before:inset-0 before:bg-gradient-conic before:from-transparent before:via-white/20 before:to-transparent
+    before:animate-spin-slow before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-1000
+    after:absolute after:top-0 after:left-0 after:w-full after:h-full
+    after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent
+    after:transform after:-skew-x-12 after:translate-x-full hover:after:-translate-x-full
+    after:transition-transform after:duration-1000 after:ease-in-out
+    shadow-neon-lg hover:shadow-glow-lg
+    transform-gpu hover:rotateY-12 hover:scale-105
+    transition-all duration-500 ease-out
+  `,
+  neural: `
+    relative overflow-hidden
+    bg-gradient-mesh opacity-90
+    backdrop-blur-xl border border-white/10
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-emerald-400/20 before:via-blue-500/20 before:to-purple-600/20
+    before:animate-pulse-slow before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500
+    after:absolute after:inset-0 after:border after:border-dashed after:border-emerald-400/30
+    after:animate-morph after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-700
+    shadow-floating hover:shadow-neon
+    transform-gpu hover:scale-103 hover:rotate-1
+    transition-all duration-600 ease-out
+  `,
+  cosmic: `
+    relative overflow-hidden
+    bg-gradient-to-br from-purple-900/40 via-blue-900/40 to-indigo-900/40
+    backdrop-blur-xl border border-purple-400/20
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]
+    before:animate-pulse-slow
+    after:absolute after:top-1/2 after:left-1/2 after:w-2 after:h-2 after:bg-white after:rounded-full
+    after:animate-ping after:transform after:-translate-x-1/2 after:-translate-y-1/2
+    shadow-glow hover:shadow-glow-lg
+    transform-gpu hover:scale-105 hover:-rotate-2
+    transition-all duration-800 ease-out
+  `,
+  liquid: `
+    relative overflow-hidden
+    bg-gradient-to-br from-cyan-400/25 via-blue-500/25 to-indigo-600/25
+    backdrop-blur-xl border border-cyan-300/20
+    before:absolute before:inset-0 before:bg-gradient-to-br before:from-cyan-400/30 before:via-transparent before:to-indigo-600/30
+    before:animate-wave before:opacity-60
+    after:absolute after:inset-0 after:bg-gradient-to-t after:from-blue-500/20 after:to-transparent
+    after:animate-float after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-500
+    shadow-glass hover:shadow-floating
+    transform-gpu hover:scale-102
+    transition-all duration-500 ease-out
+    border-radius-morph
+  `,
+  crystalline: `
+    relative overflow-hidden
+    bg-gradient-to-br from-white/30 via-gray-100/30 to-gray-200/30
+    backdrop-blur-xl border border-white/40
+    before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-gray-300/20
+    before:animate-shimmer before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-800
+    after:absolute after:top-0 after:right-0 after:w-8 after:h-8 after:bg-white/40 after:transform after:rotate-45 after:-translate-y-4 after:translate-x-4
+    after:animate-glow after:opacity-60
+    shadow-neumorphism hover:shadow-floating
+    transform-gpu hover:scale-103 hover:rotate-1
+    transition-all duration-700 ease-out
+  `,
+  plasma: `
+    relative overflow-hidden
+    bg-gradient-to-br from-pink-500/30 via-red-500/30 to-orange-500/30
+    backdrop-blur-xl border border-pink-400/20
+    before:absolute before:inset-0 before:bg-gradient-to-br before:from-pink-400/40 before:via-red-500/40 before:to-orange-400/40
+    before:animate-gradient-shift before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-600
+    after:absolute after:inset-2 after:bg-gradient-to-br after:from-pink-300/20 after:to-orange-300/20
+    after:animate-morph after:rounded-3xl
+    shadow-glow hover:shadow-neon-lg
+    transform-gpu hover:scale-105 hover:-rotate-3
+    transition-all duration-600 ease-out
+  `,
+  ethereal: `
+    relative overflow-hidden
+    bg-gradient-to-br from-indigo-400/20 via-purple-400/20 to-pink-400/20
+    backdrop-blur-4xl border border-white/10
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-white/20 before:via-transparent before:to-transparent
+    before:animate-pulse-slow before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-1000
+    after:absolute after:inset-0 after:border after:border-white/5 after:rounded-inherit
+    after:animate-glow after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-800
+    shadow-glass hover:shadow-glow
+    transform-gpu hover:scale-102 hover:translateZ-4
+    transition-all duration-800 ease-out
+  `,
+  matrix: `
+    relative overflow-hidden
+    bg-gradient-to-br from-green-900/40 via-emerald-900/40 to-teal-900/40
+    backdrop-blur-xl border border-green-400/20
+    before:absolute before:inset-0 before:bg-[linear-gradient(90deg,transparent_0%,rgba(0,255,0,0.2)_50%,transparent_100%)]
+    before:animate-slide-right before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500
+    after:absolute after:top-0 after:left-0 after:w-full after:h-full
+    after:bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,255,0,0.1)_2px,rgba(0,255,0,0.1)_4px)]
+    after:animate-slide-down after:opacity-30
+    shadow-neon hover:shadow-neon-lg
+    transform-gpu hover:scale-103 hover:skew-y-1
+    transition-all duration-700 ease-out
+    font-mono
+  `,
+  void: `
+    relative overflow-hidden
+    bg-gradient-to-br from-black/80 via-gray-900/80 to-black/80
+    backdrop-blur-xl border border-white/5
+    before:absolute before:inset-0 before:bg-gradient-radial before:from-white/5 before:via-transparent before:to-transparent
+    before:animate-pulse-slow before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-1000
+    after:absolute after:top-1/2 after:left-1/2 after:w-32 after:h-32 after:bg-gradient-radial after:from-white/10 after:to-transparent
+    after:animate-ping-slow after:transform after:-translate-x-1/2 after:-translate-y-1/2 after:opacity-0 hover:after:opacity-100
+    after:transition-opacity after:duration-800
+    shadow-floating hover:shadow-glow
+    transform-gpu hover:scale-98 hover:blur-sm
+    transition-all duration-900 ease-out
+  `,
+};
+
+const sizeClasses = {
+  micro: 'p-2 text-xs rounded-lg min-h-16',
+  tiny: 'p-3 text-sm rounded-xl min-h-20',
+  small: 'p-4 text-base rounded-xl min-h-24',
+  medium: 'p-6 text-base rounded-2xl min-h-32',
+  large: 'p-8 text-lg rounded-3xl min-h-40',
+  lg: 'p-8 text-lg rounded-3xl min-h-40',
+  huge: 'p-12 text-xl rounded-4xl min-h-48',
+  massive: 'p-16 text-2xl rounded-5xl min-h-64',
+  colossal: 'p-24 text-3xl rounded-6xl min-h-80',
+  xl: 'p-20 text-2xl rounded-5xl min-h-72',
+};
+
+const dimensionClasses = {
+  '2d': 'transform-flat',
+  '3d': 'transform-style-3d perspective-1000',
+  '4d': 'transform-style-3d perspective-2000 hover:animate-morph',
+  'infinite': 'transform-style-3d perspective-2000 hover:animate-morph hover:animate-float hover:animate-glow',
+};
+
+const interactionClasses = {
+  static: '',
+  hover: 'hover:z-10 cursor-pointer',
+  magnetic: 'hover:z-10 cursor-pointer hover:animate-magnetic',
+  gravitational: 'hover:z-10 cursor-pointer hover:scale-110 hover:shadow-glow-lg',
+  quantum: 'hover:z-10 cursor-pointer hover:animate-glitch hover:animate-neon-pulse',
+  telepathic: 'hover:z-10 cursor-pointer hover:animate-blur-in hover:animate-gradient-shift',
+  dimensional: 'hover:z-10 cursor-pointer hover:rotateY-12 hover:rotateX-6 hover:scale-105',
+  particle: 'hover:z-10 cursor-pointer hover:animate-particle-burst',
+  ripple: 'hover:z-10 cursor-pointer hover:animate-ripple-effect',
+};
+
+const energyClasses = {
+  low: 'opacity-80',
+  medium: 'opacity-90',
+  high: 'opacity-100 hover:animate-glow',
+  nuclear: 'opacity-100 animate-pulse-slow hover:animate-glow hover:animate-neon-pulse',
+  cosmic: 'opacity-100 animate-gradient-shift hover:animate-glow hover:animate-neon-pulse hover:animate-morph',
+  supercharged: 'opacity-100 brightness-110 contrast-110 animate-gradient-shift hover:animate-glow',
+  transcendent: 'opacity-100 brightness-125 contrast-125 saturate-125 animate-gradient-shift hover:animate-glow',
+  godmode: 'opacity-100 brightness-150 contrast-150 saturate-150 hue-rotate-15 animate-gradient-shift hover:animate-glow',
+};
+
+const combinedClasses = [
+  variantClasses[variant],
+  sizeClasses[size],
+  dimensionClasses[dimension],
+  interactionClasses[interaction],
+  energyClasses[energy],
+  className,
+].join(' ').replace(/\s+/g, ' ').trim();
+
+const Component = href ? 'a' : 'div';
+---
+
+<Component
+  class={combinedClasses}
+  id={id}
+  href={href}
+  target={target}
+  onclick={onClick}
+  data-variant={variant}
+  data-size={size}
+  data-dimension={dimension}
+  data-interaction={interaction}
+  data-energy={energy}
+>
+  <slot />
+</Component>
+
+<style>
+  .border-radius-morph {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: morph 8s ease-in-out infinite;
+  }
+  
+  .transform-flat {
+    transform-style: flat;
+  }
+  
+  [data-variant="holographic"]:hover {
+    animation: holographic-effect 2s ease-in-out infinite;
+  }
+  
+  @keyframes holographic-effect {
+    0%, 100% { filter: hue-rotate(0deg) saturate(1); }
+    25% { filter: hue-rotate(90deg) saturate(1.2); }
+    50% { filter: hue-rotate(180deg) saturate(1.4); }
+    75% { filter: hue-rotate(270deg) saturate(1.2); }
+  }
+  
+  [data-variant="neural"] {
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 255, 198, 0.2) 0%, transparent 50%);
+    background-size: 200% 200%;
+    animation: neural-activity 4s ease-in-out infinite;
+  }
+  
+  @keyframes neural-activity {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+  }
+  
+  [data-variant="cosmic"] {
+    position: relative;
+  }
+  
+  [data-variant="cosmic"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 25% 25%, white 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, white 0.5px, transparent 0.5px);
+    background-size: 50px 50px, 25px 25px;
+    animation: starfield 20s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  
+  @keyframes starfield {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100px); }
+  }
+  
+  [data-energy="cosmic"] {
+    animation: 
+      gradient-shift 3s ease-in-out infinite,
+      glow 2s ease-in-out infinite alternate,
+      float 6s ease-in-out infinite;
+  }
+  
+  [data-interaction="quantum"]:hover {
+    filter: 
+      hue-rotate(180deg) 
+      saturate(1.5) 
+      brightness(1.2) 
+      contrast(1.1);
+  }
+  
+  [data-interaction="telepathic"]:hover {
+    backdrop-filter: 
+      blur(20px) 
+      hue-rotate(45deg) 
+      saturate(1.3);
+  }
+</style>

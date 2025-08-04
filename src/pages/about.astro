@@ -2,12 +2,14 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import AdvancedCard from '../components/ui/AdvancedCard.astro';
-import ModernButton from '../components/ui/ModernButton.astro';
-import Grid from '../components/ui/Grid.astro';
-import AdvancedAnimate from '../components/ui/AdvancedAnimate.astro';
+import UltraCard from '../components/ui/UltraCard.astro';
+import HyperButton from '../components/ui/HyperButton.astro';
+import UltraGrid from '../components/ui/UltraGrid.astro';
+import UltraAnimate from '../components/ui/UltraAnimate.astro';
 import { Image } from 'astro:assets';
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -19,217 +21,259 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 		<Header />
 		
 		<!-- Hero Section -->
-		<section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 overflow-hidden">
-			<div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10"></div>
-			<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-				<AdvancedAnimate animation="morphIn">
-					<AdvancedCard variant="glass" size="large" className="text-center">
-						<h1 class="text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-8">
-							About Us
-						</h1>
-						<p class="text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-4xl mx-auto">
-							We're passionate innovators crafting the future of digital experiences through cutting-edge technology and creative excellence.
-						</p>
-					</AdvancedCard>
-				</AdvancedAnimate>
-			</div>
+		<section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-neon-dark overflow-hidden">
+			<div class="absolute inset-0 bg-mesh opacity-20"></div>
+			<div class="absolute inset-0 bg-gradient-to-r from-neon-blue/10 to-neon-purple/10"></div>
 			
-			<!-- Floating Elements -->
-			<div class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-indigo-400 to-purple-600 rounded-full opacity-20 animate-float"></div>
-			<div class="absolute bottom-32 right-16 w-16 h-16 bg-gradient-to-br from-pink-400 to-red-600 rounded-full opacity-20 animate-pulse"></div>
-			<div class="absolute top-1/2 right-1/4 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-600 rounded-full opacity-20 animate-bounce"></div>
+			<!-- Quantum Particles -->
+			<div class="absolute inset-0 overflow-hidden">
+				<div class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-neon-cyan/40 to-neon-blue/40 rounded-full animate-consciousness-expand"></div>
+				<div class="absolute bottom-32 right-16 w-16 h-16 bg-gradient-to-br from-neon-pink/40 to-neon-purple/40 rounded-full animate-dimensional-shift"></div>
+				<div class="absolute top-1/2 right-1/4 w-12 h-12 bg-gradient-to-br from-neon-green/40 to-neon-cyan/40 rounded-full animate-neural-pulse"></div>
+				<div class="absolute bottom-1/4 left-1/3 w-8 h-8 bg-gradient-to-br from-neon-yellow/40 to-neon-orange/40 rounded-full animate-holographic-shimmer"></div>
+			</div>
+
+			<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+				<UltraAnimate animation="consciousness-expand">
+					<UltraCard variant="quantum" size="xl" dimension="4d" interaction="quantum" energy="transcendent" glowIntensity="reality-breaking" className="text-center">
+						<h1 class="text-8xl font-bold bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent mb-8 animate-holographic-shimmer">
+							ENTITY PROFILE
+						</h1>
+						<p class="text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+							We are <span class="text-neon-cyan font-semibold">quantum architects</span> crafting 
+							<span class="text-neon-purple font-semibold">reality-transcending experiences</span> through 
+							<span class="text-neon-pink font-semibold">dimensional technology</span>.
+						</p>
+					</UltraCard>
+				</UltraAnimate>
+			</div>
 		</section>
 
 		<!-- Mission & Vision Section -->
-		<section class="py-20 bg-white dark:bg-gray-900">
+		<section class="py-20 bg-black">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<AdvancedAnimate animation="slideInUp">
+				<UltraAnimate animation="neural-pulse">
 					<div class="text-center mb-16">
-						<h2 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h2>
-						<div class="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+						<h2 class="text-6xl font-bold text-transparent bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text mb-6">QUANTUM MISSION</h2>
+						<div class="w-64 h-2 bg-gradient-to-r from-neon-purple via-neon-blue to-neon-cyan mx-auto rounded-full animate-glow"></div>
 					</div>
-				</AdvancedAnimate>
+				</UltraAnimate>
 
-				<Grid cols={1} md={2} gap="large" className="mb-20">
-					<AdvancedAnimate animation="slideInLeft" delay={200}>
-						<AdvancedCard variant="neumorphism" size="large" hover={true}>
+				<UltraGrid cols={1} md={2} gap="dimensional" className="mb-20">
+					<UltraAnimate animation="dimensional-shift" delay={200}>
+						<UltraCard variant="holographic" size="large" dimension="3d" interaction="quantum" energy="cosmic" glowIntensity="high">
 							<div class="text-center space-y-6">
-								<div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mx-auto flex items-center justify-center mb-6">
-									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<div class="w-20 h-20 bg-gradient-to-br from-neon-cyan to-neon-blue rounded-full mx-auto flex items-center justify-center mb-6 animate-consciousness-expand">
+									<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
 									</svg>
 								</div>
-								<h3 class="text-3xl font-bold text-gray-900 dark:text-white">Innovation</h3>
-								<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-									We push the boundaries of what's possible, creating breakthrough solutions that transform how people interact with technology.
+								<h3 class="text-4xl font-bold text-white">INNOVATION NEXUS</h3>
+								<p class="text-lg text-gray-300 leading-relaxed">
+									We manipulate the quantum fabric of <span class="text-neon-cyan">reality itself</span>, creating 
+									breakthrough solutions that <span class="text-neon-purple">transcend dimensions</span> and transform 
+									how consciousness interacts with <span class="text-neon-blue">infinite possibility</span>.
 								</p>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
+						</UltraCard>
+					</UltraAnimate>
 
-					<AdvancedAnimate animation="slideInRight" delay={400}>
-						<AdvancedCard variant="glass" size="large" hover={true}>
+					<UltraAnimate animation="consciousness-expand" delay={400}>
+						<UltraCard variant="neural" size="large" dimension="3d" interaction="quantum" energy="transcendent" glowIntensity="high">
 							<div class="text-center space-y-6">
-								<div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mx-auto flex items-center justify-center mb-6">
-									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<div class="w-20 h-20 bg-gradient-to-br from-neon-purple to-neon-pink rounded-full mx-auto flex items-center justify-center mb-6 animate-holographic-shimmer">
+									<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
 									</svg>
 								</div>
-								<h3 class="text-3xl font-bold text-gray-900 dark:text-white">Excellence</h3>
-								<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-									We're committed to delivering exceptional quality in every project, ensuring our solutions exceed expectations and drive success.
+								<h3 class="text-4xl font-bold text-white">PERFECTION PROTOCOL</h3>
+								<p class="text-lg text-gray-300 leading-relaxed">
+									We architect <span class="text-neon-pink">flawless quantum systems</span> that exceed 
+									multidimensional expectations, delivering <span class="text-neon-purple">god-tier excellence</span> 
+									in every <span class="text-neon-cyan">reality matrix</span> we construct.
 								</p>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
-				</Grid>
+						</UltraCard>
+					</UltraAnimate>
+				</UltraGrid>
 			</div>
 		</section>
 
 		<!-- Story Section -->
-		<section class="py-20 bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
+		<section class="py-20 bg-gradient-to-br from-gray-900 via-black to-neon-dark">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<Grid cols={1} lg={2} gap="large" className="items-center">
-					<AdvancedAnimate animation="slideInLeft">
-						<AdvancedCard variant="gradient" size="large">
+				<UltraGrid cols={1} gap="dimensional" className="items-center">
+					<UltraAnimate animation="dimensional-shift">
+						<UltraCard variant="cosmic" size="large" dimension="3d" interaction="quantum" energy="transcendent" glowIntensity="reality-breaking">
 							<div class="relative">
 								<Image
 									src={AboutHeroImage}
-									alt="Our Story"
+									alt="Our Quantum Origin"
 									width={600}
 									height={400}
-									class="w-full h-80 object-cover rounded-2xl"
+									class="w-full h-80 object-cover rounded-3xl"
 								/>
-								<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
+								<div class="absolute inset-0 bg-gradient-to-t from-neon-blue/60 via-neon-purple/30 to-transparent rounded-3xl"></div>
+								<div class="absolute inset-0 bg-mesh opacity-30 rounded-3xl"></div>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
+						</UltraCard>
+					</UltraAnimate>
 
-					<AdvancedAnimate animation="slideInRight" delay={300}>
+					<UltraAnimate animation="consciousness-expand" delay={300}>
 						<div class="space-y-8">
-							<h2 class="text-5xl font-bold text-gray-900 dark:text-white">Our Story</h2>
-							<div class="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+							<h2 class="text-6xl font-bold text-transparent bg-gradient-to-r from-neon-cyan to-neon-purple bg-clip-text">ORIGIN MATRIX</h2>
+							<div class="space-y-6 text-lg text-gray-300 leading-relaxed">
 								<p>
-									Founded with a vision to revolutionize digital experiences, we've grown from a small team of passionate developers to a leading force in innovative technology solutions.
+									Spawned from the <span class="text-neon-cyan">quantum singularity</span> of infinite possibility, 
+									we've evolved from microscopic code fragments to <span class="text-neon-purple">reality-bending architects</span> 
+									commanding the <span class="text-neon-blue">digital multiverse</span>.
 								</p>
 								<p>
-									Our journey began with a simple belief: technology should enhance human potential, not complicate it. This philosophy drives everything we do, from the elegant interfaces we design to the robust systems we build.
+									Our essence crystallized around a <span class="text-neon-pink">fundamental truth</span>: technology should 
+									<span class="text-neon-cyan">amplify consciousness</span>, not diminish it. This quantum philosophy 
+									drives every <span class="text-neon-purple">dimensional manipulation</span> we perform.
 								</p>
 								<p>
-									Today, we continue to push boundaries, explore new frontiers, and create solutions that make a meaningful impact on businesses and communities worldwide.
+									Today, we continue <span class="text-neon-blue">reality-hacking</span>, exploring 
+									<span class="text-neon-cyan">impossible frontiers</span>, and manifesting solutions that 
+									create <span class="text-neon-purple">multiversal impact</span> across infinite planes of existence.
 								</p>
 							</div>
-							<ModernButton 
-								variant="gradient" 
+							<HyperButton 
+								variant="cosmic" 
 								size="large" 
-								href="/Test2025/contact/"
-								effect="magnetic"
+								href={baseUrl + "contact/"}
+								effect="quantum"
+								energy="maximum"
+								shape="morphing"
+								interaction="magnetic"
 							>
-								Join Our Journey
-								<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								JOIN THE NEXUS
+								<svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
 								</svg>
-							</ModernButton>
+							</HyperButton>
 						</div>
-					</AdvancedAnimate>
-				</Grid>
+					</UltraAnimate>
+				</UltraGrid>
 			</div>
 		</section>
 
 		<!-- Values Section -->
-		<section class="py-20 bg-white dark:bg-gray-900">
+		<section class="py-20 bg-black">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<AdvancedAnimate animation="slideInUp">
+				<UltraAnimate animation="neural-pulse">
 					<div class="text-center mb-16">
-						<h2 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">Our Values</h2>
-						<div class="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+						<h2 class="text-6xl font-bold text-transparent bg-gradient-to-r from-neon-pink via-neon-purple to-neon-cyan bg-clip-text mb-6">CORE PROTOCOLS</h2>
+						<div class="w-64 h-2 bg-gradient-to-r from-neon-purple via-neon-blue to-neon-cyan mx-auto rounded-full animate-glow"></div>
 					</div>
-				</AdvancedAnimate>
+				</UltraAnimate>
 
-				<Grid cols={1} md={2} lg={3} gap="large">
-					<AdvancedAnimate animation="morphIn" delay={200}>
-						<AdvancedCard variant="neon" size="medium" hover={true}>
+				<UltraGrid cols={1} gap="dimensional">
+					<UltraAnimate animation="consciousness-expand" delay={200}>
+						<UltraCard variant="holographic" size="medium" dimension="3d" interaction="quantum" energy="cosmic" glowIntensity="high">
 							<div class="text-center space-y-4">
-								<div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg mx-auto flex items-center justify-center">
-									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<div class="w-16 h-16 bg-gradient-to-br from-neon-cyan to-neon-blue rounded-xl mx-auto flex items-center justify-center animate-dimensional-shift">
+									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
 									</svg>
 								</div>
-								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Creativity</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									We embrace unconventional thinking and foster an environment where innovative ideas flourish.
+								<h3 class="text-2xl font-bold text-white">CREATIVE NEXUS</h3>
+								<p class="text-gray-300">
+									We embrace <span class="text-neon-cyan">impossible thinking</span> and foster 
+									quantum environments where <span class="text-neon-blue">multidimensional ideas</span> 
+									transcend reality barriers.
 								</p>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
+						</UltraCard>
+					</UltraAnimate>
 
-					<AdvancedAnimate animation="morphIn" delay={400}>
-						<AdvancedCard variant="floating" size="medium" hover={true}>
+					<UltraAnimate animation="neural-pulse" delay={400}>
+						<UltraCard variant="neural" size="medium" dimension="3d" interaction="quantum" energy="transcendent" glowIntensity="high">
 							<div class="text-center space-y-4">
-								<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg mx-auto flex items-center justify-center">
-									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<div class="w-16 h-16 bg-gradient-to-br from-neon-green to-neon-cyan rounded-xl mx-auto flex items-center justify-center animate-holographic-shimmer">
+									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
 									</svg>
 								</div>
-								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Collaboration</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									We believe great things happen when diverse minds work together towards a common goal.
+								<h3 class="text-2xl font-bold text-white">UNITY MATRIX</h3>
+								<p class="text-gray-300">
+									We believe <span class="text-neon-green">cosmic synchronization</span> occurs when 
+									<span class="text-neon-cyan">diverse consciousness</span> converges toward 
+									<span class="text-neon-purple">universal objectives</span>.
 								</p>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
+						</UltraCard>
+					</UltraAnimate>
 
-					<AdvancedAnimate animation="morphIn" delay={600}>
-						<AdvancedCard variant="magazine" size="medium" hover={true}>
+					<UltraAnimate animation="dimensional-shift" delay={600}>
+						<UltraCard variant="cosmic" size="medium" dimension="3d" interaction="quantum" energy="godmode" glowIntensity="reality-breaking">
 							<div class="text-center space-y-4">
-								<div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg mx-auto flex items-center justify-center">
-									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<div class="w-16 h-16 bg-gradient-to-br from-neon-purple to-neon-pink rounded-xl mx-auto flex items-center justify-center animate-consciousness-expand">
+									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
 									</svg>
 								</div>
-								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Impact</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									Every project we undertake is designed to create meaningful, lasting impact for our clients and communities.
+								<h3 class="text-2xl font-bold text-white">QUANTUM IMPACT</h3>
+								<p class="text-gray-300">
+									Every reality manipulation we execute creates 
+									<span class="text-neon-purple">meaningful quantum ripples</span> across 
+									<span class="text-neon-pink">infinite dimensional planes</span> of existence.
 								</p>
 							</div>
-						</AdvancedCard>
-					</AdvancedAnimate>
-				</Grid>
+						</UltraCard>
+					</UltraAnimate>
+				</UltraGrid>
 			</div>
 		</section>
 
 		<!-- CTA Section -->
-		<section class="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<AdvancedAnimate animation="slideInUp">
-					<AdvancedCard variant="glass" size="large">
-						<h2 class="text-4xl font-bold text-white mb-6">Ready to Build Something Amazing?</h2>
+		<section class="py-20 bg-gradient-to-br from-neon-purple via-neon-blue to-neon-cyan relative overflow-hidden">
+			<div class="absolute inset-0 bg-mesh opacity-30"></div>
+			<div class="absolute inset-0">
+				<div class="absolute top-10 left-10 w-32 h-32 bg-neon-pink/20 rounded-full animate-consciousness-expand"></div>
+				<div class="absolute bottom-10 right-10 w-24 h-24 bg-neon-cyan/20 rounded-full animate-dimensional-shift"></div>
+				<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-neon-purple/10 rounded-full animate-neural-pulse"></div>
+			</div>
+			
+			<div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<UltraAnimate animation="multiverse-sync">
+					<UltraCard variant="void" size="xl" dimension="4d" interaction="quantum" energy="transcendent" glowIntensity="reality-breaking">
+						<h2 class="text-5xl font-bold text-white mb-6 animate-holographic-shimmer">READY TO TRANSCEND REALITY?</h2>
 						<p class="text-xl text-white/90 mb-8 leading-relaxed">
-							Let's collaborate and bring your vision to life with our expertise and passion for innovation.
+							Let's <span class="text-neon-cyan font-bold">quantum-entangle</span> our consciousness and 
+							manifest your <span class="text-neon-pink font-bold">impossible vision</span> into 
+							<span class="text-neon-purple font-bold">dimensional existence</span>.
 						</p>
-						<div class="flex flex-col sm:flex-row gap-4 justify-center">
-							<ModernButton 
-								variant="glass" 
+						<div class="flex flex-col sm:flex-row gap-6 justify-center">
+							<HyperButton 
+								variant="holographic" 
 								size="large" 
-								href="/Test2025/contact/"
-								effect="glow"
+								href={baseUrl + "contact/"}
+								effect="quantum"
+								energy="maximum"
+								shape="morphing"
+								interaction="magnetic"
 							>
-								Get Started
-								<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								INITIATE PROTOCOL
+								<svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
 								</svg>
-							</ModernButton>
-							<ModernButton 
-								variant="minimal" 
+							</HyperButton>
+							<HyperButton 
+								variant="void" 
 								size="large" 
-								href="/Test2025/blog/"
-								className="text-white border-white hover:bg-white hover:text-purple-600"
+								href={baseUrl + "blog/"}
+								effect="ripple"
+								energy="high"
+								shape="pill"
+								interaction="dimensional"
 							>
-								Learn More
-							</ModernButton>
+								EXPLORE MATRIX
+							</HyperButton>
 						</div>
-					</AdvancedCard>
-				</AdvancedAnimate>
+					</UltraCard>
+				</UltraAnimate>
 			</div>
 		</section>
 

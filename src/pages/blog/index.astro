@@ -5,15 +5,17 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import AdvancedCard from '../../components/ui/AdvancedCard.astro';
-import ModernButton from '../../components/ui/ModernButton.astro';
-import Grid from '../../components/ui/Grid.astro';
-import AdvancedAnimate from '../../components/ui/AdvancedAnimate.astro';
+import UltraCard from '../../components/ui/UltraCard.astro';
+import HyperButton from '../../components/ui/HyperButton.astro';
+import UltraGrid from '../../components/ui/UltraGrid.astro';
+import UltraAnimate from '../../components/ui/UltraAnimate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -21,92 +23,121 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900 min-h-screen relative overflow-x-hidden">
+		<!-- Quantum Background Effects -->
+		<div class="fixed inset-0 bg-gradient-mesh opacity-20 animate-mesh-flow"></div>
+		<div class="fixed inset-0 bg-noise opacity-15"></div>
+		
+		<!-- Floating Quantum Particles -->
+		<div class="fixed inset-0 pointer-events-none">
+			<div class="absolute top-1/6 left-1/5 w-1 h-1 bg-neon-purple rounded-full animate-particle-drift opacity-70"></div>
+			<div class="absolute top-2/3 right-1/4 w-2 h-2 bg-neon-cyan rounded-full animate-particle-pulse opacity-50"></div>
+			<div class="absolute top-1/2 left-2/3 w-1.5 h-1.5 bg-neon-blue rounded-full animate-particle-float opacity-60"></div>
+		</div>
+
 		<Header />
-		<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-			<AdvancedAnimate animation="morphIn">
-				<AdvancedCard variant="glass" size="large" className="text-center mb-16">
-					<h1 class="text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
-						Blog
+		<main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+			<UltraAnimate animation="consciousness-expand" intensity="extreme">
+				<UltraCard variant="matrix" size="huge" dimension="4d" interaction="quantum" energy="godmode" glowIntensity="reality-breaking" className="text-center mb-16">
+					<h1 class="text-7xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-cyan bg-clip-text text-transparent mb-6">
+						QUANTUM JOURNAL
 					</h1>
-					<p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-						Thoughts, stories, and ideas from our journey of innovation and discovery.
+					<p class="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+						Chronicles from the <span class="text-neon-cyan font-semibold">infinite dimensions</span> of 
+						technological transcendence and <span class="text-neon-purple font-semibold">reality manipulation</span>.
 					</p>
-				</AdvancedCard>
-			</AdvancedAnimate>
+				</UltraCard>
+			</UltraAnimate>
 			
 			<section>
-				<AdvancedAnimate animation="slideInUp" delay={200}>
-					<div class="text-center mb-12">
-						<h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Latest Articles</h2>
-						<div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+				<UltraAnimate animation="neural-pulse" delay={400} intensity="strong">
+					<div class="text-center mb-16">
+						<h2 class="text-5xl font-bold text-transparent bg-gradient-to-r from-neon-pink via-neon-blue to-neon-cyan bg-clip-text mb-6">
+							DIMENSIONAL ARCHIVES
+						</h2>
+						<div class="w-32 h-1 bg-gradient-to-r from-neon-purple via-neon-blue to-neon-cyan mx-auto rounded-full animate-glow"></div>
 					</div>
-				</AdvancedAnimate>
+				</UltraAnimate>
 
-				<Grid columns="3" gap="8" breakpoints={{ md: 1, lg: 2 }}>
-					{posts.map((post, index) => (
-						<AdvancedAnimate animation="morphIn" delay={index * 150}>
-							<AdvancedCard 
-								variant={index % 3 === 0 ? "gradient" : index % 3 === 1 ? "glass" : "neumorphism"} 
-								size="medium" 
-								hover={true} 
-								className="h-full group"
-							>
-								<a href={`/Test2025/blog/${post.id}/`} class="block">
-									{post.data.heroImage && (
-										<div class="relative overflow-hidden rounded-lg mb-6">
-											<Image 
-												width={720} 
-												height={360} 
-												src={post.data.heroImage} 
-												alt={post.data.title} 
-												class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-											/>
-											<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-										</div>
-									)}
-									
-									<div class="space-y-4">
-										<div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-											<time datetime={post.data.pubDate.toISOString()}>
-												<FormattedDate date={post.data.pubDate} />
-											</time>
-											<span>•</span>
-											<span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-xs font-medium">
-												Article
-											</span>
-										</div>
-										
-										<h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-											{post.data.title}
-										</h3>
-										
-										{post.data.description && (
-											<p class="text-gray-600 dark:text-gray-300 line-clamp-3">
-												{post.data.description}
-											</p>
+				<UltraGrid 
+					variant="holographic-array"
+					cols="auto"
+					gap="dimensional"
+					animated={true}
+					energyLevel="transcendent"
+					dimension="3d"
+					morphology="fluid"
+				>
+					{posts.map((post, index) => {
+						const variants = ['quantum', 'holographic', 'neural', 'cosmic', 'crystalline', 'plasma', 'ethereal', 'matrix', 'void'] as const;
+						const variant = variants[index % variants.length];
+						
+						return (
+							<UltraAnimate animation="dimensional-shift" delay={index * 200} intensity="strong">
+								<UltraCard 
+									variant={variant}
+									size="large" 
+									dimension="3d"
+									interaction="quantum"
+									energy="cosmic"
+									glowIntensity="high"
+									className="h-full group"
+								>
+									<a href={`${baseUrl}blog/${post.id}/`} class="block space-y-6">
+										{post.data.heroImage && (
+											<div class="relative overflow-hidden rounded-2xl">
+												<Image 
+													width={720} 
+													height={360} 
+													src={post.data.heroImage} 
+													alt={post.data.title} 
+													class="w-full h-48 object-cover transition-all duration-700 group-hover:scale-110 group-hover:blur-sm"
+												/>
+												<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+												<div class="absolute bottom-4 left-4 text-white">
+													<div class="flex items-center space-x-2 text-sm">
+														<time datetime={post.data.pubDate.toISOString()} class="px-3 py-1 bg-neon-blue/30 rounded-full backdrop-blur-sm">
+															<FormattedDate date={post.data.pubDate} />
+														</time>
+														<span class="px-3 py-1 bg-neon-purple/30 rounded-full backdrop-blur-sm text-xs font-medium">
+															QUANTUM ENTRY
+														</span>
+													</div>
+												</div>
+											</div>
 										)}
+										
+										<div class="space-y-4">
+											<h3 class="text-2xl font-bold text-white group-hover:text-neon-cyan transition-colors duration-500">
+												{post.data.title}
+											</h3>
+											
+											{post.data.description && (
+												<p class="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
+													{post.data.description}
+												</p>
+											)}
+										</div>
+									</a>
+									
+									<div class="mt-8 pt-6 border-t border-gray-700/50">
+										<HyperButton 
+											variant="holographic" 
+											size="medium" 
+											href={`${baseUrl}blog/${post.id}/`}
+											effect="ripple"
+											energy="high"
+											shape="pill"
+											interaction="magnetic"
+										>
+											ENTER DIMENSION
+										</HyperButton>
 									</div>
-								</a>
-								
-								<div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-									<ModernButton 
-										variant="glass" 
-										size="small" 
-										href={`/Test2025/blog/${post.id}/`}
-										effect="glow"
-										className="w-full"
-									>
-										Read More
-										<svg class="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-										</svg>
-									</ModernButton>
-								</div>
-							</AdvancedCard>
-						</AdvancedAnimate>
-					))}
-				</Grid>
+								</UltraCard>
+							</UltraAnimate>
+						);
+					})}
+				</UltraGrid>
 			</section>
 		</main>
 		<Footer />

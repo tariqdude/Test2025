@@ -1,0 +1,882 @@
+---
+export interface Props {
+  animation?: 'quantum-phase' | 'dimensional-shift' | 'neural-pulse' | 'plasma-wave' | 'crystalline-grow' | 'void-emerge' | 'cosmic-drift' | 'ethereal-float' | 'matrix-load' | 'infinity-spiral' | 'holographic-shimmer' | 'particle-burst' | 'magnetic-pull' | 'gravitational-lens' | 'time-dilate' | 'reality-bend' | 'consciousness-expand' | 'multiverse-sync' | 'quantum-entangle' | 'singularity-form';
+  trigger?: 'immediate' | 'viewport' | 'hover' | 'click' | 'focus' | 'scroll' | 'time' | 'conditional';
+  duration?: number;
+  delay?: number;
+  intensity?: 'subtle' | 'moderate' | 'strong' | 'extreme' | 'reality-breaking';
+  repeat?: 'once' | 'infinite' | 'oscillate' | 'chain' | 'cascade';
+  easing?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'quantum' | 'organic' | 'explosive' | 'ethereal';
+  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | 'random' | 'spiral' | 'dimensional';
+  className?: string;
+  id?: string;
+  threshold?: number;
+  offset?: string;
+}
+
+const {
+  animation = 'quantum-phase',
+  trigger = 'viewport',
+  duration = 1000,
+  delay = 0,
+  intensity = 'moderate',
+  repeat = 'once',
+  easing = 'ease-out',
+  direction = 'normal',
+  className = '',
+  id,
+  threshold = 0.1,
+  offset = '0px',
+} = Astro.props;
+
+const animationClasses = {
+  'quantum-phase': `
+    opacity-0 transform translate-y-8 scale-95 blur-sm
+    transition-all duration-1000 ease-out
+    [&.animate]:opacity-100 [&.animate]:translate-y-0 [&.animate]:scale-100 [&.animate]:blur-0
+    [&.animate]:animate-[quantum-phase_1s_ease-out_forwards]
+  `,
+  'dimensional-shift': `
+    opacity-0 transform perspective-1000 rotateY-90 scale-90
+    transition-all duration-1200 ease-out
+    [&.animate]:opacity-100 [&.animate]:rotateY-0 [&.animate]:scale-100
+    [&.animate]:animate-[dimensional-shift_1.2s_ease-out_forwards]
+  `,
+  'neural-pulse': `
+    opacity-0 transform scale-0
+    transition-all duration-800 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100
+    [&.animate]:animate-[neural-pulse_0.8s_ease-out_forwards]
+  `,
+  'plasma-wave': `
+    opacity-0 transform translateX-full skew-x-12
+    transition-all duration-1500 ease-out
+    [&.animate]:opacity-100 [&.animate]:translateX-0 [&.animate]:skew-x-0
+    [&.animate]:animate-[plasma-wave_1.5s_ease-out_forwards]
+  `,
+  'crystalline-grow': `
+    opacity-0 transform scale-0 rotate-180
+    transition-all duration-2000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:rotate-0
+    [&.animate]:animate-[crystalline-grow_2s_ease-out_forwards]
+  `,
+  'void-emerge': `
+    opacity-0 transform scale-150 blur-lg
+    transition-all duration-1800 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:blur-0
+    [&.animate]:animate-[void-emerge_1.8s_ease-out_forwards]
+  `,
+  'cosmic-drift': `
+    opacity-0 transform translateY-20 rotateZ-6 scale-110
+    transition-all duration-2500 ease-out
+    [&.animate]:opacity-100 [&.animate]:translateY-0 [&.animate]:rotateZ-0 [&.animate]:scale-100
+    [&.animate]:animate-[cosmic-drift_2.5s_ease-out_forwards]
+  `,
+  'ethereal-float': `
+    opacity-0 transform translateY-12 scale-98
+    transition-all duration-3000 ease-out
+    [&.animate]:opacity-100 [&.animate]:translateY-0 [&.animate]:scale-100
+    [&.animate]:animate-[ethereal-float_3s_ease-out_forwards]
+  `,
+  'matrix-load': `
+    opacity-0 transform scaleY-0
+    transition-all duration-1000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scaleY-100
+    [&.animate]:animate-[matrix-load_1s_ease-out_forwards]
+  `,
+  'infinity-spiral': `
+    opacity-0 transform scale-0 rotate-720
+    transition-all duration-3000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:rotate-0
+    [&.animate]:animate-[infinity-spiral_3s_ease-out_forwards]
+  `,
+  'holographic-shimmer': `
+    opacity-0 transform skew-x-12 translateX-8
+    transition-all duration-1200 ease-out
+    [&.animate]:opacity-100 [&.animate]:skew-x-0 [&.animate]:translateX-0
+    [&.animate]:animate-[holographic-shimmer_1.2s_ease-out_forwards]
+  `,
+  'particle-burst': `
+    opacity-0 transform scale-0
+    transition-all duration-800 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100
+    [&.animate]:animate-[particle-burst_0.8s_ease-out_forwards]
+  `,
+  'magnetic-pull': `
+    opacity-0 transform scale-80 translateZ-20
+    transition-all duration-1000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:translateZ-0
+    [&.animate]:animate-[magnetic-pull_1s_ease-out_forwards]
+  `,
+  'gravitational-lens': `
+    opacity-0 transform scale-200 blur-xl
+    transition-all duration-2000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:blur-0
+    [&.animate]:animate-[gravitational-lens_2s_ease-out_forwards]
+  `,
+  'time-dilate': `
+    opacity-0 transform scaleX-0
+    transition-all duration-1500 ease-out
+    [&.animate]:opacity-100 [&.animate]:scaleX-100
+    [&.animate]:animate-[time-dilate_1.5s_ease-out_forwards]
+  `,
+  'reality-bend': `
+    opacity-0 transform perspective-1000 rotateX-90 rotateY-45 rotateZ-12
+    transition-all duration-2500 ease-out
+    [&.animate]:opacity-100 [&.animate]:rotateX-0 [&.animate]:rotateY-0 [&.animate]:rotateZ-0
+    [&.animate]:animate-[reality-bend_2.5s_ease-out_forwards]
+  `,
+  'consciousness-expand': `
+    opacity-0 transform scale-0 blur-lg hue-rotate-180
+    transition-all duration-3000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:blur-0 [&.animate]:hue-rotate-0
+    [&.animate]:animate-[consciousness-expand_3s_ease-out_forwards]
+  `,
+  'multiverse-sync': `
+    opacity-0 transform scale-50 rotateY-180 rotateX-180
+    transition-all duration-2000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:rotateY-0 [&.animate]:rotateX-0
+    [&.animate]:animate-[multiverse-sync_2s_ease-out_forwards]
+  `,
+  'quantum-entangle': `
+    opacity-0 transform translateX-10 translateY-10 rotateZ-45 scale-90
+    transition-all duration-1500 ease-out
+    [&.animate]:opacity-100 [&.animate]:translateX-0 [&.animate]:translateY-0 [&.animate]:rotateZ-0 [&.animate]:scale-100
+    [&.animate]:animate-[quantum-entangle_1.5s_ease-out_forwards]
+  `,
+  'singularity-form': `
+    opacity-0 transform scale-0 blur-2xl brightness-0
+    transition-all duration-4000 ease-out
+    [&.animate]:opacity-100 [&.animate]:scale-100 [&.animate]:blur-0 [&.animate]:brightness-100
+    [&.animate]:animate-[singularity-form_4s_ease-out_forwards]
+  `,
+};
+
+const intensityMultipliers = {
+  subtle: 0.5,
+  moderate: 1,
+  strong: 1.5,
+  extreme: 2,
+  'reality-breaking': 3,
+};
+
+const easingFunctions = {
+  linear: 'linear',
+  ease: 'ease',
+  'ease-in': 'ease-in',
+  'ease-out': 'ease-out',
+  'ease-in-out': 'ease-in-out',
+  quantum: 'cubic-bezier(0.23, 1, 0.32, 1)',
+  organic: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+  explosive: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  ethereal: 'cubic-bezier(0.19, 1, 0.22, 1)',
+};
+
+const multiplier = intensityMultipliers[intensity];
+const adjustedDuration = duration * multiplier;
+const customEasing = easingFunctions[easing];
+
+const combinedClasses = [
+  animationClasses[animation],
+  className,
+].join(' ').replace(/\s+/g, ' ').trim();
+---
+
+<div
+  class={combinedClasses}
+  id={id}
+  data-animation={animation}
+  data-trigger={trigger}
+  data-duration={adjustedDuration}
+  data-delay={delay}
+  data-intensity={intensity}
+  data-repeat={repeat}
+  data-easing={customEasing}
+  data-direction={direction}
+  data-threshold={threshold}
+  data-offset={offset}
+  style={`
+    animation-duration: ${adjustedDuration}ms;
+    animation-delay: ${delay}ms;
+    animation-timing-function: ${customEasing};
+    animation-direction: ${direction};
+    animation-iteration-count: ${repeat === 'infinite' ? 'infinite' : repeat === 'once' ? '1' : repeat};
+  `}
+>
+  <slot />
+</div>
+
+<script>
+  class UltraAnimate {
+    private observer: IntersectionObserver | null = null;
+    private elements: NodeList | null = null;
+    
+    constructor() {
+      this.init();
+    }
+    
+    private init() {
+      if (typeof window === 'undefined') return;
+      
+      this.elements = document.querySelectorAll('[data-animation]');
+      this.setupObserver();
+      this.bindEvents();
+    }
+    
+    private setupObserver() {
+      if (!this.elements) return;
+      
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const element = entry.target as HTMLElement;
+            const trigger = element.dataset.trigger || 'viewport';
+            
+            if (entry.isIntersecting && trigger === 'viewport') {
+              this.triggerAnimation(element);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '0px',
+        }
+      );
+      
+      this.elements.forEach((node) => {
+        const element = node as HTMLElement;
+        const trigger = element.dataset.trigger || 'viewport';
+        
+        if (trigger === 'viewport') {
+          this.observer?.observe(element);
+        } else if (trigger === 'immediate') {
+          this.triggerAnimation(element);
+        }
+      });
+    }
+    
+    private bindEvents() {
+      if (!this.elements) return;
+      
+      this.elements.forEach((node) => {
+        const element = node as HTMLElement;
+        const trigger = element.dataset.trigger || 'viewport';
+        
+        switch (trigger) {
+          case 'hover':
+            element.addEventListener('mouseenter', () => this.triggerAnimation(element));
+            element.addEventListener('mouseleave', () => this.resetAnimation(element));
+            break;
+          case 'click':
+            element.addEventListener('click', () => this.triggerAnimation(element));
+            break;
+          case 'focus':
+            element.addEventListener('focus', () => this.triggerAnimation(element));
+            break;
+          case 'scroll':
+            this.setupScrollTrigger(element);
+            break;
+          case 'time':
+            this.setupTimeTrigger(element);
+            break;
+        }
+      });
+    }
+    
+    private triggerAnimation(element: HTMLElement) {
+      const delay = parseInt(element.dataset.delay || '0');
+      const repeat = element.dataset.repeat || 'once';
+      const direction = element.dataset.direction || 'normal';
+      
+      setTimeout(() => {
+        element.classList.add('animate');
+        
+        // Handle special repeat modes
+        if (repeat === 'chain') {
+          this.triggerChainAnimation(element);
+        } else if (repeat === 'cascade') {
+          this.triggerCascadeAnimation(element);
+        }
+        
+        // Handle special directions
+        if (direction === 'random') {
+          this.applyRandomDirection(element);
+        } else if (direction === 'spiral') {
+          this.applySpiralDirection(element);
+        } else if (direction === 'dimensional') {
+          this.applyDimensionalDirection(element);
+        }
+      }, delay);
+    }
+    
+    private resetAnimation(element: HTMLElement) {
+      element.classList.remove('animate');
+    }
+    
+    private triggerChainAnimation(element: HTMLElement) {
+      const siblings = element.parentElement?.children;
+      if (!siblings) return;
+      
+      Array.from(siblings).forEach((sibling, index) => {
+        if (sibling !== element && sibling.hasAttribute('data-animation')) {
+          setTimeout(() => {
+            (sibling as HTMLElement).classList.add('animate');
+          }, index * 200);
+        }
+      });
+    }
+    
+    private triggerCascadeAnimation(element: HTMLElement) {
+      const children = element.querySelectorAll('[data-animation]');
+      children.forEach((child, index) => {
+        setTimeout(() => {
+          (child as HTMLElement).classList.add('animate');
+        }, index * 100);
+      });
+    }
+    
+    private applyRandomDirection(element: HTMLElement) {
+      const directions = ['normal', 'reverse', 'alternate', 'alternate-reverse'];
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      element.style.animationDirection = randomDirection;
+    }
+    
+    private applySpiralDirection(element: HTMLElement) {
+      element.style.transform += ' rotateZ(720deg)';
+      element.style.transition = 'transform 2s ease-in-out';
+    }
+    
+    private applyDimensionalDirection(element: HTMLElement) {
+      element.style.transformStyle = 'preserve-3d';
+      element.style.transform += ' rotateX(360deg) rotateY(360deg)';
+      element.style.transition = 'transform 3s ease-in-out';
+    }
+    
+    private setupScrollTrigger(element: HTMLElement) {
+      let lastScrollY = window.scrollY;
+      
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+        
+        if (scrollDelta > 50) {
+          this.triggerAnimation(element);
+        }
+        
+        lastScrollY = currentScrollY;
+      });
+    }
+    
+    private setupTimeTrigger(element: HTMLElement) {
+      const interval = parseInt(element.dataset.timeInterval || '5000');
+      
+      setInterval(() => {
+        this.triggerAnimation(element);
+        setTimeout(() => this.resetAnimation(element), 2000);
+      }, interval);
+    }
+  }
+  
+  // Auto-initialize when DOM is ready
+  if (typeof window !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => new UltraAnimate());
+    } else {
+      new UltraAnimate();
+    }
+  }
+</script>
+
+<style>
+  @keyframes quantum-phase {
+    0% {
+      opacity: 0;
+      transform: translateY(2rem) scale(0.95) rotateX(10deg);
+      filter: blur(4px) hue-rotate(0deg);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateY(0.5rem) scale(1.02) rotateX(5deg);
+      filter: blur(2px) hue-rotate(90deg);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotateX(0deg);
+      filter: blur(0) hue-rotate(0deg);
+    }
+  }
+  
+  @keyframes dimensional-shift {
+    0% {
+      opacity: 0;
+      transform: perspective(1000px) rotateY(90deg) rotateX(30deg) scale(0.8);
+    }
+    50% {
+      opacity: 0.8;
+      transform: perspective(1000px) rotateY(45deg) rotateX(15deg) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1);
+    }
+  }
+  
+  @keyframes neural-pulse {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotateZ(180deg);
+      filter: brightness(0) contrast(2);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.1) rotateZ(90deg);
+      filter: brightness(1.2) contrast(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(0deg);
+      filter: brightness(1) contrast(1);
+    }
+  }
+  
+  @keyframes plasma-wave {
+    0% {
+      opacity: 0;
+      transform: translateX(100%) skewX(45deg) scaleY(0.5);
+      filter: hue-rotate(0deg) saturate(2);
+    }
+    50% {
+      opacity: 0.9;
+      transform: translateX(0%) skewX(22deg) scaleY(0.8);
+      filter: hue-rotate(180deg) saturate(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0%) skewX(0deg) scaleY(1);
+      filter: hue-rotate(0deg) saturate(1);
+    }
+  }
+  
+  @keyframes crystalline-grow {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(180deg) skewX(45deg);
+      filter: brightness(2) blur(10px);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scale(0.3) rotate(135deg) skewX(30deg);
+      filter: brightness(1.8) blur(7px);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(0.6) rotate(90deg) skewX(15deg);
+      filter: brightness(1.4) blur(4px);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(0.9) rotate(45deg) skewX(5deg);
+      filter: brightness(1.2) blur(2px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg) skewX(0deg);
+      filter: brightness(1) blur(0px);
+    }
+  }
+  
+  @keyframes void-emerge {
+    0% {
+      opacity: 0;
+      transform: scale(2) rotateZ(360deg);
+      filter: blur(20px) invert(1) brightness(0);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.2) rotateZ(180deg);
+      filter: blur(10px) invert(0.5) brightness(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(0deg);
+      filter: blur(0px) invert(0) brightness(1);
+    }
+  }
+  
+  @keyframes cosmic-drift {
+    0% {
+      opacity: 0;
+      transform: translateY(5rem) rotateZ(15deg) scale(1.2);
+      filter: hue-rotate(0deg) saturate(0.5) brightness(0.5);
+    }
+    25% {
+      opacity: 0.3;
+      transform: translateY(3rem) rotateZ(10deg) scale(1.1);
+      filter: hue-rotate(90deg) saturate(0.7) brightness(0.7);
+    }
+    50% {
+      opacity: 0.6;
+      transform: translateY(1rem) rotateZ(5deg) scale(1.05);
+      filter: hue-rotate(180deg) saturate(0.9) brightness(0.9);
+    }
+    75% {
+      opacity: 0.8;
+      transform: translateY(0.2rem) rotateZ(2deg) scale(1.02);
+      filter: hue-rotate(270deg) saturate(1.1) brightness(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotateZ(0deg) scale(1);
+      filter: hue-rotate(360deg) saturate(1) brightness(1);
+    }
+  }
+  
+  @keyframes ethereal-float {
+    0% {
+      opacity: 0;
+      transform: translateY(3rem) scale(0.95) rotateX(15deg);
+      filter: blur(8px) brightness(0.3);
+    }
+    33% {
+      opacity: 0.4;
+      transform: translateY(2rem) scale(0.97) rotateX(10deg);
+      filter: blur(5px) brightness(0.6);
+    }
+    66% {
+      opacity: 0.7;
+      transform: translateY(1rem) scale(0.99) rotateX(5deg);
+      filter: blur(2px) brightness(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotateX(0deg);
+      filter: blur(0px) brightness(1);
+    }
+  }
+  
+  @keyframes matrix-load {
+    0% {
+      opacity: 0;
+      transform: scaleY(0) skewX(45deg);
+      filter: hue-rotate(0deg) brightness(0);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scaleY(0.25) skewX(30deg);
+      filter: hue-rotate(90deg) brightness(0.5);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scaleY(0.5) skewX(15deg);
+      filter: hue-rotate(180deg) brightness(0.8);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scaleY(0.75) skewX(5deg);
+      filter: hue-rotate(270deg) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleY(1) skewX(0deg);
+      filter: hue-rotate(360deg) brightness(1);
+    }
+  }
+  
+  @keyframes infinity-spiral {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(720deg) translateZ(100px);
+      filter: hue-rotate(0deg) saturate(0) brightness(0);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scale(0.3) rotate(540deg) translateZ(75px);
+      filter: hue-rotate(90deg) saturate(0.5) brightness(0.5);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(0.6) rotate(360deg) translateZ(50px);
+      filter: hue-rotate(180deg) saturate(1) brightness(1);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(0.9) rotate(180deg) translateZ(25px);
+      filter: hue-rotate(270deg) saturate(1.5) brightness(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg) translateZ(0px);
+      filter: hue-rotate(360deg) saturate(1) brightness(1);
+    }
+  }
+  
+  @keyframes holographic-shimmer {
+    0% {
+      opacity: 0;
+      transform: skewX(45deg) translateX(2rem) rotateY(45deg);
+      filter: hue-rotate(0deg) saturate(2) brightness(0.5);
+    }
+    33% {
+      opacity: 0.4;
+      transform: skewX(30deg) translateX(1rem) rotateY(30deg);
+      filter: hue-rotate(120deg) saturate(1.8) brightness(0.8);
+    }
+    66% {
+      opacity: 0.7;
+      transform: skewX(15deg) translateX(0.5rem) rotateY(15deg);
+      filter: hue-rotate(240deg) saturate(1.4) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: skewX(0deg) translateX(0rem) rotateY(0deg);
+      filter: hue-rotate(360deg) saturate(1) brightness(1);
+    }
+  }
+  
+  @keyframes particle-burst {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotateZ(0deg);
+      filter: brightness(0) blur(10px);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotateZ(180deg);
+      filter: brightness(2) blur(0px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(360deg);
+      filter: brightness(1) blur(0px);
+    }
+  }
+  
+  @keyframes magnetic-pull {
+    0% {
+      opacity: 0;
+      transform: scale(0.7) translateZ(50px) rotateX(45deg);
+      filter: blur(5px) brightness(0.5);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05) translateZ(25px) rotateX(22deg);
+      filter: blur(2px) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateZ(0px) rotateX(0deg);
+      filter: blur(0px) brightness(1);
+    }
+  }
+  
+  @keyframes gravitational-lens {
+    0% {
+      opacity: 0;
+      transform: scale(3) rotateZ(180deg);
+      filter: blur(30px) brightness(0) contrast(2);
+    }
+    25% {
+      opacity: 0.2;
+      transform: scale(2.2) rotateZ(135deg);
+      filter: blur(20px) brightness(0.3) contrast(1.8);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.5) rotateZ(90deg);
+      filter: blur(10px) brightness(0.6) contrast(1.5);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(1.1) rotateZ(45deg);
+      filter: blur(3px) brightness(0.9) contrast(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(0deg);
+      filter: blur(0px) brightness(1) contrast(1);
+    }
+  }
+  
+  @keyframes time-dilate {
+    0% {
+      opacity: 0;
+      transform: scaleX(0) skewY(45deg);
+      filter: hue-rotate(0deg) blur(10px);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scaleX(0.3) skewY(30deg);
+      filter: hue-rotate(90deg) blur(7px);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scaleX(0.6) skewY(15deg);
+      filter: hue-rotate(180deg) blur(4px);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scaleX(0.9) skewY(5deg);
+      filter: hue-rotate(270deg) blur(1px);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleX(1) skewY(0deg);
+      filter: hue-rotate(360deg) blur(0px);
+    }
+  }
+  
+  @keyframes reality-bend {
+    0% {
+      opacity: 0;
+      transform: perspective(1000px) rotateX(90deg) rotateY(45deg) rotateZ(30deg) scale(0.5);
+      filter: invert(1) blur(15px) hue-rotate(180deg);
+    }
+    25% {
+      opacity: 0.3;
+      transform: perspective(1000px) rotateX(67deg) rotateY(33deg) rotateZ(22deg) scale(0.7);
+      filter: invert(0.7) blur(10px) hue-rotate(135deg);
+    }
+    50% {
+      opacity: 0.6;
+      transform: perspective(1000px) rotateX(45deg) rotateY(22deg) rotateZ(15deg) scale(0.85);
+      filter: invert(0.4) blur(5px) hue-rotate(90deg);
+    }
+    75% {
+      opacity: 0.8;
+      transform: perspective(1000px) rotateX(22deg) rotateY(11deg) rotateZ(7deg) scale(0.95);
+      filter: invert(0.1) blur(2px) hue-rotate(45deg);
+    }
+    100% {
+      opacity: 1;
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+      filter: invert(0) blur(0px) hue-rotate(0deg);
+    }
+  }
+  
+  @keyframes consciousness-expand {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotateZ(0deg);
+      filter: blur(20px) hue-rotate(0deg) saturate(0) brightness(0);
+    }
+    20% {
+      opacity: 0.2;
+      transform: scale(0.2) rotateZ(72deg);
+      filter: blur(15px) hue-rotate(72deg) saturate(0.3) brightness(0.3);
+    }
+    40% {
+      opacity: 0.4;
+      transform: scale(0.4) rotateZ(144deg);
+      filter: blur(10px) hue-rotate(144deg) saturate(0.6) brightness(0.6);
+    }
+    60% {
+      opacity: 0.6;
+      transform: scale(0.6) rotateZ(216deg);
+      filter: blur(5px) hue-rotate(216deg) saturate(0.9) brightness(0.9);
+    }
+    80% {
+      opacity: 0.8;
+      transform: scale(0.9) rotateZ(288deg);
+      filter: blur(2px) hue-rotate(288deg) saturate(1.2) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(360deg);
+      filter: blur(0px) hue-rotate(360deg) saturate(1) brightness(1);
+    }
+  }
+  
+  @keyframes multiverse-sync {
+    0% {
+      opacity: 0;
+      transform: scale(0.3) rotateY(180deg) rotateX(180deg) translateZ(100px);
+      filter: hue-rotate(0deg) saturate(0) brightness(0) contrast(2);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scale(0.5) rotateY(135deg) rotateX(135deg) translateZ(75px);
+      filter: hue-rotate(90deg) saturate(0.5) brightness(0.5) contrast(1.8);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(0.7) rotateY(90deg) rotateX(90deg) translateZ(50px);
+      filter: hue-rotate(180deg) saturate(1) brightness(1) contrast(1.5);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(0.9) rotateY(45deg) rotateX(45deg) translateZ(25px);
+      filter: hue-rotate(270deg) saturate(1.5) brightness(1.5) contrast(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateY(0deg) rotateX(0deg) translateZ(0px);
+      filter: hue-rotate(360deg) saturate(1) brightness(1) contrast(1);
+    }
+  }
+  
+  @keyframes quantum-entangle {
+    0% {
+      opacity: 0;
+      transform: translateX(2rem) translateY(2rem) rotateZ(45deg) scale(0.8);
+      filter: blur(8px) hue-rotate(0deg) saturate(2);
+    }
+    25% {
+      opacity: 0.3;
+      transform: translateX(1.5rem) translateY(1.5rem) rotateZ(33deg) scale(0.85);
+      filter: blur(6px) hue-rotate(90deg) saturate(1.8);
+    }
+    50% {
+      opacity: 0.6;
+      transform: translateX(1rem) translateY(1rem) rotateZ(22deg) scale(0.9);
+      filter: blur(4px) hue-rotate(180deg) saturate(1.5);
+    }
+    75% {
+      opacity: 0.8;
+      transform: translateX(0.5rem) translateY(0.5rem) rotateZ(11deg) scale(0.95);
+      filter: blur(2px) hue-rotate(270deg) saturate(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) translateY(0) rotateZ(0deg) scale(1);
+      filter: blur(0px) hue-rotate(360deg) saturate(1);
+    }
+  }
+  
+  @keyframes singularity-form {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotateZ(0deg);
+      filter: blur(50px) brightness(0) contrast(0) saturate(0) hue-rotate(0deg);
+    }
+    10% {
+      opacity: 0.1;
+      transform: scale(0.1) rotateZ(36deg);
+      filter: blur(40px) brightness(0.1) contrast(0.2) saturate(0.1) hue-rotate(36deg);
+    }
+    25% {
+      opacity: 0.3;
+      transform: scale(0.3) rotateZ(90deg);
+      filter: blur(30px) brightness(0.3) contrast(0.5) saturate(0.3) hue-rotate(90deg);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(0.5) rotateZ(180deg);
+      filter: blur(20px) brightness(0.5) contrast(1) saturate(0.5) hue-rotate(180deg);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(0.8) rotateZ(270deg);
+      filter: blur(10px) brightness(0.8) contrast(1.5) saturate(0.8) hue-rotate(270deg);
+    }
+    90% {
+      opacity: 0.9;
+      transform: scale(0.95) rotateZ(324deg);
+      filter: blur(5px) brightness(0.9) contrast(1.8) saturate(0.9) hue-rotate(324deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotateZ(360deg);
+      filter: blur(0px) brightness(1) contrast(1) saturate(1) hue-rotate(360deg);
+    }
+  }
+</style>
