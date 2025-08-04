@@ -2,6 +2,11 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Icon from '../components/ui/Icon.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
@@ -20,37 +25,44 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 				<div class="absolute inset-0 opacity-20 bg-gray-100" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23e2e8f0%22 fill-opacity=%220.3%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 				
 				<div class="relative max-w-7xl mx-auto text-center">
-					<div class="space-y-8 animate-fade-in">
+					<Animate animation="fadeInUp" delay={200}>
 						<h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
 							Transform Your 
 							<span class="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
 								Business
 							</span>
 						</h1>
-						<p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+					</Animate>
+					
+					<Animate animation="fadeInUp" delay={400}>
+						<p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mt-6">
 							We deliver enterprise-grade technology and strategic consulting to drive unprecedented growth and innovation for Fortune 500 companies.
 						</p>
+					</Animate>
+					
+					<Animate animation="fadeInUp" delay={600}>
 						<div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-							<a href="#contact" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+							<Button variant="primary" size="lg" href="#contact" icon="arrow-right" iconPosition="right">
 								Get Started
-								<svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-								</svg>
-							</a>
-							<a href="#about" class="inline-flex items-center px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-500 hover:text-blue-600 transform hover:scale-105 transition-all duration-300">
+							</Button>
+							<Button variant="outline" size="lg" href="#about">
 								Learn More
-							</a>
+							</Button>
 						</div>
-					</div>
+					</Animate>
 				</div>
-
-				<!-- Floating Elements -->
-				<div class="absolute top-20 left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-float"></div>
-				<div class="absolute top-40 right-20 w-16 h-16 bg-purple-200 rounded-full opacity-30 animate-bounce"></div>
-				<div class="absolute bottom-40 left-20 w-12 h-12 bg-indigo-200 rounded-full opacity-25 animate-pulse"></div>
-			</section>
-
-			<!-- About Section -->
+				
+				<!-- Enhanced Floating Elements -->
+				<Animate animation="float">
+					<div class="absolute top-20 left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20"></div>
+				</Animate>
+				<Animate animation="bounce" delay={300}>
+					<div class="absolute top-40 right-20 w-16 h-16 bg-purple-200 rounded-full opacity-30"></div>
+				</Animate>
+				<Animate animation="pulse" delay={600}>
+					<div class="absolute bottom-40 left-20 w-12 h-12 bg-indigo-200 rounded-full opacity-25"></div>
+				</Animate>
+			</section>			<!-- About Section -->
 			<section id="about" class="py-20 bg-white">
 				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="text-center mb-16">
@@ -96,84 +108,73 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			<section id="services" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
 				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="text-center mb-16">
-						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
-						<p class="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive solutions tailored to your needs</p>
+						<Animate animation="fadeInUp">
+							<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
+							<p class="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive solutions tailored to your needs</p>
+						</Animate>
 					</div>
 					
-					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-						<!-- Service Card 1 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-									<line x1="8" y1="21" x2="16" y2="21"></line>
-									<line x1="12" y1="17" x2="12" y2="21"></line>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Custom Software Development</h3>
-							<p class="text-gray-600 leading-relaxed">Tailored applications that perfectly align with your business processes and strategic objectives.</p>
-						</div>
+					<Grid columns="3" gap="8" breakpoints={{ md: 2, lg: 3 }}>
+						<Animate animation="slideInUp" delay={100}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="monitor" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Custom Software Development</h3>
+								<p class="text-gray-600 leading-relaxed">Tailored applications that perfectly align with your business processes and strategic objectives.</p>
+							</Card>
+						</Animate>
 
-						<!-- Service Card 2 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Cloud Migration & Integration</h3>
-							<p class="text-gray-600 leading-relaxed">Seamless migration to cloud platforms with optimized performance and security.</p>
-						</div>
+						<Animate animation="slideInUp" delay={200}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="cloud" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Cloud Migration & Integration</h3>
+								<p class="text-gray-600 leading-relaxed">Seamless migration to cloud platforms with optimized performance and security.</p>
+							</Card>
+						</Animate>
 
-						<!-- Service Card 3 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Data Analytics & AI</h3>
-							<p class="text-gray-600 leading-relaxed">Advanced analytics and machine learning solutions to drive data-driven decisions.</p>
-						</div>
+						<Animate animation="slideInUp" delay={300}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="trending-up" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Data Analytics & AI</h3>
+								<p class="text-gray-600 leading-relaxed">Advanced analytics and machine learning solutions to drive data-driven decisions.</p>
+							</Card>
+						</Animate>
 
-						<!-- Service Card 4 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<circle cx="12" cy="12" r="3"></circle>
-									<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Digital Transformation</h3>
-							<p class="text-gray-600 leading-relaxed">Complete business process optimization and technology modernization strategies.</p>
-						</div>
+						<Animate animation="slideInUp" delay={400}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="settings" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Digital Transformation</h3>
+								<p class="text-gray-600 leading-relaxed">Complete business process optimization and technology modernization strategies.</p>
+							</Card>
+						</Animate>
 
-						<!-- Service Card 5 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Cybersecurity Solutions</h3>
-							<p class="text-gray-600 leading-relaxed">Enterprise-grade security infrastructure to protect your digital assets and data.</p>
-						</div>
+						<Animate animation="slideInUp" delay={500}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="shield" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Cybersecurity Solutions</h3>
+								<p class="text-gray-600 leading-relaxed">Enterprise-grade security infrastructure to protect your digital assets and data.</p>
+							</Card>
+						</Animate>
 
-						<!-- Service Card 6 -->
-						<div class="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-							<div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-								<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-									<polyline points="14,2 14,8 20,8"></polyline>
-									<line x1="16" y1="13" x2="8" y2="13"></line>
-									<line x1="16" y1="17" x2="8" y2="17"></line>
-									<polyline points="10,9 9,9 8,9"></polyline>
-								</svg>
-							</div>
-							<h3 class="text-xl font-bold text-gray-900 mb-4">Strategic Consulting</h3>
-							<p class="text-gray-600 leading-relaxed">Expert guidance on technology roadmaps and business strategy optimization.</p>
-						</div>
-					</div>
+						<Animate animation="slideInUp" delay={600}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
+									<Icon name="file-text" size={32} className="text-white" />
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 mb-4">Strategic Consulting</h3>
+								<p class="text-gray-600 leading-relaxed">Expert guidance on technology roadmaps and business strategy optimization.</p>
+							</Card>
+						</Animate>
+					</Grid>
 				</div>
 			</section>
 
