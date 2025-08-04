@@ -1,0 +1,331 @@
+---
+export interface AdvancedAnimateProps {
+  animation?: 'fadeIn' | 'slideInUp' | 'slideInDown' | 'slideInLeft' | 'slideInRight' | 
+             'zoomIn' | 'zoomOut' | 'bounceIn' | 'rotateIn' | 'flipInX' | 'flipInY' |
+             'slideUp' | 'slideDown' | 'slideLeft' | 'slideRight' | 'scaleUp' | 'scaleDown' |
+             'morphIn' | 'glitch' | 'wave' | 'particle' | 'magnetic' | 'float' | 'pulse3d';
+  delay?: number;
+  duration?: number;
+  easing?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'bounce' | 'elastic';
+  repeat?: boolean | number;
+  trigger?: 'hover' | 'click' | 'scroll' | 'load';
+  threshold?: number;
+  className?: string;
+  once?: boolean;
+}
+
+const {
+  animation = 'fadeIn',
+  delay = 0,
+  duration = 600,
+  easing = 'ease-out',
+  repeat = false,
+  trigger = 'scroll',
+  threshold = 0.1,
+  className = '',
+  once = true,
+  ...rest
+} = Astro.props as AdvancedAnimateProps;
+
+const animationId = `anim-${Math.random().toString(36).substr(2, 9)}`;
+
+const easingFunctions = {
+  ease: 'ease',
+  'ease-in': 'ease-in',
+  'ease-out': 'ease-out',
+  'ease-in-out': 'ease-in-out',
+  bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  elastic: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+};
+
+const _animations = {
+  fadeIn: {
+    from: { opacity: '0' },
+    to: { opacity: '1' }
+  },
+  slideInUp: {
+    from: { opacity: '0', transform: 'translateY(60px)' },
+    to: { opacity: '1', transform: 'translateY(0)' }
+  },
+  slideInDown: {
+    from: { opacity: '0', transform: 'translateY(-60px)' },
+    to: { opacity: '1', transform: 'translateY(0)' }
+  },
+  slideInLeft: {
+    from: { opacity: '0', transform: 'translateX(-60px)' },
+    to: { opacity: '1', transform: 'translateX(0)' }
+  },
+  slideInRight: {
+    from: { opacity: '0', transform: 'translateX(60px)' },
+    to: { opacity: '1', transform: 'translateX(0)' }
+  },
+  zoomIn: {
+    from: { opacity: '0', transform: 'scale(0.8)' },
+    to: { opacity: '1', transform: 'scale(1)' }
+  },
+  zoomOut: {
+    from: { opacity: '0', transform: 'scale(1.2)' },
+    to: { opacity: '1', transform: 'scale(1)' }
+  },
+  bounceIn: {
+    from: { opacity: '0', transform: 'scale(0.3)' },
+    to: { opacity: '1', transform: 'scale(1)' }
+  },
+  rotateIn: {
+    from: { opacity: '0', transform: 'rotate(-180deg) scale(0.8)' },
+    to: { opacity: '1', transform: 'rotate(0deg) scale(1)' }
+  },
+  flipInX: {
+    from: { opacity: '0', transform: 'perspective(400px) rotateX(-90deg)' },
+    to: { opacity: '1', transform: 'perspective(400px) rotateX(0deg)' }
+  },
+  flipInY: {
+    from: { opacity: '0', transform: 'perspective(400px) rotateY(-90deg)' },
+    to: { opacity: '1', transform: 'perspective(400px) rotateY(0deg)' }
+  },
+  morphIn: {
+    from: { opacity: '0', transform: 'scale(0) rotate(180deg)', borderRadius: '50%' },
+    to: { opacity: '1', transform: 'scale(1) rotate(0deg)', borderRadius: '0%' }
+  },
+  glitch: {
+    from: { transform: 'translate(0)' },
+    to: { transform: 'translate(0)' }
+  },
+  wave: {
+    from: { transform: 'translateY(0px)' },
+    to: { transform: 'translateY(-20px)' }
+  },
+  particle: {
+    from: { opacity: '0', transform: 'scale(0) rotate(0deg)' },
+    to: { opacity: '1', transform: 'scale(1) rotate(360deg)' }
+  },
+  float: {
+    from: { transform: 'translateY(0px)' },
+    to: { transform: 'translateY(-10px)' }
+  },
+  pulse3d: {
+    from: { transform: 'scale3d(1, 1, 1)' },
+    to: { transform: 'scale3d(1.05, 1.05, 1.05)' }
+  }
+};
+---
+
+<div 
+  class={`advanced-animate ${className}`}
+  id={animationId}
+  data-animation={animation}
+  data-delay={delay}
+  data-duration={duration}
+  data-easing={easing}
+  data-repeat={repeat}
+  data-trigger={trigger}
+  data-threshold={threshold}
+  data-once={once}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style define:vars={{
+  delay: `${delay}ms`,
+  duration: `${duration}ms`,
+  easing: easingFunctions[easing]
+}}>
+  .advanced-animate {
+    transition-property: all;
+    transition-duration: var(--duration);
+    transition-timing-function: var(--easing);
+    transition-delay: var(--delay);
+  }
+
+  .advanced-animate:not(.animate-in) {
+    opacity: 0;
+  }
+
+  /* Animation States */
+  .animate-fadeIn { opacity: 1; }
+  
+  .animate-slideInUp {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .animate-slideInDown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .animate-slideInLeft {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .animate-slideInRight {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .animate-zoomIn {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .animate-zoomOut {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .animate-bounceIn {
+    opacity: 1;
+    transform: scale(1);
+    animation: bounceInEffect var(--duration) var(--easing) var(--delay);
+  }
+  
+  .animate-rotateIn {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  .animate-flipInX {
+    opacity: 1;
+    transform: perspective(400px) rotateX(0deg);
+  }
+  
+  .animate-flipInY {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0deg);
+  }
+  
+  .animate-morphIn {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    border-radius: 0%;
+  }
+  
+  .animate-glitch {
+    animation: glitchEffect 0.3s ease-in-out var(--delay);
+  }
+  
+  .animate-wave {
+    animation: waveEffect 2s ease-in-out infinite var(--delay);
+  }
+  
+  .animate-particle {
+    opacity: 1;
+    transform: scale(1) rotate(360deg);
+  }
+  
+  .animate-float {
+    animation: floatEffect 3s ease-in-out infinite var(--delay);
+  }
+  
+  .animate-pulse3d {
+    animation: pulse3dEffect 2s ease-in-out infinite var(--delay);
+  }
+
+  /* Initial States */
+  .advanced-animate[data-animation="slideInUp"]:not(.animate-in) {
+    transform: translateY(60px);
+  }
+  
+  .advanced-animate[data-animation="slideInDown"]:not(.animate-in) {
+    transform: translateY(-60px);
+  }
+  
+  .advanced-animate[data-animation="slideInLeft"]:not(.animate-in) {
+    transform: translateX(-60px);
+  }
+  
+  .advanced-animate[data-animation="slideInRight"]:not(.animate-in) {
+    transform: translateX(60px);
+  }
+  
+  .advanced-animate[data-animation="zoomIn"]:not(.animate-in) {
+    transform: scale(0.8);
+  }
+  
+  .advanced-animate[data-animation="zoomOut"]:not(.animate-in) {
+    transform: scale(1.2);
+  }
+  
+  .advanced-animate[data-animation="rotateIn"]:not(.animate-in) {
+    transform: rotate(-180deg) scale(0.8);
+  }
+  
+  .advanced-animate[data-animation="flipInX"]:not(.animate-in) {
+    transform: perspective(400px) rotateX(-90deg);
+  }
+  
+  .advanced-animate[data-animation="flipInY"]:not(.animate-in) {
+    transform: perspective(400px) rotateY(-90deg);
+  }
+  
+  .advanced-animate[data-animation="morphIn"]:not(.animate-in) {
+    transform: scale(0) rotate(180deg);
+    border-radius: 50%;
+  }
+  
+  .advanced-animate[data-animation="particle"]:not(.animate-in) {
+    transform: scale(0) rotate(0deg);
+  }
+
+  /* Keyframe Animations */
+  @keyframes bounceInEffect {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes glitchEffect {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-2px, 2px); }
+    20% { transform: translate(-2px, -2px); }
+    30% { transform: translate(2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    50% { transform: translate(-2px, 2px); }
+    60% { transform: translate(-2px, -2px); }
+    70% { transform: translate(2px, 2px); }
+    80% { transform: translate(-2px, -2px); }
+    90% { transform: translate(2px, 2px); }
+  }
+  
+  @keyframes waveEffect {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes floatEffect {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes pulse3dEffect {
+    0%, 100% { transform: scale3d(1, 1, 1); }
+    50% { transform: scale3d(1.05, 1.05, 1.05); }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('.advanced-animate');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const animation = entry.target.getAttribute('data-animation');
+          entry.target.classList.add('animate-in', `animate-${animation}`);
+          
+          const once = entry.target.getAttribute('data-once') === 'true';
+          if (once) {
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    elements.forEach(element => {
+      observer.observe(element);
+    });
+  });
+</script>

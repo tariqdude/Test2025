@@ -1,63 +1,238 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import AdvancedCard from '../components/ui/AdvancedCard.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
+import Grid from '../components/ui/Grid.astro';
+import AdvancedAnimate from '../components/ui/AdvancedAnimate.astro';
+import { Image } from 'astro:assets';
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="About Us" description="Learn more about our mission, vision, and the team behind our innovative solutions." />
+	</head>
+	<body>
+		<Header />
+		
+		<!-- Hero Section -->
+		<section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900/20 overflow-hidden">
+			<div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10"></div>
+			<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+				<AdvancedAnimate animation="morphIn">
+					<AdvancedCard variant="glass" size="large" className="text-center">
+						<h1 class="text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-8">
+							About Us
+						</h1>
+						<p class="text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-4xl mx-auto">
+							We're passionate innovators crafting the future of digital experiences through cutting-edge technology and creative excellence.
+						</p>
+					</AdvancedCard>
+				</AdvancedAnimate>
+			</div>
+			
+			<!-- Floating Elements -->
+			<div class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-indigo-400 to-purple-600 rounded-full opacity-20 animate-float"></div>
+			<div class="absolute bottom-32 right-16 w-16 h-16 bg-gradient-to-br from-pink-400 to-red-600 rounded-full opacity-20 animate-pulse"></div>
+			<div class="absolute top-1/2 right-1/4 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-600 rounded-full opacity-20 animate-bounce"></div>
+		</section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+		<!-- Mission & Vision Section -->
+		<section class="py-20 bg-white dark:bg-gray-900">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<AdvancedAnimate animation="slideInUp">
+					<div class="text-center mb-16">
+						<h2 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h2>
+						<div class="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+					</div>
+				</AdvancedAnimate>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+				<Grid cols={1} md={2} gap="large" className="mb-20">
+					<AdvancedAnimate animation="slideInLeft" delay={200}>
+						<AdvancedCard variant="neumorphism" size="large" hover={true}>
+							<div class="text-center space-y-6">
+								<div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mx-auto flex items-center justify-center mb-6">
+									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+									</svg>
+								</div>
+								<h3 class="text-3xl font-bold text-gray-900 dark:text-white">Innovation</h3>
+								<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+									We push the boundaries of what's possible, creating breakthrough solutions that transform how people interact with technology.
+								</p>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+					<AdvancedAnimate animation="slideInRight" delay={400}>
+						<AdvancedCard variant="glass" size="large" hover={true}>
+							<div class="text-center space-y-6">
+								<div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mx-auto flex items-center justify-center mb-6">
+									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+									</svg>
+								</div>
+								<h3 class="text-3xl font-bold text-gray-900 dark:text-white">Excellence</h3>
+								<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+									We're committed to delivering exceptional quality in every project, ensuring our solutions exceed expectations and drive success.
+								</p>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
+				</Grid>
+			</div>
+		</section>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+		<!-- Story Section -->
+		<section class="py-20 bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<Grid cols={1} lg={2} gap="large" className="items-center">
+					<AdvancedAnimate animation="slideInLeft">
+						<AdvancedCard variant="gradient" size="large">
+							<div class="relative">
+								<Image
+									src={AboutHeroImage}
+									alt="Our Story"
+									width={600}
+									height={400}
+									class="w-full h-80 object-cover rounded-2xl"
+								/>
+								<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
+
+					<AdvancedAnimate animation="slideInRight" delay={300}>
+						<div class="space-y-8">
+							<h2 class="text-5xl font-bold text-gray-900 dark:text-white">Our Story</h2>
+							<div class="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+								<p>
+									Founded with a vision to revolutionize digital experiences, we've grown from a small team of passionate developers to a leading force in innovative technology solutions.
+								</p>
+								<p>
+									Our journey began with a simple belief: technology should enhance human potential, not complicate it. This philosophy drives everything we do, from the elegant interfaces we design to the robust systems we build.
+								</p>
+								<p>
+									Today, we continue to push boundaries, explore new frontiers, and create solutions that make a meaningful impact on businesses and communities worldwide.
+								</p>
+							</div>
+							<ModernButton 
+								variant="gradient" 
+								size="large" 
+								href="/Test2025/contact/"
+								effect="magnetic"
+							>
+								Join Our Journey
+								<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+								</svg>
+							</ModernButton>
+						</div>
+					</AdvancedAnimate>
+				</Grid>
+			</div>
+		</section>
+
+		<!-- Values Section -->
+		<section class="py-20 bg-white dark:bg-gray-900">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<AdvancedAnimate animation="slideInUp">
+					<div class="text-center mb-16">
+						<h2 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">Our Values</h2>
+						<div class="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+					</div>
+				</AdvancedAnimate>
+
+				<Grid cols={1} md={2} lg={3} gap="large">
+					<AdvancedAnimate animation="morphIn" delay={200}>
+						<AdvancedCard variant="neon" size="medium" hover={true}>
+							<div class="text-center space-y-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg mx-auto flex items-center justify-center">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+									</svg>
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Creativity</h3>
+								<p class="text-gray-600 dark:text-gray-300">
+									We embrace unconventional thinking and foster an environment where innovative ideas flourish.
+								</p>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
+
+					<AdvancedAnimate animation="morphIn" delay={400}>
+						<AdvancedCard variant="floating" size="medium" hover={true}>
+							<div class="text-center space-y-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg mx-auto flex items-center justify-center">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+									</svg>
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Collaboration</h3>
+								<p class="text-gray-600 dark:text-gray-300">
+									We believe great things happen when diverse minds work together towards a common goal.
+								</p>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
+
+					<AdvancedAnimate animation="morphIn" delay={600}>
+						<AdvancedCard variant="magazine" size="medium" hover={true}>
+							<div class="text-center space-y-4">
+								<div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg mx-auto flex items-center justify-center">
+									<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+									</svg>
+								</div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white">Impact</h3>
+								<p class="text-gray-600 dark:text-gray-300">
+									Every project we undertake is designed to create meaningful, lasting impact for our clients and communities.
+								</p>
+							</div>
+						</AdvancedCard>
+					</AdvancedAnimate>
+				</Grid>
+			</div>
+		</section>
+
+		<!-- CTA Section -->
+		<section class="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<AdvancedAnimate animation="slideInUp">
+					<AdvancedCard variant="glass" size="large">
+						<h2 class="text-4xl font-bold text-white mb-6">Ready to Build Something Amazing?</h2>
+						<p class="text-xl text-white/90 mb-8 leading-relaxed">
+							Let's collaborate and bring your vision to life with our expertise and passion for innovation.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4 justify-center">
+							<ModernButton 
+								variant="glass" 
+								size="large" 
+								href="/Test2025/contact/"
+								effect="glow"
+							>
+								Get Started
+								<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+								</svg>
+							</ModernButton>
+							<ModernButton 
+								variant="minimal" 
+								size="large" 
+								href="/Test2025/blog/"
+								className="text-white border-white hover:bg-white hover:text-purple-600"
+							>
+								Learn More
+							</ModernButton>
+						</div>
+					</AdvancedCard>
+				</AdvancedAnimate>
+			</div>
+		</section>
+
+		<Footer />
+	</body>
+</html>
