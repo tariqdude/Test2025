@@ -5,6 +5,9 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import Card from '../../components/ui/Card.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Animate from '../../components/ui/Animate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
@@ -16,97 +19,50 @@ const posts = (await getCollection('blog')).sort(
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+			<Animate animation="slideInUp">
+				<div class="text-center mb-12">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Blog</h1>
+					<p class="text-xl text-gray-600">Insights, tutorials, and updates from our team</p>
+				</div>
+			</Animate>
+			
 			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
+				<Grid columns="2" gap="8" breakpoints={{ md: 1, lg: 2 }}>
+					{posts.map((post, index) => (
+						<Animate animation="slideInUp" delay={index * 100}>
+							<Card variant="elevated" hover={true} className="h-full">
+								<a href={`/Test2025/blog/${post.id}/`} class="block group">
 									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
+										<div class="aspect-video overflow-hidden rounded-lg mb-4">
+											<Image 
+												width={720} 
+												height={360} 
+												src={post.data.heroImage} 
+												alt="" 
+												class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+											/>
+										</div>
 									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+									<div class="p-6">
+										<h4 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+											{post.data.title}
+										</h4>
+										<p class="text-gray-500">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+										{post.data.description && (
+											<p class="text-gray-600 mt-2 line-clamp-3">{post.data.description}</p>
+										)}
+									</div>
 								</a>
-							</li>
-						))
-					}
-				</ul>
+							</Card>
+						</Animate>
+					))}
+				</Grid>
 			</section>
 		</main>
 		<Footer />
