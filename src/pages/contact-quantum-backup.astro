@@ -1,0 +1,146 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
+import UltraCard from '../components/ui/UltraCard.astro';
+import UltraGrid from '../components/ui/UltraGrid.astro';
+import UltraAnimate from '../components/ui/UltraAnimate.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${SITE_TITLE} | Contact`} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="bg-black min-h-screen">
+    <Header />
+    
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <!-- Hero Section -->
+      <section class="relative mb-20">
+        <div class="absolute inset-0 bg-mesh opacity-20"></div>
+        <div class="absolute inset-0">
+          <div class="absolute top-10 left-10 w-32 h-32 bg-neon-cyan/20 rounded-full animate-consciousness-expand"></div>
+          <div class="absolute bottom-10 right-10 w-24 h-24 bg-neon-purple/20 rounded-full animate-dimensional-shift"></div>
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-neon-blue/10 rounded-full animate-neural-pulse"></div>
+        </div>
+        
+        <UltraAnimate animation="multiverse-sync">
+          <UltraCard variant="quantum" size="xl" dimension="4d" interaction="quantum" energy="transcendent" glowIntensity="reality-breaking" className="text-center relative z-10">
+            <h1 class="text-8xl font-bold bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent mb-8 animate-holographic-shimmer">
+              QUANTUM CONTACT
+            </h1>
+            <p class="text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+              Initiate <span class="text-neon-cyan font-semibold">quantum entanglement</span> with our 
+              <span class="text-neon-purple font-semibold">reality architects</span>. Transform your 
+              <span class="text-neon-blue font-semibold">dimensional vision</span> into existence.
+            </p>
+          </UltraCard>
+        </UltraAnimate>
+      </section>
+
+      <!-- Contact Grid -->
+      <UltraGrid cols={1} gap="dimensional" className="items-start">
+        <UltraAnimate animation="dimensional-shift" delay={100}>
+          <div class="space-y-8">
+            <!-- Communication Channels -->
+            <UltraCard variant="holographic" size="large" dimension="3d" interaction="quantum" energy="cosmic" glowIntensity="high">
+              <h2 class="text-4xl font-bold text-transparent bg-gradient-to-r from-neon-cyan to-neon-purple bg-clip-text mb-8 text-center">
+                DIMENSIONAL CHANNELS
+              </h2>
+              
+              <UltraGrid cols={1} gap="quantum" className="mb-8">
+                <UltraCard variant="neural" size="medium" dimension="3d" interaction="magnetic" energy="high" glowIntensity="moderate">
+                  <div class="flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neon-cyan to-neon-blue rounded-xl flex items-center justify-center animate-dimensional-shift">
+                      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </div>
+                    <div class="flex-1">
+                      <h3 class="text-2xl font-bold text-white mb-2">NEURAL LINK</h3>
+                      <p class="text-gray-300 mb-3">Direct consciousness transmission with our quantum architects</p>
+                      <a href="tel:+1-555-0123" class="text-neon-cyan font-semibold hover:text-neon-blue transition-colors duration-300">
+                        +1 (555) QUANTUM
+                      </a>
+                    </div>
+                  </div>
+                </UltraCard>
+
+                <UltraCard variant="cosmic" size="medium" dimension="3d" interaction="magnetic" energy="high" glowIntensity="moderate">
+                  <div class="flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neon-purple to-neon-pink rounded-xl flex items-center justify-center animate-consciousness-expand">
+                      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <div class="flex-1">
+                      <h3 class="text-2xl font-bold text-white mb-2">QUANTUM MAIL</h3>
+                      <p class="text-gray-300 mb-3">Detailed multidimensional responses within 2 quantum cycles</p>
+                      <a href="mailto:hello@quantumarchitects.nexus" class="text-neon-purple font-semibold hover:text-neon-pink transition-colors duration-300">
+                        hello@quantumarchitects.nexus
+                      </a>
+                    </div>
+                  </div>
+                </UltraCard>
+
+                <UltraCard variant="crystalline" size="medium" dimension="3d" interaction="magnetic" energy="high" glowIntensity="moderate">
+                  <div class="flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neon-green to-neon-cyan rounded-xl flex items-center justify-center animate-holographic-shimmer">
+                      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div class="flex-1">
+                      <h3 class="text-2xl font-bold text-white mb-2">NEXUS COORDINATES</h3>
+                      <p class="text-gray-300 mb-3">Physical manifestation point in this dimension</p>
+                      <address class="text-neon-green font-semibold not-italic">
+                        123 Quantum Avenue<br>
+                        Reality Nexus, RN 12345<br>
+                        Multiverse Sector 7
+                      </address>
+                    </div>
+                  </div>
+                </UltraCard>
+              </UltraGrid>
+            </UltraCard>
+
+            <!-- Response Matrix -->
+            <UltraCard variant="void" size="large" dimension="3d" interaction="quantum" energy="transcendent" glowIntensity="high">
+              <h3 class="text-3xl font-bold text-transparent bg-gradient-to-r from-neon-pink to-neon-cyan bg-clip-text mb-6 text-center">
+                RESPONSE MATRIX
+              </h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+                  <span class="text-gray-300"><strong class="text-neon-cyan">Reality Crisis Support:</strong> Instant quantum response</span>
+                  <span class="text-neon-cyan font-bold">&lt; 1 nanosecond</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+                  <span class="text-gray-300"><strong class="text-neon-purple">Dimensional Inquiries:</strong> Consciousness synchronization</span>
+                  <span class="text-neon-purple font-bold">&lt; 2 quantum cycles</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+                  <span class="text-gray-300"><strong class="text-neon-blue">Reality Consultation:</strong> Full architectural analysis</span>
+                  <span class="text-neon-blue font-bold">&lt; 24 temporal units</span>
+                </div>
+              </div>
+            </UltraCard>
+
+            <!-- Contact Form -->
+            <UltraCard variant="matrix" size="large" dimension="3d" interaction="quantum" energy="cosmic" glowIntensity="extreme">
+              <h3 class="text-4xl font-bold text-transparent bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink bg-clip-text mb-8 text-center">
+                QUANTUM TRANSMISSION PORTAL
+              </h3>
+              <ContactForm />
+            </UltraCard>
+          </div>
+        </UltraAnimate>
+      </UltraGrid>
+    </main>
+    
+    <Footer />
+  </body>
+</html>
