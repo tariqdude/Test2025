@@ -5,10 +5,10 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import ModernCard from '../../components/ui/ModernCard.astro';
-import ModernButton from '../../components/ui/ModernButton.astro';
-import ModernGrid from '../../components/ui/ModernGrid.astro';
-import ModernAnimate from '../../components/ui/ModernAnimate.astro';
+import Card from '../../components/ui/Card.astro';
+import Button from '../../components/ui/Button.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Animate from '../../components/ui/Animate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
@@ -26,29 +26,29 @@ const posts = (await getCollection('blog')).sort(
 		<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
 			<!-- Blog Header -->
 			<div class="max-w-3xl mx-auto text-center mb-16">
-				<ModernAnimate animation="fade-in" duration="slow">
+				<Animate animation="fade-in" duration="slow">
 					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
 						Our Blog
 					</h1>
 					<p class="text-xl text-gray-600 dark:text-gray-300">
 						Insights, tutorials, and updates from our team of experts.
 					</p>
-				</ModernAnimate>
+				</Animate>
 			</div>
 
 			<!-- Blog Posts Grid -->
-			<ModernGrid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+			<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
 				{posts.map((post, index) => {
 					const delayMap = ['none', 'sm', 'md'] as const;
 					const delay = index < 3 ? delayMap[index] : 'none';
 					
 					return (
-					<ModernAnimate 
+					<Animate 
 						animation="slide-up" 
 						delay={delay}
 						trigger="scroll"
 					>
-						<ModernCard variant="default" className="h-full">
+						<Card variant="default" className="h-full">
 							{post.data.heroImage && (
 								<div class="aspect-video overflow-hidden rounded-t-lg mb-4">
 									<Image
@@ -76,20 +76,20 @@ const posts = (await getCollection('blog')).sort(
 									</p>
 								)}
 								
-								<ModernButton 
+								<Button 
 									variant="outline" 
 									size="sm" 
 									href={`/blog/${post.id}/`}
 									className="w-full"
 								>
 									Read More
-								</ModernButton>
+								</Button>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					);
 				})}
-			</ModernGrid>
+			</Grid>
 
 			{posts.length === 0 && (
 				<div class="text-center py-12">

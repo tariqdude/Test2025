@@ -1,0 +1,60 @@
+---
+export interface Props {
+  title: string;
+  subtitle?: string;
+  stats: Array<{
+    label: string;
+    value: string;
+    description?: string;
+    icon?: string;
+  }>;
+  variant?: 'default' | 'gradient' | 'minimal';
+  className?: string;
+}
+
+const { title, subtitle, stats, variant = 'default', className = '' } = Astro.props;
+
+const variants = {
+  default: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+  gradient: 'bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 border border-primary-200 dark:border-primary-700',
+  minimal: 'bg-transparent'
+};
+---
+
+<div class={`rounded-xl p-8 ${variants[variant]} ${className}`}>
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      {title}
+    </h2>
+    {subtitle && (
+      <p class="text-gray-600 dark:text-gray-300">
+        {subtitle}
+      </p>
+    )}
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {stats.map((stat) => (
+      <div class="text-center">
+        {stat.icon && (
+          <div class="text-primary-600 dark:text-primary-400 mb-3">
+            <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <use href={`#${stat.icon}`}></use>
+            </svg>
+          </div>
+        )}
+        <div class="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+          {stat.value}
+        </div>
+        <div class="text-sm font-medium text-primary-600 dark:text-primary-400 mb-1">
+          {stat.label}
+        </div>
+        {stat.description && (
+          <div class="text-xs text-gray-500 dark:text-gray-400">
+            {stat.description}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</div>

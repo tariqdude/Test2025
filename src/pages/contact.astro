@@ -3,9 +3,9 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
-import ModernCard from '../components/ui/ModernCard.astro';
-import ModernGrid from '../components/ui/ModernGrid.astro';
-import ModernAnimate from '../components/ui/ModernAnimate.astro';
+import Card from '../components/ui/Card.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
@@ -20,7 +20,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <!-- Hero Section -->
       <section class="text-center mb-20">
-        <ModernAnimate animation="fade-in" duration="slow">
+        <Animate animation="fade-in" duration="slow">
           <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Get in Touch
           </h1>
@@ -28,25 +28,25 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
             Ready to start your next project? We'd love to hear from you. 
             Send us a message and we'll respond as soon as possible.
           </p>
-        </ModernAnimate>
+        </Animate>
       </section>
 
       <!-- Contact Content -->
-      <ModernGrid cols={2} gap="xl" responsive={{ sm: 1, lg: 2 }}>
+      <Grid cols={2} gap="xl" responsive={{ sm: 1, lg: 2 }}>
         <!-- Contact Form -->
-        <ModernAnimate animation="slide-left" trigger="scroll">
-          <ModernCard variant="outline" className="h-full">
+        <Animate animation="slide-left" trigger="scroll">
+          <Card variant="outline" className="h-full">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Send us a Message
             </h2>
             <ContactForm />
-          </ModernCard>
-        </ModernAnimate>
+          </Card>
+        </Animate>
 
         <!-- Contact Information -->
-        <ModernAnimate animation="slide-right" trigger="scroll" delay="sm">
+        <Animate animation="slide-right" trigger="scroll" delay="sm">
           <div class="space-y-6">
-            <ModernCard variant="default">
+            <Card variant="default">
               <div class="flex items-start space-x-4">
                 <div class="text-primary-600 dark:text-primary-400 mt-1">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,9 +65,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
                   </p>
                 </div>
               </div>
-            </ModernCard>
+            </Card>
 
-            <ModernCard variant="default">
+            <Card variant="default">
               <div class="flex items-start space-x-4">
                 <div class="text-primary-600 dark:text-primary-400 mt-1">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,9 +85,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
                   </p>
                 </div>
               </div>
-            </ModernCard>
+            </Card>
 
-            <ModernCard variant="default">
+            <Card variant="default">
               <div class="flex items-start space-x-4">
                 <div class="text-primary-600 dark:text-primary-400 mt-1">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,9 +105,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
                   </p>
                 </div>
               </div>
-            </ModernCard>
+            </Card>
 
-            <ModernCard variant="default">
+            <Card variant="default">
               <div class="flex items-start space-x-4">
                 <div class="text-primary-600 dark:text-primary-400 mt-1">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,10 +125,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
                   </p>
                 </div>
               </div>
-            </ModernCard>
+            </Card>
           </div>
-        </ModernAnimate>
-      </ModernGrid>
+        </Animate>
+      </Grid>
 
       <!-- FAQ Section -->
       <section class="mt-20 pt-20 border-t border-gray-200 dark:border-gray-700">
@@ -141,51 +141,51 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
           </p>
         </div>
 
-        <ModernGrid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
-          <ModernAnimate animation="fade-in" trigger="scroll">
-            <ModernCard variant="outline">
+        <Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
+          <Animate animation="fade-in" trigger="scroll">
+            <Card variant="outline">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 How quickly can you start a project?
               </h3>
               <p class="text-gray-600 dark:text-gray-300">
                 We typically can begin new projects within 1-2 weeks, depending on our current capacity and project scope.
               </p>
-            </ModernCard>
-          </ModernAnimate>
+            </Card>
+          </Animate>
 
-          <ModernAnimate animation="fade-in" trigger="scroll" delay="sm">
-            <ModernCard variant="outline">
+          <Animate animation="fade-in" trigger="scroll" delay="sm">
+            <Card variant="outline">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 Do you provide ongoing support?
               </h3>
               <p class="text-gray-600 dark:text-gray-300">
                 Yes, we offer comprehensive support and maintenance packages to ensure your solutions continue to perform optimally.
               </p>
-            </ModernCard>
-          </ModernAnimate>
+            </Card>
+          </Animate>
 
-          <ModernAnimate animation="fade-in" trigger="scroll" delay="md">
-            <ModernCard variant="outline">
+          <Animate animation="fade-in" trigger="scroll" delay="md">
+            <Card variant="outline">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 What industries do you serve?
               </h3>
               <p class="text-gray-600 dark:text-gray-300">
                 We work with businesses across various industries including healthcare, finance, e-commerce, and technology.
               </p>
-            </ModernCard>
-          </ModernAnimate>
+            </Card>
+          </Animate>
 
-          <ModernAnimate animation="fade-in" trigger="scroll" delay="lg">
-            <ModernCard variant="outline">
+          <Animate animation="fade-in" trigger="scroll" delay="lg">
+            <Card variant="outline">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 How do you handle project communication?
               </h3>
               <p class="text-gray-600 dark:text-gray-300">
                 We maintain regular communication through weekly updates, dedicated project channels, and milestone reviews.
               </p>
-            </ModernCard>
-          </ModernAnimate>
-        </ModernGrid>
+            </Card>
+          </Animate>
+        </Grid>
       </section>
     </main>
     

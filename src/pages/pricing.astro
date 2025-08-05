@@ -1,0 +1,237 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Card from '../components/ui/Card.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
+import PricingCard from '../components/ui/PricingCard.astro';
+import FAQ from '../components/ui/FAQ.astro';
+import CTA from '../components/ui/CTA.astro';
+
+const pricingPlans = [
+  {
+    title: 'Starter',
+    description: 'Perfect for small businesses getting started',
+    price: '$29',
+    period: 'month',
+    popular: false,
+    cta: { text: 'Start Free Trial', href: '/contact' },
+    features: [
+      { name: 'Up to 5 team members', included: true },
+      { name: 'Basic analytics', included: true },
+      { name: 'Email support', included: true },
+      { name: 'Custom integrations', included: false },
+      { name: 'Priority support', included: false },
+    ]
+  },
+  {
+    title: 'Professional',
+    description: 'Ideal for growing businesses with advanced needs',
+    price: '$79',
+    period: 'month',
+    popular: true,
+    cta: { text: 'Start Free Trial', href: '/contact' },
+    features: [
+      { name: 'Up to 25 team members', included: true },
+      { name: 'Advanced analytics', included: true },
+      { name: 'Priority email support', included: true },
+      { name: 'Custom integrations', included: true },
+      { name: '24/7 phone support', included: false },
+    ]
+  },
+  {
+    title: 'Enterprise',
+    description: 'Comprehensive solution for large organizations',
+    price: '$199',
+    period: 'month',
+    popular: false,
+    cta: { text: 'Contact Sales', href: '/contact' },
+    features: [
+      { name: 'Unlimited team members', included: true },
+      { name: 'Enterprise analytics', included: true },
+      { name: '24/7 phone support', included: true },
+      { name: 'Custom integrations', included: true },
+      { name: 'Dedicated account manager', included: true },
+    ]
+  }
+];
+
+const faqItems = [
+  {
+    title: 'How does the free trial work?',
+    content: 'You get full access to all features for 14 days, no credit card required. After the trial, you can choose to upgrade to a paid plan or continue with our free tier.'
+  },
+  {
+    title: 'Can I change my plan later?',
+    content: 'Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and billing is prorated accordingly.'
+  },
+  {
+    title: 'What payment methods do you accept?',
+    content: 'We accept all major credit cards, PayPal, and bank transfers for enterprise customers. All payments are processed securely.'
+  },
+  {
+    title: 'Is there a setup fee?',
+    content: 'No, there are no setup fees for any of our plans. You only pay the monthly or annual subscription fee.'
+  },
+  {
+    title: 'Do you offer refunds?',
+    content: 'Yes, we offer a 30-day money-back guarantee for all paid plans. If you\'re not satisfied, we\'ll provide a full refund.'
+  }
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Pricing - Simple, Transparent Plans" description="Choose the perfect plan for your business. Transparent pricing with no hidden fees." />
+	</head>
+	<body class="bg-white dark:bg-gray-900 min-h-screen">
+		<Header />
+		
+		<main>
+			<!-- Hero Section -->
+			<section class="py-20 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-3xl mx-auto text-center">
+						<Animate animation="fade-in" duration="slow">
+							<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+								Simple, Transparent Pricing
+							</h1>
+							<p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+								Choose the perfect plan for your business. No hidden fees, no surprises.
+							</p>
+							<div class="inline-flex items-center bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm">
+								<button class="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-md">
+									Monthly
+								</button>
+								<button class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+									Annual (Save 20%)
+								</button>
+							</div>
+						</Animate>
+					</div>
+				</div>
+			</section>
+
+			<!-- Pricing Cards -->
+			<section class="py-20">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+						{pricingPlans.map((plan, index) => (
+							<Animate 
+								animation="slide-up" 
+								delay={index === 0 ? 'none' : index === 1 ? 'sm' : 'md'}
+								trigger="scroll"
+							>
+								<PricingCard 
+									title={plan.title}
+									description={plan.description}
+									price={plan.price}
+									period={plan.period}
+									popular={plan.popular}
+									cta={plan.cta}
+									features={plan.features}
+								/>
+							</Animate>
+						))}
+					</Grid>
+				</div>
+			</section>
+
+			<!-- Features Comparison -->
+			<section class="py-20 bg-gray-50 dark:bg-gray-800">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-3xl mx-auto text-center mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+							Compare All Features
+						</h2>
+						<p class="text-lg text-gray-600 dark:text-gray-300">
+							See what's included in each plan and find the right fit for your needs.
+						</p>
+					</div>
+					
+					<Animate animation="fade-in" trigger="scroll">
+						<Card variant="default" className="overflow-hidden">
+							<div class="overflow-x-auto">
+								<table class="w-full">
+									<thead class="bg-gray-50 dark:bg-gray-700">
+										<tr>
+											<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+												Feature
+											</th>
+											<th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+												Starter
+											</th>
+											<th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+												Professional
+											</th>
+											<th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+												Enterprise
+											</th>
+										</tr>
+									</thead>
+									<tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+										<tr>
+											<td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Team Members</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Up to 5</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Up to 25</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Unlimited</td>
+										</tr>
+										<tr class="bg-gray-50 dark:bg-gray-800">
+											<td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Analytics</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Basic</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Advanced</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Enterprise</td>
+										</tr>
+										<tr>
+											<td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Support</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Email</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">Priority Email</td>
+											<td class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-300">24/7 Phone</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</Card>
+					</Animate>
+				</div>
+			</section>
+
+			<!-- FAQ Section -->
+			<section class="py-20">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-3xl mx-auto">
+						<div class="text-center mb-16">
+							<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+								Frequently Asked Questions
+							</h2>
+							<p class="text-lg text-gray-600 dark:text-gray-300">
+								Have questions? We have answers.
+							</p>
+						</div>
+						
+						<Animate animation="slide-up" trigger="scroll">
+							<FAQ items={faqItems} />
+						</Animate>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA Section -->
+			<section class="py-20">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<Animate animation="scale" trigger="scroll">
+						<CTA 
+							heading="Ready to get started?"
+							subheading="Join thousands of businesses already growing with our platform."
+							variant="contact"
+						/>
+					</Animate>
+				</div>
+			</section>
+		</main>
+		
+		<Footer />
+	</body>
+</html>

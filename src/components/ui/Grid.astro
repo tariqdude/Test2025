@@ -1,147 +1,51 @@
 ---
-export interface GridProps {
-  columns?: 1 | 2 | 3 | 4 | 5 | 6 | 'auto-fit' | 'auto-fill';
-  rows?: 'auto' | 1 | 2 | 3 | 4 | 5 | 6;
-  gap?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  gapX?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  gapY?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export interface Props {
+  cols?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
+  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
-  responsive?: boolean;
-  alignItems?: 'start' | 'center' | 'end' | 'stretch';
-  justifyItems?: 'start' | 'center' | 'end' | 'stretch';
-  placeItems?: 'start' | 'center' | 'end' | 'stretch';
-  minColWidth?: string;
-  maxColWidth?: string;
-  autoRows?: 'auto' | 'min' | 'max' | 'fr';
-  dense?: boolean;
+  responsive?: {
+    sm?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
+    md?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
+    lg?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
+    xl?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
+  };
 }
 
-const {
-  columns = 3,
-  rows = 'auto',
-  gap = 'md',
-  gapX,
-  gapY,
+const { 
+  cols = 3, 
+  gap = 'md', 
   className = '',
-  responsive = true,
-  alignItems,
-  justifyItems,
-  placeItems,
-  minColWidth,
-  maxColWidth,
-  autoRows,
-  dense = false,
-  ...rest
-} = Astro.props as GridProps;
+  responsive
+} = Astro.props;
 
-const baseClasses = 'grid';
-
-// Handle responsive column classes
-const getColumnClasses = () => {
-  if (columns === 'auto-fit' || columns === 'auto-fill') {
-    const minWidth = minColWidth || '250px';
-    const maxWidth = maxColWidth || '1fr';
-    return `grid-cols-[repeat(${columns},minmax(${minWidth},${maxWidth}))]`;
-  }
-  
-  if (responsive && typeof columns === 'number') {
-    const responsiveMap = {
-      1: 'grid-cols-1',
-      2: 'grid-cols-1 sm:grid-cols-2',
-      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-      5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
-      6: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
-    };
-    return responsiveMap[columns] || 'grid-cols-3';
-  }
-  
-  return `grid-cols-${columns}`;
-};
-
-// Handle row classes
-const getRowClasses = () => {
-  if (rows === 'auto') return '';
-  return `grid-rows-${rows}`;
-};
-
-// Gap classes
 const gaps = {
-  none: '',
-  xs: 'gap-2',
+  none: 'gap-0',
   sm: 'gap-4',
   md: 'gap-6',
   lg: 'gap-8',
-  xl: 'gap-12',
-  '2xl': 'gap-16'
+  xl: 'gap-12'
 };
 
-const gapXClasses = {
-  none: '',
-  xs: 'gap-x-2',
-  sm: 'gap-x-4',
-  md: 'gap-x-6',
-  lg: 'gap-x-8',
-  xl: 'gap-x-12',
-  '2xl': 'gap-x-16'
+const columns = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+  5: 'grid-cols-5',
+  6: 'grid-cols-6',
+  12: 'grid-cols-12'
 };
 
-const gapYClasses = {
-  none: '',
-  xs: 'gap-y-2',
-  sm: 'gap-y-4',
-  md: 'gap-y-6',
-  lg: 'gap-y-8',
-  xl: 'gap-y-12',
-  '2xl': 'gap-y-16'
-};
+const responsiveClasses = responsive ? [
+  responsive.sm ? `sm:grid-cols-${responsive.sm}` : '',
+  responsive.md ? `md:grid-cols-${responsive.md}` : '',
+  responsive.lg ? `lg:grid-cols-${responsive.lg}` : '',
+  responsive.xl ? `xl:grid-cols-${responsive.xl}` : ''
+].filter(Boolean).join(' ') : '';
 
-// Alignment classes
-const alignItemsClasses = {
-  start: 'items-start',
-  center: 'items-center',
-  end: 'items-end',
-  stretch: 'items-stretch'
-};
-
-const justifyItemsClasses = {
-  start: 'justify-items-start',
-  center: 'justify-items-center',
-  end: 'justify-items-end',
-  stretch: 'justify-items-stretch'
-};
-
-const placeItemsClasses = {
-  start: 'place-items-start',
-  center: 'place-items-center',
-  end: 'place-items-end',
-  stretch: 'place-items-stretch'
-};
-
-// Auto rows classes
-const autoRowsClasses = {
-  auto: 'auto-rows-auto',
-  min: 'auto-rows-min',
-  max: 'auto-rows-max',
-  fr: 'auto-rows-fr'
-};
-
-const classes = [
-  baseClasses,
-  getColumnClasses(),
-  getRowClasses(),
-  // Use specific gap classes if provided, otherwise use general gap
-  gapX ? gapXClasses[gapX] : gaps[gap],
-  gapY ? gapYClasses[gapY] : (gapX ? '' : gaps[gap]), // Only apply gapY if gapX is used
-  alignItems && alignItemsClasses[alignItems],
-  justifyItems && justifyItemsClasses[justifyItems],
-  placeItems && placeItemsClasses[placeItems],
-  autoRows && autoRowsClasses[autoRows],
-  dense && 'grid-flow-dense',
-  className
-].filter(Boolean).join(' ');
+const classes = `grid ${columns[cols]} ${gaps[gap]} ${responsiveClasses} ${className}`.trim();
 ---
 
-<div class={classes} {...rest}>
+<div class={classes}>
   <slot />
 </div>

@@ -5,7 +5,47 @@ import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
 import ClientPortal from '../components/ClientPortal.astro';
 import PerformanceMonitor from '../components/PerformanceMonitor.astro';
+import DashboardMetrics from '../components/ui/DashboardMetrics.astro';
+import Card from '../components/ui/Card.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
 import { SITE_TITLE } from '../consts';
+
+// Sample dashboard metrics
+const metrics = [
+  {
+    label: 'Total Revenue',
+    value: 125000,
+    format: 'currency',
+    change: 12.5,
+    changeType: 'increase',
+    trend: [10, 15, 12, 18, 22, 19, 25]
+  },
+  {
+    label: 'Active Projects',
+    value: 342,
+    format: 'number',
+    change: 8.2,
+    changeType: 'increase',
+    trend: [20, 25, 30, 28, 35, 38, 42]
+  },
+  {
+    label: 'Client Satisfaction',
+    value: 96.8,
+    format: 'percentage',
+    change: 2.1,
+    changeType: 'increase',
+    trend: [92, 93, 95, 94, 96, 97, 97]
+  },
+  {
+    label: 'Server Uptime',
+    value: 99.98,
+    format: 'percentage',
+    change: 0.1,
+    changeType: 'increase',
+    trend: [99.5, 99.7, 99.9, 99.8, 99.9, 100, 99.98]
+  }
+];
 ---
 <!DOCTYPE html>
 <html lang="en">

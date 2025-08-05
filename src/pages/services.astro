@@ -1,0 +1,275 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Card from '../components/ui/Card.astro';
+import Button from '../components/ui/Button.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
+import CTA from '../components/ui/CTA.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const services = [
+  {
+    title: 'Web Development',
+    description: 'Custom web applications built with modern technologies and best practices.',
+    icon: 'monitor',
+    features: [
+      'Responsive Design',
+      'Performance Optimization',
+      'SEO-Friendly',
+      'Cross-Browser Compatible',
+      'Mobile-First Approach'
+    ],
+    technologies: ['React', 'Vue.js', 'Astro', 'Node.js', 'TypeScript']
+  },
+  {
+    title: 'Mobile Development',
+    description: 'Native and cross-platform mobile applications for iOS and Android.',
+    icon: 'smartphone',
+    features: [
+      'Native Performance',
+      'Offline Functionality',
+      'Push Notifications',
+      'App Store Optimization',
+      'User Analytics'
+    ],
+    technologies: ['React Native', 'Flutter', 'Swift', 'Kotlin', 'Xamarin']
+  },
+  {
+    title: 'Cloud Solutions',
+    description: 'Scalable cloud infrastructure and deployment solutions.',
+    icon: 'cloud',
+    features: [
+      'Auto Scaling',
+      'High Availability',
+      'Security First',
+      'Cost Optimization',
+      'Monitoring & Alerts'
+    ],
+    technologies: ['AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes']
+  },
+  {
+    title: 'Digital Strategy',
+    description: 'Strategic planning and digital transformation consulting.',
+    icon: 'trending-up',
+    features: [
+      'Market Analysis',
+      'Technology Roadmap',
+      'ROI Optimization',
+      'Process Automation',
+      'Performance Metrics'
+    ],
+    technologies: ['Analytics', 'CRM', 'Marketing Automation', 'Business Intelligence']
+  },
+  {
+    title: 'UI/UX Design',
+    description: 'User-centered design that creates exceptional experiences.',
+    icon: 'palette',
+    features: [
+      'User Research',
+      'Wireframing & Prototyping',
+      'Visual Design',
+      'Usability Testing',
+      'Design Systems'
+    ],
+    technologies: ['Figma', 'Adobe CC', 'Sketch', 'InVision', 'Principle']
+  },
+  {
+    title: 'Data Analytics',
+    description: 'Transform your data into actionable business insights.',
+    icon: 'bar-chart',
+    features: [
+      'Data Visualization',
+      'Predictive Analytics',
+      'Real-time Dashboards',
+      'Custom Reports',
+      'Machine Learning'
+    ],
+    technologies: ['Python', 'R', 'Tableau', 'Power BI', 'TensorFlow']
+  }
+];
+
+const process = [
+  {
+    step: '01',
+    title: 'Discovery',
+    description: 'We start by understanding your business goals, challenges, and requirements through detailed consultation and analysis.'
+  },
+  {
+    step: '02',
+    title: 'Strategy',
+    description: 'Our team develops a comprehensive strategy and roadmap tailored to your specific needs and objectives.'
+  },
+  {
+    step: '03',
+    title: 'Design',
+    description: 'We create detailed designs and prototypes, ensuring the solution aligns with your brand and user expectations.'
+  },
+  {
+    step: '04',
+    title: 'Development',
+    description: 'Our experienced developers build your solution using the latest technologies and best practices.'
+  },
+  {
+    step: '05',
+    title: 'Testing',
+    description: 'Rigorous testing ensures quality, performance, and security before launch.'
+  },
+  {
+    step: '06',
+    title: 'Launch & Support',
+    description: 'We handle the deployment and provide ongoing support to ensure continued success.'
+  }
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Our Services - Comprehensive Technology Solutions" description="Discover our full range of professional services designed to help your business succeed in the digital age." />
+	</head>
+	<body class="bg-white dark:bg-gray-900 min-h-screen">
+		<Header />
+		
+		<main>
+			<!-- Hero Section -->
+			<section class="py-20 lg:py-32 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-4xl mx-auto text-center">
+						<Animate animation="fade-in" duration="slow">
+							<h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+								Comprehensive Technology
+								<span class="text-primary-600 dark:text-primary-400">Solutions</span>
+							</h1>
+							<p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">
+								From strategy to execution, we provide end-to-end technology services that drive growth and innovation for your business.
+							</p>
+							<Button variant="primary" size="lg" href="/contact">
+								Start Your Project
+							</Button>
+						</Animate>
+					</div>
+				</div>
+			</section>
+
+			<!-- Services Grid -->
+			<section class="py-20">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-3xl mx-auto text-center mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+							Our Services
+						</h2>
+						<p class="text-lg text-gray-600 dark:text-gray-300">
+							We offer a full spectrum of technology services to meet your business needs.
+						</p>
+					</div>
+					
+					<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+						{services.map((service, index) => (
+							<Animate 
+								animation="slide-up" 
+								delay={index % 3 === 0 ? 'none' : index % 3 === 1 ? 'sm' : 'md'}
+								trigger="scroll"
+							>
+								<Card variant="default" className="h-full">
+									<div class="text-primary-600 dark:text-primary-400 mb-6">
+										<Icon name={service.icon} size="2xl" />
+									</div>
+									<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+										{service.title}
+									</h3>
+									<p class="text-gray-600 dark:text-gray-300 mb-6">
+										{service.description}
+									</p>
+									
+									<div class="mb-6">
+										<h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+											Key Features:
+										</h4>
+										<ul class="space-y-2">
+											{service.features.map((feature) => (
+												<li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+													<Icon name="check" size="sm" className="text-green-500 mr-2 flex-shrink-0" />
+													{feature}
+												</li>
+											))}
+										</ul>
+									</div>
+									
+									<div class="mt-auto">
+										<h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+											Technologies:
+										</h4>
+										<div class="flex flex-wrap gap-2">
+											{service.technologies.map((tech) => (
+												<span class="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 text-xs rounded-md">
+													{tech}
+												</span>
+											))}
+										</div>
+									</div>
+								</Card>
+							</Animate>
+						))}
+					</Grid>
+				</div>
+			</section>
+
+			<!-- Process Section -->
+			<section class="py-20 bg-gray-50 dark:bg-gray-800">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="max-w-3xl mx-auto text-center mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+							Our Process
+						</h2>
+						<p class="text-lg text-gray-600 dark:text-gray-300">
+							We follow a proven methodology to ensure successful project delivery.
+						</p>
+					</div>
+					
+					<div class="max-w-4xl mx-auto">
+						<Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
+							{process.map((step, index) => (
+								<Animate 
+									animation="slide-up" 
+									delay={index % 2 === 0 ? 'none' : 'sm'}
+									trigger="scroll"
+								>
+									<div class="flex items-start space-x-4">
+										<div class="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
+											{step.step}
+										</div>
+										<div>
+											<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+												{step.title}
+											</h3>
+											<p class="text-gray-600 dark:text-gray-300">
+												{step.description}
+											</p>
+										</div>
+									</div>
+								</Animate>
+							))}
+						</Grid>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA Section -->
+			<section class="py-20">
+				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+					<Animate animation="scale" trigger="scroll">
+						<CTA 
+							heading="Ready to Start Your Project?"
+							subheading="Let's discuss how we can help bring your vision to life with our expert services."
+							variant="contact"
+						/>
+					</Animate>
+				</div>
+			</section>
+		</main>
+		
+		<Footer />
+	</body>
+</html>

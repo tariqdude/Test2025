@@ -2,10 +2,10 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import ModernCard from '../components/ui/ModernCard.astro';
-import ModernButton from '../components/ui/ModernButton.astro';
-import ModernGrid from '../components/ui/ModernGrid.astro';
-import ModernAnimate from '../components/ui/ModernAnimate.astro';
+import Card from '../components/ui/Card.astro';
+import Button from '../components/ui/Button.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
 import Icon from '../components/ui/Icon.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
@@ -22,30 +22,30 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			<section id="hero" class="relative overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800 py-20 lg:py-32">
 				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="max-w-4xl mx-auto text-center">
-						<ModernAnimate animation="fade-in" duration="slow">
+						<Animate animation="fade-in" duration="slow">
 							<h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
 								Professional
 								<span class="text-primary-600 dark:text-primary-400">Business Solutions</span>
 								for Modern Companies
 							</h1>
-						</ModernAnimate>
+						</Animate>
 						
-						<ModernAnimate animation="slide-up" delay="sm">
+						<Animate animation="slide-up" delay="sm">
 							<p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">
 								We deliver cutting-edge technology solutions that drive growth, efficiency, and innovation for businesses of all sizes.
 							</p>
-						</ModernAnimate>
+						</Animate>
 						
-						<ModernAnimate animation="scale" delay="md">
+						<Animate animation="scale" delay="md">
 							<div class="flex flex-col sm:flex-row gap-4 justify-center">
-								<ModernButton variant="primary" size="lg" href="/contact">
+								<Button variant="primary" size="lg" href="/contact">
 									Get Started
-								</ModernButton>
-								<ModernButton variant="outline" size="lg" href="/about">
+								</Button>
+								<Button variant="outline" size="lg" href="/about">
 									Learn More
-								</ModernButton>
+								</Button>
 							</div>
-						</ModernAnimate>
+						</Animate>
 					</div>
 				</div>
 			</section>
@@ -62,9 +62,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 						</p>
 					</div>
 					
-					<ModernGrid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
-						<ModernAnimate animation="slide-up" delay="none">
-							<ModernCard variant="default">
+					<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+						<Animate animation="slide-up" delay="none">
+							<Card variant="default">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<Icon name="lightning" size="2xl" />
 								</div>
@@ -74,11 +74,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								<p class="text-gray-600 dark:text-gray-300">
 									Lightning-fast solutions built with performance and reliability at their core.
 								</p>
-							</ModernCard>
-						</ModernAnimate>
+							</Card>
+						</Animate>
 						
-						<ModernAnimate animation="slide-up" delay="sm">
-							<ModernCard variant="default">
+						<Animate animation="slide-up" delay="sm">
+							<Card variant="default">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<Icon name="shield" size="2xl" />
 								</div>
@@ -88,11 +88,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								<p class="text-gray-600 dark:text-gray-300">
 									Enterprise-grade security with full compliance to industry standards.
 								</p>
-							</ModernCard>
-						</ModernAnimate>
+							</Card>
+						</Animate>
 						
-						<ModernAnimate animation="slide-up" delay="md">
-							<ModernCard variant="default">
+						<Animate animation="slide-up" delay="md">
+							<Card variant="default">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<Icon name="users" size="2xl" />
 								</div>
@@ -102,9 +102,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								<p class="text-gray-600 dark:text-gray-300">
 									24/7 expert support from our dedicated team of professionals.
 								</p>
-							</ModernCard>
-						</ModernAnimate>
-					</ModernGrid>
+							</Card>
+						</Animate>
+					</Grid>
 				</div>
 			</section>
 
@@ -120,9 +120,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 						</p>
 					</div>
 					
-					<ModernGrid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
-						<ModernAnimate animation="slide-left" trigger="scroll">
-							<ModernCard variant="outline">
+					<Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
+						<Animate animation="slide-left" trigger="scroll">
+							<Card variant="outline">
 								<h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
 									Web Development
 								</h3>
@@ -143,14 +143,14 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 										Performance Optimization
 									</li>
 								</ul>
-								<ModernButton variant="primary" href="/contact">
+								<Button variant="primary" href="/contact">
 									Learn More
-								</ModernButton>
-							</ModernCard>
-						</ModernAnimate>
+								</Button>
+							</Card>
+						</Animate>
 						
-						<ModernAnimate animation="slide-right" trigger="scroll">
-							<ModernCard variant="outline">
+						<Animate animation="slide-right" trigger="scroll">
+							<Card variant="outline">
 								<h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
 									Cloud Solutions
 								</h3>
@@ -171,12 +171,12 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 										24/7 Monitoring
 									</li>
 								</ul>
-								<ModernButton variant="primary" href="/contact">
+								<Button variant="primary" href="/contact">
 									Learn More
-								</ModernButton>
-							</ModernCard>
-						</ModernAnimate>
-					</ModernGrid>
+								</Button>
+							</Card>
+						</Animate>
+					</Grid>
 				</div>
 			</section>
 
@@ -184,17 +184,17 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			<section id="cta" class="py-20 bg-primary-600 dark:bg-primary-700">
 				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="max-w-3xl mx-auto text-center">
-						<ModernAnimate animation="fade-in" trigger="scroll">
+						<Animate animation="fade-in" trigger="scroll">
 							<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
 								Ready to Get Started?
 							</h2>
 							<p class="text-xl text-primary-100 mb-8">
 								Let's discuss how we can help transform your business with our expert solutions.
 							</p>
-							<ModernButton variant="secondary" size="lg" href="/contact">
+							<Button variant="secondary" size="lg" href="/contact">
 								Contact Us Today
-							</ModernButton>
-						</ModernAnimate>
+							</Button>
+						</Animate>
 					</div>
 				</div>
 			</section>

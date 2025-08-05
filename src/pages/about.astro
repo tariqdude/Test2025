@@ -2,10 +2,10 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import ModernCard from '../components/ui/ModernCard.astro';
-import ModernButton from '../components/ui/ModernButton.astro';
-import ModernGrid from '../components/ui/ModernGrid.astro';
-import ModernAnimate from '../components/ui/ModernAnimate.astro';
+import Card from '../components/ui/Card.astro';
+import Button from '../components/ui/Button.astro';
+import Grid from '../components/ui/Grid.astro';
+import Animate from '../components/ui/Animate.astro';
 import { Image } from 'astro:assets';
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 ---
@@ -22,9 +22,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 		<section class="relative bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800 py-20 lg:py-32">
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="max-w-6xl mx-auto">
-					<ModernGrid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
+					<Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
 						<div class="flex flex-col justify-center">
-							<ModernAnimate animation="slide-left" duration="slow">
+							<Animate animation="slide-left" duration="slow">
 								<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
 									About Our
 									<span class="text-primary-600 dark:text-primary-400">Company</span>
@@ -32,14 +32,14 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 								<p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
 									We are a team of passionate professionals dedicated to delivering innovative solutions that drive business success and technological advancement.
 								</p>
-								<ModernButton variant="primary" size="lg" href="/contact">
+								<Button variant="primary" size="lg" href="/contact">
 									Get In Touch
-								</ModernButton>
-							</ModernAnimate>
+								</Button>
+							</Animate>
 						</div>
 						
 						<div class="flex justify-center lg:justify-end">
-							<ModernAnimate animation="slide-right" delay="sm">
+							<Animate animation="slide-right" delay="sm">
 								<div class="relative max-w-md">
 									<Image
 										src={AboutHeroImage}
@@ -49,9 +49,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 										height={300}
 									/>
 								</div>
-							</ModernAnimate>
+							</Animate>
 						</div>
-					</ModernGrid>
+					</Grid>
 				</div>
 			</div>
 		</section>
@@ -59,9 +59,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 		<!-- Mission & Vision Section -->
 		<section class="py-20 bg-white dark:bg-gray-900">
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-				<ModernGrid cols={2} gap="xl" responsive={{ sm: 1, lg: 2 }}>
-					<ModernAnimate animation="slide-up" trigger="scroll">
-						<ModernCard variant="outline" className="h-full">
+				<Grid cols={2} gap="xl" responsive={{ sm: 1, lg: 2 }}>
+					<Animate animation="slide-up" trigger="scroll">
+						<Card variant="outline" className="h-full">
 							<div class="text-primary-600 dark:text-primary-400 mb-6">
 								<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
@@ -73,11 +73,11 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 							<p class="text-gray-600 dark:text-gray-300 leading-relaxed">
 								To empower businesses with cutting-edge technology solutions that drive innovation, efficiency, and growth. We believe in creating digital experiences that make a meaningful impact on our clients' success.
 							</p>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					
-					<ModernAnimate animation="slide-up" trigger="scroll" delay="sm">
-						<ModernCard variant="outline" className="h-full">
+					<Animate animation="slide-up" trigger="scroll" delay="sm">
+						<Card variant="outline" className="h-full">
 							<div class="text-primary-600 dark:text-primary-400 mb-6">
 								<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -90,9 +90,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 							<p class="text-gray-600 dark:text-gray-300 leading-relaxed">
 								To be the leading technology partner for businesses seeking digital transformation. We envision a world where technology seamlessly integrates with business goals to create exceptional value.
 							</p>
-						</ModernCard>
-					</ModernAnimate>
-				</ModernGrid>
+						</Card>
+					</Animate>
+				</Grid>
 			</div>
 		</section>
 
@@ -108,9 +108,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 					</p>
 				</div>
 				
-				<ModernGrid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
-					<ModernAnimate animation="scale" trigger="scroll">
-						<ModernCard variant="default">
+				<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+					<Animate animation="scale" trigger="scroll">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,11 +124,11 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									We strive for excellence in every project, delivering quality that exceeds expectations.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					
-					<ModernAnimate animation="scale" trigger="scroll" delay="sm">
-						<ModernCard variant="default">
+					<Animate animation="scale" trigger="scroll" delay="sm">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,11 +142,11 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									We work closely with our clients as partners, ensuring transparent communication throughout.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					
-					<ModernAnimate animation="scale" trigger="scroll" delay="md">
-						<ModernCard variant="default">
+					<Animate animation="scale" trigger="scroll" delay="md">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="text-primary-600 dark:text-primary-400 mb-4">
 									<svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,9 +160,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									We embrace cutting-edge technologies and creative solutions to solve complex challenges.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
-				</ModernGrid>
+						</Card>
+					</Animate>
+				</Grid>
 			</div>
 		</section>
 
@@ -178,9 +178,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 					</p>
 				</div>
 				
-				<ModernGrid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
-					<ModernAnimate animation="fade-in" trigger="scroll">
-						<ModernCard variant="default">
+				<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
+					<Animate animation="fade-in" trigger="scroll">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="w-24 h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
 									JD
@@ -195,11 +195,11 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									Visionary leader with 15+ years in technology and business strategy.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					
-					<ModernAnimate animation="fade-in" trigger="scroll" delay="sm">
-						<ModernCard variant="default">
+					<Animate animation="fade-in" trigger="scroll" delay="sm">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="w-24 h-24 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
 									JS
@@ -214,11 +214,11 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									Technical expert specializing in scalable architecture and innovation.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
+						</Card>
+					</Animate>
 					
-					<ModernAnimate animation="fade-in" trigger="scroll" delay="md">
-						<ModernCard variant="default">
+					<Animate animation="fade-in" trigger="scroll" delay="md">
+						<Card variant="default">
 							<div class="text-center">
 								<div class="w-24 h-24 bg-gradient-to-br from-accent-400 to-accent-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
 									MB
@@ -233,9 +233,9 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 									Full-stack developer passionate about creating exceptional user experiences.
 								</p>
 							</div>
-						</ModernCard>
-					</ModernAnimate>
-				</ModernGrid>
+						</Card>
+					</Animate>
+				</Grid>
 			</div>
 		</section>
 
@@ -243,17 +243,17 @@ import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 		<section class="py-20 bg-primary-600 dark:bg-primary-700">
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="max-w-3xl mx-auto text-center">
-					<ModernAnimate animation="fade-in" trigger="scroll">
+					<Animate animation="fade-in" trigger="scroll">
 						<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
 							Ready to Work Together?
 						</h2>
 						<p class="text-xl text-primary-100 mb-8">
 							Let's discuss how our expertise can help achieve your business goals.
 						</p>
-						<ModernButton variant="secondary" size="lg" href="/contact">
+						<Button variant="secondary" size="lg" href="/contact">
 							Start a Conversation
-						</ModernButton>
-					</ModernAnimate>
+						</Button>
+					</Animate>
 				</div>
 			</div>
 		</section>

@@ -1,6 +1,6 @@
 // Modern utility functions for enhanced development experience
 
-import type { BlogPost, SearchFilters, ColorScheme } from '../types/modern';
+import type { BlogPost, SearchFilters, ColorScheme } from '../types/index';
 
 /* ==================== FORMATTING UTILITIES ==================== */
 
