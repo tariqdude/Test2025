@@ -16,33 +16,33 @@ const metrics = [
   {
     label: 'Total Revenue',
     value: 125000,
-    format: 'currency',
+    format: 'currency' as const,
     change: 12.5,
-    changeType: 'increase',
+    changeType: 'increase' as const,
     trend: [10, 15, 12, 18, 22, 19, 25]
   },
   {
     label: 'Active Projects',
     value: 342,
-    format: 'number',
+    format: 'number' as const,
     change: 8.2,
-    changeType: 'increase',
+    changeType: 'increase' as const,
     trend: [20, 25, 30, 28, 35, 38, 42]
   },
   {
     label: 'Client Satisfaction',
     value: 96.8,
-    format: 'percentage',
+    format: 'percentage' as const,
     change: 2.1,
-    changeType: 'increase',
+    changeType: 'increase' as const,
     trend: [92, 93, 95, 94, 96, 97, 97]
   },
   {
     label: 'Server Uptime',
     value: 99.98,
-    format: 'percentage',
+    format: 'percentage' as const,
     change: 0.1,
-    changeType: 'increase',
+    changeType: 'increase' as const,
     trend: [99.5, 99.7, 99.9, 99.8, 99.9, 100, 99.98]
   }
 ];
@@ -89,6 +89,17 @@ const metrics = [
 
       <!-- Dashboard Content -->
       <div class="container dashboard-container">
+        <!-- Key Metrics Section -->
+        <section class="dashboard-section" id="metrics">
+          <div class="section-header">
+            <h2>Key Performance Metrics</h2>
+            <p>Real-time insights into your business performance</p>
+          </div>
+          <Animate animation="fade-in" duration="slow">
+            <DashboardMetrics metrics={metrics} className="mb-8" />
+          </Animate>
+        </section>
+
         <!-- Analytics Section -->
         <section class="dashboard-section" id="analytics">
           <div class="section-header">
