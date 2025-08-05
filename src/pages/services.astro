@@ -4,15 +4,13 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Card from '../components/ui/Card.astro';
 import Button from '../components/ui/Button.astro';
-import Grid from '../components/ui/Grid.astro';
-import Animate from '../components/ui/Animate.astro';
-import CTA from '../components/ui/CTA.astro';
 import Icon from '../components/ui/Icon.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const services = [
   {
     title: 'Web Development',
-    description: 'Custom web applications built with modern technologies and best practices.',
+    description: 'Custom web applications built with modern technologies and best practices for exceptional user experiences.',
     icon: 'monitor',
     features: [
       'Responsive Design',
@@ -25,7 +23,7 @@ const services = [
   },
   {
     title: 'Mobile Development',
-    description: 'Native and cross-platform mobile applications for iOS and Android.',
+    description: 'Native and cross-platform mobile applications for iOS and Android that deliver superior performance.',
     icon: 'smartphone',
     features: [
       'Native Performance',
@@ -38,7 +36,7 @@ const services = [
   },
   {
     title: 'Cloud Solutions',
-    description: 'Scalable cloud infrastructure and deployment solutions.',
+    description: 'Scalable cloud infrastructure and deployment solutions that grow with your business needs.',
     icon: 'cloud',
     features: [
       'Auto Scaling',
@@ -51,225 +49,350 @@ const services = [
   },
   {
     title: 'Digital Strategy',
-    description: 'Strategic planning and digital transformation consulting.',
+    description: 'Comprehensive digital transformation strategies that align technology with business objectives.',
     icon: 'trending-up',
     features: [
-      'Market Analysis',
+      'Business Analysis',
       'Technology Roadmap',
-      'ROI Optimization',
-      'Process Automation',
-      'Performance Metrics'
+      'Digital Transformation',
+      'Process Optimization',
+      'ROI Measurement'
     ],
-    technologies: ['Analytics', 'CRM', 'Marketing Automation', 'Business Intelligence']
+    technologies: ['Analytics', 'CRM', 'ERP', 'Automation', 'AI/ML']
   },
   {
     title: 'UI/UX Design',
-    description: 'User-centered design that creates exceptional experiences.',
+    description: 'User-centered design solutions that create meaningful and delightful digital experiences.',
     icon: 'palette',
     features: [
       'User Research',
-      'Wireframing & Prototyping',
+      'Wireframing',
+      'Prototyping',
       'Visual Design',
-      'Usability Testing',
-      'Design Systems'
+      'Usability Testing'
     ],
-    technologies: ['Figma', 'Adobe CC', 'Sketch', 'InVision', 'Principle']
+    technologies: ['Figma', 'Adobe XD', 'Sketch', 'InVision', 'Principle']
   },
   {
     title: 'Data Analytics',
-    description: 'Transform your data into actionable business insights.',
+    description: 'Transform your data into actionable insights that drive informed business decisions.',
     icon: 'bar-chart',
     features: [
       'Data Visualization',
       'Predictive Analytics',
       'Real-time Dashboards',
-      'Custom Reports',
+      'Business Intelligence',
       'Machine Learning'
     ],
     technologies: ['Python', 'R', 'Tableau', 'Power BI', 'TensorFlow']
   }
 ];
-
-const process = [
-  {
-    step: '01',
-    title: 'Discovery',
-    description: 'We start by understanding your business goals, challenges, and requirements through detailed consultation and analysis.'
-  },
-  {
-    step: '02',
-    title: 'Strategy',
-    description: 'Our team develops a comprehensive strategy and roadmap tailored to your specific needs and objectives.'
-  },
-  {
-    step: '03',
-    title: 'Design',
-    description: 'We create detailed designs and prototypes, ensuring the solution aligns with your brand and user expectations.'
-  },
-  {
-    step: '04',
-    title: 'Development',
-    description: 'Our experienced developers build your solution using the latest technologies and best practices.'
-  },
-  {
-    step: '05',
-    title: 'Testing',
-    description: 'Rigorous testing ensures quality, performance, and security before launch.'
-  },
-  {
-    step: '06',
-    title: 'Launch & Support',
-    description: 'We handle the deployment and provide ongoing support to ensure continued success.'
-  }
-];
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title="Our Services - Comprehensive Technology Solutions" description="Discover our full range of professional services designed to help your business succeed in the digital age." />
-	</head>
-	<body class="bg-white dark:bg-gray-900 min-h-screen">
-		<Header />
-		
-		<main>
-			<!-- Hero Section -->
-			<section class="py-20 lg:py-32 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-4xl mx-auto text-center">
-						<Animate animation="fade-in" duration="slow">
-							<h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
-								Comprehensive Technology
-								<span class="text-primary-600 dark:text-primary-400">Solutions</span>
-							</h1>
-							<p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">
-								From strategy to execution, we provide end-to-end technology services that drive growth and innovation for your business.
-							</p>
-							<Button variant="primary" size="lg" href="/contact">
-								Start Your Project
-							</Button>
-						</Animate>
-					</div>
-				</div>
-			</section>
+  <head>
+    <BaseHead title={`${SITE_TITLE} | Services`} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    
+    <main>
+      <!-- Hero Section -->
+      <section class="relative py-20 bg-gradient-to-br from-primary-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent dark:from-gray-900/20"></div>
+        
+        <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
+              <Icon name="briefcase" class="w-4 h-4 mr-2" />
+              Our Services
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+              Comprehensive 
+              <span class="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+                Digital Solutions
+              </span>
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              From strategy to implementation, we offer end-to-end digital services 
+              that transform your business and accelerate growth in the digital age.
+            </p>
+          </div>
+        </div>
+      </section>
 
-			<!-- Services Grid -->
-			<section class="py-20">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-3xl mx-auto text-center mb-16">
-						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-							Our Services
-						</h2>
-						<p class="text-lg text-gray-600 dark:text-gray-300">
-							We offer a full spectrum of technology services to meet your business needs.
-						</p>
-					</div>
-					
-					<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
-						{services.map((service, index) => (
-							<Animate 
-								animation="slide-up" 
-								delay={index % 3 === 0 ? 'none' : index % 3 === 1 ? 'sm' : 'md'}
-								trigger="scroll"
-							>
-								<Card variant="default" className="h-full">
-									<div class="text-primary-600 dark:text-primary-400 mb-6">
-										<Icon name={service.icon} size="2xl" />
-									</div>
-									<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-										{service.title}
-									</h3>
-									<p class="text-gray-600 dark:text-gray-300 mb-6">
-										{service.description}
-									</p>
-									
-									<div class="mb-6">
-										<h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
-											Key Features:
-										</h4>
-										<ul class="space-y-2">
-											{service.features.map((feature) => (
-												<li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-													<Icon name="check" size="sm" className="text-green-500 mr-2 flex-shrink-0" />
-													{feature}
-												</li>
-											))}
-										</ul>
-									</div>
-									
-									<div class="mt-auto">
-										<h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
-											Technologies:
-										</h4>
-										<div class="flex flex-wrap gap-2">
-											{service.technologies.map((tech) => (
-												<span class="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 text-xs rounded-md">
-													{tech}
-												</span>
-											))}
-										</div>
-									</div>
-								</Card>
-							</Animate>
-						))}
-					</Grid>
-				</div>
-			</section>
+      <!-- Services Grid -->
+      <section class="py-20 bg-white dark:bg-gray-950">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {services.map((service, index) => (
+              <Card className="group border-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="text-center">
+                  <!-- Icon -->
+                  <div class={`w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br ${
+                    index % 6 === 0 ? 'from-blue-400 to-blue-600' :
+                    index % 6 === 1 ? 'from-green-400 to-green-600' :
+                    index % 6 === 2 ? 'from-purple-400 to-purple-600' :
+                    index % 6 === 3 ? 'from-orange-400 to-orange-600' :
+                    index % 6 === 4 ? 'from-pink-400 to-pink-600' :
+                    'from-indigo-400 to-indigo-600'
+                  } flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon name={service.icon} class="w-8 h-8" />
+                  </div>
+                  
+                  <!-- Title -->
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    {service.title}
+                  </h3>
+                  
+                  <!-- Description -->
+                  <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    {service.description}
+                  </p>
+                  
+                  <!-- Features -->
+                  <div class="mb-6">
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wide">
+                      Key Features
+                    </h4>
+                    <ul class="space-y-2">
+                      {service.features.map((feature) => (
+                        <li class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                          <Icon name="check" class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <!-- Technologies -->
+                  <div class="mb-6">
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wide">
+                      Technologies
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                      {service.technologies.map((tech) => (
+                        <span class="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs rounded-full">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <!-- CTA Button -->
+                  <Button variant="primary" class="w-full group-hover:scale-105 transition-transform duration-200">
+                    Learn More
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-			<!-- Process Section -->
-			<section class="py-20 bg-gray-50 dark:bg-gray-800">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-3xl mx-auto text-center mb-16">
-						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-							Our Process
-						</h2>
-						<p class="text-lg text-gray-600 dark:text-gray-300">
-							We follow a proven methodology to ensure successful project delivery.
-						</p>
-					</div>
-					
-					<div class="max-w-4xl mx-auto">
-						<Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
-							{process.map((step, index) => (
-								<Animate 
-									animation="slide-up" 
-									delay={index % 2 === 0 ? 'none' : 'sm'}
-									trigger="scroll"
-								>
-									<div class="flex items-start space-x-4">
-										<div class="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
-											{step.step}
-										</div>
-										<div>
-											<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-												{step.title}
-											</h3>
-											<p class="text-gray-600 dark:text-gray-300">
-												{step.description}
-											</p>
-										</div>
-									</div>
-								</Animate>
-							))}
-						</Grid>
-					</div>
-				</div>
-			</section>
+      <!-- Process Section -->
+      <section class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Our Process
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              A proven methodology that ensures successful project delivery and exceptional results.
+            </p>
+          </div>
 
-			<!-- CTA Section -->
-			<section class="py-20">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<Animate animation="scale" trigger="scroll">
-						<CTA 
-							heading="Ready to Start Your Project?"
-							subheading="Let's discuss how we can help bring your vision to life with our expert services."
-							variant="contact"
-						/>
-					</Animate>
-				</div>
-			</section>
-		</main>
-		
-		<Footer />
-	</body>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <!-- Discovery -->
+            <Card className="text-center border-0 bg-white dark:bg-gray-900 p-6 hover:shadow-xl transition-shadow">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                1
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Discovery
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                We dive deep into your business needs, goals, and challenges to create a comprehensive understanding.
+              </p>
+            </Card>
+
+            <!-- Planning -->
+            <Card className="text-center border-0 bg-white dark:bg-gray-900 p-6 hover:shadow-xl transition-shadow">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                2
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Planning
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Strategic planning and architecture design to ensure optimal solutions that scale with your business.
+              </p>
+            </Card>
+
+            <!-- Development -->
+            <Card className="text-center border-0 bg-white dark:bg-gray-900 p-6 hover:shadow-xl transition-shadow">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                3
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Development
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Agile development with regular updates, ensuring transparency and flexibility throughout the process.
+              </p>
+            </Card>
+
+            <!-- Launch -->
+            <Card className="text-center border-0 bg-white dark:bg-gray-900 p-6 hover:shadow-xl transition-shadow">
+              <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                4
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                Launch
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Seamless deployment and ongoing support to ensure your solution performs optimally in production.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Choose Us Section -->
+      <section class="py-20 bg-white dark:bg-gray-950">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Why Choose Us
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              We combine technical expertise with business acumen to deliver solutions that truly make a difference.
+            </p>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-center">
+            <!-- Left Content -->
+            <div class="space-y-8">
+              <div class="flex items-start space-x-4">
+                <div class="p-3 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-lg flex-shrink-0">
+                  <Icon name="star" class="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Proven Expertise
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-300">
+                    Our team brings years of experience across diverse industries and cutting-edge technologies.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-4">
+                <div class="p-3 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg flex-shrink-0">
+                  <Icon name="users" class="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Client-Centric Approach
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-300">
+                    We prioritize your business goals and work collaboratively to ensure your success.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-4">
+                <div class="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg flex-shrink-0">
+                  <Icon name="shield" class="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Quality Assurance
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-300">
+                    Rigorous testing and quality control processes ensure reliable, high-performance solutions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Content -->
+            <Card className="border-0 bg-gradient-to-br from-primary-50 to-purple-50 dark:from-gray-800 dark:to-purple-900/20 p-8">
+              <div class="text-center">
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                  <div>
+                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                      500+
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                      Projects Delivered
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                      98%
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                      Client Satisfaction
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                      24/7
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                      Support Available
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                      10+
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                      Years Experience
+                    </div>
+                  </div>
+                </div>
+                <blockquote class="text-lg text-gray-700 dark:text-gray-300 italic">
+                  "Working with this team transformed our business. Their expertise and dedication are unmatched."
+                </blockquote>
+                <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                  — Sarah Johnson, CEO at TechCorp
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="py-20 bg-primary-600 dark:bg-primary-700">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Transform Your Business?
+            </h2>
+            <p class="text-xl text-primary-100 mb-8">
+              Let's discuss your project and create a solution that drives real results for your organization.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/contact" class="inline-flex items-center px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                <Icon name="phone" class="w-5 h-5 mr-2" />
+                Get Started Today
+              </a>
+              <a href="/pricing" class="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors">
+                <Icon name="eye" class="w-5 h-5 mr-2" />
+                View Pricing
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <Footer />
+  </body>
 </html>

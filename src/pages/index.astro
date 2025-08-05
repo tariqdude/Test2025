@@ -15,35 +15,61 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body class="bg-white dark:bg-gray-900 min-h-screen">
+	<body class="bg-white dark:bg-gray-900 min-h-screen antialiased">
 		<Header />
 		<main>
 			<!-- Hero Section -->
-			<section id="hero" class="relative overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800 py-20 lg:py-32">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-4xl mx-auto text-center">
+			<section id="hero" class="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 py-24 lg:py-32">
+				<!-- Background decorations -->
+				<div class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25"></div>
+				<div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
+				
+				<div class="container-custom relative">
+					<div class="max-w-5xl mx-auto text-center">
 						<Animate animation="fade-in" duration="slow">
-							<h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+							<div class="inline-flex items-center rounded-full px-4 py-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8">
+								<span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+								Now available for enterprise solutions
+							</div>
+						</Animate>
+						
+						<Animate animation="fade-in" duration="slow">
+							<h1 class="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight">
 								Professional
-								<span class="text-primary-600 dark:text-primary-400">Business Solutions</span>
+								<span class="text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Business Solutions</span>
 								for Modern Companies
 							</h1>
 						</Animate>
 						
 						<Animate animation="slide-up" delay="sm">
-							<p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">
-								We deliver cutting-edge technology solutions that drive growth, efficiency, and innovation for businesses of all sizes.
+							<p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-10 text-pretty">
+								We deliver cutting-edge technology solutions that drive growth, efficiency, and innovation for businesses of all sizes. Transform your digital presence with our expert team.
 							</p>
 						</Animate>
 						
 						<Animate animation="scale" delay="md">
-							<div class="flex flex-col sm:flex-row gap-4 justify-center">
-								<Button variant="primary" size="lg" href="/contact">
-									Get Started
+							<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+								<Button variant="primary" size="lg" href="/contact" className="shadow-xl shadow-blue-500/25">
+									<Icon name="arrow-right" size="sm" className="ml-2" />
+									Get Started Today
 								</Button>
-								<Button variant="outline" size="lg" href="/about">
-									Learn More
+								<Button variant="outline" size="lg" href="/about" className="backdrop-blur-sm">
+									<Icon name="play" size="sm" className="mr-2" />
+									Watch Demo
 								</Button>
+							</div>
+						</Animate>
+						
+						<!-- Trust indicators -->
+						<Animate animation="fade-in" delay="lg">
+							<div class="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-60">
+								<div class="text-sm text-gray-500 dark:text-gray-400">Trusted by leading companies</div>
+								<div class="flex gap-6 items-center">
+									<div class="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded opacity-50"></div>
+									<div class="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded opacity-50"></div>
+									<div class="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded opacity-50"></div>
+									<div class="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded opacity-50"></div>
+								</div>
 							</div>
 						</Animate>
 					</div>
@@ -51,57 +77,86 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</section>
 
 			<!-- Features Section -->
-			<section id="features" class="py-20 bg-white dark:bg-gray-900">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-3xl mx-auto text-center mb-16">
-						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-							Why Choose Our Services
+			<section id="features" class="py-24 lg:py-32 bg-white dark:bg-gray-900 relative">
+				<!-- Background pattern -->
+				<div class="absolute inset-0 bg-grid-slate-50 [mask-image:linear-gradient(0deg,transparent,white,transparent)] dark:bg-grid-slate-800/25"></div>
+				
+				<div class="container-custom relative">
+					<div class="max-w-4xl mx-auto text-center mb-20">
+						<Animate animation="fade-in" trigger="scroll">
+							<div class="inline-flex items-center rounded-full px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 text-sm font-medium mb-6">
+								<Icon name="check" size="sm" className="mr-2" />
+								Premium Features
+							</div>
+						</Animate>
+						
+						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
+							Why Choose Our
+							<span class="text-gradient bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent"> Services</span>
 						</h2>
-						<p class="text-lg text-gray-600 dark:text-gray-300">
-							We combine expertise, innovation, and dedication to deliver exceptional results.
+						<p class="text-xl text-gray-600 dark:text-gray-300 text-balance max-w-2xl mx-auto">
+							We combine expertise, innovation, and dedication to deliver exceptional results that exceed expectations.
 						</p>
 					</div>
 					
 					<Grid cols={3} gap="lg" responsive={{ sm: 1, md: 2, lg: 3 }}>
-						<Animate animation="slide-up" delay="none">
-							<Card variant="default">
-								<div class="text-primary-600 dark:text-primary-400 mb-4">
+						<Animate animation="slide-up" delay="none" trigger="scroll">
+							<Card variant="default" className="group hover-lift bg-gradient-to-br from-white to-blue-50/50 dark:from-gray-800 dark:to-blue-900/10 border-0 shadow-soft">
+								<div class="text-blue-600 dark:text-blue-400 mb-6 p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl w-fit">
 									<Icon name="lightning" size="2xl" />
 								</div>
-								<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-									Fast & Reliable
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+									Lightning Fast
 								</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									Lightning-fast solutions built with performance and reliability at their core.
+								<p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+									Ultra-high performance solutions optimized for speed, reliability, and scalability across all platforms.
 								</p>
+								<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+									<div class="flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
+										<Icon name="arrow-right" size="sm" className="mr-2" />
+										Learn more
+									</div>
+								</div>
 							</Card>
 						</Animate>
 						
-						<Animate animation="slide-up" delay="sm">
-							<Card variant="default">
-								<div class="text-primary-600 dark:text-primary-400 mb-4">
+						<Animate animation="slide-up" delay="sm" trigger="scroll">
+							<Card variant="default" className="group hover-lift bg-gradient-to-br from-white to-emerald-50/50 dark:from-gray-800 dark:to-emerald-900/10 border-0 shadow-soft">
+								<div class="text-emerald-600 dark:text-emerald-400 mb-6 p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl w-fit">
 									<Icon name="shield" size="2xl" />
 								</div>
-								<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-									Secure & Compliant
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+									Bank-Grade Security
 								</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									Enterprise-grade security with full compliance to industry standards.
+								<p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+									Enterprise-grade security with full compliance to international standards and zero-trust architecture.
 								</p>
+								<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+									<div class="flex items-center text-sm text-emerald-600 dark:text-emerald-400 font-medium">
+										<Icon name="arrow-right" size="sm" className="mr-2" />
+										Learn more
+									</div>
+								</div>
 							</Card>
 						</Animate>
 						
-						<Animate animation="slide-up" delay="md">
-							<Card variant="default">
-								<div class="text-primary-600 dark:text-primary-400 mb-4">
+						<Animate animation="slide-up" delay="md" trigger="scroll">
+							<Card variant="default" className="group hover-lift bg-gradient-to-br from-white to-purple-50/50 dark:from-gray-800 dark:to-purple-900/10 border-0 shadow-soft">
+								<div class="text-purple-600 dark:text-purple-400 mb-6 p-3 bg-purple-100 dark:bg-purple-900/30 rounded-2xl w-fit">
 									<Icon name="users" size="2xl" />
 								</div>
-								<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-									Expert Support
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+									24/7 Expert Support
 								</h3>
-								<p class="text-gray-600 dark:text-gray-300">
-									24/7 expert support from our dedicated team of professionals.
+								<p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+									Round-the-clock expert support from our dedicated team of certified professionals and specialists.
 								</p>
+								<div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+									<div class="flex items-center text-sm text-purple-600 dark:text-purple-400 font-medium">
+										<Icon name="arrow-right" size="sm" className="mr-2" />
+										Learn more
+									</div>
+								</div>
 							</Card>
 						</Animate>
 					</Grid>
@@ -109,70 +164,93 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</section>
 
 			<!-- Services Section -->
-			<section id="services" class="py-20 bg-gray-50 dark:bg-gray-800">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-3xl mx-auto text-center mb-16">
-						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-							Our Services
+			<section id="services" class="py-24 lg:py-32 bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-gray-800 dark:to-gray-900 relative overflow-hidden">
+				<!-- Background decorations -->
+				<div class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-l from-blue-200/40 to-purple-200/40 rounded-full blur-3xl"></div>
+				<div class="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-r from-emerald-200/40 to-blue-200/40 rounded-full blur-3xl"></div>
+				
+				<div class="container-custom relative">
+					<div class="max-w-4xl mx-auto text-center mb-20">
+						<h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
+							Our 
+							<span class="text-gradient bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">Premium Services</span>
 						</h2>
-						<p class="text-lg text-gray-600 dark:text-gray-300">
-							Comprehensive solutions tailored to your business needs.
+						<p class="text-xl text-gray-600 dark:text-gray-300 text-balance max-w-2xl mx-auto">
+							Comprehensive solutions tailored to your business needs with cutting-edge technology and expert implementation.
 						</p>
 					</div>
 					
 					<Grid cols={2} gap="lg" responsive={{ sm: 1, lg: 2 }}>
 						<Animate animation="slide-left" trigger="scroll">
-							<Card variant="outline">
-								<h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-									Web Development
-								</h3>
-								<p class="text-gray-600 dark:text-gray-300 mb-6">
-									Modern, responsive websites and web applications built with the latest technologies.
+							<Card variant="default" className="group h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-medium hover:shadow-strong transition-all duration-300">
+								<div class="flex items-start space-x-4 mb-6">
+									<div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg">
+										<Icon name="monitor" size="xl" className="text-white" />
+									</div>
+									<div>
+										<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+											Web Development
+										</h3>
+										<div class="text-sm text-blue-600 dark:text-blue-400 font-medium">Enterprise Solutions</div>
+									</div>
+								</div>
+								<p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+									Modern, responsive websites and web applications built with the latest technologies, optimized for performance and user experience.
 								</p>
-								<ul class="space-y-2 text-gray-600 dark:text-gray-300 mb-6">
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										Responsive Design
-									</li>
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										SEO Optimization
-									</li>
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										Performance Optimization
-									</li>
-								</ul>
-								<Button variant="primary" href="/contact">
-									Learn More
+								<div class="space-y-4 mb-8">
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">Responsive & Mobile-First Design</span>
+									</div>
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">Advanced SEO Optimization</span>
+									</div>
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">Lightning-Fast Performance</span>
+									</div>
+								</div>
+								<Button variant="primary" href="/services" className="w-full group">
+									<span>Explore Web Development</span>
+									<Icon name="arrow-right" size="sm" className="ml-2 group-hover:translate-x-1 transition-transform" />
 								</Button>
 							</Card>
 						</Animate>
 						
 						<Animate animation="slide-right" trigger="scroll">
-							<Card variant="outline">
-								<h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-									Cloud Solutions
-								</h3>
-								<p class="text-gray-600 dark:text-gray-300 mb-6">
-									Scalable cloud infrastructure and deployment solutions for modern businesses.
+							<Card variant="default" className="group h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-medium hover:shadow-strong transition-all duration-300">
+								<div class="flex items-start space-x-4 mb-6">
+									<div class="p-3 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-lg">
+										<Icon name="cloud" size="xl" className="text-white" />
+									</div>
+									<div>
+										<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+											Cloud Solutions
+										</h3>
+										<div class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Scalable Infrastructure</div>
+									</div>
+								</div>
+								<p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+									Scalable cloud infrastructure and deployment solutions for modern businesses with automated scaling and monitoring.
 								</p>
-								<ul class="space-y-2 text-gray-600 dark:text-gray-300 mb-6">
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										Cloud Migration
-									</li>
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										Auto Scaling
-									</li>
-									<li class="flex items-center">
-										<Icon name="check" size="sm" className="text-green-500 mr-2" />
-										24/7 Monitoring
-									</li>
-								</ul>
-								<Button variant="primary" href="/contact">
-									Learn More
+								<div class="space-y-4 mb-8">
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">Seamless Cloud Migration</span>
+									</div>
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">Auto-Scaling Architecture</span>
+									</div>
+									<div class="flex items-center">
+										<div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+										<span class="text-gray-700 dark:text-gray-300">24/7 System Monitoring</span>
+									</div>
+								</div>
+								<Button variant="primary" href="/services" className="w-full group">
+									<span>Explore Cloud Solutions</span>
+									<Icon name="arrow-right" size="sm" className="ml-2 group-hover:translate-x-1 transition-transform" />
 								</Button>
 							</Card>
 						</Animate>
@@ -181,19 +259,69 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</section>
 
 			<!-- CTA Section -->
-			<section id="cta" class="py-20 bg-primary-600 dark:bg-primary-700">
-				<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="max-w-3xl mx-auto text-center">
+			<section id="cta" class="py-24 lg:py-32 relative overflow-hidden">
+				<!-- Enhanced gradient background -->
+				<div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800"></div>
+				<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+				
+				<!-- Animated background elements -->
+				<div class="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+				<div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl"></div>
+				
+				<!-- Grid pattern overlay -->
+				<div class="absolute inset-0 bg-grid-white/[0.05] [mask-image:linear-gradient(0deg,transparent,white,transparent)]"></div>
+				
+				<div class="container-custom relative">
+					<div class="max-w-4xl mx-auto text-center">
 						<Animate animation="fade-in" trigger="scroll">
-							<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-								Ready to Get Started?
+							<div class="inline-flex items-center rounded-full px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium mb-8">
+								<Icon name="sparkles" size="sm" className="mr-2" />
+								Start your transformation today
+							</div>
+						</Animate>
+						
+						<Animate animation="fade-in" trigger="scroll">
+							<h2 class="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+								Ready to Get
+								<span class="text-transparent bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text"> Started?</span>
 							</h2>
-							<p class="text-xl text-primary-100 mb-8">
-								Let's discuss how we can help transform your business with our expert solutions.
+						</Animate>
+						
+						<Animate animation="slide-up" trigger="scroll">
+							<p class="text-xl md:text-2xl text-blue-100 mb-12 leading-relaxed max-w-2xl mx-auto text-balance">
+								Let's discuss how we can help transform your business with our expert solutions and cutting-edge technology.
 							</p>
-							<Button variant="secondary" size="lg" href="/contact">
-								Contact Us Today
-							</Button>
+						</Animate>
+						
+						<Animate animation="scale" trigger="scroll">
+							<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+								<Button variant="secondary" size="lg" href="/contact" className="bg-white text-blue-600 hover:bg-blue-50 shadow-xl">
+									<Icon name="calendar" size="sm" className="mr-2" />
+									Schedule Consultation
+								</Button>
+								<Button variant="outline" size="lg" href="/pricing" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm">
+									<Icon name="eye" size="sm" className="mr-2" />
+									View Pricing
+								</Button>
+							</div>
+						</Animate>
+						
+						<!-- Trust indicators -->
+						<Animate animation="fade-in" trigger="scroll">
+							<div class="mt-16 flex flex-wrap justify-center items-center gap-8 text-blue-200/80 text-sm">
+								<div class="flex items-center">
+									<Icon name="check" size="sm" className="mr-2 text-emerald-400" />
+									No setup fees
+								</div>
+								<div class="flex items-center">
+									<Icon name="check" size="sm" className="mr-2 text-emerald-400" />
+									30-day money back
+								</div>
+								<div class="flex items-center">
+									<Icon name="check" size="sm" className="mr-2 text-emerald-400" />
+									Expert support included
+								</div>
+							</div>
 						</Animate>
 					</div>
 				</div>
