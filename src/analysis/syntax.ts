@@ -1,4 +1,4 @@
-import { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
+import type { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
 import { AnalysisError, CommandExecutionError } from '../errors';
 import { logger } from '../utils/logger';

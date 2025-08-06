@@ -1,4 +1,4 @@
-import { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
+import type { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { glob } from 'glob';
@@ -125,7 +125,7 @@ export class SecurityAnalyzer implements AnalysisModule {
                 after: lines.slice(i + 1, i + 3),
               },
               metadata: {
-                checksum: this.generateChecksum(line),
+                checksum: generateChecksum(line),
                 timestamp: new Date(),
               },
             });

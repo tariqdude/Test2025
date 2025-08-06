@@ -80,13 +80,19 @@ export interface AnalysisResult {
   deployment: DeploymentChecklist | null;
 }
 
+export interface AnalysisModule {
+  name: string;
+  canAnalyze(config: AnalyzerConfig): boolean;
+  analyze(config: AnalyzerConfig): Promise<CodeIssue[]>;
+}
+
 export interface AnalyzerConfig {
   projectRoot: string;
   ignore: string[];
   include: string[];
   frameworks: string[];
   enabledAnalyzers: string[];
-  severityThreshold: 'critical' | 'high' | 'medium' | 'low';
+  severityThreshold: 'critical' | 'high' | 'medium' | 'low' | 'info';
   outputFormat: 'json' | 'markdown' | 'html' | 'terminal';
   githubIntegration: boolean;
   deploymentChecks: boolean;

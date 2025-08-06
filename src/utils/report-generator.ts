@@ -1,4 +1,4 @@
-import { AnalysisResult, CodeIssue, ProjectHealth, GitAnalysis, DeploymentChecklist } from '../types/analysis';
+import type { AnalysisResult, CodeIssue } from '../types/analysis';
 
 export class ReportGenerator {
   static generateHTMLReport(analysis: AnalysisResult): string {

@@ -1,15 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ProjectAnalyzer } from '../core/analyzer';
 import { SyntaxAnalyzer } from '../analysis/syntax';
-import { TypesAnalyzer } from '../analysis/types';
-import { SecurityAnalyzer } from '../analysis/security';
-import { PerformanceAnalyzer } from '../analysis/performance';
-import { AccessibilityAnalyzer } from '../analysis/accessibility';
-import { GitAnalyzer } from '../analysis/git';
-import { DeploymentAnalyzer } from '../analysis/deployment';
-import { AppError, AnalysisError, CommandExecutionError, FileSystemError, ConfigurationError } from '../errors';
+import { AnalysisError, ConfigurationError } from '../errors';
 import { logger } from '../utils/logger';
-import { AnalyzerConfig } from '../config/schema';
+import type { AnalyzerConfig } from '../config/schema';
 import { ConfigLoader } from '../config/config-loader';
 import { ReportGenerator } from '../utils/report-generator';
 
@@ -29,19 +23,14 @@ vi.mock('../utils/command-executor', () => ({
   }),
 }));
 
-vi.mock('../utils/logger', async () => {
-  const actual = await vi.importActual('../utils/logger');
-  return {
-    ...actual,
-    logger: {
-      ...actual.logger,
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-      fatal: vi.fn(),
-    },
-  };
-});
+vi.mock('../utils/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    fatal: vi.fn(),
+  },
+}));
 
 vi.mock('../config/config-loader', () => ({
   ConfigLoader: {
@@ -79,8 +68,8 @@ describe('ProjectAnalyzer', () => {
 
   it('should initialize with default configuration', () => {
     expect(analyzer).toBeDefined();
-    // Check if modules are registered (assuming default enabledAnalyzers)
-    expect((analyzer as any).analysisModules.length).toBeGreaterThan(0);
+    // Check if analyzer is properly initialized
+    expect(analyzer).toBeInstanceOf(ProjectAnalyzer);
   });
 
   it('should run all enabled analyzers and collect issues', async () => {

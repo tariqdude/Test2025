@@ -1,12 +1,8 @@
-import { CodeIssue, ProjectHealth, GitAnalysis, DeploymentChecklist, AnalysisResult } from '../types/analysis';
-import { AnalyzerConfig } from '../config/schema';
+import type { CodeIssue, ProjectHealth, GitAnalysis, DeploymentChecklist, AnalysisResult, AnalysisModule } from '../types/analysis';
+import type { AnalyzerConfig } from '../config/schema';
 import { ConfigLoader } from '../config/config-loader';
 import { logger } from '../utils/logger';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { glob } from 'glob';
-import { CommandExecutionError, AnalysisError, FileSystemError } from '../errors';
-import { generateChecksum } from '../utils/common';
+import { AnalysisError } from '../errors';
 
 import { SyntaxAnalyzer } from '../analysis/syntax';
 import { TypesAnalyzer } from '../analysis/types';
@@ -15,13 +11,6 @@ import { PerformanceAnalyzer } from '../analysis/performance';
 import { AccessibilityAnalyzer } from '../analysis/accessibility';
 import { GitAnalyzer } from '../analysis/git';
 import { DeploymentAnalyzer } from '../analysis/deployment';
-
-// Define a base interface for all analysis modules
-export interface AnalysisModule {
-  name: string;
-  canAnalyze(config: AnalyzerConfig): boolean;
-  analyze(config: AnalyzerConfig): Promise<CodeIssue[]>;
-}
 
 export class ProjectAnalyzer {
   private config: AnalyzerConfig;
@@ -48,14 +37,14 @@ export class ProjectAnalyzer {
 
   async analyze(): Promise<AnalysisResult> {
     logger.info('Starting comprehensive project analysis...');
-    let issues: CodeIssue[] = [];
-    let gitAnalysis: GitAnalysis | null = null;
-    let deploymentChecklist: DeploymentChecklist | null = null;
-
-    // Load and validate configuration using ConfigLoader
-    this.config = await ConfigLoader.loadConfig(this.config);
+    const issues: CodeIssue[] = [];
+    const gitAnalysis: GitAnalysis | null = null;
+    const deploymentChecklist: DeploymentChecklist | null = null;
 
     try {
+      // Load and validate configuration using ConfigLoader
+      this.config = await ConfigLoader.loadConfig(this.config);
+
       // Run all enabled analysis modules in parallel
       const analysisPromises = this.analysisModules
         .filter(module => module.canAnalyze(this.config))

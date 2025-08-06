@@ -1,4 +1,5 @@
-import { AnalyzerConfig, AnalyzerConfigSchema } from './schema';
+import type { AnalyzerConfig } from './schema';
+import { AnalyzerConfigSchema } from './schema';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { logger } from '../utils/logger';
@@ -33,7 +34,7 @@ export class ConfigLoader {
     try {
       return AnalyzerConfigSchema.parse(config);
     } catch (error: unknown) {
-      logger.error('Configuration validation failed', error);
+      logger.error('Configuration validation failed', error instanceof Error ? error : undefined);
       throw new ConfigurationError('validation', `Invalid configuration: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
