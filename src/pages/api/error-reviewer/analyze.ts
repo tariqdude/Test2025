@@ -2,10 +2,8 @@
 // Provides comprehensive project analysis data
 
 import type { APIRoute } from 'astro';
-import { promises as fs } from 'fs';
-import path from 'path';
-import crypto from 'crypto';
-import { EliteErrorReviewer } from '../../../utils/error-reviewer.js';
+
+import { EliteErrorReviewer, type CodeIssue, type ProjectHealth, type GitAnalysis, type DeploymentChecklist } from '../../../utils/error-reviewer.js';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -22,8 +20,8 @@ export const GET: APIRoute = async ({ url }) => {
     // Initialize error reviewer with configuration
     const reviewer = new EliteErrorReviewer({
       projectRoot,
-      outputFormat: format as any,
-      severityThreshold: severity as any,
+      outputFormat: format as 'json' | 'html' | 'markdown' | 'terminal',
+      severityThreshold: severity as 'critical' | 'high' | 'medium' | 'low',
       githubIntegration: enableGit,
       deploymentChecks: enableDeployment,
       enabledCheckers: [
@@ -145,7 +143,7 @@ export const POST: APIRoute = async ({ request }) => {
 };
 
 // Generate smart recommendations based on analysis results
-function generateRecommendations(analysis: any): string[] {
+function generateRecommendations(analysis: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null; }): string[] {
   const recommendations: string[] = [];
   const { issues, health, git, deployment } = analysis;
 
@@ -159,28 +157,28 @@ function generateRecommendations(analysis: any): string[] {
   }
 
   // Issue-specific recommendations
-  const criticalIssues = issues.filter((i: any) => i.severity.level === 'critical');
+  const criticalIssues = issues.filter((i) => i.severity.level === 'critical');
   if (criticalIssues.length > 0) {
     recommendations.push(`🔴 Fix ${criticalIssues.length} critical issue(s) immediately - they block deployment.`);
   }
 
-  const securityIssues = issues.filter((i: any) => i.type === 'security');
+  const securityIssues = issues.filter((i) => i.type === 'security');
   if (securityIssues.length > 0) {
     recommendations.push(`🔒 Address ${securityIssues.length} security issue(s) to protect your application.`);
   }
 
-  const performanceIssues = issues.filter((i: any) => i.type === 'performance');
+  const performanceIssues = issues.filter((i) => i.type === 'performance');
   if (performanceIssues.length > 5) {
     recommendations.push(`⚡ Optimize performance - ${performanceIssues.length} issues detected that may impact user experience.`);
   }
 
-  const a11yIssues = issues.filter((i: any) => i.type === 'accessibility');
+  const a11yIssues = issues.filter((i) => i.type === 'accessibility');
   if (a11yIssues.length > 0) {
     recommendations.push(`♿ Improve accessibility - ${a11yIssues.length} issues found that affect users with disabilities.`);
   }
 
   // Auto-fix recommendations
-  const autoFixableIssues = issues.filter((i: any) => i.autoFixable);
+  const autoFixableIssues = issues.filter((i) => i.autoFixable);
   if (autoFixableIssues.length > 0) {
     recommendations.push(`🔧 Run auto-fix to automatically resolve ${autoFixableIssues.length} issues.`);
   }
@@ -203,7 +201,7 @@ function generateRecommendations(analysis: any): string[] {
   }
 
   // Category-specific recommendations
-  const categories = issues.reduce((acc: any, issue: any) => {
+  const categories = issues.reduce((acc: Record<string, number>, issue) => {
     acc[issue.category] = (acc[issue.category] || 0) + 1;
     return acc;
   }, {});
@@ -214,13 +212,13 @@ function generateRecommendations(analysis: any): string[] {
   }
 
   // Code quality recommendations
-  const codeQualityIssues = issues.filter((i: any) => i.category === 'Code Quality');
+  const codeQualityIssues = issues.filter((i) => i.category === 'Code Quality');
   if (codeQualityIssues.length > 10) {
     recommendations.push('🏗️ Consider refactoring to improve code maintainability and reduce technical debt.');
   }
 
   // TypeScript recommendations
-  const typeIssues = issues.filter((i: any) => i.type === 'type');
+  const typeIssues = issues.filter((i) => i.type === 'type');
   if (typeIssues.length > 3) {
     recommendations.push('📘 Strengthen TypeScript types to catch more errors at compile time.');
   }

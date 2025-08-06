@@ -13,10 +13,6 @@ function AnimatedSphere() {
     }
   });
 
-  const colorArray = useMemo(() => {
-    return new Float32Array(200 * 3).map(() => Math.random());
-  }, []);
-
   return (
     <Sphere ref={meshRef} args={[1, 100, 200]} scale={2}>
       <MeshDistortMaterial

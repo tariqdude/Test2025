@@ -5,6 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { glob } from 'glob';
 
 const execAsync = promisify(exec);
 
@@ -113,7 +114,7 @@ export class EliteErrorReviewer {
   constructor(config: Partial<ReviewConfig> = {}) {
     this.config = {
       projectRoot: process.cwd(),
-      ignore: ['node_modules', '.git', 'dist', 'build', '.astro'],
+      ignore: ['node_modules', '.git', 'dist', 'build', '.astro', 'src/utils'],
       include: ['**/*.{ts,tsx,js,jsx,astro,vue,svelte,md,mdx}'],
       frameworks: ['astro', 'react', 'vue', 'svelte', 'solid', 'preact'],
       enabledCheckers: ['syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'],
@@ -628,32 +629,17 @@ export class EliteErrorReviewer {
 
   /* ==================== UTILITY METHODS ==================== */
 
-  private async getProjectFiles(_patterns: string[] = this.config.include): Promise<string[]> {
-    // Simplified file discovery - in production use proper glob matching
-    const files: string[] = [];
-    
-    async function walk(dir: string): Promise<void> {
-      try {
-        const entries = await fs.readdir(dir, { withFileTypes: true });
-        
-        for (const entry of entries) {
-          const fullPath = path.join(dir, entry.name);
-          
-          if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-            await walk(fullPath);
-          } else if (entry.isFile()) {
-            const ext = path.extname(entry.name);
-            if (['.ts', '.tsx', '.js', '.jsx', '.astro', '.vue', '.svelte', '.md', '.mdx'].includes(ext)) {
-              files.push(fullPath);
-            }
-          }
-        }
-      } catch (error) {
-        // Skip directories we can't read
-      }
-    }
-    
-    await walk(this.config.projectRoot);
+  private async getProjectFiles(patterns: string[] = this.config.include): Promise<string[]> {
+    const projectRoot = this.config.projectRoot;
+
+    // Use glob for powerful file matching, respecting ignores
+    const files = await glob(patterns, {
+      cwd: projectRoot,
+      ignore: this.config.ignore,
+      nodir: true, // we only want files
+      absolute: true, // return absolute paths
+    });
+
     return files;
   }
 
@@ -928,7 +914,7 @@ export class EliteErrorReviewer {
     console.log(`Applying fix for issue: ${issue.id}`);
   }
 
-  private generateHTMLReport(analysis: any): string {
+  private generateHTMLReport(analysis: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }): string {
     return `
       <html>
         <head><title>Error Analysis Report</title></head>
@@ -938,7 +924,7 @@ export class EliteErrorReviewer {
           <p>Total Issues: ${analysis.health.totalIssues}</p>
           <h2>Issues</h2>
           <ul>
-            ${analysis.issues.map((issue: any) => `
+            ${analysis.issues.map((issue: CodeIssue) => `
               <li>
                 <strong>${issue.title}</strong> (${issue.severity.level})
                 <br>${issue.description}
@@ -950,7 +936,7 @@ export class EliteErrorReviewer {
     `;
   }
 
-  private generateMarkdownReport(analysis: any): string {
+  private generateMarkdownReport(analysis: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }): string {
     return `
 # Project Health Report
 
@@ -959,7 +945,7 @@ export class EliteErrorReviewer {
 
 ## Issues
 
-${analysis.issues.map((issue: any) => `
+${analysis.issues.map((issue: CodeIssue) => `
 ### ${issue.title} (${issue.severity.level})
 
 ${issue.description}

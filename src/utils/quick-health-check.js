@@ -26,7 +26,7 @@ async function quickHealthCheck() {
     try {
       await fs.access(packageJsonPath);
       console.log('✅ package.json found');
-    } catch {
+    } catch (e) { /* Ignore error, file/directory might not exist */ 
       console.log('❌ package.json missing');
       issues.push('Missing package.json');
       score -= 20;
@@ -37,7 +37,7 @@ async function quickHealthCheck() {
     try {
       await fs.access(gitignorePath);
       console.log('✅ .gitignore found');
-    } catch {
+    } catch (e) { /* Ignore error, file/directory might not exist */ 
       console.log('⚠️  .gitignore missing');
       issues.push('Missing .gitignore');
       score -= 5;
@@ -54,7 +54,7 @@ async function quickHealthCheck() {
           score -= 10;
         }
       }
-    } catch {}
+    } catch (e) { /* Ignore error, file/directory might not exist */ }
     
     // Check for large files
     try {
@@ -68,9 +68,9 @@ async function quickHealthCheck() {
             issues.push(`Large file: ${path.basename(file)}`);
             score -= 2;
           }
-        } catch {}
+        } catch (e) { /* Ignore error, file/directory might not exist */ }
       }
-    } catch {}
+    } catch (e) { /* Ignore error, file/directory might not exist */ }
     
     // Check for common security patterns
     const sourceFiles = await findFiles('**/*.{ts,tsx,js,jsx,astro}', projectRoot);
@@ -89,7 +89,7 @@ async function quickHealthCheck() {
           issues.push('Security: unsafe innerHTML usage');
           score -= 10;
         }
-      } catch {}
+      } catch (e) { /* Ignore error, file/directory might not exist */ }
     }
     
   } catch (error) {
@@ -138,7 +138,8 @@ async function findFiles(pattern, dir) {
               entry.name !== 'build') {
             await walk(fullPath);
           }
-        } else if (entry.isFile()) {
+        }
+        else if (entry.isFile()) {
           if (pattern === '**/*' || 
               pattern.includes(path.extname(entry.name)) ||
               (pattern.includes('*.ts') && entry.name.endsWith('.ts'))) {
@@ -146,7 +147,7 @@ async function findFiles(pattern, dir) {
           }
         }
       }
-    } catch {}
+    } catch (e) { /* Ignore error, file/directory might not exist */ }
   }
   
   await walk(dir);

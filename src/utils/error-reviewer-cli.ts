@@ -2,7 +2,7 @@
 // Elite Error Reviewer CLI
 // Command-line interface for comprehensive project analysis
 
-import { EliteErrorReviewer, type ReviewConfig, type CodeIssue, type ProjectHealth } from './error-reviewer.js';
+import { EliteErrorReviewer, type ReviewConfig, type CodeIssue, type ProjectHealth, type GitAnalysis, type DeploymentChecklist } from './error-reviewer.js';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,7 +17,7 @@ interface CLIArgs {
   options: {
     config?: string;
     output?: string;
-    format?: 'json' | 'markdown' | 'html' | 'terminal';
+        format?: 'json' | 'markdown' | 'html';
     severity?: 'critical' | 'high' | 'medium' | 'low';
     autoFix?: boolean;
     watch?: boolean;
@@ -157,7 +157,7 @@ export class ErrorReviewerCLI {
     const results = await reviewer.analyzeProject();
     
     const reportPath = this.args.options.output || 'error-report.html';
-    const format = this.args.options.format || path.extname(reportPath).slice(1) as any || 'html';
+        const format = this.args.options.format || path.extname(reportPath).slice(1) as 'json' | 'markdown' | 'html' || 'html';
     
     await this.generateDetailedReport(results, reportPath, format);
     
@@ -181,7 +181,7 @@ export class ErrorReviewerCLI {
 
   /* ==================== DISPLAY AND FORMATTING ==================== */
 
-  private displayResults(results: { issues: CodeIssue[]; health: ProjectHealth; git: any; deployment: any }): void {
+  private displayResults(results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }): void {
     const { issues, health } = results;
     
     // Health Score Display
@@ -264,7 +264,7 @@ export class ErrorReviewerCLI {
     console.log('');
   }
 
-  private displayGitStatus(git: any): void {
+  private displayGitStatus(git: GitAnalysis): void {
     console.log('\n📝 GIT STATUS:\n');
     console.log(`🌿 Branch: ${git.branch}`);
     console.log(`📝 Latest Commit: ${git.commit}`);
@@ -275,7 +275,7 @@ export class ErrorReviewerCLI {
     }
   }
 
-  private displayDeploymentStatus(deployment: any): void {
+  private displayDeploymentStatus(deployment: DeploymentChecklist): void {
     console.log('\n🚀 DEPLOYMENT READINESS:\n');
     
     Object.entries(deployment).forEach(([check, status]) => {
@@ -314,7 +314,7 @@ export class ErrorReviewerCLI {
   /* ==================== REPORT GENERATION ==================== */
 
   private async generateDetailedReport(
-    results: { issues: CodeIssue[]; health: ProjectHealth; git: any; deployment: any },
+    results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null },
     outputPath: string,
     format: 'json' | 'markdown' | 'html'
   ): Promise<void> {
@@ -331,7 +331,7 @@ export class ErrorReviewerCLI {
     }
   }
 
-  private async generateJSONReport(results: any, outputPath: string): Promise<void> {
+  private async generateJSONReport(results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }, outputPath: string): Promise<void> {
     const report = {
       timestamp: new Date().toISOString(),
       ...results,
@@ -340,7 +340,7 @@ export class ErrorReviewerCLI {
     await fs.writeFile(outputPath, JSON.stringify(report, null, 2));
   }
 
-  private async generateMarkdownReport(results: any, outputPath: string): Promise<void> {
+  private async generateMarkdownReport(results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }, outputPath: string): Promise<void> {
     const { issues, health } = results;
     
     let markdown = `# Elite Error Review Report\n\n`;
@@ -376,7 +376,7 @@ export class ErrorReviewerCLI {
     await fs.writeFile(outputPath, markdown);
   }
 
-  private async generateHTMLReport(results: any, outputPath: string): Promise<void> {
+  private async generateHTMLReport(results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }, outputPath: string): Promise<void> {
     const { issues, health } = results;
     
     const html = `
@@ -477,12 +477,12 @@ export class ErrorReviewerCLI {
           break;
         case '--format':
         case '-f':
-          options.format = nextArg as any;
+          options.format = nextArg as 'json' | 'markdown' | 'html';
           i++;
           break;
         case '--severity':
         case '-s':
-          options.severity = nextArg as any;
+          options.severity = nextArg as 'critical' | 'high' | 'medium' | 'low';
           i++;
           break;
         case '--auto-fix':
@@ -520,7 +520,7 @@ export class ErrorReviewerCLI {
       frameworks: ['astro', 'react', 'vue', 'svelte', 'solid', 'preact'],
       enabledCheckers: ['syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'],
       severityThreshold: 'low',
-      outputFormat: 'terminal',
+      outputFormat: 'html',
       githubIntegration: true,
       deploymentChecks: true,
       autoFix: false,
@@ -554,9 +554,9 @@ export class ErrorReviewerCLI {
     }
   }
 
-  private async saveResults(results: any): Promise<void> {
-    const outputPath = this.args.options.output!;
-    const format = this.args.options.format || path.extname(outputPath).slice(1) as any || 'json';
+  private async saveResults(results: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null }): Promise<void> {
+    const outputPath = this.args.options.output as string;
+    const format = this.args.options.format || path.extname(outputPath).slice(1) as 'json' | 'markdown' | 'html';
     
     await this.generateDetailedReport(results, outputPath, format);
     console.log(`📄 Results saved to: ${outputPath}`);
@@ -640,7 +640,7 @@ COMMANDS:
 OPTIONS:
   -c, --config <path>     Configuration file path
   -o, --output <path>     Output file path
-  -f, --format <format>   Output format (json|markdown|html|terminal)
+  -f, --format <format>   Output format (json|markdown|html)
   -s, --severity <level>  Minimum severity level (critical|high|medium|low)
   --auto-fix              Enable automatic fixes
   -w, --watch             Enable watch mode

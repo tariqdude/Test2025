@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ url }) => {
     const includeDeployment = searchParams.get('deployment') !== 'false';
 
     // Validate format
-    const validFormats = ['json', 'markdown', 'html', 'terminal'];
+    const validFormats = ['json', 'markdown', 'html'];
     if (!validFormats.includes(format)) {
       return new Response(JSON.stringify({
         error: `Invalid format. Must be one of: ${validFormats.join(', ')}`,
@@ -29,17 +29,14 @@ export const GET: APIRoute = async ({ url }) => {
     // Initialize error reviewer
     const reviewer = new EliteErrorReviewer({
       projectRoot,
-      outputFormat: format as any,
-      severityThreshold: severity as any,
+      outputFormat: format as 'json' | 'markdown' | 'html',
+      severityThreshold: severity as 'critical' | 'high' | 'medium' | 'low',
       githubIntegration: includeGit,
       deploymentChecks: includeDeployment,
     });
 
-    // Run analysis
-    const analysis = await reviewer.analyzeProject();
-    
     // Generate report
-    const report = await reviewer.generateReport(format as any);
+    const report = await reviewer.generateReport(format as 'json' | 'markdown' | 'html');
 
     // Determine content type and filename
     let contentType = 'text/plain';
@@ -93,7 +90,6 @@ export const POST: APIRoute = async ({ request }) => {
       format = 'markdown',
       projectRoot,
       configuration = {},
-      includeRawData = false,
     } = body;
 
     // Initialize with custom configuration
@@ -104,30 +100,15 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     // Run analysis
-    const analysis = await reviewer.analyzeProject();
-    
-    // Generate report
     const report = await reviewer.generateReport(format);
 
     // Prepare response data
-    const responseData: any = {
+    const responseData: { success: boolean; format: string; timestamp: string; report: string; } = {
       success: true,
       format,
       timestamp: new Date().toISOString(),
       report,
-      summary: {
-        totalIssues: analysis.issues.length,
-        healthScore: analysis.health.score,
-        criticalIssues: analysis.health.criticalIssues,
-        highIssues: analysis.health.highIssues,
-        mediumIssues: analysis.health.mediumIssues,
-        lowIssues: analysis.health.lowIssues,
-      },
     };
-
-    if (includeRawData) {
-      responseData.rawData = analysis;
-    }
 
     return new Response(JSON.stringify(responseData, null, 2), {
       status: 200,

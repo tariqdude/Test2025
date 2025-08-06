@@ -282,16 +282,16 @@ const mockHealth: ProjectHealth = {
   <div class="actions-panel">
     <h2>Quick Actions</h2>
     <div class="action-buttons">
-      <button class="action-btn primary" onclick="runAnalysis()">
+      <button class="action-btn primary" onclick="alert('🔍 Running comprehensive analysis...\nThis would trigger the error reviewer in a real implementation.');">
         🔍 Run Analysis
       </button>
-      <button class="action-btn secondary" onclick="autoFix()">
+      <button class="action-btn secondary" onclick="alert('🔧 Auto-fixing issues...\nThis would apply automatic fixes to fixable issues.');">
         🔧 Auto-fix Issues
       </button>
-      <button class="action-btn secondary" onclick="exportReport()">
+      <button class="action-btn secondary" onclick="alert('📊 Exporting report...\nThis would generate and download a detailed report.');">
         📊 Export Report
       </button>
-      <button class="action-btn secondary" onclick="deploymentCheck()">
+      <button class="action-btn secondary" onclick="alert('🚀 Checking deployment readiness...\nThis would run pre-deployment validation.');">
         🚀 Deployment Check
       </button>
     </div>
@@ -816,23 +816,6 @@ const mockHealth: ProjectHealth = {
 </style>
 
 <script>
-  // Dashboard Interactive Functions
-  function runAnalysis() {
-    alert('🔍 Running comprehensive analysis...\nThis would trigger the error reviewer in a real implementation.');
-  }
-
-  function autoFix() {
-    alert('🔧 Auto-fixing issues...\nThis would apply automatic fixes to fixable issues.');
-  }
-
-  function exportReport() {
-    alert('📊 Exporting report...\nThis would generate and download a detailed report.');
-  }
-
-  function deploymentCheck() {
-    alert('🚀 Checking deployment readiness...\nThis would run pre-deployment validation.');
-  }
-
   // Real-time updates (if enabled)
   if (document.querySelector('.real-time-indicator')) {
     setInterval(() => {

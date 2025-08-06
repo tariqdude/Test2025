@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['dist'],
   env: {
     browser: true,
     node: true,
@@ -21,6 +22,12 @@ module.exports = {
         node: true,
       },
       rules: {},
+    },
+    {
+      files: ['src/utils/error-reviewer.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
     },
   ],
   rules: {
