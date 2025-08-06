@@ -1,0 +1,148 @@
+---
+interface CodeExample {
+  title: string;
+  language: string;
+  code: string;
+  description: string;
+}
+
+const examples: CodeExample[] = [
+  {
+    title: "Astro Component Islands",
+    language: "astro",
+    code: `---
+// Component script (runs at build time)
+const data = await fetch('https://api.example.com/data');
+const items = await data.json();
+---
+
+<!-- Template (rendered to HTML) -->
+<div class="grid">
+  {items.map(item => (
+    <Card title={item.title}>
+      <ReactComponent client:visible data={item} />
+    </Card>
+  ))}
+</div>`,
+    description: "Zero JS by default, hydrate only when needed"
+  },
+  {
+    title: "Multi-Framework Integration",
+    language: "astro",
+    code: `---
+import ReactCounter from './react/Counter.tsx';
+import VueChart from './vue/Chart.vue';
+import SvelteParticles from './svelte/Particles.svelte';
+---
+
+<div class="framework-showcase">
+  <ReactCounter client:load />
+  <VueChart client:visible data={chartData} />
+  <SvelteParticles client:idle />
+</div>`,
+    description: "Use any framework together in one project"
+  },
+  {
+    title: "Content Collections",
+    language: "typescript",
+    code: `// src/content/config.ts
+import { defineCollection, z } from 'astro:content';
+
+const blog = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.date(),
+    author: z.string(),
+    tags: z.array(z.string()),
+  }),
+});
+
+export const collections = { blog };`,
+    description: "Type-safe content management with Zod validation"
+  },
+  {
+    title: "Server-Side Rendering",
+    language: "astro",
+    code: `---
+// This runs on the server
+export const prerender = false;
+
+const userAgent = Astro.request.headers.get('user-agent');
+const isBot = /bot|crawler|spider/i.test(userAgent || '');
+
+if (isBot) {
+  return Astro.redirect('/sitemap.xml');
+}
+---
+
+<html>
+  <head>
+    <meta name="user-agent" content={userAgent} />
+  </head>
+</html>`,
+    description: "Full control over server-side logic and rendering"
+  }
+];
+---
+
+<div class="space-y-8">
+  {examples.map((example) => (
+    <div class="group">
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-700">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700">
+          <div class="flex items-center space-x-3">
+            <div class="flex space-x-2">
+              <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+              <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+            </div>
+            <span class="text-gray-300 font-medium">{example.title}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-gray-400 px-2 py-1 bg-gray-700 rounded">
+              {example.language}
+            </span>
+            <button class="text-gray-400 hover:text-white transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Code content -->
+        <div class="relative">
+          <pre class="p-6 text-sm overflow-x-auto"><code class={`language-${example.language} text-gray-300`}>{example.code}</code></pre>
+          
+          <!-- Line numbers -->
+          <div class="absolute left-0 top-0 p-6 text-gray-500 text-sm font-mono select-none pointer-events-none">
+            {example.code.split('\n').map((_, i) => (
+              <div class="leading-6">{i + 1}</div>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Description -->
+        <div class="p-4 bg-gray-800/50 border-t border-gray-700">
+          <p class="text-gray-300 text-sm">{example.description}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  pre {
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  }
+  
+  code {
+    counter-reset: line;
+  }
+  
+  .group:hover .code-container {
+    transform: translateY(-2px);
+  }
+</style>
