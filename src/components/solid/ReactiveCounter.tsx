@@ -1,53 +1,51 @@
 import { createSignal, createEffect, onCleanup } from 'solid-js';
 
-export default function SolidCounter() {
+export default function ReactiveCounter() {
   const [count, setCount] = createSignal(0);
   const [isAnimating, setIsAnimating] = createSignal(false);
-  const [particles, setParticles] = createSignal<Array<{id: number, x: number, y: number}>>([]);
+  const [autoIncrement, setAutoIncrement] = createSignal(false);
 
-  let intervalId: number;
-
-  const increment = () => {
-    setCount(count() + 1);
-    setIsAnimating(true);
-    
-    // Create explosion effect
-    const newParticles = Array.from({length: 8}, (_, i) => ({
-      id: Date.now() + i,
-      x: Math.random() * 200,
-      y: Math.random() * 200,
-    }));
-    
-    setParticles(newParticles);
-    
-    setTimeout(() => {
-      setIsAnimating(false);
-      setParticles([]);
-    }, 1000);
-  };
-
-  const startAutoIncrement = () => {
-    intervalId = setInterval(() => {
-      setCount(c => c + 1);
-    }, 100);
-  };
-
-  const stopAutoIncrement = () => {
-    clearInterval(intervalId);
-  };
+  let intervalId: number | undefined;
 
   createEffect(() => {
-    // Reactive effect that runs when count changes
-    if (count() > 0 && count() % 10 === 0) {
-      // Trigger special effect every 10 counts
-      setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 500);
+    if (autoIncrement()) {
+      intervalId = window.setInterval(() => {
+        setCount(prev => prev + 1);
+        triggerAnimation();
+      }, 1000);
+    } else {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = undefined;
+      }
     }
   });
 
   onCleanup(() => {
-    clearInterval(intervalId);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
   });
+
+  const triggerAnimation = () => {
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 300);
+  };
+
+  const increment = () => {
+    setCount(prev => prev + 1);
+    triggerAnimation();
+  };
+
+  const decrement = () => {
+    setCount(prev => prev - 1);
+    triggerAnimation();
+  };
+
+  const reset = () => {
+    setCount(0);
+    triggerAnimation();
+  };
 
   return (
     <div class="relative w-full h-64 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl overflow-hidden flex items-center justify-center">
@@ -56,47 +54,55 @@ export default function SolidCounter() {
         
         <div 
           class={`text-6xl font-bold mb-6 transition-all duration-300 ${
-            isAnimating() ? 'scale-125 text-yellow-300' : 'scale-100'
+            isAnimating() ? 'scale-110 text-yellow-300' : 'scale-100'
           }`}
         >
           {count()}
         </div>
         
         <div class="space-x-4">
-          <button 
-            onClick={increment}
+          <button
+            onClick={decrement}
             class="px-6 py-2 bg-white/20 backdrop-blur-md rounded-lg border border-white/30 hover:bg-white/30 transition-all duration-200"
           >
-            Click Me!
+            -
           </button>
           
-          <button 
-            onClick={startAutoIncrement}
+          <button
+            onClick={increment}
             class="px-6 py-2 bg-green-500/80 backdrop-blur-md rounded-lg border border-green-400/50 hover:bg-green-500 transition-all duration-200"
           >
-            Auto
+            +
           </button>
           
-          <button 
-            onClick={stopAutoIncrement}
+          <button
+            onClick={reset}
             class="px-6 py-2 bg-red-500/80 backdrop-blur-md rounded-lg border border-red-400/50 hover:bg-red-500 transition-all duration-200"
           >
-            Stop
+            Reset
+          </button>
+        </div>
+        
+        <div class="mt-4">
+          <button
+            onClick={() => setAutoIncrement(!autoIncrement())}
+            class={`px-4 py-2 rounded-lg transition-all duration-200 ${
+              autoIncrement() 
+                ? 'bg-yellow-500/80 border border-yellow-400/50' 
+                : 'bg-white/20 border border-white/30'
+            }`}
+          >
+            Auto: {autoIncrement() ? 'ON' : 'OFF'}
           </button>
         </div>
       </div>
       
-      {/* Animated particles */}
-      {particles().map((particle) => (
-        <div
-          class="absolute w-2 h-2 bg-yellow-400 rounded-full animate-ping"
-          style={{
-            left: `${particle.x}px`,
-            top: `${particle.y}px`,
-            'animation-duration': '1s'
-          }}
-        />
-      ))}
+      <div 
+        class="absolute inset-0 bg-gradient-to-br from-purple-600/30 to-pink-600/30 opacity-50"
+        style={{
+          animation: isAnimating() ? 'pulse 0.6s ease-in-out' : 'none'
+        }}
+      />
     </div>
   );
 }

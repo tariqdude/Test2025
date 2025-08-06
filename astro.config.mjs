@@ -5,7 +5,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
-import vue from '@astrojs/vue';
 import svelte from '@astrojs/svelte';
 import solid from '@astrojs/solid-js';
 import preact from '@astrojs/preact';
@@ -21,10 +20,17 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    react(),
-    vue(),
-    svelte(),
-    solid(),
-    preact(),
+    react({
+      include: ['**/react/**/*']
+    }),
+    svelte({
+      include: ['**/svelte/**/*']
+    }),
+    solid({
+      include: ['**/solid/**/*']
+    }),
+    preact({
+      include: ['**/preact/**/*']
+    }),
   ],
 });
