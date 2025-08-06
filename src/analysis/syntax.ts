@@ -1,19 +1,19 @@
-import { Checker } from './checker';
-import { CodeIssue, ReviewConfig, ErrorSeverity } from '../utils/error-reviewer';
+import { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
+import { AnalysisError, CommandExecutionError } from '../errors';
+import { logger } from '../utils/logger';
 import path from 'path';
-import { CommandExecutionError, AnalysisError } from '../errors';
 
-export class SyntaxChecker implements Checker {
-  name = 'SyntaxChecker';
+export class SyntaxAnalyzer implements AnalysisModule {
+  name = 'SyntaxAnalyzer';
 
-  canHandle(config: ReviewConfig):
-    return config.enabledCheckers.includes('syntax');
+  canAnalyze(config: AnalyzerConfig): boolean {
+    return config.enabledAnalyzers.includes('syntax');
   }
 
-  async check(config: ReviewConfig): Promise<CodeIssue[]> {
+  async analyze(config: AnalyzerConfig): Promise<CodeIssue[]> {
+    logger.info('Checking syntax errors...');
     const issues: CodeIssue[] = [];
-    console.log('🔍 Checking syntax errors...');
 
     try {
       const { stdout, stderr } = await executeCommand('npx tsc --noEmit --listFiles', {
@@ -26,14 +26,11 @@ export class SyntaxChecker implements Checker {
         issues.push(...tsErrors);
       }
 
-      // Placeholder for Astro and other framework syntax checks
-      // await this.checkAstroSyntax();
-      // await this.checkFrameworkSyntax();
-
     } catch (error: unknown) {
       const analysisError = error instanceof CommandExecutionError ? 
         new AnalysisError(this.name, error, `Failed to run TypeScript syntax check: ${error.message}`) :
         new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
+      logger.error(`Syntax analysis failed: ${analysisError.message}`, analysisError);
       throw analysisError;
     }
     return issues;
@@ -49,10 +46,10 @@ export class SyntaxChecker implements Checker {
         const [, file, lineNum, colNum, code, message] = match;
         
         errors.push({
-          id: `ts-${code}-${Date.now()}`,
-          type: 'type',
+          id: `ts-syntax-${code}-${Date.now()}`,
+          type: 'syntax',
           severity: this.getTypescriptSeverity(code),
-          title: `TypeScript Error TS${code}`,
+          title: `TypeScript Syntax Error TS${code}`,
           description: message,
           file: path.relative(projectRoot, file),
           line: parseInt(lineNum),
@@ -60,13 +57,9 @@ export class SyntaxChecker implements Checker {
           rule: `TS${code}`,
           category: 'TypeScript',
           source: 'typescript',
-          autoFixable: this.isAutoFixableTS(code),
+          autoFixable: false,
           context: {
             current: line,
-          },
-          metadata: {
-            checksum: this.generateChecksum(line),
-            timestamp: new Date(),
           },
         });
       }
@@ -75,7 +68,7 @@ export class SyntaxChecker implements Checker {
     return errors;
   }
 
-  private getTypescriptSeverity(code: string): ErrorSeverity {
+  private getTypescriptSeverity(code: string): CodeIssue['severity'] {
     const criticalCodes = ['2304', '2322', '2339', '2345']; // Cannot find name, type issues
     const highCodes = ['2531', '2532', '2533']; // Object possibly null/undefined
     
@@ -86,21 +79,5 @@ export class SyntaxChecker implements Checker {
     } else {
       return { level: 'medium', impact: 'minor', urgency: 'medium' };
     }
-  }
-
-  private isAutoFixableTS(code: string): boolean {
-    const autoFixableCodes = ['2531', '2532']; // Missing optional chaining
-    return autoFixableCodes.includes(code);
-  }
-
-  private generateChecksum(content: string): string {
-    // Simple checksum for change detection
-    let hash = 0;
-    for (let i = 0; i < content.length; i++) {
-      const char = content.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return hash.toString(16);
   }
 }

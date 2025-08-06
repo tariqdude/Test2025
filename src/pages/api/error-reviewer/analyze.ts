@@ -2,9 +2,10 @@
 // Provides comprehensive project analysis data
 
 import type { APIRoute } from 'astro';
-
-import { EliteErrorReviewer, type CodeIssue, type ProjectHealth, type GitAnalysis, type DeploymentChecklist } from '../../../utils/error-reviewer.js';
 import { AppError, AnalysisError } from '../../../errors';
+import { logger } from '../../../utils/logger';
+import { ProjectAnalyzer } from '../../../core/analyzer';
+import { AnalysisResult, CodeIssue, ProjectHealth, GitAnalysis, DeploymentChecklist } from '../../../types/analysis';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -12,33 +13,23 @@ export const GET: APIRoute = async ({ url }) => {
     
     // Parse query parameters
     const projectRoot = searchParams.get('projectRoot') || process.cwd();
-    const format = searchParams.get('format') || 'json';
+    const format = searchParams.get('format') || 'json'; // Not directly used for analysis, but kept for consistency
     const severity = searchParams.get('severity') || 'low';
     const categories = searchParams.get('categories')?.split(',') || [];
     const enableGit = searchParams.get('git') !== 'false';
     const enableDeployment = searchParams.get('deployment') !== 'false';
 
-    // Initialize error reviewer with configuration
-    const reviewer = new EliteErrorReviewer({
+    const analyzer = new ProjectAnalyzer({
       projectRoot,
-      outputFormat: format as 'json' | 'html' | 'markdown' | 'terminal',
       severityThreshold: severity as 'critical' | 'high' | 'medium' | 'low',
-      githubIntegration: enableGit,
-      deploymentChecks: enableDeployment,
-      enabledCheckers: [
-        'syntax',
-        'types', 
-        'security',
-        'performance',
-        'accessibility',
-        'seo',
+      enabledAnalyzers: [
+        'syntax', 'types', 'security', 'performance', 'accessibility',
         ...(enableGit ? ['git'] : []),
         ...(enableDeployment ? ['deployment'] : []),
       ],
     });
 
-    // Run comprehensive analysis
-    const analysis = await reviewer.analyzeProject();
+    const analysis = await analyzer.analyze();
 
     // Filter by categories if specified
     let filteredIssues = analysis.issues;
@@ -88,7 +79,7 @@ export const GET: APIRoute = async ({ url }) => {
 
   } catch (error: unknown) {
     const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
-    console.error('Analysis API error:', err);
+    logger.error('Analysis API error', err);
     
     return new Response(JSON.stringify({
       success: false,
@@ -108,21 +99,17 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
     const {
       projectRoot,
-      configuration = {},
-      enabledCheckers = [],
+      enabledAnalyzers = [],
     } = body;
 
-    // Initialize with custom configuration
-    const reviewer = new EliteErrorReviewer({
+    const analyzer = new ProjectAnalyzer({
       projectRoot: projectRoot || process.cwd(),
-      ...configuration,
-      enabledCheckers: enabledCheckers.length > 0 ? enabledCheckers : [
+      enabledAnalyzers: enabledAnalyzers.length > 0 ? enabledAnalyzers : [
         'syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'
       ],
     });
 
-    // Run analysis
-    const analysis = await reviewer.analyzeProject();
+    const analysis = await analyzer.analyze();
 
     return new Response(JSON.stringify({
       success: true,
@@ -135,7 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   } catch (error: unknown) {
     const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
-    console.error('Custom analysis API error:', err);
+    logger.error('Custom analysis API error', err);
     
     return new Response(JSON.stringify({
       success: false,
@@ -150,7 +137,7 @@ export const POST: APIRoute = async ({ request }) => {
 };
 
 // Generate smart recommendations based on analysis results
-function generateRecommendations(analysis: { issues: CodeIssue[]; health: ProjectHealth; git: GitAnalysis | null; deployment: DeploymentChecklist | null; }): string[] {
+function generateRecommendations(analysis: AnalysisResult): string[] {
   const recommendations: string[] = [];
   const { issues, health, git, deployment } = analysis;
 
@@ -184,7 +171,7 @@ function generateRecommendations(analysis: { issues: CodeIssue[]; health: Projec
     recommendations.push(`♿ Improve accessibility - ${a11yIssues.length} issues found that affect users with disabilities.`);
   }
 
-  // Auto-fix recommendations
+  // Auto-fix recommendations (if autoFixable property is still relevant)
   const autoFixableIssues = issues.filter((i) => i.autoFixable);
   if (autoFixableIssues.length > 0) {
     recommendations.push(`🔧 Run auto-fix to automatically resolve ${autoFixableIssues.length} issues.`);
@@ -216,12 +203,6 @@ function generateRecommendations(analysis: { issues: CodeIssue[]; health: Projec
   const topCategory = Object.entries(categories).sort(([,a], [,b]) => (b as number) - (a as number))[0];
   if (topCategory && topCategory[1] > 5) {
     recommendations.push(`📊 Focus on ${topCategory[0]} issues - they represent the largest category with ${topCategory[1]} items.`);
-  }
-
-  // Code quality recommendations
-  const codeQualityIssues = issues.filter((i) => i.category === 'Code Quality');
-  if (codeQualityIssues.length > 10) {
-    recommendations.push('🏗️ Consider refactoring to improve code maintainability and reduce technical debt.');
   }
 
   // TypeScript recommendations

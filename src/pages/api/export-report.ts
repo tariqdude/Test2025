@@ -2,8 +2,10 @@
 // Generates and exports comprehensive error analysis reports
 
 import type { APIRoute } from 'astro';
-import { EliteErrorReviewer } from '../../utils/error-reviewer.js';
 import { AppError, ConfigurationError, NetworkError } from '../../errors';
+import { logger } from '../../utils/logger';
+import { ProjectAnalyzer } from '../../core/analyzer';
+import { ReportGenerator } from '../../utils/report-generator';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -29,17 +31,34 @@ export const GET: APIRoute = async ({ url }) => {
       });
     }
 
-    // Initialize error reviewer
-    const reviewer = new EliteErrorReviewer({
+    // Initialize analyzer
+    const analyzer = new ProjectAnalyzer({
       projectRoot,
-      outputFormat: format as 'json' | 'markdown' | 'html',
       severityThreshold: severity as 'critical' | 'high' | 'medium' | 'low',
-      githubIntegration: includeGit,
-      deploymentChecks: includeDeployment,
+      enabledAnalyzers: [
+        'syntax', 'types', 'security', 'performance', 'accessibility',
+        ...(includeGit ? ['git'] : []),
+        ...(includeDeployment ? ['deployment'] : []),
+      ],
     });
 
-    // Generate report
-    const report = await reviewer.generateReport(format as 'json' | 'markdown' | 'html');
+    // Run analysis
+    const analysisResult = await analyzer.analyze();
+
+    let report: string;
+    switch (format) {
+      case 'json':
+        report = ReportGenerator.generateJsonReport(analysisResult);
+        break;
+      case 'markdown':
+        report = ReportGenerator.generateMarkdownReport(analysisResult);
+        break;
+      case 'html':
+        report = ReportGenerator.generateHTMLReport(analysisResult);
+        break;
+      default:
+        report = ReportGenerator.generateJsonReport(analysisResult);
+    }
 
     // Determine content type and filename
     let contentType = 'text/plain';
@@ -57,10 +76,6 @@ export const GET: APIRoute = async ({ url }) => {
         contentType = 'text/html';
         filename = 'error-report.html';
         break;
-      case 'terminal':
-        contentType = 'text/plain';
-        filename = 'error-report.txt';
-        break;
     }
 
     return new Response(report, {
@@ -74,7 +89,7 @@ export const GET: APIRoute = async ({ url }) => {
 
   } catch (error: unknown) {
     const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
-    console.error('Export report API error:', err);
+    logger.error('Export report API error', err);
     
     return new Response(JSON.stringify({
       success: false,
@@ -95,18 +110,34 @@ export const POST: APIRoute = async ({ request }) => {
     const {
       format = 'markdown',
       projectRoot,
-      configuration = {},
+      enabledAnalyzers = [],
     } = body;
 
-    // Initialize with custom configuration
-    const reviewer = new EliteErrorReviewer({
+    // Initialize analyzer with custom configuration
+    const analyzer = new ProjectAnalyzer({
       projectRoot: projectRoot || process.cwd(),
-      outputFormat: format,
-      ...configuration,
+      enabledAnalyzers: enabledAnalyzers.length > 0 ? enabledAnalyzers : [
+        'syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'
+      ],
     });
 
     // Run analysis
-    const report = await reviewer.generateReport(format);
+    const analysisResult = await analyzer.analyze();
+
+    let report: string;
+    switch (format) {
+      case 'json':
+        report = ReportGenerator.generateJsonReport(analysisResult);
+        break;
+      case 'markdown':
+        report = ReportGenerator.generateMarkdownReport(analysisResult);
+        break;
+      case 'html':
+        report = ReportGenerator.generateHTMLReport(analysisResult);
+        break;
+      default:
+        report = ReportGenerator.generateJsonReport(analysisResult);
+    }
 
     // Prepare response data
     const responseData: { success: boolean; format: string; timestamp: string; report: string; } = {
@@ -121,12 +152,15 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
-    console.error('Export report POST API error:', error);
+  } catch (error: unknown) {
+    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    logger.error('Export report POST API error', err);
     
     return new Response(JSON.stringify({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: err.message,
+      code: err.code,
+      details: err.details,
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
