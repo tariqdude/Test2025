@@ -19,6 +19,7 @@ export default defineConfig({
     sitemap(),
     tailwind({
       applyBaseStyles: false,
+      config: './tailwind.config.ts',
     }),
     react({
       include: ['**/react/**/*']

@@ -3,11 +3,26 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import { glob } from 'glob';
+import { executeCommand } from './command-executor';
+import { Checker } from '../checkers/checker';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { glob } from 'glob';
+import { executeCommand } from './command-executor';
+import { Checker } from '../checkers/checker';
+import { SyntaxChecker } from '../checkers/syntax-checker';
+import { TypeChecker } from '../checkers/type-checker';
+import { AppError, AnalysisError, FileSystemError, CommandExecutionError } from '../errors';
+import { TypeChecker } from '../checkers/type-checker';
 
-const execAsync = promisify(exec);
+// Global unhandled promise rejection handler
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('FATAL: Unhandled Promise Rejection at:', promise, 'reason:', reason);
+  // In a production environment, you might want to log this to a file or an error tracking service
+  // and then gracefully shut down or exit the process.
+  // For now, we'll just log it.
+});
 
 /* ==================== TYPES ==================== */
 
@@ -110,6 +125,7 @@ export class EliteErrorReviewer {
   private projectHealth: ProjectHealth;
   private gitAnalysis: GitAnalysis | null = null;
   private deploymentStatus: DeploymentChecklist | null = null;
+  private checkers: Checker[];
 
   constructor(config: Partial<ReviewConfig> = {}) {
     this.config = {
@@ -141,6 +157,13 @@ export class EliteErrorReviewer {
         lastCheck: new Date(),
       },
     };
+
+    // Initialize checkers
+    this.checkers = [
+      new SyntaxChecker(),
+      new TypeChecker(),
+      // Other checkers will be added here
+    ];
   }
 
   /* ==================== MAIN ANALYSIS METHODS ==================== */
@@ -159,24 +182,34 @@ export class EliteErrorReviewer {
       await this.detectProjectStructure();
 
       // Run all enabled checkers in parallel for performance
-      const checks = await Promise.allSettled([
-        this.config.enabledCheckers.includes('syntax') ? this.checkSyntaxErrors() : Promise.resolve(),
-        this.config.enabledCheckers.includes('types') ? this.checkTypeErrors() : Promise.resolve(),
-        this.config.enabledCheckers.includes('security') ? this.checkSecurityIssues() : Promise.resolve(),
-        this.config.enabledCheckers.includes('performance') ? this.checkPerformanceIssues() : Promise.resolve(),
-        this.config.enabledCheckers.includes('accessibility') ? this.checkAccessibilityIssues() : Promise.resolve(),
-        this.config.enabledCheckers.includes('git') && this.config.githubIntegration ? this.analyzeGitStatus() : Promise.resolve(),
-        this.config.enabledCheckers.includes('deployment') && this.config.deploymentChecks ? this.checkDeploymentReadiness() : Promise.resolve(),
-      ]);
+      const checkerPromises = this.checkers
+        .filter(checker => checker.canHandle(this.config))
+        .map(async checker => {
+          try {
+            const issues = await checker.check(this.config);
+            this.issues.push(...issues);
+          } catch (error: unknown) {
+            const analysisError = error instanceof AnalysisError ? error : new AnalysisError(checker.name, error instanceof Error ? error : new Error(String(error)));
+            this.issues.push({
+              id: `checker-unhandled-error-${checker.name}-${Date.now()}`,
+              type: 'runtime',
+              severity: { level: 'critical', impact: 'blocking', urgency: 'immediate' },
+              title: `Unhandled Error in ${checker.name}`,
+              description: `An unhandled error occurred during ${checker.name} execution: ${analysisError.message}`,
+              file: 'internal',
+              rule: 'checker-unhandled-exception',
+              category: 'Internal',
+              source: 'error-reviewer',
+              autoFixable: false,
+              context: { current: '' },
+              metadata: { checksum: '', timestamp: new Date() },
+            });
+          }
+        });
 
-      // Log any checker failures
-      checks.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.warn(`⚠️  Checker ${index} failed:`, result.reason);
-        }
-      });
+      await Promise.allSettled(checkerPromises);
 
-      // Additional advanced checks
+      // Additional advanced checks (these will also be refactored into checkers later)
       await Promise.allSettled([
         this.checkDependencyVulnerabilities(),
         this.checkBundleSize(),
@@ -184,6 +217,8 @@ export class EliteErrorReviewer {
         this.checkFrameworkSpecificIssues(),
         this.checkCodeQuality(),
         this.checkEnvironmentConfiguration(),
+        this.analyzeGitStatus(), // Git analysis is now a checker candidate
+        this.checkDeploymentReadiness(), // Deployment checks are also checker candidates
       ]);
 
       // Calculate final health score
@@ -198,99 +233,12 @@ export class EliteErrorReviewer {
         deployment: this.deploymentStatus,
       };
 
-    } catch (error) {
-      console.error('❌ Analysis failed:', error);
-      throw error;
-    }
-  }
-
-  /* ==================== SYNTAX & TYPE CHECKING ==================== */
-
-  private async checkSyntaxErrors(): Promise<void> {
-    console.log('🔍 Checking syntax errors...');
-    
-    try {
-      // Check TypeScript/JavaScript syntax
-      const { stdout, stderr } = await execAsync('npx tsc --noEmit --listFiles 2>&1', {
-        cwd: this.config.projectRoot,
-      });
-
-      if (stderr || stdout.includes('error TS')) {
-        const errors = this.parseTSErrors(stdout + stderr);
-        this.issues.push(...errors);
-      }
-
-      // Check Astro files
-      await this.checkAstroSyntax();
-      
-      // Check other framework files
-      await this.checkFrameworkSyntax();
-
     } catch (error: unknown) {
-      const err = error as { stdout?: string };
-      if (err.stdout?.includes('error TS')) {
-        const errors = this.parseTSErrors(err.stdout);
-        this.issues.push(...errors);
-      }
+      throw new AnalysisError('EliteErrorReviewer', error instanceof Error ? error : new Error(String(error)), 'Overall project analysis failed');
     }
   }
 
-  private async checkTypeErrors(): Promise<void> {
-    console.log('🔍 Checking type errors...');
-    
-    try {
-      await execAsync('npx tsc --noEmit --skipLibCheck', {
-        cwd: this.config.projectRoot,
-      });
-    } catch (error: unknown) {
-      const err = error as { stdout?: string };
-      if (err.stdout) {
-        const typeErrors = this.parseTypeErrors(err.stdout);
-        this.issues.push(...typeErrors);
-      }
-    }
-  }
-
-  private parseTSErrors(output: string): CodeIssue[] {
-    const lines = output.split('\n');
-    const errors: CodeIssue[] = [];
-    
-    for (const line of lines) {
-      const match = line.match(/^(.+)\((\d+),(\d+)\): error TS(\d+): (.+)$/);
-      if (match) {
-        const [, file, lineNum, colNum, code, message] = match;
-        
-        errors.push({
-          id: `ts-${code}-${Date.now()}`,
-          type: 'type',
-          severity: this.getTypescriptSeverity(code),
-          title: `TypeScript Error TS${code}`,
-          description: message,
-          file: path.relative(this.config.projectRoot, file),
-          line: parseInt(lineNum),
-          column: parseInt(colNum),
-          rule: `TS${code}`,
-          category: 'TypeScript',
-          source: 'typescript',
-          autoFixable: this.isAutoFixableTS(code),
-          context: {
-            current: line,
-          },
-          metadata: {
-            checksum: this.generateChecksum(line),
-            timestamp: new Date(),
-          },
-        });
-      }
-    }
-    
-    return errors;
-  }
-
-  private parseTypeErrors(output: string): CodeIssue[] {
-    // Similar parsing logic for type-specific errors
-    return this.parseTSErrors(output);
-  }
+  
 
   /* ==================== SECURITY ANALYSIS ==================== */
 
@@ -307,8 +255,9 @@ export class EliteErrorReviewer {
       // Check environment variables exposure
       await this.checkEnvironmentSecurity();
       
-    } catch (error) {
-      console.warn('⚠️  Security check failed:', error);
+    } catch (error: unknown) {
+      const analysisError = error instanceof AnalysisError ? error : new AnalysisError('SecurityChecker', error instanceof Error ? error : new Error(String(error)));
+      console.warn(`⚠️  Security check failed: ${analysisError.message}`);
     }
   }
 
@@ -318,71 +267,101 @@ export class EliteErrorReviewer {
         pattern: /eval\s*\(/g,
         message: 'Avoid using eval() as it can execute arbitrary code',
         severity: 'critical' as const,
+        suggestion: this.getSecuritySuggestion(/eval\s*\(/g),
       },
       {
         pattern: /innerHTML\s*=/g,
         message: 'innerHTML can lead to XSS vulnerabilities. Use textContent or sanitize input.',
         severity: 'high' as const,
+        suggestion: this.getSecuritySuggestion(/innerHTML\s*=/g),
       },
       {
         pattern: /document\.write\s*\(/g,
         message: 'document.write can be dangerous and is deprecated',
         severity: 'medium' as const,
+        suggestion: this.getSecuritySuggestion(/document\.write\s*\(/g),
       },
       {
         pattern: /window\.location\.href\s*=\s*[^"'`\s]+/g,
         message: 'Direct location assignment can be vulnerable to injection',
         severity: 'high' as const,
+        suggestion: this.getSecuritySuggestion(/window\.location\.href\s*=\s*[^"'`\s]+/g),
       },
     ];
 
     const files = await this.getProjectFiles();
     
     for (const file of files) {
-      try {
-        const content = await fs.readFile(file, 'utf-8');
-        const lines = content.split('\n');
-        
-        for (const { pattern, message, severity } of securityPatterns) {
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            const matches = line.match(pattern);
-            
-            if (matches) {
-              this.issues.push({
-                id: `security-${Date.now()}-${Math.random()}`,
-                type: 'security',
-                severity: {
-                  level: severity,
-                  impact: severity === 'critical' ? 'blocking' : 'major',
-                  urgency: severity === 'critical' ? 'immediate' : 'high',
-                },
-                title: 'Security Vulnerability Detected',
-                description: message,
-                file: path.relative(this.config.projectRoot, file),
-                line: i + 1,
-                rule: 'security-pattern',
-                category: 'Security',
-                source: 'security-scanner',
-                suggestion: this.getSecuritySuggestion(pattern),
-                autoFixable: false,
-                context: {
-                  before: lines.slice(Math.max(0, i - 2), i),
-                  current: line,
-                  after: lines.slice(i + 1, i + 3),
-                },
-                metadata: {
-                  checksum: this.generateChecksum(line),
-                  timestamp: new Date(),
-                },
-              });
-            }
+      const issuesInFile = await this._checkFileForPatterns(
+        file,
+        securityPatterns.map(p => ({ ...p, type: 'security', category: 'Security', source: 'security-scanner', rule: 'security-pattern', autoFixable: false }))
+      );
+      this.issues.push(...issuesInFile);
+    }
+  }
+
+  private async _checkFileForPatterns(
+    filePath: string,
+    patterns: Array<{ 
+      pattern: RegExp;
+      message: string;
+      severity: 'critical' | 'high' | 'medium' | 'low';
+      type: CodeIssue['type'];
+      category: string;
+      source: string;
+      rule: string;
+      suggestion?: string;
+      autoFixable: boolean;
+      documentation?: string;
+    }> 
+  ): Promise<CodeIssue[]> {
+    const issues: CodeIssue[] = [];
+    try {
+      const content = await fs.readFile(filePath, 'utf-8');
+      const lines = content.split('\n');
+
+      for (const { pattern, message, severity, type, category, source, rule, suggestion, autoFixable, documentation } of patterns) {
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const matches = line.match(pattern);
+
+          if (matches) {
+            issues.push({
+              id: `${type}-${Date.now()}-${Math.random()}`,
+              type,
+              severity: {
+                level: severity,
+                impact: severity === 'critical' ? 'blocking' : 'major',
+                urgency: severity === 'critical' ? 'immediate' : 'high',
+              },
+              title: `${category} Issue Detected`,
+              description: message,
+              file: path.relative(this.config.projectRoot, filePath),
+              line: i + 1,
+              rule,
+              category,
+              source,
+              suggestion,
+              autoFixable,
+              documentation,
+              context: {
+                before: lines.slice(Math.max(0, i - 2), i),
+                current: line,
+                after: lines.slice(i + 1, i + 3),
+              },
+              metadata: {
+                checksum: this.generateChecksum(line),
+                timestamp: new Date(),
+              },
+            });
           }
         }
-      } catch (error) {
-        console.warn(`⚠️  Could not analyze ${file}:`, error);
       }
+    } catch (error: unknown) {
+      const fsError = error instanceof FileSystemError ? error : new FileSystemError('read', filePath, error instanceof Error ? error : new Error(String(error)));
+      console.warn(`⚠️  Could not analyze ${filePath}: ${fsError.message}`);
     }
+    return issues;
   }
 
   /* ==================== PERFORMANCE ANALYSIS ==================== */
@@ -397,16 +376,18 @@ export class EliteErrorReviewer {
         this.checkLoadingPerformance(),
         this.checkFrameworkPerformance(),
       ]);
-    } catch (error) {
-      console.warn('⚠️  Performance check failed:', error);
+    } catch (error: unknown) {
+      const analysisError = error instanceof AnalysisError ? error : new AnalysisError('PerformanceChecker', error instanceof Error ? error : new Error(String(error)));
+      console.warn(`⚠️  Performance check failed: ${analysisError.message}`);
     }
   }
 
   private async checkBundleSize(): Promise<void> {
     try {
       // Analyze bundle size and suggest optimizations
-      const { stdout } = await execAsync('npx astro build --dry-run 2>/dev/null || echo "Build analysis not available"', {
+      const { stdout } = await executeCommand('npx astro build --dry-run', {
         cwd: this.config.projectRoot,
+        ignoreExitCode: true, // astro build --dry-run might exit with non-zero even if it provides useful output
       });
 
       // Parse build output for large bundles
@@ -436,7 +417,9 @@ export class EliteErrorReviewer {
           },
         });
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      const analysisError = error instanceof AnalysisError ? error : new AnalysisError('BundleSizeChecker', error instanceof Error ? error : new Error(String(error)));
+      console.warn(`⚠️  Bundle size check failed: ${analysisError.message}`);
       // Non-critical error, continue analysis
     }
   }
@@ -451,66 +434,33 @@ export class EliteErrorReviewer {
         pattern: /<img(?![^>]*alt=)/g,
         message: 'Images should have alt attributes for accessibility',
         severity: 'high' as const,
+        suggestion: this.getA11ySuggestion(/<img(?![^>]*alt=)/g),
+        autoFixable: true,
       },
       {
         pattern: /<input(?![^>]*aria-label)(?![^>]*aria-labelledby)(?![^>]*id="[^"]*")(?![^>]*type="submit")(?![^>]*type="button")/g,
         message: 'Form inputs should have accessible labels',
         severity: 'high' as const,
+        suggestion: this.getA11ySuggestion(/<input(?![^>]*aria-label)(?![^>]*aria-labelledby)(?![^>]*id="[^"]*")(?![^>]*type="submit")(?![^>]*type="button")/g),
+        autoFixable: true,
       },
       {
         pattern: /<button(?![^>]*aria-label)(?![^>]*aria-labelledby)>\s*<\/button>/g,
         message: 'Empty buttons should have accessible labels',
         severity: 'medium' as const,
+        suggestion: this.getA11ySuggestion(/<button(?![^>]*aria-label)(?![^>]*aria-labelledby)>\s*<\/button>/g),
+        autoFixable: true,
       },
     ];
 
     const files = await this.getProjectFiles(['**/*.{astro,tsx,jsx,vue,svelte}']);
     
     for (const file of files) {
-      try {
-        const content = await fs.readFile(file, 'utf-8');
-        const lines = content.split('\n');
-        
-        for (const { pattern, message, severity } of a11yPatterns) {
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            const matches = line.match(pattern);
-            
-            if (matches) {
-              this.issues.push({
-                id: `a11y-${Date.now()}-${Math.random()}`,
-                type: 'accessibility',
-                severity: {
-                  level: severity,
-                  impact: 'major',
-                  urgency: 'medium',
-                },
-                title: 'Accessibility Issue',
-                description: message,
-                file: path.relative(this.config.projectRoot, file),
-                line: i + 1,
-                rule: 'accessibility-pattern',
-                category: 'Accessibility',
-                source: 'a11y-scanner',
-                suggestion: this.getA11ySuggestion(pattern),
-                autoFixable: true,
-                documentation: 'https://www.w3.org/WAI/WCAG21/quickref/',
-                context: {
-                  before: lines.slice(Math.max(0, i - 2), i),
-                  current: line,
-                  after: lines.slice(i + 1, i + 3),
-                },
-                metadata: {
-                  checksum: this.generateChecksum(line),
-                  timestamp: new Date(),
-                },
-              });
-            }
-          }
-        }
-      } catch (error) {
-        console.warn(`⚠️  Could not analyze ${file}:`, error);
-      }
+      const issuesInFile = await this._checkFileForPatterns(
+        file,
+        a11yPatterns.map(p => ({ ...p, type: 'accessibility', category: 'Accessibility', source: 'a11y-scanner', rule: 'accessibility-pattern' }))
+      );
+      this.issues.push(...issuesInFile);
     }
   }
 
@@ -521,9 +471,9 @@ export class EliteErrorReviewer {
     
     try {
       const [branchInfo, statusInfo, logInfo] = await Promise.all([
-        execAsync('git branch --show-current', { cwd: this.config.projectRoot }),
-        execAsync('git status --porcelain', { cwd: this.config.projectRoot }),
-        execAsync('git log --oneline -1', { cwd: this.config.projectRoot }),
+        executeCommand('git branch --show-current', { cwd: this.config.projectRoot }),
+        executeCommand('git status --porcelain', { cwd: this.config.projectRoot }),
+        executeCommand('git log --oneline -1', { cwd: this.config.projectRoot }),
       ]);
 
       const branch = branchInfo.stdout.trim();
@@ -571,8 +521,9 @@ export class EliteErrorReviewer {
         });
       }
 
-    } catch (error) {
-      console.warn('⚠️  Git analysis failed - not a git repository or git not available');
+    } catch (error: unknown) {
+      const analysisError = error instanceof AnalysisError ? error : new AnalysisError('GitAnalyzer', error instanceof Error ? error : new Error(String(error)));
+      console.warn(`⚠️  Git analysis failed: ${analysisError.message}`);
     }
   }
 
@@ -804,18 +755,22 @@ export class EliteErrorReviewer {
 
   private async checkBuildStatus(): Promise<'pass' | 'fail' | 'warning'> {
     try {
-      await execAsync('npm run build', { cwd: this.config.projectRoot });
-      return 'pass';
-    } catch {
+      const { exitCode } = await executeCommand('npm run build', { cwd: this.config.projectRoot });
+      return exitCode === 0 ? 'pass' : 'fail';
+    } catch (error: unknown) {
+      const cmdError = error instanceof CommandExecutionError ? error : new CommandExecutionError('npm run build', null, null, '', '', String(error));
+      console.error(`Build check failed: ${cmdError.message}`);
       return 'fail';
     }
   }
 
   private async checkTypes(): Promise<'pass' | 'fail'> {
     try {
-      await execAsync('npx tsc --noEmit', { cwd: this.config.projectRoot });
-      return 'pass';
-    } catch {
+      const { exitCode } = await executeCommand('npx tsc --noEmit', { cwd: this.config.projectRoot });
+      return exitCode === 0 ? 'pass' : 'fail';
+    } catch (error: unknown) {
+      const cmdError = error instanceof CommandExecutionError ? error : new CommandExecutionError('npx tsc --noEmit', null, null, '', '', String(error));
+      console.error(`Type check failed: ${cmdError.message}`);
       return 'fail';
     }
   }

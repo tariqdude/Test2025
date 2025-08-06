@@ -4,6 +4,7 @@
 import type { APIRoute } from 'astro';
 
 import { EliteErrorReviewer, type CodeIssue, type ProjectHealth, type GitAnalysis, type DeploymentChecklist } from '../../../utils/error-reviewer.js';
+import { AppError, AnalysisError } from '../../../errors';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -85,12 +86,15 @@ export const GET: APIRoute = async ({ url }) => {
       },
     });
 
-  } catch (error) {
-    console.error('Analysis API error:', error);
+  } catch (error: unknown) {
+    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    console.error('Analysis API error:', err);
     
     return new Response(JSON.stringify({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: err.message,
+      code: err.code,
+      details: err.details,
       timestamp: new Date().toISOString(),
     }), {
       status: 500,
@@ -129,12 +133,15 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
-    console.error('Custom analysis API error:', error);
+  } catch (error: unknown) {
+    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    console.error('Custom analysis API error:', err);
     
     return new Response(JSON.stringify({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: err.message,
+      code: err.code,
+      details: err.details,
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

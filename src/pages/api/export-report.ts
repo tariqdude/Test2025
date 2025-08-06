@@ -3,6 +3,7 @@
 
 import type { APIRoute } from 'astro';
 import { EliteErrorReviewer } from '../../utils/error-reviewer.js';
+import { AppError, ConfigurationError, NetworkError } from '../../errors';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -18,8 +19,10 @@ export const GET: APIRoute = async ({ url }) => {
     // Validate format
     const validFormats = ['json', 'markdown', 'html'];
     if (!validFormats.includes(format)) {
+      const error = new ConfigurationError('outputFormat', `Invalid format. Must be one of: ${validFormats.join(', ')}`);
       return new Response(JSON.stringify({
-        error: `Invalid format. Must be one of: ${validFormats.join(', ')}`,
+        error: error.message,
+        code: error.code,
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -69,15 +72,18 @@ export const GET: APIRoute = async ({ url }) => {
       },
     });
 
-  } catch (error) {
-    console.error('Export report API error:', error);
+  } catch (error: unknown) {
+    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    console.error('Export report API error:', err);
     
     return new Response(JSON.stringify({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: err.message,
+      code: err.code,
+      details: err.details,
       timestamp: new Date().toISOString(),
     }), {
-      status: 500,
+      status: error instanceof NetworkError ? error.status : 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }

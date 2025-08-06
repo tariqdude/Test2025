@@ -98,6 +98,8 @@ export class ErrorReviewerCLI {
 
     } catch (error) {
       spinner.stop();
+      console.error('❌ Project analysis failed:', error);
+      // Re-throw to be caught by the top-level CLI error handler
       throw error;
     }
   }
@@ -106,7 +108,9 @@ export class ErrorReviewerCLI {
     console.log('👀 Starting watch mode...\n');
     
     const reviewer = new EliteErrorReviewer({ ...this.config, watchMode: true });
-    
+    let consecutiveErrors = 0;
+    const MAX_CONSECUTIVE_ERRORS = 5;
+
     // Initial analysis
     await this.runAnalysis();
     
@@ -114,15 +118,24 @@ export class ErrorReviewerCLI {
     
     // In a real implementation, we'd use fs.watch or chokidar
     // For now, just run analysis every 30 seconds
-    setInterval(async () => {
+    const intervalId = setInterval(async () => {
       try {
         console.log('\n🔍 Re-analyzing...');
         const results = await reviewer.analyzeProject();
         this.displayResults(results);
+        consecutiveErrors = 0; // Reset error counter on success
       } catch (error) {
+        consecutiveErrors++;
         console.error('❌ Watch analysis failed:', error);
+        if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
+          console.error(`
+🚨 Maximum consecutive errors (${MAX_CONSECUTIVE_ERRORS}) reached. Stopping watch mode.`);
+          clearInterval(intervalId);
+          process.exit(1); // Exit with error code
+        }
       }
     }, 30000);
+  }
   }
 
   private async runAutoFix(): Promise<void> {
@@ -535,8 +548,12 @@ export class ErrorReviewerCLI {
       const configFile = await fs.readFile(configPath, 'utf-8');
       const fileConfig = JSON.parse(configFile);
       this.config = { ...this.config, ...fileConfig };
-    } catch {
-      // Use default config if file doesn't exist
+    } catch (error) {
+      if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+        // Config file not found, use default. No warning needed.
+      } else {
+        console.warn(`⚠️  Warning: Could not parse configuration file at ${configPath}. Using default settings. Error: ${error instanceof Error ? error.message : String(error)}`);
+      }
     }
 
     // Override with CLI options
@@ -563,8 +580,20 @@ export class ErrorReviewerCLI {
   }
 
   private async applyFix(issue: CodeIssue): Promise<void> {
-    // In a real implementation, this would apply the actual fix
-    console.log(`  🔧 Fixed: ${issue.title}`);
+    try {
+      // In a real implementation, this would apply the actual fix
+      console.log(`  🔧 Attempting to fix: ${issue.title} in ${issue.file}:${issue.line}`);
+      // Simulate a potential failure for demonstration
+      if (Math.random() < 0.1) { // 10% chance of failure
+        throw new Error('Simulated fix application failure');
+      }
+      // await fs.writeFile(issue.file, modifiedContent);
+      console.log(`  ✅ Fixed: ${issue.title}`);
+    } catch (error) {
+      console.error(`  ❌ Failed to apply fix for ${issue.title}: ${error instanceof Error ? error.message : String(error)}`);
+      // Log the specific issue that failed to fix
+      // Potentially add this to a 'failedFixes' array in the CLI class
+    }
   }
 
   private getSeverityWeight(severity: string): number {

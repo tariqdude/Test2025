@@ -3,6 +3,7 @@
 
 import type { APIRoute } from 'astro';
 import { EliteErrorReviewer } from '../../../utils/error-reviewer.js';
+import { AppError, AnalysisError } from '../../../errors';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -69,12 +70,15 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
-    console.error('Auto-fix API error:', error);
+  } catch (error: unknown) {
+    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    console.error('Auto-fix API error:', err);
     
     return new Response(JSON.stringify({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: err.message,
+      code: err.code,
+      details: err.details,
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
