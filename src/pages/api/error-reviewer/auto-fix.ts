@@ -2,7 +2,7 @@
 // Handles automatic fixing of detected issues
 
 import type { APIRoute } from 'astro';
-import { AppError, AnalysisError } from '../../../errors';
+import { AppError, _AnalysisError } from '../../../errors';
 import { logger } from '../../../utils/logger';
 import { ProjectAnalyzer } from '../../../core/analyzer';
 

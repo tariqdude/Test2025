@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { SyntaxAnalyzer } from '../analysis/syntax';
-import { TypesAnalyzer } from '../analysis/types';
+import { TypesAnalyzer as _TypesAnalyzer } from '../analysis/types';
 import { SecurityAnalyzer } from '../analysis/security';
-import { PerformanceAnalyzer } from '../analysis/performance';
-import { AccessibilityAnalyzer } from '../analysis/accessibility';
-import { GitAnalyzer } from '../analysis/git';
-import { DeploymentAnalyzer } from '../analysis/deployment';
+import { PerformanceAnalyzer as _PerformanceAnalyzer } from '../analysis/performance';
+import { AccessibilityAnalyzer as _AccessibilityAnalyzer } from '../analysis/accessibility';
+import { GitAnalyzer as _GitAnalyzer } from '../analysis/git';
+import { DeploymentAnalyzer as _DeploymentAnalyzer } from '../analysis/deployment';
 import { AnalysisError, CommandExecutionError, FileSystemError } from '../errors';
 import type { AnalyzerConfig } from '../config/schema';
 

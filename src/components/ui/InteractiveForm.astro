@@ -223,6 +223,8 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
 <script>
   // Enhanced form handling with validation and animations
   document.addEventListener('DOMContentLoaded', function() {
+    type FormElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    
     const form = document.getElementById('enhanced-form') as HTMLFormElement;
     const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
     const submitText = submitButton?.querySelector('.submit-text') as HTMLElement;
@@ -326,11 +328,11 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
     }
 
     function validateForm(): boolean {
-      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<HTMLInputElement>;
+      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
       let isValid = true;
 
       fields.forEach(field => {
-        if (!validateField(field)) {
+        if (!validateField(field as HTMLInputElement)) {
           isValid = false;
         }
       });
@@ -373,7 +375,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
         message.classList.add('opacity-0');
       });
 
-      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<HTMLInputElement>;
+      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
       fields.forEach(field => {
         field.classList.remove('border-red-500', 'border-green-500');
       });
