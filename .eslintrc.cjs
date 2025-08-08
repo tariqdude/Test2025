@@ -7,7 +7,7 @@ module.exports = {
     es2022: true,
   },
   parser: '@typescript-eslint/parser',
-  parserOptions: { 
+  parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2022,
   },
@@ -34,7 +34,11 @@ module.exports = {
       },
     },
     {
-      files: ['src/utils/error-reviewer.ts', 'src/utils/logger.ts', 'src/tests/*.test.ts'],
+      files: [
+        'src/utils/error-reviewer.ts',
+        'src/utils/logger.ts',
+        'src/tests/*.test.ts',
+      ],
       rules: {
         '@typescript-eslint/no-explicit-any': 'warn',
       },

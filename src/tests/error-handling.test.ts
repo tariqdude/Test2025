@@ -1,18 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { 
-  AppError, 
-  AnalysisError, 
-  CommandExecutionError, 
-  FileSystemError, 
-  ConfigurationError, 
-  NetworkError 
+import {
+  AppError,
+  AnalysisError,
+  CommandExecutionError,
+  FileSystemError,
+  ConfigurationError,
+  NetworkError,
 } from '../errors';
 
 describe('Error Handling System', () => {
   describe('AppError (Base Class)', () => {
     it('should create basic app error with message and code', () => {
       const error = new AppError('Test error message', 'TEST_ERROR');
-      
+
       expect(error.name).toBe('AppError');
       expect(error.message).toBe('Test error message');
       expect(error.code).toBe('TEST_ERROR');
@@ -22,14 +22,14 @@ describe('Error Handling System', () => {
 
     it('should use default error code when not provided', () => {
       const error = new AppError('Test message');
-      
+
       expect(error.code).toBe('APP_ERROR');
     });
 
     it('should store additional details', () => {
       const details = { extra: 'info', count: 42 };
       const error = new AppError('Test', 'TEST', details);
-      
+
       expect(error.details).toEqual(details);
     });
   });
@@ -38,7 +38,7 @@ describe('Error Handling System', () => {
     it('should create analysis error with checker name and original error', () => {
       const originalError = new Error('Original problem');
       const analysisError = new AnalysisError('SyntaxChecker', originalError);
-      
+
       expect(analysisError.name).toBe('AnalysisError');
       expect(analysisError.code).toBe('ANALYSIS_ERROR');
       expect(analysisError.message).toContain('SyntaxChecker');
@@ -49,8 +49,12 @@ describe('Error Handling System', () => {
 
     it('should use custom message when provided', () => {
       const originalError = new Error('File not found');
-      const analysisError = new AnalysisError('FileChecker', originalError, 'Custom analysis failed');
-      
+      const analysisError = new AnalysisError(
+        'FileChecker',
+        originalError,
+        'Custom analysis failed'
+      );
+
       expect(analysisError.message).toContain('Custom analysis failed');
       expect(analysisError.message).toContain('FileChecker');
     });
@@ -65,7 +69,7 @@ describe('Error Handling System', () => {
         'Test output',
         'Error output'
       );
-      
+
       expect(error.name).toBe('CommandExecutionError');
       expect(error.code).toBe('COMMAND_EXECUTION_ERROR');
       expect(error.details.command).toBe('npm test');
@@ -83,7 +87,7 @@ describe('Error Handling System', () => {
         '',
         'Process killed'
       );
-      
+
       expect(error.details.exitCode).toBeNull();
       expect(error.details.signal).toBeNull();
     });
@@ -92,8 +96,12 @@ describe('Error Handling System', () => {
   describe('FileSystemError', () => {
     it('should store file operation details', () => {
       const originalError = new Error('ENOENT: no such file or directory');
-      const fsError = new FileSystemError('read', '/path/to/file.ts', originalError);
-      
+      const fsError = new FileSystemError(
+        'read',
+        '/path/to/file.ts',
+        originalError
+      );
+
       expect(fsError.name).toBe('FileSystemError');
       expect(fsError.code).toBe('FILE_SYSTEM_ERROR');
       expect(fsError.message).toContain('read on /path/to/file.ts');
@@ -106,20 +114,23 @@ describe('Error Handling System', () => {
     it('should use custom message when provided', () => {
       const originalError = new Error('Permission denied');
       const fsError = new FileSystemError(
-        'write', 
-        '/readonly/file.txt', 
-        originalError, 
+        'write',
+        '/readonly/file.txt',
+        originalError,
         'Custom file operation failed'
       );
-      
+
       expect(fsError.message).toContain('Custom file operation failed');
     });
   });
 
   describe('ConfigurationError', () => {
     it('should store configuration key and message', () => {
-      const error = new ConfigurationError('projectRoot', 'Invalid path specified');
-      
+      const error = new ConfigurationError(
+        'projectRoot',
+        'Invalid path specified'
+      );
+
       expect(error.name).toBe('ConfigurationError');
       expect(error.code).toBe('CONFIGURATION_ERROR');
       expect(error.message).toContain('Invalid path specified');
@@ -129,7 +140,7 @@ describe('Error Handling System', () => {
 
     it('should use default message when not provided', () => {
       const error = new ConfigurationError('timeout');
-      
+
       expect(error.message).toContain('Invalid configuration');
       expect(error.message).toContain('timeout');
     });
@@ -138,8 +149,12 @@ describe('Error Handling System', () => {
   describe('NetworkError', () => {
     it('should store network request details', () => {
       const originalError = new Error('Connection timeout');
-      const networkError = new NetworkError('https://api.example.com', 500, originalError);
-      
+      const networkError = new NetworkError(
+        'https://api.example.com',
+        500,
+        originalError
+      );
+
       expect(networkError.name).toBe('NetworkError');
       expect(networkError.code).toBe('NETWORK_ERROR');
       expect(networkError.message).toContain('https://api.example.com');
@@ -152,7 +167,7 @@ describe('Error Handling System', () => {
 
     it('should work without original error', () => {
       const networkError = new NetworkError('https://api.test.com', 404);
-      
+
       expect(networkError.details.originalError).toBeUndefined();
       expect(networkError.message).toContain('https://api.test.com');
       expect(networkError.message).toContain('404');
@@ -160,12 +175,12 @@ describe('Error Handling System', () => {
 
     it('should use custom message when provided', () => {
       const networkError = new NetworkError(
-        'https://custom.api.com', 
-        503, 
-        undefined, 
+        'https://custom.api.com',
+        503,
+        undefined,
         'Custom network failure'
       );
-      
+
       expect(networkError.message).toContain('Custom network failure');
     });
   });
@@ -210,9 +225,9 @@ describe('Error Handling System', () => {
     it('should serialize errors with all relevant properties', () => {
       const originalError = new Error('Original');
       const analysisError = new AnalysisError('TestAnalyzer', originalError);
-      
+
       const serialized = JSON.parse(JSON.stringify(analysisError));
-      
+
       expect(serialized.name).toBe('AnalysisError');
       expect(serialized.message).toBeDefined();
       expect(typeof serialized.message).toBe('string');

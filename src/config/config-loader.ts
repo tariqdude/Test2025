@@ -6,13 +6,18 @@ import { logger } from '../utils/logger';
 import { ConfigurationError } from '../errors';
 
 export class ConfigLoader {
-  static async loadConfig(cliOptions: Partial<AnalyzerConfig>): Promise<AnalyzerConfig> {
+  static async loadConfig(
+    cliOptions: Partial<AnalyzerConfig>
+  ): Promise<AnalyzerConfig> {
     let config: Partial<AnalyzerConfig> = {};
 
     // 1. Load default configuration (handled by Zod schema defaults)
 
     // 2. Load from file (.analyzer.json)
-    const configFilePath = path.join(cliOptions.projectRoot || process.cwd(), '.analyzer.json');
+    const configFilePath = path.join(
+      cliOptions.projectRoot || process.cwd(),
+      '.analyzer.json'
+    );
     try {
       const fileContent = await fs.readFile(configFilePath, 'utf-8');
       const fileConfig = JSON.parse(fileContent);
@@ -20,10 +25,17 @@ export class ConfigLoader {
       logger.info(`Loaded configuration from ${configFilePath}`);
     } catch (error: unknown) {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        logger.info(`No .analyzer.json found at ${configFilePath}. Using defaults and CLI options.`);
+        logger.info(
+          `No .analyzer.json found at ${configFilePath}. Using defaults and CLI options.`
+        );
       } else {
-        logger.warn(`Failed to parse .analyzer.json at ${configFilePath}: ${error instanceof Error ? error.message : String(error)}`);
-        throw new ConfigurationError('file', `Failed to parse .analyzer.json: ${error instanceof Error ? error.message : String(error)}`);
+        logger.warn(
+          `Failed to parse .analyzer.json at ${configFilePath}: ${error instanceof Error ? error.message : String(error)}`
+        );
+        throw new ConfigurationError(
+          'file',
+          `Failed to parse .analyzer.json: ${error instanceof Error ? error.message : String(error)}`
+        );
       }
     }
 
@@ -34,8 +46,14 @@ export class ConfigLoader {
     try {
       return AnalyzerConfigSchema.parse(config);
     } catch (error: unknown) {
-      logger.error('Configuration validation failed', error instanceof Error ? error : undefined);
-      throw new ConfigurationError('validation', `Invalid configuration: ${error instanceof Error ? error.message : String(error)}`);
+      logger.error(
+        'Configuration validation failed',
+        error instanceof Error ? error : undefined
+      );
+      throw new ConfigurationError(
+        'validation',
+        `Invalid configuration: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 }

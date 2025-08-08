@@ -1,4 +1,8 @@
-import type { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
+import type {
+  AnalysisModule,
+  CodeIssue,
+  AnalyzerConfig,
+} from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
 import { AnalysisError, CommandExecutionError } from '../errors';
 import { logger } from '../utils/logger';
@@ -22,13 +26,24 @@ export class PerformanceAnalyzer implements AnalysisModule {
         // this.checkFrameworkPerformance(config, issues),
       ]);
     } catch (error: unknown) {
-      const analysisError = error instanceof AnalysisError ? error : new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Performance analysis failed: ${analysisError.message}`, { error: analysisError });
+      const analysisError =
+        error instanceof AnalysisError
+          ? error
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Performance analysis failed: ${analysisError.message}`, {
+        error: analysisError,
+      });
     }
     return issues;
   }
 
-  private async checkBundleSize(config: AnalyzerConfig, issues: CodeIssue[]): Promise<void> {
+  private async checkBundleSize(
+    config: AnalyzerConfig,
+    issues: CodeIssue[]
+  ): Promise<void> {
     try {
       const { stdout } = await executeCommand('npx astro build --dry-run', {
         cwd: config.projectRoot,
@@ -45,12 +60,14 @@ export class PerformanceAnalyzer implements AnalysisModule {
             urgency: 'medium',
           },
           title: 'Large Bundle Size Detected',
-          description: 'The application bundle size may impact loading performance',
+          description:
+            'The application bundle size may impact loading performance',
           file: 'build-output',
           rule: 'bundle-size',
           category: 'Performance',
           source: 'bundle-analyzer',
-          suggestion: 'Consider code splitting, tree shaking, or removing unused dependencies',
+          suggestion:
+            'Consider code splitting, tree shaking, or removing unused dependencies',
           autoFixable: false,
           context: {
             current: 'Build analysis suggests large bundle size',
@@ -58,10 +75,20 @@ export class PerformanceAnalyzer implements AnalysisModule {
         });
       }
     } catch (error: unknown) {
-      const analysisError = error instanceof CommandExecutionError ? 
-        new AnalysisError(this.name, error, `Failed to run bundle size check: ${error.message}`) :
-        new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Bundle size check failed: ${analysisError.message}`, { error: analysisError });
+      const analysisError =
+        error instanceof CommandExecutionError
+          ? new AnalysisError(
+              this.name,
+              error,
+              `Failed to run bundle size check: ${error.message}`
+            )
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Bundle size check failed: ${analysisError.message}`, {
+        error: analysisError,
+      });
     }
   }
 }

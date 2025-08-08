@@ -1,4 +1,8 @@
-import type { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
+import type {
+  AnalysisModule,
+  CodeIssue,
+  AnalyzerConfig,
+} from '../types/analysis';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { glob } from 'glob';
@@ -20,21 +24,31 @@ export class SecurityAnalyzer implements AnalysisModule {
     try {
       // Check for known vulnerabilities (placeholder for npm audit or similar)
       // await this.checkDependencyVulnerabilities(config, issues);
-      
+
       // Check for security anti-patterns
       await this.checkSecurityPatterns(config, issues);
-      
+
       // Check environment variables exposure
       // await this.checkEnvironmentSecurity(config, issues);
-      
     } catch (error: unknown) {
-      const analysisError = error instanceof AnalysisError ? error : new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Security analysis failed: ${analysisError.message}`, { error: analysisError });
+      const analysisError =
+        error instanceof AnalysisError
+          ? error
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Security analysis failed: ${analysisError.message}`, {
+        error: analysisError,
+      });
     }
     return issues;
   }
 
-  private async checkSecurityPatterns(config: AnalyzerConfig, issues: CodeIssue[]): Promise<void> {
+  private async checkSecurityPatterns(
+    config: AnalyzerConfig,
+    issues: CodeIssue[]
+  ): Promise<void> {
     const securityPatterns = [
       {
         pattern: /eval\s*\(/g,
@@ -44,7 +58,8 @@ export class SecurityAnalyzer implements AnalysisModule {
       },
       {
         pattern: /innerHTML\s*=/g,
-        message: 'innerHTML can lead to XSS vulnerabilities. Use textContent or sanitize input.',
+        message:
+          'innerHTML can lead to XSS vulnerabilities. Use textContent or sanitize input.',
         severity: 'high' as const,
         suggestion: this.getSecuritySuggestion(/innerHTML\s*=/g),
       },
@@ -58,16 +73,25 @@ export class SecurityAnalyzer implements AnalysisModule {
         pattern: /window\.location\.href\s*=\s*[^"'`\s]+/g,
         message: 'Direct location assignment can be vulnerable to injection',
         severity: 'high' as const,
-        suggestion: this.getSecuritySuggestion(/window\.location\.href\s*=\s*[^"'`\s]+/g),
+        suggestion: this.getSecuritySuggestion(
+          /window\.location\.href\s*=\s*[^"'`\s]+/g
+        ),
       },
     ];
 
     const files = await this.getProjectFiles(config);
-    
+
     for (const file of files) {
       const issuesInFile = await this._checkFileForPatterns(
         file,
-        securityPatterns.map(p => ({ ...p, type: 'security', category: 'Security', source: 'security-scanner', rule: 'security-pattern', autoFixable: false })),
+        securityPatterns.map(p => ({
+          ...p,
+          type: 'security',
+          category: 'Security',
+          source: 'security-scanner',
+          rule: 'security-pattern',
+          autoFixable: false,
+        })),
         config.projectRoot
       );
       issues.push(...issuesInFile);
@@ -76,7 +100,7 @@ export class SecurityAnalyzer implements AnalysisModule {
 
   private async _checkFileForPatterns(
     filePath: string,
-    patterns: Array<{ 
+    patterns: Array<{
       pattern: RegExp;
       message: string;
       severity: 'critical' | 'high' | 'medium' | 'low';
@@ -95,7 +119,18 @@ export class SecurityAnalyzer implements AnalysisModule {
       const content = await fs.readFile(filePath, 'utf-8');
       const lines = content.split('\n');
 
-      for (const { pattern, message, severity, type, category, source, rule, suggestion, autoFixable, documentation } of patterns) {
+      for (const {
+        pattern,
+        message,
+        severity,
+        type,
+        category,
+        source,
+        rule,
+        suggestion,
+        autoFixable,
+        documentation,
+      } of patterns) {
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
           const matches = line.match(pattern);
@@ -133,8 +168,18 @@ export class SecurityAnalyzer implements AnalysisModule {
         }
       }
     } catch (error: unknown) {
-      const fsError = error instanceof FileSystemError ? error : new FileSystemError('read', filePath, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Could not analyze ${filePath}: ${fsError.message}`, { error: fsError, filePath });
+      const fsError =
+        error instanceof FileSystemError
+          ? error
+          : new FileSystemError(
+              'read',
+              filePath,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Could not analyze ${filePath}: ${fsError.message}`, {
+        error: fsError,
+        filePath,
+      });
     }
     return issues;
   }
@@ -152,16 +197,14 @@ export class SecurityAnalyzer implements AnalysisModule {
     return files;
   }
 
-  
-
   private getSecuritySuggestion(pattern: RegExp): string {
     const suggestions: Record<string, string> = {
-      'eval': 'Use JSON.parse() for data parsing or Function constructor for safer code execution',
-      'innerHTML': 'Use textContent, createElement, or sanitize with DOMPurify',
+      eval: 'Use JSON.parse() for data parsing or Function constructor for safer code execution',
+      innerHTML: 'Use textContent, createElement, or sanitize with DOMPurify',
       'document.write': 'Use modern DOM manipulation methods',
       'window.location': 'Validate and sanitize URLs before navigation',
     };
-    
+
     const patternStr = pattern.toString();
     for (const [key, suggestion] of Object.entries(suggestions)) {
       if (patternStr.includes(key)) {

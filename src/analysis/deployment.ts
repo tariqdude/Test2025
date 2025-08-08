@@ -1,4 +1,9 @@
-import type { AnalysisModule, CodeIssue, AnalyzerConfig, DeploymentChecklist } from '../types/analysis';
+import type {
+  AnalysisModule,
+  CodeIssue,
+  AnalyzerConfig,
+  DeploymentChecklist,
+} from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
 import { AnalysisError, CommandExecutionError } from '../errors';
 import { logger } from '../utils/logger';
@@ -53,20 +58,41 @@ export class DeploymentAnalyzer implements AnalysisModule {
           });
         }
       });
-
     } catch (error: unknown) {
-      const analysisError = error instanceof AnalysisError ? error : new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Deployment analysis failed: ${analysisError.message}`, { error: analysisError });
+      const analysisError =
+        error instanceof AnalysisError
+          ? error
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Deployment analysis failed: ${analysisError.message}`, {
+        error: analysisError,
+      });
     }
     return issues;
   }
 
-  private async checkBuildStatus(config: AnalyzerConfig): Promise<'pass' | 'fail' | 'warning'> {
+  private async checkBuildStatus(
+    config: AnalyzerConfig
+  ): Promise<'pass' | 'fail' | 'warning'> {
     try {
-      const { exitCode } = await executeCommand('npm run build', { cwd: config.projectRoot });
+      const { exitCode } = await executeCommand('npm run build', {
+        cwd: config.projectRoot,
+      });
       return exitCode === 0 ? 'pass' : 'fail';
     } catch (error: unknown) {
-      const cmdError = error instanceof CommandExecutionError ? error : new CommandExecutionError('npm run build', null, null, '', '', String(error));
+      const cmdError =
+        error instanceof CommandExecutionError
+          ? error
+          : new CommandExecutionError(
+              'npm run build',
+              null,
+              null,
+              '',
+              '',
+              String(error)
+            );
       logger.error(`Build check failed: ${cmdError.message}`, cmdError);
       return 'fail';
     }
@@ -74,10 +100,22 @@ export class DeploymentAnalyzer implements AnalysisModule {
 
   private async checkTypes(config: AnalyzerConfig): Promise<'pass' | 'fail'> {
     try {
-      const { exitCode } = await executeCommand('npx tsc --noEmit', { cwd: config.projectRoot });
+      const { exitCode } = await executeCommand('npx tsc --noEmit', {
+        cwd: config.projectRoot,
+      });
       return exitCode === 0 ? 'pass' : 'fail';
     } catch (error: unknown) {
-      const cmdError = error instanceof CommandExecutionError ? error : new CommandExecutionError('npx tsc --noEmit', null, null, '', '', String(error));
+      const cmdError =
+        error instanceof CommandExecutionError
+          ? error
+          : new CommandExecutionError(
+              'npx tsc --noEmit',
+              null,
+              null,
+              '',
+              '',
+              String(error)
+            );
       logger.error(`Type check failed: ${cmdError.message}`, cmdError);
       return 'fail';
     }
@@ -96,7 +134,7 @@ export class DeploymentAnalyzer implements AnalysisModule {
       seo: 'Improve SEO compliance',
       assets: 'Optimize and compress assets',
     };
-    
+
     return suggestions[check] || `Review and fix ${check} issues`;
   }
 }

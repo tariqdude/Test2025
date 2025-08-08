@@ -6,7 +6,7 @@ import type { AnalyzerConfig } from '../config/schema';
 
 // Mock fs operations
 vi.mock('fs', async () => {
-  const actual = await vi.importActual('fs') as any;
+  const actual = (await vi.importActual('fs')) as any;
   return {
     ...actual,
     promises: {
@@ -53,10 +53,34 @@ describe('Configuration System', () => {
       const result = AnalyzerConfigSchema.parse(minimalConfig);
 
       expect(result.projectRoot).toBe(process.cwd());
-      expect(result.ignore).toEqual(['node_modules', '.git', 'dist', 'build', '.astro', 'src/utils']);
-      expect(result.include).toEqual(['**/*.{ts,tsx,js,jsx,astro,vue,svelte,md,mdx}']);
-      expect(result.frameworks).toEqual(['astro', 'react', 'vue', 'svelte', 'solid', 'preact']);
-      expect(result.enabledAnalyzers).toEqual(['syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment']);
+      expect(result.ignore).toEqual([
+        'node_modules',
+        '.git',
+        'dist',
+        'build',
+        '.astro',
+        'src/utils',
+      ]);
+      expect(result.include).toEqual([
+        '**/*.{ts,tsx,js,jsx,astro,vue,svelte,md,mdx}',
+      ]);
+      expect(result.frameworks).toEqual([
+        'astro',
+        'react',
+        'vue',
+        'svelte',
+        'solid',
+        'preact',
+      ]);
+      expect(result.enabledAnalyzers).toEqual([
+        'syntax',
+        'types',
+        'security',
+        'performance',
+        'accessibility',
+        'git',
+        'deployment',
+      ]);
       expect(result.severityThreshold).toBe('low');
       expect(result.outputFormat).toBe('terminal');
       expect(result.githubIntegration).toBe(true);
@@ -124,7 +148,7 @@ describe('Configuration System', () => {
         githubIntegration: false,
         ignore: ['custom-ignore'],
       };
-      
+
       vi.mocked(fs.readFile).mockResolvedValueOnce(JSON.stringify(fileConfig));
 
       const cliOptions: Partial<AnalyzerConfig> = {
@@ -144,12 +168,16 @@ describe('Configuration System', () => {
       const { promises: fs } = await import('fs');
       vi.mocked(fs.readFile).mockResolvedValueOnce('{ invalid json }');
 
-      await expect(ConfigLoader.loadConfig({})).rejects.toThrow(ConfigurationError);
+      await expect(ConfigLoader.loadConfig({})).rejects.toThrow(
+        ConfigurationError
+      );
     });
 
     it('should handle file read errors gracefully', async () => {
       const { promises: fs } = await import('fs');
-      vi.mocked(fs.readFile).mockRejectedValueOnce(new Error('Permission denied'));
+      vi.mocked(fs.readFile).mockRejectedValueOnce(
+        new Error('Permission denied')
+      );
 
       // Should not throw, should log warning and continue with defaults
       const result = await ConfigLoader.loadConfig({});
@@ -165,7 +193,9 @@ describe('Configuration System', () => {
         severityThreshold: 'invalid' as any,
       };
 
-      await expect(ConfigLoader.loadConfig(invalidOptions)).rejects.toThrow(ConfigurationError);
+      await expect(ConfigLoader.loadConfig(invalidOptions)).rejects.toThrow(
+        ConfigurationError
+      );
     });
   });
 

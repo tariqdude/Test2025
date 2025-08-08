@@ -6,7 +6,11 @@ import { PerformanceAnalyzer as _PerformanceAnalyzer } from '../analysis/perform
 import { AccessibilityAnalyzer as _AccessibilityAnalyzer } from '../analysis/accessibility';
 import { GitAnalyzer as _GitAnalyzer } from '../analysis/git';
 import { DeploymentAnalyzer as _DeploymentAnalyzer } from '../analysis/deployment';
-import { AnalysisError, CommandExecutionError, FileSystemError } from '../errors';
+import {
+  AnalysisError,
+  CommandExecutionError,
+  FileSystemError,
+} from '../errors';
 import type { AnalyzerConfig } from '../config/schema';
 
 // Mock external dependencies
@@ -33,7 +37,15 @@ describe('Individual Analysis Modules', () => {
       ignore: ['node_modules'],
       include: ['**/*.{ts,tsx,js,jsx}'],
       frameworks: ['react'],
-      enabledAnalyzers: ['syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'],
+      enabledAnalyzers: [
+        'syntax',
+        'types',
+        'security',
+        'performance',
+        'accessibility',
+        'git',
+        'deployment',
+      ],
       severityThreshold: 'low',
       outputFormat: 'terminal',
       githubIntegration: true,
@@ -55,14 +67,24 @@ describe('Individual Analysis Modules', () => {
     });
 
     it('should be disabled when syntax is not in enabledAnalyzers', () => {
-      const configWithoutSyntax = { ...mockConfig, enabledAnalyzers: ['types'] };
+      const configWithoutSyntax = {
+        ...mockConfig,
+        enabledAnalyzers: ['types'],
+      };
       expect(analyzer.canAnalyze(configWithoutSyntax)).toBe(false);
     });
 
     it('should handle command execution errors gracefully', async () => {
       const { executeCommand } = await import('../utils/command-executor');
       vi.mocked(executeCommand).mockRejectedValueOnce(
-        new CommandExecutionError('npx tsc --noEmit', 1, null, '', 'Type check failed', 'Command failed')
+        new CommandExecutionError(
+          'npx tsc --noEmit',
+          1,
+          null,
+          '',
+          'Type check failed',
+          'Command failed'
+        )
       );
 
       await expect(analyzer.analyze(mockConfig)).rejects.toThrow(AnalysisError);
@@ -91,17 +113,29 @@ describe('Individual Analysis Modules', () => {
     it('should handle AnalysisError instances', () => {
       const originalError = new Error('Original error');
       const analysisError = new AnalysisError('TestAnalyzer', originalError);
-      
+
       expect(analysisError.name).toBe('AnalysisError');
       expect(analysisError.message).toContain('TestAnalyzer');
       expect(analysisError.message).toContain('Original error');
-      expect(analysisError.details).toHaveProperty('checkerName', 'TestAnalyzer');
-      expect(analysisError.details).toHaveProperty('originalError', originalError);
+      expect(analysisError.details).toHaveProperty(
+        'checkerName',
+        'TestAnalyzer'
+      );
+      expect(analysisError.details).toHaveProperty(
+        'originalError',
+        originalError
+      );
     });
 
     it('should handle CommandExecutionError instances', () => {
-      const cmdError = new CommandExecutionError('test command', 1, null, 'stdout', 'stderr');
-      
+      const cmdError = new CommandExecutionError(
+        'test command',
+        1,
+        null,
+        'stdout',
+        'stderr'
+      );
+
       expect(cmdError.name).toBe('CommandExecutionError');
       expect(cmdError.details).toHaveProperty('command', 'test command');
       expect(cmdError.details).toHaveProperty('exitCode', 1);
@@ -111,8 +145,12 @@ describe('Individual Analysis Modules', () => {
 
     it('should handle FileSystemError instances', () => {
       const originalError = new Error('ENOENT: file not found');
-      const fsError = new FileSystemError('read', '/test/file.ts', originalError);
-      
+      const fsError = new FileSystemError(
+        'read',
+        '/test/file.ts',
+        originalError
+      );
+
       expect(fsError.name).toBe('FileSystemError');
       expect(fsError.details).toHaveProperty('operation', 'read');
       expect(fsError.details).toHaveProperty('filePath', '/test/file.ts');

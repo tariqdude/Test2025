@@ -22,16 +22,16 @@ export default defineConfig({
       config: './tailwind.config.ts',
     }),
     react({
-      include: ['**/react/**/*']
+      include: ['**/react/**/*'],
     }),
     svelte({
-      include: ['**/svelte/**/*']
+      include: ['**/svelte/**/*'],
     }),
     solid({
-      include: ['**/solid/**/*']
+      include: ['**/solid/**/*'],
     }),
     preact({
-      include: ['**/preact/**/*']
+      include: ['**/preact/**/*'],
     }),
   ],
 });

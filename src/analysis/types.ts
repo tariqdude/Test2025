@@ -1,9 +1,12 @@
-import type { AnalysisModule, CodeIssue, AnalyzerConfig } from '../types/analysis';
+import type {
+  AnalysisModule,
+  CodeIssue,
+  AnalyzerConfig,
+} from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
 import { AnalysisError, CommandExecutionError } from '../errors';
 import { logger } from '../utils/logger';
 import path from 'path';
-
 
 export class TypesAnalyzer implements AnalysisModule {
   name = 'TypesAnalyzer';
@@ -17,20 +20,37 @@ export class TypesAnalyzer implements AnalysisModule {
     const issues: CodeIssue[] = [];
 
     try {
-      const { stdout, stderr } = await executeCommand('npx tsc --noEmit --skipLibCheck', {
-        cwd: config.projectRoot,
-        ignoreExitCode: true,
-      });
+      const { stdout, stderr } = await executeCommand(
+        'npx tsc --noEmit --skipLibCheck',
+        {
+          cwd: config.projectRoot,
+          ignoreExitCode: true,
+        }
+      );
 
       if (stderr || stdout.includes('error TS')) {
-        const typeErrors = this.parseTSErrors(stdout + stderr, config.projectRoot);
+        const typeErrors = this.parseTSErrors(
+          stdout + stderr,
+          config.projectRoot
+        );
         issues.push(...typeErrors);
       }
     } catch (error: unknown) {
-      const analysisError = error instanceof CommandExecutionError ? 
-        new AnalysisError(this.name, error, `Failed to run TypeScript type check: ${error.message}`) :
-        new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.error(`Type analysis failed: ${analysisError.message}`, analysisError);
+      const analysisError =
+        error instanceof CommandExecutionError
+          ? new AnalysisError(
+              this.name,
+              error,
+              `Failed to run TypeScript type check: ${error.message}`
+            )
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.error(
+        `Type analysis failed: ${analysisError.message}`,
+        analysisError
+      );
       throw analysisError;
     }
     return issues;
@@ -39,12 +59,12 @@ export class TypesAnalyzer implements AnalysisModule {
   private parseTSErrors(output: string, projectRoot: string): CodeIssue[] {
     const lines = output.split('\n');
     const errors: CodeIssue[] = [];
-    
+
     for (const line of lines) {
       const match = line.match(/^(.+)\((\d+),(\d+)\): error TS(\d+): (.+)$/);
       if (match) {
         const [, file, lineNum, colNum, code, message] = match;
-        
+
         errors.push({
           id: `ts-type-${code}-${Date.now()}`,
           type: 'type',
@@ -64,14 +84,14 @@ export class TypesAnalyzer implements AnalysisModule {
         });
       }
     }
-    
+
     return errors;
   }
 
   private getTypescriptSeverity(code: string): CodeIssue['severity'] {
     const criticalCodes = ['2304', '2322', '2339', '2345']; // Cannot find name, type issues
     const highCodes = ['2531', '2532', '2533']; // Object possibly null/undefined
-    
+
     if (criticalCodes.includes(code)) {
       return { level: 'critical', impact: 'blocking', urgency: 'immediate' };
     } else if (highCodes.includes(code)) {

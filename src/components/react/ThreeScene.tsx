@@ -1,12 +1,17 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial, Environment } from '@react-three/drei';
+import {
+  OrbitControls,
+  Sphere,
+  MeshDistortMaterial,
+  Environment,
+} from '@react-three/drei';
 import * as THREE from 'three';
 
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
+
+  useFrame(state => {
     if (meshRef.current) {
       meshRef.current.rotation.x = state.clock.elapsedTime * 0.3;
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
@@ -29,7 +34,7 @@ function AnimatedSphere() {
 
 function ParticleField() {
   const points = useRef<THREE.Points>(null);
-  
+
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(2000 * 3);
     for (let i = 0; i < 2000; i++) {
@@ -40,7 +45,7 @@ function ParticleField() {
     return positions;
   }, []);
 
-  useFrame((state) => {
+  useFrame(state => {
     if (points.current) {
       points.current.rotation.x = state.clock.elapsedTime * 0.05;
       points.current.rotation.y = state.clock.elapsedTime * 0.1;
@@ -65,7 +70,7 @@ function ParticleField() {
 
 export default function ThreeScene() {
   return (
-    <div className="w-full h-96 bg-black rounded-2xl overflow-hidden">
+    <div className="h-96 w-full overflow-hidden rounded-2xl bg-black">
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />

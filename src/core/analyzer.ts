@@ -1,4 +1,11 @@
-import type { CodeIssue, ProjectHealth, GitAnalysis, DeploymentChecklist, AnalysisResult, AnalysisModule } from '../types/analysis';
+import type {
+  CodeIssue,
+  ProjectHealth,
+  GitAnalysis,
+  DeploymentChecklist,
+  AnalysisResult,
+  AnalysisModule,
+} from '../types/analysis';
 import type { AnalyzerConfig } from '../config/schema';
 import { ConfigLoader } from '../config/config-loader';
 import { logger } from '../utils/logger';
@@ -53,8 +60,17 @@ export class ProjectAnalyzer {
             const moduleIssues = await module.analyze(this.config);
             return moduleIssues;
           } catch (error: unknown) {
-            const analysisError = error instanceof AnalysisError ? error : new AnalysisError(module.name, error instanceof Error ? error : new Error(String(error)));
-            logger.error(`Analysis module '${module.name}' failed`, analysisError);
+            const analysisError =
+              error instanceof AnalysisError
+                ? error
+                : new AnalysisError(
+                    module.name,
+                    error instanceof Error ? error : new Error(String(error))
+                  );
+            logger.error(
+              `Analysis module '${module.name}' failed`,
+              analysisError
+            );
             // Return an empty array of issues for this module to allow others to continue
             return [];
           }
@@ -67,7 +83,10 @@ export class ProjectAnalyzer {
           issues.push(...result.value);
         } else {
           // Log rejected promises, which should ideally be caught by individual modules
-          logger.error('An analysis module promise was rejected', result.reason);
+          logger.error(
+            'An analysis module promise was rejected',
+            result.reason
+          );
         }
       });
 
@@ -88,7 +107,14 @@ export class ProjectAnalyzer {
         deployment: deploymentChecklist, // Will be populated by DeploymentAnalyzer
       };
     } catch (error: unknown) {
-      const analysisError = error instanceof AnalysisError ? error : new AnalysisError('ProjectAnalyzer', error instanceof Error ? error : new Error(String(error)), 'Overall project analysis failed');
+      const analysisError =
+        error instanceof AnalysisError
+          ? error
+          : new AnalysisError(
+              'ProjectAnalyzer',
+              error instanceof Error ? error : new Error(String(error)),
+              'Overall project analysis failed'
+            );
       logger.fatal('Overall project analysis failed', analysisError);
       throw analysisError;
     }
@@ -101,24 +127,31 @@ export class ProjectAnalyzer {
     const mediumWeight = 5;
     const lowWeight = 1;
 
-    const criticalIssues = issues.filter(i => i.severity.level === 'critical').length;
+    const criticalIssues = issues.filter(
+      i => i.severity.level === 'critical'
+    ).length;
     const highIssues = issues.filter(i => i.severity.level === 'high').length;
-    const mediumIssues = issues.filter(i => i.severity.level === 'medium').length;
+    const mediumIssues = issues.filter(
+      i => i.severity.level === 'medium'
+    ).length;
     const lowIssues = issues.filter(i => i.severity.level === 'low').length;
     const totalIssues = issues.length;
 
-    const deductions = 
-      (criticalIssues * criticalWeight) +
-      (highIssues * highWeight) +
-      (mediumIssues * mediumWeight) +
-      (lowIssues * lowWeight);
+    const deductions =
+      criticalIssues * criticalWeight +
+      highIssues * highWeight +
+      mediumIssues * mediumWeight +
+      lowIssues * lowWeight;
 
     score = Math.max(0, score - deductions);
 
-    const categories = issues.reduce((acc, issue) => {
-      acc[issue.category] = (acc[issue.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const categories = issues.reduce(
+      (acc, issue) => {
+        acc[issue.category] = (acc[issue.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return {
       score: Math.round(score),

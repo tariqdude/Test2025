@@ -23,7 +23,12 @@ export async function executeCommand(
   command: string,
   options: CommandOptions = {}
 ): Promise<CommandResult> {
-  const { cwd, timeout = 60000, maxBuffer = 10 * 1024 * 1024, ignoreExitCode = false } = options; // Default timeout 60s, maxBuffer 10MB
+  const {
+    cwd,
+    timeout = 60000,
+    maxBuffer = 10 * 1024 * 1024,
+    ignoreExitCode = false,
+  } = options; // Default timeout 60s, maxBuffer 10MB
 
   try {
     const { stdout, stderr } = await execPromise(command, {
@@ -40,7 +45,12 @@ export async function executeCommand(
       signal: null,
     };
   } catch (error: unknown) {
-    const err = error as ExecException & { stdout: string; stderr: string; code: number | null; signal: NodeJS.Signals | null };
+    const err = error as ExecException & {
+      stdout: string;
+      stderr: string;
+      code: number | null;
+      signal: NodeJS.Signals | null;
+    };
 
     if (!ignoreExitCode) {
       throw new CommandExecutionError(
@@ -61,4 +71,3 @@ export async function executeCommand(
     };
   }
 }
-

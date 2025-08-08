@@ -14,7 +14,12 @@ vi.mock('../utils/command-executor', () => ({
       return { stdout: '', stderr: '', exitCode: 0, signal: null };
     }
     if (command.includes('git')) {
-      return { stdout: 'branch\ncommit', stderr: '', exitCode: 0, signal: null };
+      return {
+        stdout: 'branch\ncommit',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+      };
     }
     if (command.includes('astro build')) {
       return { stdout: '', stderr: '', exitCode: 0, signal: null };
@@ -36,14 +41,26 @@ vi.mock('../config/config-loader', () => ({
   ConfigLoader: {
     loadConfig: vi.fn(async (config: Partial<AnalyzerConfig>) => {
       if (config.projectRoot === 'fatal-error') {
-        throw new ConfigurationError('ConfigLoader', 'Simulated fatal config error');
+        throw new ConfigurationError(
+          'ConfigLoader',
+          'Simulated fatal config error'
+        );
       }
-      return { // Mock a valid config
+      return {
+        // Mock a valid config
         projectRoot: '/mock/project',
         ignore: [],
         include: [],
         frameworks: [],
-        enabledAnalyzers: ['syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'],
+        enabledAnalyzers: [
+          'syntax',
+          'types',
+          'security',
+          'performance',
+          'accessibility',
+          'git',
+          'deployment',
+        ],
         severityThreshold: 'low',
         outputFormat: 'terminal',
         githubIntegration: true,
@@ -77,7 +94,9 @@ describe('ProjectAnalyzer', () => {
     expect(result).toBeDefined();
     expect(result.issues).toBeInstanceOf(Array);
     expect(result.health).toBeDefined();
-    expect(logger.info).toHaveBeenCalledWith('Starting comprehensive project analysis...');
+    expect(logger.info).toHaveBeenCalledWith(
+      'Starting comprehensive project analysis...'
+    );
     expect(logger.info).toHaveBeenCalledWith('Project analysis complete.');
   });
 
@@ -103,8 +122,34 @@ describe('ProjectAnalyzer', () => {
   it('should calculate project health correctly', async () => {
     // Simulate some issues
     vi.spyOn(SyntaxAnalyzer.prototype, 'analyze').mockResolvedValueOnce([
-      { id: '1', type: 'syntax', severity: { level: 'critical', impact: 'blocking', urgency: 'immediate' }, title: 'Crit', description: '', file: '', rule: '', category: 'Syntax', source: '', autoFixable: false },
-      { id: '2', type: 'syntax', severity: { level: 'high', impact: 'major', urgency: 'high' }, title: 'High', description: '', file: '', rule: '', category: 'Syntax', source: '', autoFixable: false },
+      {
+        id: '1',
+        type: 'syntax',
+        severity: {
+          level: 'critical',
+          impact: 'blocking',
+          urgency: 'immediate',
+        },
+        title: 'Crit',
+        description: '',
+        file: '',
+        rule: '',
+        category: 'Syntax',
+        source: '',
+        autoFixable: false,
+      },
+      {
+        id: '2',
+        type: 'syntax',
+        severity: { level: 'high', impact: 'major', urgency: 'high' },
+        title: 'High',
+        description: '',
+        file: '',
+        rule: '',
+        category: 'Syntax',
+        source: '',
+        autoFixable: false,
+      },
     ]);
 
     const result = await analyzer.analyze();
@@ -120,7 +165,9 @@ describe('ProjectAnalyzer', () => {
     const fatalConfig = { projectRoot: 'fatal-error' };
     const analyzerWithFatalConfig = new ProjectAnalyzer(fatalConfig);
 
-    await expect(analyzerWithFatalConfig.analyze()).rejects.toThrow(AnalysisError);
+    await expect(analyzerWithFatalConfig.analyze()).rejects.toThrow(
+      AnalysisError
+    );
     expect(logger.fatal).toHaveBeenCalledWith(
       expect.stringContaining('Overall project analysis failed'),
       expect.objectContaining({
@@ -136,21 +183,21 @@ describe('ProjectAnalyzer', () => {
     );
   });
 
-  
-
   // Test report generation (simulated)
   it('should generate reports in different formats', async () => {
     const analysisResult = await analyzer.analyze();
 
     // Deep copy and convert Date to string for comparison
     const comparableResult = JSON.parse(JSON.stringify(analysisResult));
-    comparableResult.health.trends.lastCheck = analysisResult.health.trends.lastCheck.toISOString();
+    comparableResult.health.trends.lastCheck =
+      analysisResult.health.trends.lastCheck.toISOString();
 
     const jsonReport = ReportGenerator.generateJsonReport(analysisResult);
     expect(jsonReport).toBeTypeOf('string');
     expect(JSON.parse(jsonReport)).toEqual(comparableResult);
 
-    const markdownReport = ReportGenerator.generateMarkdownReport(analysisResult);
+    const markdownReport =
+      ReportGenerator.generateMarkdownReport(analysisResult);
     expect(markdownReport).toBeTypeOf('string');
     expect(markdownReport).toContain('# Project Health Report');
 

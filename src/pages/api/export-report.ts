@@ -10,7 +10,7 @@ import { ReportGenerator } from '../../utils/report-generator';
 export const GET: APIRoute = async ({ url }) => {
   try {
     const searchParams = new URL(url).searchParams;
-    
+
     // Parse query parameters
     const format = searchParams.get('format') || 'markdown';
     const projectRoot = searchParams.get('projectRoot') || process.cwd();
@@ -21,14 +21,20 @@ export const GET: APIRoute = async ({ url }) => {
     // Validate format
     const validFormats = ['json', 'markdown', 'html'];
     if (!validFormats.includes(format)) {
-      const error = new ConfigurationError('outputFormat', `Invalid format. Must be one of: ${validFormats.join(', ')}`);
-      return new Response(JSON.stringify({
-        error: error.message,
-        code: error.code,
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const error = new ConfigurationError(
+        'outputFormat',
+        `Invalid format. Must be one of: ${validFormats.join(', ')}`
+      );
+      return new Response(
+        JSON.stringify({
+          error: error.message,
+          code: error.code,
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     // Initialize analyzer
@@ -36,7 +42,11 @@ export const GET: APIRoute = async ({ url }) => {
       projectRoot,
       severityThreshold: severity as 'critical' | 'high' | 'medium' | 'low',
       enabledAnalyzers: [
-        'syntax', 'types', 'security', 'performance', 'accessibility',
+        'syntax',
+        'types',
+        'security',
+        'performance',
+        'accessibility',
         ...(includeGit ? ['git'] : []),
         ...(includeDeployment ? ['deployment'] : []),
       ],
@@ -63,7 +73,7 @@ export const GET: APIRoute = async ({ url }) => {
     // Determine content type and filename
     let contentType = 'text/plain';
     let filename = `error-report.${format}`;
-    
+
     switch (format) {
       case 'json':
         contentType = 'application/json';
@@ -86,39 +96,49 @@ export const GET: APIRoute = async ({ url }) => {
         'Cache-Control': 'no-cache',
       },
     });
-
   } catch (error: unknown) {
-    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    const err =
+      error instanceof AppError
+        ? error
+        : new AppError(String(error), 'UNKNOWN_API_ERROR');
     logger.error('Export report API error', err);
-    
-    return new Response(JSON.stringify({
-      success: false,
-      error: err.message,
-      code: err.code,
-      details: err.details,
-      timestamp: new Date().toISOString(),
-    }), {
-      status: error instanceof NetworkError ? error.status : 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: err.message,
+        code: err.code,
+        details: err.details,
+        timestamp: new Date().toISOString(),
+      }),
+      {
+        status: error instanceof NetworkError ? error.status : 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 };
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const {
-      format = 'markdown',
-      projectRoot,
-      enabledAnalyzers = [],
-    } = body;
+    const { format = 'markdown', projectRoot, enabledAnalyzers = [] } = body;
 
     // Initialize analyzer with custom configuration
     const analyzer = new ProjectAnalyzer({
       projectRoot: projectRoot || process.cwd(),
-      enabledAnalyzers: enabledAnalyzers.length > 0 ? enabledAnalyzers : [
-        'syntax', 'types', 'security', 'performance', 'accessibility', 'git', 'deployment'
-      ],
+      enabledAnalyzers:
+        enabledAnalyzers.length > 0
+          ? enabledAnalyzers
+          : [
+              'syntax',
+              'types',
+              'security',
+              'performance',
+              'accessibility',
+              'git',
+              'deployment',
+            ],
     });
 
     // Run analysis
@@ -140,7 +160,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Prepare response data
-    const responseData: { success: boolean; format: string; timestamp: string; report: string; } = {
+    const responseData: {
+      success: boolean;
+      format: string;
+      timestamp: string;
+      report: string;
+    } = {
       success: true,
       format,
       timestamp: new Date().toISOString(),
@@ -151,19 +176,24 @@ export const POST: APIRoute = async ({ request }) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-
   } catch (error: unknown) {
-    const err = error instanceof AppError ? error : new AppError(String(error), 'UNKNOWN_API_ERROR');
+    const err =
+      error instanceof AppError
+        ? error
+        : new AppError(String(error), 'UNKNOWN_API_ERROR');
     logger.error('Export report POST API error', err);
-    
-    return new Response(JSON.stringify({
-      success: false,
-      error: err.message,
-      code: err.code,
-      details: err.details,
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: err.message,
+        code: err.code,
+        details: err.details,
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 };

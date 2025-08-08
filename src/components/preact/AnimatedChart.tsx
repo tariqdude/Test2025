@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'preact/hooks';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'preact/hooks';
 
 // ===============================================
 // INTERFACES & TYPES
@@ -122,7 +128,11 @@ const validateDataPoint = (point: DataPoint): ChartError | null => {
       severity: 'high',
     };
   }
-  if (typeof point.value !== 'number' || isNaN(point.value) || point.value < 0) {
+  if (
+    typeof point.value !== 'number' ||
+    isNaN(point.value) ||
+    point.value < 0
+  ) {
     return {
       type: 'validation',
       message: `Invalid value for ${point.label}: ${point.value}`,
@@ -157,7 +167,8 @@ const getEasingFunction = (easing: AnimationConfig['easing']) => {
     linear: (t: number) => t,
     'ease-in': (t: number) => t * t,
     'ease-out': (t: number) => 1 - Math.pow(1 - t, 2),
-    'ease-in-out': (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+    'ease-in-out': (t: number) =>
+      t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
     bounce: (t: number) => {
       const n1 = 7.5625;
       const d1 = 2.75;
@@ -189,7 +200,7 @@ export default function EnhancedPreactChart({
 }: ChartProps) {
   // Note: showLegend is available but not used in current implementation
   void showLegend;
-  
+
   // ===============================================
   // STATE MANAGEMENT
   // ===============================================
@@ -258,7 +269,9 @@ export default function EnhancedPreactChart({
   const [errors, setErrors] = useState<ChartError[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [chartMode, setChartMode] = useState<'percentage' | 'absolute' | 'comparative'>('percentage');
+  const [chartMode, setChartMode] = useState<
+    'percentage' | 'absolute' | 'comparative'
+  >('percentage');
   const [showStats, setShowStats] = useState(true);
   const animationRef = useRef<number>();
 
@@ -266,13 +279,16 @@ export default function EnhancedPreactChart({
   // CONFIGURATION
   // ===============================================
 
-  const config: AnimationConfig = useMemo(() => ({
-    duration: 1000,
-    easing: 'ease-out',
-    delay: 0,
-    stagger: 100,
-    ...animationConfig,
-  }), [animationConfig]);
+  const config: AnimationConfig = useMemo(
+    () => ({
+      duration: 1000,
+      easing: 'ease-out',
+      delay: 0,
+      stagger: 100,
+      ...animationConfig,
+    }),
+    [animationConfig]
+  );
 
   const currentTheme = useMemo(() => themes[theme] || themes.dark, [theme]);
 
@@ -280,11 +296,14 @@ export default function EnhancedPreactChart({
   // ERROR HANDLING
   // ===============================================
 
-  const handleError = useCallback((error: ChartError) => {
-    setErrors(prev => [...prev.slice(-9), error]);
-    onError?.(error);
-    console.error(`[Chart Error - ${error.severity}]:`, error.message);
-  }, [onError]);
+  const handleError = useCallback(
+    (error: ChartError) => {
+      setErrors(prev => [...prev.slice(-9), error]);
+      onError?.(error);
+      console.error(`[Chart Error - ${error.severity}]:`, error.message);
+    },
+    [onError]
+  );
 
   const clearErrors = useCallback(() => {
     setErrors([]);
@@ -294,31 +313,36 @@ export default function EnhancedPreactChart({
   // DATA MANAGEMENT
   // ===============================================
 
-  const validateData = useCallback((newData: DataPoint[]) => {
-    const validationErrors: ChartError[] = [];
-    newData.forEach(point => {
-      const error = validateDataPoint(point);
-      if (error) validationErrors.push(error);
-    });
-    
-    if (validationErrors.length > 0) {
-      validationErrors.forEach(handleError);
-      return false;
-    }
-    return true;
-  }, [handleError]);
+  const validateData = useCallback(
+    (newData: DataPoint[]) => {
+      const validationErrors: ChartError[] = [];
+      newData.forEach(point => {
+        const error = validateDataPoint(point);
+        if (error) validationErrors.push(error);
+      });
+
+      if (validationErrors.length > 0) {
+        validationErrors.forEach(handleError);
+        return false;
+      }
+      return true;
+    },
+    [handleError]
+  );
 
   const maxValue = useMemo(() => {
     const max = Math.max(...data.map(d => d.value));
     return max > 0 ? max : 100;
   }, [data]);
 
-  const totalValue = useMemo(() => 
-    data.reduce((sum, item) => sum + item.value, 0), [data]
+  const totalValue = useMemo(
+    () => data.reduce((sum, item) => sum + item.value, 0),
+    [data]
   );
 
-  const averageValue = useMemo(() => 
-    data.length > 0 ? totalValue / data.length : 0, [totalValue, data.length]
+  const averageValue = useMemo(
+    () => (data.length > 0 ? totalValue / data.length : 0),
+    [totalValue, data.length]
   );
 
   // ===============================================
@@ -327,7 +351,7 @@ export default function EnhancedPreactChart({
 
   const animateToTargets = useCallback(() => {
     if (isAnimating) return;
-    
+
     setIsAnimating(true);
     const startTime = Date.now();
     const easingFn = getEasingFunction(config.easing);
@@ -337,18 +361,22 @@ export default function EnhancedPreactChart({
       const progress = Math.min(elapsed / config.duration, 1);
       const _easedProgress = easingFn(progress);
 
-      setAnimatedData(prev => 
+      setAnimatedData(prev =>
         prev.map((item, index) => {
           const target = data[index];
           if (!target) return item;
 
           const staggerDelay = index * config.stagger;
-          const adjustedProgress = Math.max(0, Math.min(1, (elapsed - staggerDelay) / config.duration));
+          const adjustedProgress = Math.max(
+            0,
+            Math.min(1, (elapsed - staggerDelay) / config.duration)
+          );
           const easedStaggerProgress = easingFn(adjustedProgress);
 
           return {
             ...item,
-            value: item.value + (target.value - item.value) * easedStaggerProgress,
+            value:
+              item.value + (target.value - item.value) * easedStaggerProgress,
           };
         })
       );
@@ -407,20 +435,24 @@ export default function EnhancedPreactChart({
     const frameworks = ['Angular', 'Ember', 'Backbone', 'Knockout', 'Alpine'];
     const colors = ['#dd0031', '#e04e39', '#0071b5', '#8dc63f', '#8bc34a'];
     const available = frameworks.filter(f => !data.some(d => d.label === f));
-    
+
     if (available.length === 0) return;
-    
-    const randomFramework = available[Math.floor(Math.random() * available.length)];
+
+    const randomFramework =
+      available[Math.floor(Math.random() * available.length)];
     const randomColor = colors[frameworks.indexOf(randomFramework)];
-    
+
     const newPoint = generateRandomDataPoint(randomFramework, randomColor);
     setData(prev => [...prev, newPoint]);
   }, [data]);
 
-  const removeFramework = useCallback((id: string) => {
-    setData(prev => prev.filter(item => item.id !== id));
-    if (selectedItem === id) setSelectedItem(null);
-  }, [selectedItem]);
+  const removeFramework = useCallback(
+    (id: string) => {
+      setData(prev => prev.filter(item => item.id !== id));
+      if (selectedItem === id) setSelectedItem(null);
+    },
+    [selectedItem]
+  );
 
   const resetData = useCallback(() => {
     setData([
@@ -464,8 +496,8 @@ export default function EnhancedPreactChart({
     if (!showTooltips || selectedItem !== item.id) return null;
 
     return (
-      <div 
-        className="absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl border border-gray-700 min-w-64"
+      <div
+        className="absolute z-50 min-w-64 rounded-lg border border-gray-700 bg-gray-900 p-3 text-white shadow-xl"
         style={{
           left: '50%',
           transform: 'translateX(-50%)',
@@ -473,17 +505,17 @@ export default function EnhancedPreactChart({
           marginTop: '-8px',
         }}
       >
-        <div className="text-sm font-semibold mb-1">{item.label}</div>
-        <div className="text-xs text-gray-300 mb-2">{item.description}</div>
-        <div className="flex justify-between items-center text-xs">
+        <div className="mb-1 text-sm font-semibold">{item.label}</div>
+        <div className="mb-2 text-xs text-gray-300">{item.description}</div>
+        <div className="flex items-center justify-between text-xs">
           <span>Value: {Math.round(item.value)}%</span>
           <span className="flex items-center gap-1">
             {renderTrendIcon(item.trend)}
             {item.trendValue}%
           </span>
         </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
-          <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900"></div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full transform">
+          <div className="h-0 w-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900"></div>
         </div>
       </div>
     );
@@ -493,17 +525,19 @@ export default function EnhancedPreactChart({
     if (errors.length === 0) return null;
 
     return (
-      <div className="mb-4 p-3 bg-red-900/20 border border-red-700/50 rounded-lg">
-        <div className="flex justify-between items-center mb-2">
-          <h4 className="text-red-400 font-semibold text-sm">Chart Errors ({errors.length})</h4>
-          <button 
+      <div className="mb-4 rounded-lg border border-red-700/50 bg-red-900/20 p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <h4 className="text-sm font-semibold text-red-400">
+            Chart Errors ({errors.length})
+          </h4>
+          <button
             onClick={clearErrors}
-            className="text-red-400 hover:text-red-300 text-xs"
+            className="text-xs text-red-400 hover:text-red-300"
           >
             Clear
           </button>
         </div>
-        <div className="space-y-1 max-h-20 overflow-y-auto">
+        <div className="max-h-20 space-y-1 overflow-y-auto">
           {errors.slice(-3).map((error, index) => (
             <div key={index} className="text-xs text-red-300">
               [{error.severity.toUpperCase()}] {error.message}
@@ -519,8 +553,8 @@ export default function EnhancedPreactChart({
   // ===============================================
 
   return (
-    <div 
-      className={`w-full rounded-2xl p-6 shadow-2xl border transition-all duration-500 ${className}`}
+    <div
+      className={`w-full rounded-2xl border p-6 shadow-2xl transition-all duration-500 ${className}`}
       style={{
         height: `${height}px`,
         backgroundColor: currentTheme.surface,
@@ -532,27 +566,24 @@ export default function EnhancedPreactChart({
       {renderErrorPanel()}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h3 
-            className="text-xl font-bold mb-1"
+          <h3
+            className="mb-1 text-xl font-bold"
             style={{ color: currentTheme.text.primary }}
           >
             {title}
           </h3>
-          <p 
-            className="text-sm"
-            style={{ color: currentTheme.text.muted }}
-          >
+          <p className="text-sm" style={{ color: currentTheme.text.muted }}>
             {subtitle}
           </p>
         </div>
-        
+
         <div className="flex flex-wrap gap-2">
-          <button 
+          <button
             onClick={shuffleData}
             disabled={isAnimating}
-            className="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50"
+            className="rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50"
             style={{
               background: currentTheme.gradients.primary,
               color: currentTheme.text.primary,
@@ -560,10 +591,10 @@ export default function EnhancedPreactChart({
           >
             🎲 Randomize
           </button>
-          
-          <button 
+
+          <button
             onClick={addRandomFramework}
-            className="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
+            className="rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105"
             style={{
               background: currentTheme.gradients.secondary,
               color: currentTheme.text.primary,
@@ -571,10 +602,10 @@ export default function EnhancedPreactChart({
           >
             ➕ Add
           </button>
-          
-          <button 
+
+          <button
             onClick={resetData}
-            className="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
+            className="rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105"
             style={{
               backgroundColor: currentTheme.accent,
               color: currentTheme.text.primary,
@@ -587,63 +618,63 @@ export default function EnhancedPreactChart({
 
       {/* Stats Panel */}
       {showStats && (
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div 
-            className="p-3 rounded-lg border"
+        <div className="mb-6 grid grid-cols-3 gap-4">
+          <div
+            className="rounded-lg border p-3"
             style={{
               backgroundColor: currentTheme.background,
               borderColor: currentTheme.border,
             }}
           >
-            <div 
-              className="text-xs font-medium mb-1"
+            <div
+              className="mb-1 text-xs font-medium"
               style={{ color: currentTheme.text.muted }}
             >
               Total
             </div>
-            <div 
+            <div
               className="text-lg font-bold"
               style={{ color: currentTheme.text.primary }}
             >
               {Math.round(totalValue)}%
             </div>
           </div>
-          
-          <div 
-            className="p-3 rounded-lg border"
+
+          <div
+            className="rounded-lg border p-3"
             style={{
               backgroundColor: currentTheme.background,
               borderColor: currentTheme.border,
             }}
           >
-            <div 
-              className="text-xs font-medium mb-1"
+            <div
+              className="mb-1 text-xs font-medium"
               style={{ color: currentTheme.text.muted }}
             >
               Average
             </div>
-            <div 
+            <div
               className="text-lg font-bold"
               style={{ color: currentTheme.text.primary }}
             >
               {Math.round(averageValue)}%
             </div>
           </div>
-          
-          <div 
-            className="p-3 rounded-lg border"
+
+          <div
+            className="rounded-lg border p-3"
             style={{
               backgroundColor: currentTheme.background,
               borderColor: currentTheme.border,
             }}
           >
-            <div 
-              className="text-xs font-medium mb-1"
+            <div
+              className="mb-1 text-xs font-medium"
               style={{ color: currentTheme.text.muted }}
             >
               Items
             </div>
-            <div 
+            <div
               className="text-lg font-bold"
               style={{ color: currentTheme.text.primary }}
             >
@@ -654,28 +685,29 @@ export default function EnhancedPreactChart({
       )}
 
       {/* Chart */}
-      <div className="space-y-4 flex-1 overflow-y-auto">
+      <div className="flex-1 space-y-4 overflow-y-auto">
         {animatedData.map((item, index) => (
-          <div 
+          <div
             key={item.id}
-            className="relative group cursor-pointer"
-            onClick={() => enableInteraction && setSelectedItem(
-              selectedItem === item.id ? null : item.id
-            )}
+            className="group relative cursor-pointer"
+            onClick={() =>
+              enableInteraction &&
+              setSelectedItem(selectedItem === item.id ? null : item.id)
+            }
           >
             {renderTooltip(item, index)}
-            
+
             <div className="flex items-center space-x-4">
               {/* Label */}
-              <div className="w-20 text-sm font-medium flex-shrink-0">
-                <div 
+              <div className="w-20 flex-shrink-0 text-sm font-medium">
+                <div
                   style={{ color: currentTheme.text.secondary }}
                   className="truncate"
                 >
                   {item.label}
                 </div>
                 {item.trend && (
-                  <div className="text-xs flex items-center gap-1 mt-1">
+                  <div className="mt-1 flex items-center gap-1 text-xs">
                     <span>{renderTrendIcon(item.trend)}</span>
                     <span style={{ color: currentTheme.text.muted }}>
                       {item.trendValue}%
@@ -683,17 +715,17 @@ export default function EnhancedPreactChart({
                   </div>
                 )}
               </div>
-              
+
               {/* Progress Bar */}
-              <div 
-                className="flex-1 rounded-full h-6 relative overflow-hidden border transition-all duration-300"
+              <div
+                className="relative h-6 flex-1 overflow-hidden rounded-full border transition-all duration-300"
                 style={{
                   backgroundColor: currentTheme.background,
                   borderColor: currentTheme.border,
                 }}
               >
-                <div 
-                  className="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden"
+                <div
+                  className="relative h-full overflow-hidden rounded-full transition-all duration-700 ease-out"
                   style={{
                     width: `${Math.max(0, Math.min(100, (item.value / maxValue) * 100))}%`,
                     background: item.gradient || item.color,
@@ -701,16 +733,16 @@ export default function EnhancedPreactChart({
                   }}
                 >
                   {/* Animated shine effect */}
-                  <div 
+                  <div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                     style={{
                       animation: `shimmer 2s ease-in-out infinite`,
                       animationDelay: `${index * 0.2}s`,
                     }}
                   />
-                  
+
                   {/* Pattern overlay */}
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-20"
                     style={{
                       background: `repeating-linear-gradient(
@@ -724,14 +756,14 @@ export default function EnhancedPreactChart({
                   />
                 </div>
               </div>
-              
+
               {/* Value Display */}
-              <div className="w-16 text-sm font-bold text-right">
+              <div className="w-16 text-right text-sm font-bold">
                 <div style={{ color: currentTheme.text.primary }}>
                   {Math.round(item.value)}%
                 </div>
                 {chartMode === 'comparative' && (
-                  <div 
+                  <div
                     className="text-xs"
                     style={{ color: currentTheme.text.muted }}
                   >
@@ -739,15 +771,15 @@ export default function EnhancedPreactChart({
                   </div>
                 )}
               </div>
-              
+
               {/* Remove Button */}
               {enableInteraction && data.length > 2 && (
                 <button
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     removeFramework(item.id);
                   }}
-                  className="w-6 h-6 rounded-full text-xs hover:bg-red-500/20 transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                  className="h-6 w-6 rounded-full text-xs opacity-0 transition-colors duration-200 hover:bg-red-500/20 group-hover:opacity-100"
                   style={{ color: currentTheme.accent }}
                 >
                   ×
@@ -759,38 +791,52 @@ export default function EnhancedPreactChart({
       </div>
 
       {/* Footer */}
-      <div 
-        className="mt-4 pt-4 border-t flex justify-between items-center text-xs"
+      <div
+        className="mt-4 flex items-center justify-between border-t pt-4 text-xs"
         style={{
           borderColor: currentTheme.border,
           color: currentTheme.text.muted,
         }}
       >
         <div className="flex items-center gap-2">
-          <div 
-            className="w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: isAnimating ? currentTheme.accent : currentTheme.primary }}
+          <div
+            className="h-2 w-2 animate-pulse rounded-full"
+            style={{
+              backgroundColor: isAnimating
+                ? currentTheme.accent
+                : currentTheme.primary,
+            }}
           />
           <span>
-            {isAnimating ? 'Animating...' : 'Ready'} • Preact Chart • {data.length} items
+            {isAnimating ? 'Animating...' : 'Ready'} • Preact Chart •{' '}
+            {data.length} items
           </span>
         </div>
-        
+
         <div className="flex gap-2">
           <button
             onClick={() => setShowStats(!showStats)}
-            className="hover:opacity-70 transition-opacity"
+            className="transition-opacity hover:opacity-70"
           >
             📊
           </button>
           <button
-            onClick={() => setChartMode(
-              chartMode === 'percentage' ? 'absolute' : 
-              chartMode === 'absolute' ? 'comparative' : 'percentage'
-            )}
-            className="hover:opacity-70 transition-opacity"
+            onClick={() =>
+              setChartMode(
+                chartMode === 'percentage'
+                  ? 'absolute'
+                  : chartMode === 'absolute'
+                    ? 'comparative'
+                    : 'percentage'
+              )
+            }
+            className="transition-opacity hover:opacity-70"
           >
-            {chartMode === 'percentage' ? '%' : chartMode === 'absolute' ? '#' : '📈'}
+            {chartMode === 'percentage'
+              ? '%'
+              : chartMode === 'absolute'
+                ? '#'
+                : '📈'}
           </button>
         </div>
       </div>

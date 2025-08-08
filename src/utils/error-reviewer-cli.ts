@@ -11,7 +11,11 @@ import { AnalyzerConfig } from '../config/schema';
 import chokidar from 'chokidar';
 
 class Cli {
-  private args: Partial<AnalyzerConfig> & { output?: string; format?: 'json' | 'markdown' | 'html'; verbose?: boolean; };
+  private args: Partial<AnalyzerConfig> & {
+    output?: string;
+    format?: 'json' | 'markdown' | 'html';
+    verbose?: boolean;
+  };
 
   constructor() {
     this.args = yargs(hideBin(process.argv))
@@ -129,9 +133,11 @@ class Cli {
       } else {
         logger.info('CLI execution finished.');
       }
-
     } catch (error: unknown) {
-      const err = error instanceof AppError ? error : new AppError(String(error), 'CLI_ERROR');
+      const err =
+        error instanceof AppError
+          ? error
+          : new AppError(String(error), 'CLI_ERROR');
       logger.fatal('CLI encountered a fatal error', err);
       process.exit(1);
     }

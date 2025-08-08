@@ -27,11 +27,22 @@ class Logger {
   }
 
   private shouldLog(level: LogLevel): boolean {
-    const levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR, LogLevel.FATAL];
+    const levels = [
+      LogLevel.DEBUG,
+      LogLevel.INFO,
+      LogLevel.WARN,
+      LogLevel.ERROR,
+      LogLevel.FATAL,
+    ];
     return levels.indexOf(level) >= levels.indexOf(this.minLevel);
   }
 
-  private formatMessage(level: LogLevel, message: string, context?: Record<string, any>, error?: Error): LogEntry {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, any>,
+    error?: Error
+  ): LogEntry {
     const logEntry: LogEntry = {
       timestamp: new Date().toISOString(),
       level,

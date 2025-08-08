@@ -1,4 +1,9 @@
-import type { AnalysisModule, CodeIssue, AnalyzerConfig, GitAnalysis } from '../types/analysis';
+import type {
+  AnalysisModule,
+  CodeIssue,
+  AnalyzerConfig,
+  GitAnalysis,
+} from '../types/analysis';
 import { executeCommand } from '../utils/command-executor';
 import { AnalysisError, CommandExecutionError } from '../errors';
 import { logger } from '../utils/logger';
@@ -32,9 +37,15 @@ export class GitAnalyzer implements AnalysisModule {
         branchStatus: 'up-to-date', // Simplified for now
         conflicts: false,
         fileChanges: {
-          added: statusLines.filter(line => line.startsWith('A ')).map(line => line.substring(3)),
-          modified: statusLines.filter(line => line.startsWith('M ')).map(line => line.substring(3)),
-          deleted: statusLines.filter(line => line.startsWith('D ')).map(line => line.substring(3)),
+          added: statusLines
+            .filter(line => line.startsWith('A '))
+            .map(line => line.substring(3)),
+          modified: statusLines
+            .filter(line => line.startsWith('M '))
+            .map(line => line.substring(3)),
+          deleted: statusLines
+            .filter(line => line.startsWith('D '))
+            .map(line => line.substring(3)),
         },
       };
 
@@ -61,17 +72,37 @@ export class GitAnalyzer implements AnalysisModule {
           },
         });
       }
-
     } catch (error: unknown) {
-      const analysisError = error instanceof CommandExecutionError ? 
-        new AnalysisError(this.name, error, `Failed to run Git command: ${error.message}`) :
-        new AnalysisError(this.name, error instanceof Error ? error : new Error(String(error)));
-      logger.warn(`Git analysis failed: ${analysisError.message}`, { error: analysisError });
+      const analysisError =
+        error instanceof CommandExecutionError
+          ? new AnalysisError(
+              this.name,
+              error,
+              `Failed to run Git command: ${error.message}`
+            )
+          : new AnalysisError(
+              this.name,
+              error instanceof Error ? error : new Error(String(error))
+            );
+      logger.warn(`Git analysis failed: ${analysisError.message}`, {
+        error: analysisError,
+      });
     }
     return issues;
   }
 
-  private async executeCommand(command: string, config: AnalyzerConfig): Promise<{ stdout: string; stderr: string; exitCode: number | null; signal: NodeJS.Signals | null }> {
-    return executeCommand(command, { cwd: config.projectRoot, ignoreExitCode: true });
+  private async executeCommand(
+    command: string,
+    config: AnalyzerConfig
+  ): Promise<{
+    stdout: string;
+    stderr: string;
+    exitCode: number | null;
+    signal: NodeJS.Signals | null;
+  }> {
+    return executeCommand(command, {
+      cwd: config.projectRoot,
+      ignoreExitCode: true,
+    });
   }
 }

@@ -11,12 +11,16 @@ export class ReportGenerator {
           <p>Total Issues: ${analysis.health.totalIssues}</p>
           <h2>Issues</h2>
           <ul>
-            ${analysis.issues.map((issue: CodeIssue) => `
+            ${analysis.issues
+              .map(
+                (issue: CodeIssue) => `
               <li>
                 <strong>${issue.title}</strong> (${issue.severity.level})
                 <br>${issue.description}
               </li>
-            `).join('')}
+            `
+              )
+              .join('')}
           </ul>
         </body>
       </html>
@@ -32,7 +36,9 @@ export class ReportGenerator {
 
 ## Issues
 
-${analysis.issues.map((issue: CodeIssue) => `
+${analysis.issues
+  .map(
+    (issue: CodeIssue) => `
 ### ${issue.title} (${issue.severity.level})
 
 ${issue.description}
@@ -40,7 +46,9 @@ ${issue.description}
 **File:** ${issue.file}
 **Line:** ${issue.line || 'N/A'}
 
-`).join('')}
+`
+  )
+  .join('')}
     `;
   }
 
