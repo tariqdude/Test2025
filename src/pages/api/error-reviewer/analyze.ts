@@ -2,15 +2,15 @@
 // Provides comprehensive project analysis data
 
 import type { APIRoute } from 'astro';
-import { AppError, _AnalysisError } from '../../../errors';
+import { AppError, AnalysisError } from '../../../errors';
 import { logger } from '../../../utils/logger';
 import { ProjectAnalyzer } from '../../../core/analyzer';
-import {
+import type {
   AnalysisResult,
-  _CodeIssue,
-  _ProjectHealth,
-  _GitAnalysis,
-  _DeploymentChecklist,
+  CodeIssue,
+  ProjectHealth,
+  GitAnalysis,
+  DeploymentChecklist,
 } from '../../../types/analysis';
 
 export const GET: APIRoute = async ({ url }) => {

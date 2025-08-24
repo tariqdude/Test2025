@@ -19,19 +19,8 @@ export default defineConfig({
     sitemap(),
     tailwind({
       applyBaseStyles: false,
-      config: './tailwind.config.ts',
+      configFile: './tailwind.config.ts',
     }),
-    react({
-      include: ['**/react/**/*'],
-    }),
-    svelte({
-      include: ['**/svelte/**/*'],
-    }),
-    solid({
-      include: ['**/solid/**/*'],
-    }),
-    preact({
-      include: ['**/preact/**/*'],
-    }),
+    react(),
   ],
 });
