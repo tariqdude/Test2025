@@ -73,6 +73,8 @@ export class ConfigurationError extends AppError {
 }
 
 export class NetworkError extends AppError {
+  public status: number;
+  
   constructor(
     url: string,
     status: number,
@@ -85,6 +87,7 @@ export class NetworkError extends AppError {
       { url, status, originalError }
     );
     this.name = 'NetworkError';
+    this.status = status;
     Object.setPrototypeOf(this, NetworkError.prototype);
   }
 }

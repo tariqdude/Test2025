@@ -2,7 +2,7 @@
 // Handles automatic fixing of detected issues
 
 import type { APIRoute } from 'astro';
-import { AppError, _AnalysisError } from '../../../errors';
+import { AppError, AnalysisError } from '../../../errors';
 import { logger } from '../../../utils/logger';
 import { ProjectAnalyzer } from '../../../core/analyzer';
 
@@ -18,7 +18,14 @@ export const POST: APIRoute = async ({ request }) => {
 
     // In a real scenario, you'd analyze first, then fix specific issues.
     // For now, we'll simulate the fix.
-    const fixResults = await analyzer.autoFix(issueIds);
+    // TODO: Implement autoFix method on ProjectAnalyzer
+    // const fixResults = await analyzer.autoFix(issueIds);
+    
+    // Simulated fix results for now
+    const fixResults = {
+      fixed: [] as any[],
+      failed: [] as any[]
+    };
 
     if (dryRun) {
       return new Response(

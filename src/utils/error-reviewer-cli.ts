@@ -7,7 +7,7 @@ import { hideBin } from 'yargs/helpers';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { ConfigLoader } from '../config/config-loader';
-import { AnalyzerConfig } from '../config/schema';
+import type { AnalyzerConfig } from '../config/schema';
 import chokidar from 'chokidar';
 
 class Cli {

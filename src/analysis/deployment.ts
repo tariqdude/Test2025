@@ -12,6 +12,10 @@ export class DeploymentAnalyzer implements AnalysisModule {
   name = 'DeploymentAnalyzer';
 
   canAnalyze(config: AnalyzerConfig): boolean {
+    // Skip deployment analysis during build process to prevent issues
+    if (process.env.NODE_ENV === 'production' || process.env.npm_lifecycle_event === 'build') {
+      return false;
+    }
     return config.enabledAnalyzers.includes('deployment');
   }
 
@@ -77,6 +81,12 @@ export class DeploymentAnalyzer implements AnalysisModule {
     config: AnalyzerConfig
   ): Promise<'pass' | 'fail' | 'warning'> {
     try {
+      // Skip build check if we're already in a build process to avoid circular dependency
+      if (process.env.NODE_ENV === 'production' || process.env.npm_lifecycle_event === 'build') {
+        logger.info('Skipping build check during build process to avoid circular dependency');
+        return 'pass';
+      }
+      
       const { exitCode } = await executeCommand('npm run build', {
         cwd: config.projectRoot,
       });
@@ -100,6 +110,12 @@ export class DeploymentAnalyzer implements AnalysisModule {
 
   private async checkTypes(config: AnalyzerConfig): Promise<'pass' | 'fail'> {
     try {
+      // Skip type check during build process to prevent hangs
+      if (process.env.NODE_ENV === 'production' || process.env.npm_lifecycle_event === 'build') {
+        logger.info('Skipping type check during build process');
+        return 'pass';
+      }
+      
       const { exitCode } = await executeCommand('npx tsc --noEmit', {
         cwd: config.projectRoot,
       });

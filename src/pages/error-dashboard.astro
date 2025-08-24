@@ -8,11 +8,17 @@ import ThemeProvider from '../components/ThemeProvider.astro';
 
 const title = 'Elite Error Reviewer Dashboard';
 const description = 'Comprehensive project health monitoring and error analysis dashboard';
+const pubDate = new Date();
+const updatedDate = new Date();
 ---
 
-<Layout title={title} description={description}>
-  <ThemeProvider>
-    <main class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+<Layout 
+  title={title} 
+  description={description} 
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+>
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <!-- Header Section -->
       <section class="py-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white">
         <div class="container mx-auto px-4">
@@ -242,7 +248,6 @@ const description = 'Comprehensive project health monitoring and error analysis 
         <!-- Status messages will be dynamically added here -->
       </div>
     </main>
-  </ThemeProvider>
 </Layout>
 
 <script>
