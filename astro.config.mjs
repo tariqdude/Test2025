@@ -10,10 +10,14 @@ import solid from '@astrojs/solid-js';
 import preact from '@astrojs/preact';
 import { defineConfig } from 'astro/config';
 
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
+
 export default defineConfig({
   // Base path only for production builds (GitHub Pages)
   base: import.meta.env.PROD ? '/Test2025/' : '/',
   site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
+  output: 'static',
   integrations: [
     mdx(),
     sitemap(),
@@ -21,6 +25,17 @@ export default defineConfig({
       applyBaseStyles: false,
       configFile: './tailwind.config.ts',
     }),
-    react(),
+    react({
+      include: ['**/react/**/*'],
+    }),
+    svelte({
+      include: ['**/svelte/**/*'],
+    }),
+    solid({
+      include: ['**/solid/**/*'],
+    }),
+    preact({
+      include: ['**/preact/**/*'],
+    }),
   ],
 });

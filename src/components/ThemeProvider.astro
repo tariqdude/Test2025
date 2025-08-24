@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { theme = 'dark', className = '' } = Astro.props;
-const currentTheme = themes[theme];
+const currentTheme = themes[theme] || themes.dark;
 ---
 
 <div 
