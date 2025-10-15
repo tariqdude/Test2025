@@ -11,15 +11,35 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+*.log
 
 # environment variables
 .env
-**/.env
+.env.local
 .env.production
+.env.*.local
 
-# macOS-specific files
+# OS-specific files
 .DS_Store
+Thumbs.db
+Desktop.ini
 
-# jetbrains setting folder
+# IDE settings (keep .vscode for workspace settings)
 .idea/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Error reports
+error-report.html
+error-analysis.json
+README-ERRORS.md

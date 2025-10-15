@@ -10,9 +10,6 @@ import solid from '@astrojs/solid-js';
 import preact from '@astrojs/preact';
 import { defineConfig } from 'astro/config';
 
-import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
-
 export default defineConfig({
   // Base path only for production builds (GitHub Pages)
   base: import.meta.env.PROD ? '/Test2025/' : '/',
