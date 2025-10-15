@@ -52,6 +52,7 @@ describe('Individual Analysis Modules', () => {
       deploymentChecks: true,
       autoFix: false,
       watchMode: false,
+      enableCache: true,
     };
   });
 

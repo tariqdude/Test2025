@@ -15,6 +15,7 @@ class Cli {
     output?: string;
     format?: 'json' | 'markdown' | 'html';
     verbose?: boolean;
+    clearCache?: boolean;
   };
 
   constructor() {
@@ -53,6 +54,14 @@ class Cli {
       .option('watchMode', {
         type: 'boolean',
         description: 'Run in watch mode, re-analyzing on file changes',
+      })
+      .option('enableCache', {
+        type: 'boolean',
+        description: 'Enable caching of analysis results',
+      })
+      .option('clearCache', {
+        type: 'boolean',
+        description: 'Clear the analysis cache before running',
       })
       .option('verbose', {
         type: 'boolean',
@@ -110,22 +119,67 @@ class Cli {
         deploymentChecks: this.args.deploymentChecks,
         autoFix: this.args.autoFix,
         watchMode: this.args.watchMode,
+        enableCache: this.args.enableCache,
       });
+
+      // Clear cache if requested
+      if (this.args.clearCache) {
+        const analyzer = new ProjectAnalyzer(loadedConfig);
+        await analyzer.clearCache();
+      }
 
       // Initial analysis
       await this.performAnalysisAndReport(loadedConfig);
 
       if (loadedConfig.watchMode) {
         logger.info(`Watching for changes in ${loadedConfig.projectRoot}...`);
+        logger.info('Press Ctrl+C to stop watching');
+        
         const watcher = chokidar.watch(loadedConfig.projectRoot, {
           ignored: loadedConfig.ignore, // Use configured ignore patterns
           persistent: true,
           ignoreInitial: true, // Don't trigger on initial scan
+          awaitWriteFinish: {
+            stabilityThreshold: 500,
+            pollInterval: 100,
+          },
         });
 
-        watcher.on('all', async (event, path) => {
-          logger.info(`File ${path} ${event}, re-analyzing...`);
-          await this.performAnalysisAndReport(loadedConfig);
+        let debounceTimer: NodeJS.Timeout | null = null;
+        const changedFiles: Set<string> = new Set();
+
+        watcher.on('all', async (event, changedPath) => {
+          changedFiles.add(changedPath);
+          
+          if (debounceTimer) {
+            clearTimeout(debounceTimer);
+          }
+
+          debounceTimer = setTimeout(async () => {
+            logger.info(
+              `${changedFiles.size} file(s) changed, re-analyzing...`
+            );
+            logger.debug(`Changed files: ${Array.from(changedFiles).join(', ')}`);
+            changedFiles.clear();
+            
+            try {
+              await this.performAnalysisAndReport(loadedConfig);
+              logger.info('Analysis complete. Watching for more changes...');
+            } catch (error) {
+              logger.error('Analysis failed during watch', error instanceof Error ? error : undefined);
+            }
+          }, 1000); // Wait 1 second after last change before re-analyzing
+        });
+
+        watcher.on('error', (error) => {
+          logger.error('File watcher error', error instanceof Error ? error : undefined);
+        });
+
+        // Graceful shutdown
+        process.on('SIGINT', () => {
+          logger.info('Stopping file watcher...');
+          watcher.close();
+          process.exit(0);
         });
 
         // Keep the process alive

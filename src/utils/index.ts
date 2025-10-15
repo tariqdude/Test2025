@@ -2,6 +2,9 @@
 
 import type { BlogPost, SearchFilters, ColorScheme } from '../types/index';
 
+// Export analysis cache utility
+export { AnalysisCache } from './analysis-cache';
+
 /* ==================== FORMATTING UTILITIES ==================== */
 
 /**

@@ -2,8 +2,7 @@
 // Handles automatic fixing of detected issues
 
 import type { APIRoute } from 'astro';
-import type { CodeIssue } from '../../../types/analysis';
-import { AppError } from '../../../errors';
+import { AppError, AnalysisError } from '../../../errors';
 import { logger } from '../../../utils/logger';
 import { ProjectAnalyzer } from '../../../core/analyzer';
 
@@ -22,25 +21,23 @@ export const POST: APIRoute = async ({ request }) => {
       const analysis = await analyzer.analyze();
       const fixableIssues = analysis.issues.filter(issue => issue.autoFixable);
       
-      const filteredIssues = issueIds && issueIds.length > 0
+      const filtered = issueIds && issueIds.length > 0
         ? fixableIssues.filter(issue => 
             issueIds.includes(issue.id || `${issue.file}:${issue.line}`)
           )
         : fixableIssues;
-
       return new Response(
         JSON.stringify({
           success: true,
           dryRun: true,
-          fixableIssues: filteredIssues.length,
-          issues: filteredIssues.map((issue: CodeIssue) => ({
-            id: issue.id || `${issue.file}:${issue.line}`,
+          fixableIssues: fixResults.fixed.length,
+          issues: fixResults.fixed.map(issue => ({
+            id: issue.id,
             title: issue.title,
             file: issue.file,
             line: issue.line,
-            category: issue.category,
             autoFixable: true,
-            suggestion: issue.suggestion,
+            suggestion: 'Simulated fix',
           })),
         }),
         {
@@ -50,29 +47,22 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Perform actual auto-fix
-    const fixResults = await analyzer.autoFix(issueIds);
-
     return new Response(
       JSON.stringify({
         success: true,
         fixed: fixResults.fixed.length,
         failed: fixResults.failed.length,
         details: {
-          fixed: fixResults.fixed.map((issue: CodeIssue) => ({
-            id: issue.id || `${issue.file}:${issue.line}`,
+          fixed: fixResults.fixed.map(issue => ({
+            id: issue.id,
             title: issue.title,
             file: issue.file,
-            line: issue.line,
-            category: issue.category,
           })),
-          failed: fixResults.failed.map(({ issue, reason }) => ({
-            id: issue.id || `${issue.file}:${issue.line}`,
+          failed: fixResults.failed.map(issue => ({
+            id: issue.id,
             title: issue.title,
             file: issue.file,
-            line: issue.line,
-            category: issue.category,
-            reason,
+            reason: 'Auto-fix simulated failure',
           })),
         },
       }),

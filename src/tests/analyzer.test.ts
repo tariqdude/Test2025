@@ -67,6 +67,7 @@ vi.mock('../config/config-loader', () => ({
         deploymentChecks: true,
         autoFix: false,
         watchMode: false,
+        enableCache: true,
         ...config,
       };
     }),

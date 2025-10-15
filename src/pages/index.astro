@@ -11,7 +11,7 @@ import ThemeSelector from '../components/ThemeSelector.astro';
 
 // Framework Components
 import ThreeScene from '../components/react/ThreeScene.tsx';
-// import Card3D from '../components/vue/Card3D.vue';
+import Card3D from '../components/vue/Card3D.vue';
 import ParticleCanvas from '../components/svelte/ParticleCanvas.svelte';
 import ReactiveCounter from '../components/solid/ReactiveCounter.tsx';
 import AnimatedChart from '../components/preact/AnimatedChart.tsx';
@@ -234,10 +234,8 @@ const description = 'Explore the full power of Astro with multiple frameworks, a
               </div>
               <span class="text-xs text-green-400 px-2 py-1 bg-green-400/20 rounded">client:visible</span>
             </div>
-            <div class="h-80 flex items-center justify-center">
-              <div class="p-4 bg-white/20 rounded backdrop-blur">
-                Vue component temporarily disabled
-              </div>
+            <div class="h-80">
+              <Card3D client:visible />
             </div>
             <p class="text-gray-300 text-sm mt-4">
               3D transforming card with mouse tracking, progress animations, and reactive Vue 3 Composition API.

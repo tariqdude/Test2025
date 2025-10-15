@@ -32,6 +32,7 @@ export const AnalyzerConfigSchema = z.object({
   deploymentChecks: z.boolean().default(true),
   autoFix: z.boolean().default(false),
   watchMode: z.boolean().default(false),
+  enableCache: z.boolean().default(true),
 });
 
 export type AnalyzerConfig = z.infer<typeof AnalyzerConfigSchema>;

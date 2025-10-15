@@ -42,6 +42,7 @@ describe('Configuration System', () => {
         deploymentChecks: false,
         autoFix: true,
         watchMode: false,
+        enableCache: true,
       };
 
       const result = AnalyzerConfigSchema.parse(validConfig);
@@ -221,6 +222,7 @@ describe('Configuration System', () => {
         deploymentChecks: false,
         autoFix: false,
         watchMode: false,
+        enableCache: false,
       };
 
       const result = AnalyzerConfigSchema.parse(booleanConfig);
