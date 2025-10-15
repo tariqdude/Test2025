@@ -94,7 +94,7 @@ class Cli {
       await fs.writeFile(outputPath, reportContent);
       logger.info(`Report successfully written to ${outputPath}`);
     } else {
-      console.log(reportContent);
+      process.stdout.write(`${reportContent}\n`);
     }
   }
 

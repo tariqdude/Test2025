@@ -4,454 +4,340 @@
 
 import Layout from '../layouts/BlogPost.astro';
 import ErrorDashboard from '../components/ErrorDashboard.astro';
-import ThemeProvider from '../components/ThemeProvider.astro';
 
 const title = 'Elite Error Reviewer Dashboard';
-const description = 'Comprehensive project health monitoring and error analysis dashboard';
+const description =
+  'Comprehensive project health monitoring and error analysis dashboard';
 const pubDate = new Date();
 const updatedDate = new Date();
 ---
 
-<Layout 
-  title={title} 
-  description={description} 
+<Layout
+  title={title}
+  description={description}
   pubDate={pubDate}
   updatedDate={updatedDate}
 >
   <main class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <!-- Header Section -->
-      <section class="py-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white">
-        <div class="container mx-auto px-4">
-          <div class="text-center">
-            <h1 class="text-5xl font-bold mb-4">
-              🔍 Elite Error Reviewer
-            </h1>
-            <p class="text-xl text-blue-100 mb-8">
-              Comprehensive project health monitoring and error analysis
-            </p>
-            
-            <div class="flex justify-center space-x-4 flex-wrap">
-              <button 
-                id="refresh-btn"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                🔄 Refresh Analysis
-              </button>
-              
-              <button 
-                id="auto-fix-btn"
-                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                🔧 Auto-fix Issues
-              </button>
-              
-              <button 
-                id="export-btn"
-                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                📄 Export Report
-              </button>
-              
-              <button 
-                id="run-analysis-btn"
-                class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                🚀 Run Full Analysis
-              </button>
-            </div>
+    <!-- Header Section -->
+    <section
+      class="py-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white"
+    >
+      <div class="container mx-auto px-4">
+        <div class="text-center">
+          <h1 class="text-5xl font-bold mb-4">🔍 Elite Error Reviewer</h1>
+          <p class="text-xl text-blue-100 mb-8">
+            Comprehensive project health monitoring and error analysis
+          </p>
+
+          <div class="flex justify-center space-x-4 flex-wrap">
+            <button
+              id="refresh-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            >
+              🔄 Refresh Analysis
+            </button>
+
+            <button
+              id="auto-fix-btn"
+              class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            >
+              🔧 Auto-fix Issues
+            </button>
+
+            <button
+              id="export-btn"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            >
+              📄 Export Report
+            </button>
+
+            <button
+              id="run-analysis-btn"
+              class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            >
+              🧠 Run Full Analysis
+            </button>
           </div>
+
+          <p class="mt-6 text-sm text-blue-200">
+            Tip: Use Ctrl+R to refresh, Ctrl+F to auto-fix, Ctrl+E to export
+          </p>
         </div>
-      </section>
-
-      <!-- Quick Stats -->
-      <section class="py-8 bg-white shadow-sm">
-        <div class="container mx-auto px-4">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="text-center">
-              <div id="health-score" class="text-4xl font-bold text-blue-600 mb-2">90</div>
-              <div class="text-gray-600">Health Score</div>
-            </div>
-            
-            <div class="text-center">
-              <div id="total-issues" class="text-4xl font-bold text-orange-600 mb-2">1</div>
-              <div class="text-gray-600">Total Issues</div>
-            </div>
-            
-            <div class="text-center">
-              <div id="critical-issues" class="text-4xl font-bold text-red-600 mb-2">0</div>
-              <div class="text-gray-600">Critical Issues</div>
-            </div>
-            
-            <div class="text-center">
-              <div id="auto-fixable" class="text-4xl font-bold text-green-600 mb-2">0</div>
-              <div class="text-gray-600">Auto-fixable</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Main Dashboard -->
-      <section class="py-8">
-        <div class="container mx-auto px-4">
-          <ErrorDashboard autoRefresh={false} />
-        </div>
-      </section>
-
-      <!-- Feature Showcase -->
-      <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-          <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-            🚀 Elite Error Reviewer Features
-          </h2>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Comprehensive Analysis -->
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">🔍</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                Comprehensive Analysis
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Deep project analysis covering syntax, types, security, performance, accessibility, and SEO compliance.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• TypeScript & JavaScript analysis</li>
-                <li>• Framework-specific checks (Astro, React, Vue, Svelte)</li>
-                <li>• Security vulnerability detection</li>
-                <li>• Performance optimization suggestions</li>
-              </ul>
-            </div>
-
-            <!-- Real-time Monitoring -->
-            <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">📊</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                Real-time Monitoring
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Continuous monitoring with live dashboard updates and health score tracking.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• Live health score calculation</li>
-                <li>• Auto-refresh capabilities</li>
-                <li>• Trend analysis and improvements</li>
-                <li>• File change detection</li>
-              </ul>
-            </div>
-
-            <!-- Auto-fix Capabilities -->
-            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">🔧</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                Auto-fix Capabilities
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Intelligent auto-fixing for common issues with safe, automated solutions.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• Automatic .gitignore updates</li>
-                <li>• Script async attribute additions</li>
-                <li>• Import statement fixes</li>
-                <li>• Code formatting improvements</li>
-              </ul>
-            </div>
-
-            <!-- GitHub Integration -->
-            <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">🔀</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                GitHub Integration
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Seamless Git analysis with branch status, conflict detection, and commit tracking.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• Branch status monitoring</li>
-                <li>• Merge conflict detection</li>
-                <li>• Uncommitted changes tracking</li>
-                <li>• File change analysis</li>
-              </ul>
-            </div>
-
-            <!-- Deployment Readiness -->
-            <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">🚀</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                Deployment Readiness
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Complete deployment checks ensuring your project is production-ready.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• Build verification</li>
-                <li>• Type checking validation</li>
-                <li>• Dependency security audit</li>
-                <li>• Performance benchmarks</li>
-              </ul>
-            </div>
-
-            <!-- Multiple Output Formats -->
-            <div class="bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-xl shadow-lg">
-              <div class="text-4xl mb-4">📄</div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                Multiple Output Formats
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Flexible reporting with JSON, Markdown, HTML, and terminal output formats.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-1">
-                <li>• JSON for CI/CD integration</li>
-                <li>• Markdown for documentation</li>
-                <li>• HTML for sharing</li>
-                <li>• Terminal for development</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CLI Usage Examples -->
-      <section class="py-12 bg-gray-50">
-        <div class="container mx-auto px-4">
-          <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
-            💻 CLI Usage Examples
-          </h2>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm overflow-x-auto">
-              <div class="text-yellow-400 mb-3"># Basic Analysis</div>
-              <div>npm run error-review</div>
-              <div class="mt-3 text-yellow-400"># Critical Issues Only</div>
-              <div>npm run error-review:critical</div>
-              <div class="mt-3 text-yellow-400"># Auto-fix Issues</div>
-              <div>npm run error-review -- --fix</div>
-              <div class="mt-3 text-yellow-400"># Export Markdown Report</div>
-              <div>npm run error-review:markdown</div>
-            </div>
-            
-            <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm overflow-x-auto">
-              <div class="text-yellow-400 mb-3"># Security Audit</div>
-              <div>npm run security-audit</div>
-              <div class="mt-3 text-yellow-400"># Deployment Check</div>
-              <div>npm run deploy-ready</div>
-              <div class="mt-3 text-yellow-400"># Interactive Mode</div>
-              <div>npm run error-review:interactive</div>
-              <div class="mt-3 text-yellow-400"># Health Check</div>
-              <div>npm run health-check</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Status Indicators -->
-      <div id="status-indicators" class="fixed bottom-4 right-4 space-y-2">
-        <!-- Status messages will be dynamically added here -->
       </div>
-    </main>
+    </section>
+
+    <section class="py-8 bg-white border-b border-slate-200">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-4 gap-4" id="status-indicators"></div>
+      </div>
+    </section>
+
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <ErrorDashboard />
+      </div>
+    </section>
+
+    <section class="py-12 bg-white border-t border-slate-200">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm"
+          >
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">
+              ⚙️ Automation Controls
+            </h2>
+
+            <div class="space-y-4 text-slate-700">
+              <div class="flex items-start space-x-3">
+                <span class="text-blue-600 text-xl">🔄</span>
+                <div>
+                  <h3 class="font-semibold">Auto-refresh monitoring</h3>
+                  <p>
+                    Continuously reconciles project state and identifies newly
+                    introduced issues.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <span class="text-green-600 text-xl">⚡</span>
+                <div>
+                  <h3 class="font-semibold">Rapid remediation</h3>
+                  <p>
+                    Applies guided fixes to common configuration and
+                    implementation mistakes.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <span class="text-purple-600 text-xl">🧠</span>
+                <div>
+                  <h3 class="font-semibold">Full stack analysis</h3>
+                  <p>
+                    Combines accessibility, performance, deployment, and
+                    security audits in one sweep.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-slate-900 to-blue-900 p-6 rounded-2xl shadow-lg text-white"
+          >
+            <h2 class="text-2xl font-bold mb-4">📊 Executive Metrics</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                <p class="text-sm uppercase tracking-widest text-blue-200">
+                  Total Issues
+                </p>
+                <p id="total-issues" class="text-3xl font-bold mt-2">0</p>
+              </div>
+
+              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                <p class="text-sm uppercase tracking-widest text-blue-200">
+                  Critical
+                </p>
+                <p
+                  id="critical-issues"
+                  class="text-3xl font-bold mt-2 text-red-300"
+                >
+                  0
+                </p>
+              </div>
+
+              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                <p class="text-sm uppercase tracking-widest text-blue-200">
+                  Auto-fixable
+                </p>
+                <p
+                  id="auto-fixable"
+                  class="text-3xl font-bold mt-2 text-green-300"
+                >
+                  0
+                </p>
+              </div>
+
+              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                <p class="text-sm uppercase tracking-widest text-blue-200">
+                  Health Score
+                </p>
+                <p
+                  id="health-score"
+                  class="text-4xl font-bold mt-2 text-emerald-300"
+                >
+                  92
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-xl">
+          <div class="p-6 border-b border-slate-200 bg-slate-50 rounded-t-2xl">
+            <h2 class="text-2xl font-bold text-slate-900">
+              📡 Real-time Status Stream
+            </h2>
+            <p class="text-slate-600">
+              Observe live updates from automated analysis, auto-fix operations,
+              and manual interventions.
+            </p>
+          </div>
+
+          <div class="p-6">
+            <div id="status-log" class="h-96 overflow-y-auto space-y-3">
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                <p class="text-sm text-slate-500">
+                  No events yet. Trigger an analysis to start monitoring.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-blue-900 text-white">
+      <div class="container mx-auto px-4 text-center space-y-6">
+        <h2 class="text-3xl font-bold">🧭 Governance Ready</h2>
+        <p class="text-blue-200 max-w-3xl mx-auto">
+          Tailored for enterprise governance teams that require verifiable
+          compliance, audit-ready reports, and resilience testing. Integrates
+          with your existing CI/CD pipelines, observability tools, and security
+          platforms.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          <div class="bg-white/10 p-5 rounded-xl">
+            <h3 class="font-semibold text-lg mb-2">Risk Prioritization</h3>
+            <p class="text-blue-100">
+              Weighted scoring across severity, frequency, and business impact
+              to guide immediate action.
+            </p>
+          </div>
+
+          <div class="bg-white/10 p-5 rounded-xl">
+            <h3 class="font-semibold text-lg mb-2">Audit-ready Outputs</h3>
+            <p class="text-blue-100">
+              Export detailed findings for compliance, featuring rollback
+              instructions and change verification.
+            </p>
+          </div>
+
+          <div class="bg-white/10 p-5 rounded-xl">
+            <h3 class="font-semibold text-lg mb-2">Live Orchestration</h3>
+            <p class="text-blue-100">
+              Link monitoring signals to incident response workflows and
+              governance dashboards.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-700">
+          <div
+            class="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl shadow-sm border border-slate-200"
+          >
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">
+              📂 Repository Health
+            </h3>
+            <ul class="space-y-2 text-sm">
+              <li>✅ Branch hygiene checks</li>
+              <li>✅ Commit verification</li>
+              <li>✅ Merge readiness scoring</li>
+            </ul>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-slate-50 to-green-50 p-6 rounded-2xl shadow-sm border border-slate-200"
+          >
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">
+              🧪 Test Coverage
+            </h3>
+            <ul class="space-y-2 text-sm">
+              <li>✅ Unit, integration, and e2e stats</li>
+              <li>✅ Failed test diagnostics</li>
+              <li>✅ Coverage regression warnings</li>
+            </ul>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-slate-50 to-purple-50 p-6 rounded-2xl shadow-sm border border-slate-200"
+          >
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">
+              🛡️ Security & Compliance
+            </h3>
+            <ul class="space-y-2 text-sm">
+              <li>✅ Dependency vulnerability scan</li>
+              <li>✅ OWASP guardrail detection</li>
+              <li>✅ Policy adherence scoring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="py-12 bg-gradient-to-br from-slate-900 to-blue-900 text-white"
+    >
+      <div class="container mx-auto px-4 text-center space-y-6">
+        <h2 class="text-3xl font-bold">🚀 Progressive Delivery Confidence</h2>
+        <p class="text-blue-200 max-w-3xl mx-auto">
+          Run targeted health scans before each release, blending automated
+          fixes with human oversight.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
+          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+            <h3 class="font-semibold mb-2">Shift-left Insights</h3>
+            <p class="text-sm text-blue-100">
+              Enforce coding standards and catch regressions directly in
+              developer workflows.
+            </p>
+          </div>
+
+          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+            <h3 class="font-semibold mb-2">Automated Remediation</h3>
+            <p class="text-sm text-blue-100">
+              Suggested patches and guided fixes for lint, dependency, and
+              configuration issues.
+            </p>
+          </div>
+
+          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+            <h3 class="font-semibold mb-2">Release Gates</h3>
+            <p class="text-sm text-blue-100">
+              Deploy with confidence by verifying readiness criteria and
+              rollback plans.
+            </p>
+          </div>
+
+          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+            <h3 class="font-semibold mb-2">Executive Dashboards</h3>
+            <p class="text-sm text-blue-100">
+              Broadcast status to leadership, compliance, and operations
+              stakeholders.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>
 
-<script>
-  // Dashboard Interactivity
-  
-  // Button event handlers
-  document.getElementById('refresh-btn')?.addEventListener('click', refreshAnalysis);
-  document.getElementById('auto-fix-btn')?.addEventListener('click', runAutoFix);
-  document.getElementById('export-btn')?.addEventListener('click', exportReport);
-  document.getElementById('run-analysis-btn')?.addEventListener('click', runFullAnalysis);
-
-  async function refreshAnalysis() {
-    showStatus('Refreshing analysis...', 'info');
-    
-    try {
-      const response = await fetch('/api/error-reviewer/analyze');
-      const data = await response.json();
-      
-      updateQuickStats(data.summary);
-      showStatus('Analysis refreshed successfully!', 'success');
-      
-      // Reload the page to update the dashboard
-      setTimeout(() => window.location.reload(), 1000);
-      
-    } catch (error) {
-      console.error('Refresh failed:', error);
-      showStatus('Failed to refresh analysis', 'error');
-    }
-  }
-
-  async function runAutoFix() {
-    showStatus('Running auto-fix...', 'info');
-    
-    try {
-      const response = await fetch('/api/error-reviewer/auto-fix', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        showStatus(`Auto-fix completed: ${result.fixed} fixed, ${result.failed} failed`, 'success');
-        setTimeout(refreshAnalysis, 2000);
-      } else {
-        showStatus('Auto-fix failed: ' + result.error, 'error');
-      }
-      
-    } catch (error) {
-      console.error('Auto-fix failed:', error);
-      showStatus('Auto-fix failed', 'error');
-    }
-  }
-
-  async function exportReport() {
-    const format = prompt('Export format (json/markdown/html):', 'markdown');
-    if (!format) return;
-    
-    showStatus(`Exporting ${format} report...`, 'info');
-    
-    try {
-      const response = await fetch(`/api/export-report?format=${format}`);
-      
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `error-report.${format}`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        
-        showStatus('Report exported successfully!', 'success');
-      } else {
-        throw new Error('Export failed');
-      }
-      
-    } catch (error) {
-      console.error('Export failed:', error);
-      showStatus('Export failed', 'error');
-    }
-  }
-
-  async function runFullAnalysis() {
-    showStatus('Running comprehensive analysis...', 'info');
-    
-    try {
-      const response = await fetch('/api/error-reviewer/analyze?deployment=true&git=true');
-      const data = await response.json();
-      
-      updateQuickStats(data.summary);
-      showStatus('Full analysis completed!', 'success');
-      
-      // Reload to show updated results
-      setTimeout(() => window.location.reload(), 1000);
-      
-    } catch (error) {
-      console.error('Full analysis failed:', error);
-      showStatus('Full analysis failed', 'error');
-    }
-  }
-
-  function updateQuickStats(summary) {
-    if (summary) {
-      document.getElementById('total-issues').textContent = summary.totalIssues || 0;
-      document.getElementById('critical-issues').textContent = summary.criticalIssues || 0;
-      document.getElementById('auto-fixable').textContent = summary.autoFixableIssues || 0;
-      
-      // Update health score with animation
-      const healthElement = document.getElementById('health-score');
-      const currentScore = parseInt(healthElement.textContent) || 0;
-      const targetScore = summary.healthScore || 90;
-      
-      animateScore(healthElement, currentScore, targetScore);
-    }
-  }
-
-  function animateScore(element, from, to) {
-    const duration = 1000;
-    const startTime = Date.now();
-    
-    function update() {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const current = Math.round(from + (to - from) * progress);
-      
-      element.textContent = current;
-      
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      }
-    }
-    
-    update();
-  }
-
-  function showStatus(message, type = 'info') {
-    const container = document.getElementById('status-indicators');
-    const statusEl = document.createElement('div');
-    
-    const colors = {
-      info: 'bg-blue-600',
-      success: 'bg-green-600',
-      error: 'bg-red-600',
-      warning: 'bg-yellow-600'
-    };
-    
-    const icons = {
-      info: '📊',
-      success: '✅',
-      error: '❌',
-      warning: '⚠️'
-    };
-    
-    statusEl.className = `${colors[type]} text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 transform transition-all duration-300`;
-    statusEl.innerHTML = `
-      <span>${icons[type]}</span>
-      <span>${message}</span>
-    `;
-    
-    container.appendChild(statusEl);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      statusEl.style.opacity = '0';
-      statusEl.style.transform = 'translateX(100%)';
-      setTimeout(() => container.removeChild(statusEl), 300);
-    }, 5000);
-  }
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey || e.metaKey) {
-      switch (e.key) {
-        case 'r':
-          e.preventDefault();
-          refreshAnalysis();
-          break;
-        case 'f':
-          e.preventDefault();
-          runAutoFix();
-          break;
-        case 'e':
-          e.preventDefault();
-          exportReport();
-          break;
-        case 'a':
-          e.preventDefault();
-          runFullAnalysis();
-          break;
-      }
-    }
-  });
-
-  // Initialize dashboard
-  document.addEventListener('DOMContentLoaded', () => {
-    showStatus('Elite Error Reviewer Dashboard loaded', 'success');
-    
-    // Show keyboard shortcuts help
-    setTimeout(() => {
-      showStatus('Tip: Use Ctrl+R to refresh, Ctrl+F to auto-fix, Ctrl+E to export', 'info');
-    }, 2000);
-  });
+<script type="module">
+  import '../scripts/error-dashboard.ts';
 </script>
 
 <style>

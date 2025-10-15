@@ -17,7 +17,7 @@ const clientData = {
   accountManager: 'Sarah Johnson',
   joinDate: '2024-01-15',
   status: 'Active',
-  tier: 'Enterprise'
+  tier: 'Enterprise',
 };
 
 const projects = [
@@ -28,7 +28,7 @@ const projects = [
     progress: 75,
     deadline: '2025-02-15',
     budget: 85000,
-    spent: 63750
+    spent: 63750,
   },
   {
     id: 'proj-002',
@@ -37,7 +37,7 @@ const projects = [
     progress: 15,
     deadline: '2025-04-30',
     budget: 120000,
-    spent: 18000
+    spent: 18000,
   },
   {
     id: 'proj-003',
@@ -46,8 +46,8 @@ const projects = [
     progress: 100,
     deadline: '2024-12-01',
     budget: 45000,
-    spent: 43200
-  }
+    spent: 43200,
+  },
 ];
 
 const documents = [
@@ -57,7 +57,7 @@ const documents = [
     type: 'proposal',
     size: '2.4 MB',
     date: '2024-01-20',
-    downloadUrl: '#'
+    downloadUrl: '#',
   },
   {
     id: 'doc-002',
@@ -65,7 +65,7 @@ const documents = [
     type: 'specification',
     size: '1.8 MB',
     date: '2024-02-05',
-    downloadUrl: '#'
+    downloadUrl: '#',
   },
   {
     id: 'doc-003',
@@ -73,7 +73,7 @@ const documents = [
     type: 'report',
     size: '3.2 MB',
     date: '2024-12-31',
-    downloadUrl: '#'
+    downloadUrl: '#',
   },
   {
     id: 'doc-004',
@@ -81,8 +81,8 @@ const documents = [
     type: 'invoice',
     size: '156 KB',
     date: '2024-12-15',
-    downloadUrl: '#'
-  }
+    downloadUrl: '#',
+  },
 ];
 
 const messages = [
@@ -90,35 +90,43 @@ const messages = [
     id: 'msg-001',
     from: 'Sarah Johnson',
     subject: 'Project Update - E-commerce Platform',
-    preview: 'Great progress this week! The new checkout flow is ready for testing...',
+    preview:
+      'Great progress this week! The new checkout flow is ready for testing...',
     date: '2025-01-03',
-    read: false
+    read: false,
   },
   {
     id: 'msg-002',
     from: 'Mike Chen',
     subject: 'Mobile App Wireframes Ready',
-    preview: 'The wireframes for the mobile app are complete and ready for your review...',
+    preview:
+      'The wireframes for the mobile app are complete and ready for your review...',
     date: '2025-01-02',
-    read: true
+    read: true,
   },
   {
     id: 'msg-003',
     from: 'Sarah Johnson',
     subject: 'Happy New Year & Q1 Planning',
-    preview: 'Wishing you a great start to 2025! Let\'s schedule a call to discuss Q1 priorities...',
+    preview:
+      "Wishing you a great start to 2025! Let's schedule a call to discuss Q1 priorities...",
     date: '2025-01-01',
-    read: true
-  }
+    read: true,
+  },
 ];
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
-    case 'completed': return '#22c55e';
-    case 'in progress': return '#3b82f6';
-    case 'planning': return '#f59e0b';
-    case 'on hold': return '#ef4444';
-    default: return '#6b7280';
+    case 'completed':
+      return '#22c55e';
+    case 'in progress':
+      return '#3b82f6';
+    case 'planning':
+      return '#f59e0b';
+    case 'on hold':
+      return '#ef4444';
+    default:
+      return '#6b7280';
   }
 };
 
@@ -126,7 +134,7 @@ const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
   }).format(amount);
 };
 
@@ -134,7 +142,7 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   });
 };
 ---
@@ -143,7 +151,14 @@ const formatDate = (dateString: string) => {
   <div class="portal-header">
     <div class="client-info">
       <div class="client-avatar">
-        <span>{clientData.name.split(' ').map(n => n[0]).join('')}</span>
+        <span
+          >{
+            clientData.name
+              .split(' ')
+              .map(n => n[0])
+              .join('')
+          }</span
+        >
       </div>
       <div class="client-details">
         <h1>Welcome back, {clientData.name}</h1>
@@ -156,16 +171,38 @@ const formatDate = (dateString: string) => {
     </div>
     <div class="portal-actions">
       <button class="btn btn-outline">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/>
-          <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+            stroke="currentColor"
+            stroke-width="2"></path>
+          <polyline
+            points="22,6 12,13 2,6"
+            stroke="currentColor"
+            stroke-width="2"></polyline>
         </svg>
         Contact Team
       </button>
       <button class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-          <polygon points="10,8 16,12 10,16 10,8" stroke="currentColor" stroke-width="2"/>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"
+          ></circle>
+          <polygon
+            points="10,8 16,12 10,16 10,8"
+            stroke="currentColor"
+            stroke-width="2"></polygon>
         </svg>
         Schedule Meeting
       </button>
@@ -180,39 +217,52 @@ const formatDate = (dateString: string) => {
           <h2>Active Projects</h2>
           <button class="btn btn-ghost btn-sm">View All</button>
         </div>
-        
+
         <div class="projects-list">
-          {projects.map(project => (
-            <div class="project-card">
-              <div class="project-header">
-                <h3>{project.name}</h3>
-                <span class="project-status" style={`color: ${getStatusColor(project.status)}`}>
-                  {project.status}
-                </span>
+          {
+            projects.map(project => (
+              <div class="project-card">
+                <div class="project-header">
+                  <h3>{project.name}</h3>
+                  <span
+                    class="project-status"
+                    style={`color: ${getStatusColor(project.status)}`}
+                  >
+                    {project.status}
+                  </span>
+                </div>
+
+                <div class="project-progress">
+                  <div class="progress-info">
+                    <span>Progress</span>
+                    <span>{project.progress}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      style={`width: ${project.progress}%`}
+                    />
+                  </div>
+                </div>
+
+                <div class="project-details">
+                  <div class="detail-item">
+                    <span class="detail-label">Deadline:</span>
+                    <span class="detail-value">
+                      {formatDate(project.deadline)}
+                    </span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Budget:</span>
+                    <span class="detail-value">
+                      {formatCurrency(project.spent)} /{' '}
+                      {formatCurrency(project.budget)}
+                    </span>
+                  </div>
+                </div>
               </div>
-              
-              <div class="project-progress">
-                <div class="progress-info">
-                  <span>Progress</span>
-                  <span>{project.progress}%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style={`width: ${project.progress}%`}></div>
-                </div>
-              </div>
-              
-              <div class="project-details">
-                <div class="detail-item">
-                  <span class="detail-label">Deadline:</span>
-                  <span class="detail-value">{formatDate(project.deadline)}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">Budget:</span>
-                  <span class="detail-value">{formatCurrency(project.spent)} / {formatCurrency(project.budget)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </section>
 
@@ -222,19 +272,21 @@ const formatDate = (dateString: string) => {
           <h2>Recent Messages</h2>
           <button class="btn btn-ghost btn-sm">View All</button>
         </div>
-        
+
         <div class="messages-list">
-          {messages.map(message => (
-            <div class={`message-item ${!message.read ? 'unread' : ''}`}>
-              <div class="message-header">
-                <span class="message-from">{message.from}</span>
-                <span class="message-date">{formatDate(message.date)}</span>
+          {
+            messages.map(message => (
+              <div class={`message-item ${!message.read ? 'unread' : ''}`}>
+                <div class="message-header">
+                  <span class="message-from">{message.from}</span>
+                  <span class="message-date">{formatDate(message.date)}</span>
+                </div>
+                <h4 class="message-subject">{message.subject}</h4>
+                <p class="message-preview">{message.preview}</p>
+                {!message.read && <div class="unread-indicator" />}
               </div>
-              <h4 class="message-subject">{message.subject}</h4>
-              <p class="message-preview">{message.preview}</p>
-              {!message.read && <div class="unread-indicator"></div>}
-            </div>
-          ))}
+            ))
+          }
         </div>
       </section>
 
@@ -244,63 +296,200 @@ const formatDate = (dateString: string) => {
           <h2>Documents & Files</h2>
           <button class="btn btn-ghost btn-sm">Upload File</button>
         </div>
-        
+
         <div class="documents-list">
-          {documents.map(document => (
-            <div class="document-item">
-              <div class="document-icon">
-                {document.type === 'proposal' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="10,9 9,9 8,9" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                )}
-                {document.type === 'specification' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                )}
-                {document.type === 'report' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9 15h6" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9 18h6" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9 12h1" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                )}
-                {document.type === 'invoice' && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
-                    <line x1="12" y1="18" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-                    <line x1="9" y1="15" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                )}
-              </div>
-              <div class="document-info">
-                <h4 class="document-name">{document.name}</h4>
-                <div class="document-meta">
-                  <span>{document.size}</span>
-                  <span>•</span>
-                  <span>{formatDate(document.date)}</span>
+          {
+            documents.map(document => (
+              <div class="document-item">
+                <div class="document-icon">
+                  {document.type === 'proposal' && (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <polyline
+                        points="14,2 14,8 20,8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="16"
+                        y1="13"
+                        x2="8"
+                        y2="13"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="16"
+                        y1="17"
+                        x2="8"
+                        y2="17"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <polyline
+                        points="10,9 9,9 8,9"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  )}
+                  {document.type === 'specification' && (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <polyline
+                        points="14,2 14,8 20,8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="16"
+                        y1="13"
+                        x2="8"
+                        y2="13"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="16"
+                        y1="17"
+                        x2="8"
+                        y2="17"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  )}
+                  {document.type === 'report' && (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <polyline
+                        points="14,2 14,8 20,8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <path
+                        d="M9 15h6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <path
+                        d="M9 18h6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <path
+                        d="M9 12h1"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  )}
+                  {document.type === 'invoice' && (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <polyline
+                        points="14,2 14,8 20,8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="12"
+                        y1="18"
+                        x2="12"
+                        y2="12"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                      <line
+                        x1="9"
+                        y1="15"
+                        x2="15"
+                        y2="15"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  )}
                 </div>
+                <div class="document-info">
+                  <h4 class="document-name">{document.name}</h4>
+                  <div class="document-meta">
+                    <span>{document.size}</span>
+                    <span>•</span>
+                    <span>{formatDate(document.date)}</span>
+                  </div>
+                </div>
+                <button class="document-download">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                    <polyline
+                      points="7,10 12,15 17,10"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                    <line
+                      x1="12"
+                      y1="15"
+                      x2="12"
+                      y2="3"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
               </div>
-              <button class="document-download">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2"/>
-                  <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
-                  <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </button>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </section>
     </div>
@@ -332,7 +521,11 @@ const formatDate = (dateString: string) => {
   .client-avatar {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(
+      135deg,
+      var(--primary-color),
+      var(--secondary-color)
+    );
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -433,7 +626,7 @@ const formatDate = (dateString: string) => {
 
   .project-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     border-color: var(--primary-color);
   }
 
@@ -492,7 +685,11 @@ const formatDate = (dateString: string) => {
 
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(
+      90deg,
+      var(--primary-color),
+      var(--secondary-color)
+    );
     border-radius: 3px;
     transition: width 0.3s ease;
   }
@@ -708,21 +905,41 @@ const formatDate = (dateString: string) => {
 <script>
   // Handle interactive elements
   document.addEventListener('DOMContentLoaded', () => {
+    const emitInteraction = (
+      eventName: string,
+      detail: Record<string, unknown> = {}
+    ) => {
+      document.dispatchEvent(
+        new CustomEvent(`client-portal:${eventName}`, {
+          detail: {
+            timestamp: Date.now(),
+            ...detail,
+          },
+        })
+      );
+    };
+
     // Message click handlers
     const messageItems = document.querySelectorAll('.message-item');
     messageItems.forEach(item => {
       item.addEventListener('click', () => {
         item.classList.remove('unread');
-        console.log('Message opened');
+        emitInteraction('message-opened', {
+          id: item.getAttribute('data-message-id') ?? undefined,
+        });
       });
     });
 
     // Document download handlers
     const downloadButtons = document.querySelectorAll('.document-download');
     downloadButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', e => {
         e.stopPropagation();
-        console.log('Document download initiated');
+        emitInteraction('document-download', {
+          id:
+            (button as HTMLElement).getAttribute('data-document-id') ??
+            undefined,
+        });
       });
     });
 
@@ -730,7 +947,9 @@ const formatDate = (dateString: string) => {
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach(card => {
       card.addEventListener('click', () => {
-        console.log('Project details opened');
+        emitInteraction('project-opened', {
+          id: card.getAttribute('data-project-id') ?? undefined,
+        });
       });
     });
   });
