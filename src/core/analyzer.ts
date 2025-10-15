@@ -70,9 +70,7 @@ export class ProjectAnalyzer {
    * Auto-fix issues that have autoFixable = true
    * Returns an object with fixed and failed issues
    */
-  async autoFix(
-    issueIds?: string[]
-  ): Promise<{
+  async autoFix(issueIds?: string[]): Promise<{
     fixed: CodeIssue[];
     failed: Array<{ issue: CodeIssue; reason: string }>;
   }> {

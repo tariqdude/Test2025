@@ -26,7 +26,12 @@
     margin: 0;
     background-color: var(--color-background, #f5f6f8);
     color: var(--color-text-primary, #121720);
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      'Plus Jakarta Sans',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -39,7 +44,12 @@
   h4,
   h5,
   h6 {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      'Plus Jakarta Sans',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
     font-weight: 600;
     letter-spacing: -0.02em;
     text-wrap: balance;
@@ -71,7 +81,9 @@
   a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s var(--easing-ease-out, ease), opacity 0.2s ease;
+    transition:
+      color 0.2s var(--easing-ease-out, ease),
+      opacity 0.2s ease;
   }
 
   a:hover {
@@ -90,7 +102,11 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-primary, #304ec8) 15%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--color-primary, #304ec8) 15%,
+      transparent
+    );
     color: var(--color-text-primary, #121720);
   }
 
@@ -103,7 +119,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--color-primary, #304ec8) 30%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--color-primary, #304ec8) 30%,
+      transparent
+    );
     border-radius: 9999px;
   }
 
@@ -197,7 +217,8 @@
   }
 
   .shadow-focus {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary, #304ec8) 15%, transparent);
+    box-shadow: 0 0 0 4px
+      color-mix(in srgb, var(--color-primary, #304ec8) 15%, transparent);
   }
 
   .divider-horizontal {
