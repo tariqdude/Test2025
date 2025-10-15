@@ -2,7 +2,7 @@
 // Elite Error Dashboard Component
 // Real-time visualization of error analysis and project health
 
-import type { CodeIssue, ProjectHealth } from '../utils/error-reviewer.ts';
+import type { CodeIssue, ProjectHealth } from '../types/analysis';
 
 interface Props {
   className?: string;
@@ -18,7 +18,7 @@ const mockIssues: CodeIssue[] = [
     type: 'type',
     severity: { level: 'critical', impact: 'blocking', urgency: 'immediate' },
     title: 'Type Error in ThemeProvider',
-    description: 'Property \'colors\' does not exist on type \'undefined\'',
+    description: "Property 'colors' does not exist on type 'undefined'",
     file: 'src/components/ThemeProvider.astro',
     line: 15,
     column: 12,
@@ -30,14 +30,14 @@ const mockIssues: CodeIssue[] = [
     context: {
       current: 'const color = theme.colors.primary;',
       before: ['const theme = themes[themeName];', 'if (theme) {'],
-      after: ['  // Use theme colors', '}']
+      after: ['  // Use theme colors', '}'],
     },
     metadata: {
       component: 'ThemeProvider',
       framework: 'astro',
       checksum: 'abc123',
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   },
   {
     id: 'sec-001',
@@ -53,12 +53,12 @@ const mockIssues: CodeIssue[] = [
     suggestion: 'Use textContent or sanitize with DOMPurify',
     autoFixable: false,
     context: {
-      current: 'element.innerHTML = userInput;'
+      current: 'element.innerHTML = userInput;',
     },
     metadata: {
       checksum: 'def456',
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   },
   {
     id: 'perf-001',
@@ -73,13 +73,13 @@ const mockIssues: CodeIssue[] = [
     suggestion: 'Consider code splitting or removing unused dependencies',
     autoFixable: false,
     context: {
-      current: 'Bundle size: 2.5MB (recommended: <1MB)'
+      current: 'Bundle size: 2.5MB (recommended: <1MB)',
     },
     metadata: {
       checksum: 'ghi789',
-      timestamp: new Date()
-    }
-  }
+      timestamp: new Date(),
+    },
+  },
 ];
 
 const mockHealth: ProjectHealth = {
@@ -90,50 +90,61 @@ const mockHealth: ProjectHealth = {
   lowIssues: 8,
   totalIssues: 15,
   categories: {
-    'TypeScript': 5,
-    'Security': 3,
-    'Performance': 4,
-    'Accessibility': 2,
-    'Git': 1
+    TypeScript: 5,
+    Security: 3,
+    Performance: 4,
+    Accessibility: 2,
+    Git: 1,
   },
   trends: {
     improving: true,
     velocity: 0.8,
-    lastCheck: new Date()
-  }
+    lastCheck: new Date(),
+  },
 };
+
+const categoryEntries = Object.entries(mockHealth.categories) as Array<
+  [string, number]
+>;
+const categoryCounts = categoryEntries.map(([, count]) => count);
+const maxCategoryCount =
+  categoryCounts.length > 0 ? Math.max(...categoryCounts) : 0;
 ---
 
 <div class={`error-dashboard ${className}`}>
   <!-- Dashboard Header -->
   <div class="dashboard-header">
     <div class="header-content">
-      <h1 class="dashboard-title">
-        🛡️ Elite Error Dashboard
-      </h1>
+      <h1 class="dashboard-title">🛡️ Elite Error Dashboard</h1>
       <div class="last-updated">
         Last updated: {new Date().toLocaleString()}
       </div>
     </div>
-    {realTime && (
-      <div class="real-time-indicator">
-        <div class="pulse-dot"></div>
-        Live
-      </div>
-    )}
+    {
+      realTime && (
+        <div class="real-time-indicator">
+          <div class="pulse-dot" />
+          Live
+        </div>
+      )
+    }
   </div>
 
   <!-- Health Score Section -->
   <div class="health-overview">
     <div class="health-card">
       <div class="health-score">
-        <div class={`score-circle score-${mockHealth.score >= 90 ? 'excellent' : mockHealth.score >= 70 ? 'good' : mockHealth.score >= 50 ? 'warning' : 'critical'}`}>
+        <div
+          class={`score-circle score-${mockHealth.score >= 90 ? 'excellent' : mockHealth.score >= 70 ? 'good' : mockHealth.score >= 50 ? 'warning' : 'critical'}`}
+        >
           <div class="score-number">{mockHealth.score}</div>
           <div class="score-label">Health</div>
         </div>
         <div class="health-details">
           <div class="health-trend">
-            <span class={`trend-icon ${mockHealth.trends.improving ? 'improving' : 'declining'}`}>
+            <span
+              class={`trend-icon ${mockHealth.trends.improving ? 'improving' : 'declining'}`}
+            >
               {mockHealth.trends.improving ? '📈' : '📉'}
             </span>
             <span class="trend-text">
@@ -176,27 +187,35 @@ const mockHealth: ProjectHealth = {
   <div class="categories-section">
     <h2>Issues by Category</h2>
     <div class="categories-grid">
-      {Object.entries(mockHealth.categories).map(([category, count]) => (
-        <div class="category-card">
-          <div class="category-header">
-            <span class="category-icon">
-              {category === 'TypeScript' ? '🏷️' : 
-               category === 'Security' ? '🔒' :
-               category === 'Performance' ? '⚡' :
-               category === 'Accessibility' ? '♿' :
-               category === 'Git' ? '📝' : '📂'}
-            </span>
-            <span class="category-name">{category}</span>
+      {
+        categoryEntries.map(([category, count]) => (
+          <div class="category-card">
+            <div class="category-header">
+              <span class="category-icon">
+                {category === 'TypeScript'
+                  ? '🏷️'
+                  : category === 'Security'
+                    ? '🔒'
+                    : category === 'Performance'
+                      ? '⚡'
+                      : category === 'Accessibility'
+                        ? '♿'
+                        : category === 'Git'
+                          ? '📝'
+                          : '📂'}
+              </span>
+              <span class="category-name">{category}</span>
+            </div>
+            <div class="category-count">{count}</div>
+            <div class="category-bar">
+              <div
+                class="category-fill"
+                style={`width: ${maxCategoryCount > 0 ? (count / maxCategoryCount) * 100 : 0}%`}
+              />
+            </div>
           </div>
-          <div class="category-count">{count}</div>
-          <div class="category-bar">
-            <div 
-              class="category-fill" 
-              style={`width: ${(count / Math.max(...Object.values(mockHealth.categories))) * 100}%`}
-            ></div>
-          </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 
@@ -204,27 +223,34 @@ const mockHealth: ProjectHealth = {
   <div class="critical-issues">
     <h2>🚨 Critical Issues</h2>
     <div class="issues-list">
-      {mockIssues.filter(issue => issue.severity.level === 'critical').map(issue => (
-        <div class="issue-item critical-issue">
-          <div class="issue-header">
-            <div class="issue-title">{issue.title}</div>
-            <div class="issue-badges">
-              <span class="severity-badge critical">{issue.severity.level}</span>
-              <span class="type-badge">{issue.type}</span>
-              {issue.autoFixable && <span class="auto-fix-badge">🔧 Auto-fix</span>}
+      {
+        mockIssues
+          .filter(issue => issue.severity.level === 'critical')
+          .map(issue => (
+            <div class="issue-item critical-issue">
+              <div class="issue-header">
+                <div class="issue-title">{issue.title}</div>
+                <div class="issue-badges">
+                  <span class="severity-badge critical">
+                    {issue.severity.level}
+                  </span>
+                  <span class="type-badge">{issue.type}</span>
+                  {issue.autoFixable && (
+                    <span class="auto-fix-badge">🔧 Auto-fix</span>
+                  )}
+                </div>
+              </div>
+              <div class="issue-description">{issue.description}</div>
+              <div class="issue-location">
+                📁 {issue.file}
+                {issue.line ? `:${issue.line}` : ''}
+              </div>
+              {issue.suggestion && (
+                <div class="issue-suggestion">💡 {issue.suggestion}</div>
+              )}
             </div>
-          </div>
-          <div class="issue-description">{issue.description}</div>
-          <div class="issue-location">
-            📁 {issue.file}{issue.line ? `:${issue.line}` : ''}
-          </div>
-          {issue.suggestion && (
-            <div class="issue-suggestion">
-              💡 {issue.suggestion}
-            </div>
-          )}
-        </div>
-      ))}
+          ))
+      }
     </div>
   </div>
 
@@ -245,34 +271,43 @@ const mockHealth: ProjectHealth = {
           </tr>
         </thead>
         <tbody>
-          {mockIssues.map(issue => (
-            <tr class={`issue-row severity-${issue.severity.level}`}>
-              <td>
-                <span class={`severity-indicator ${issue.severity.level}`}>
-                  {issue.severity.level === 'critical' ? '🚨' :
-                   issue.severity.level === 'high' ? '⚠️' :
-                   issue.severity.level === 'medium' ? '📋' : 'ℹ️'}
-                  {issue.severity.level}
-                </span>
-              </td>
-              <td>
-                <span class="type-indicator">
-                  {issue.type === 'type' ? '🏷️' :
-                   issue.type === 'security' ? '🔒' :
-                   issue.type === 'performance' ? '⚡' :
-                   issue.type === 'accessibility' ? '♿' : '🐛'}
-                  {issue.type}
-                </span>
-              </td>
-              <td class="issue-title-cell">{issue.title}</td>
-              <td class="file-cell">{issue.file}</td>
-              <td class="line-cell">{issue.line || 'N/A'}</td>
-              <td class="category-cell">{issue.category}</td>
-              <td class="autofix-cell">
-                {issue.autoFixable ? '✅' : '❌'}
-              </td>
-            </tr>
-          ))}
+          {
+            mockIssues.map(issue => (
+              <tr class={`issue-row severity-${issue.severity.level}`}>
+                <td>
+                  <span class={`severity-indicator ${issue.severity.level}`}>
+                    {issue.severity.level === 'critical'
+                      ? '🚨'
+                      : issue.severity.level === 'high'
+                        ? '⚠️'
+                        : issue.severity.level === 'medium'
+                          ? '📋'
+                          : 'ℹ️'}
+                    {issue.severity.level}
+                  </span>
+                </td>
+                <td>
+                  <span class="type-indicator">
+                    {issue.type === 'type'
+                      ? '🏷️'
+                      : issue.type === 'security'
+                        ? '🔒'
+                        : issue.type === 'performance'
+                          ? '⚡'
+                          : issue.type === 'accessibility'
+                            ? '♿'
+                            : '🐛'}
+                    {issue.type}
+                  </span>
+                </td>
+                <td class="issue-title-cell">{issue.title}</td>
+                <td class="file-cell">{issue.file}</td>
+                <td class="line-cell">{issue.line || 'N/A'}</td>
+                <td class="category-cell">{issue.category}</td>
+                <td class="autofix-cell">{issue.autoFixable ? '✅' : '❌'}</td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>
@@ -282,16 +317,28 @@ const mockHealth: ProjectHealth = {
   <div class="actions-panel">
     <h2>Quick Actions</h2>
     <div class="action-buttons">
-      <button class="action-btn primary" onclick="alert('🔍 Running comprehensive analysis...\nThis would trigger the error reviewer in a real implementation.');">
+      <button
+        class="action-btn primary"
+        onclick="alert('🔍 Running comprehensive analysis...\nThis would trigger the error reviewer in a real implementation.');"
+      >
         🔍 Run Analysis
       </button>
-      <button class="action-btn secondary" onclick="alert('🔧 Auto-fixing issues...\nThis would apply automatic fixes to fixable issues.');">
+      <button
+        class="action-btn secondary"
+        onclick="alert('🔧 Auto-fixing issues...\nThis would apply automatic fixes to fixable issues.');"
+      >
         🔧 Auto-fix Issues
       </button>
-      <button class="action-btn secondary" onclick="alert('📊 Exporting report...\nThis would generate and download a detailed report.');">
+      <button
+        class="action-btn secondary"
+        onclick="alert('📊 Exporting report...\nThis would generate and download a detailed report.');"
+      >
         📊 Export Report
       </button>
-      <button class="action-btn secondary" onclick="alert('🚀 Checking deployment readiness...\nThis would run pre-deployment validation.');">
+      <button
+        class="action-btn secondary"
+        onclick="alert('🚀 Checking deployment readiness...\nThis would run pre-deployment validation.');"
+      >
         🚀 Deployment Check
       </button>
     </div>
@@ -356,8 +403,13 @@ const mockHealth: ProjectHealth = {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   /* Health Overview */
@@ -392,7 +444,11 @@ const mockHealth: ProjectHealth = {
     justify-content: center;
     font-weight: 700;
     position: relative;
-    background: conic-gradient(from 0deg, var(--score-color) var(--score-percentage), #e5e7eb var(--score-percentage));
+    background: conic-gradient(
+      from 0deg,
+      var(--score-color) var(--score-percentage),
+      #e5e7eb var(--score-percentage)
+    );
   }
 
   .score-excellent {
@@ -605,7 +661,9 @@ const mockHealth: ProjectHealth = {
     flex-wrap: wrap;
   }
 
-  .severity-badge, .type-badge, .auto-fix-badge {
+  .severity-badge,
+  .type-badge,
+  .auto-fix-badge {
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
     font-size: 0.75rem;
@@ -817,10 +875,17 @@ const mockHealth: ProjectHealth = {
 
 <script>
   // Real-time updates (if enabled)
-  if (document.querySelector('.real-time-indicator')) {
+  const indicator = document.querySelector('.real-time-indicator');
+  if (indicator) {
     setInterval(() => {
-      // In a real implementation, this would fetch latest data
-      console.log('🔄 Checking for updates...');
+      const timestamp = new Date().toISOString();
+      indicator.setAttribute('data-last-check', timestamp);
+      indicator.dispatchEvent(
+        new CustomEvent('error-dashboard:heartbeat', {
+          bubbles: true,
+          detail: { timestamp },
+        })
+      );
     }, 30000);
   }
 </script>

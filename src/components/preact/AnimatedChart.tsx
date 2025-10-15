@@ -300,7 +300,16 @@ export default function EnhancedPreactChart({
     (error: ChartError) => {
       setErrors(prev => [...prev.slice(-9), error]);
       onError?.(error);
-      console.error(`[Chart Error - ${error.severity}]:`, error.message);
+      if (
+        typeof window !== 'undefined' &&
+        typeof window.dispatchEvent === 'function'
+      ) {
+        window.dispatchEvent(
+          new CustomEvent<ChartError>('animated-chart:error', {
+            detail: error,
+          })
+        );
+      }
     },
     [onError]
   );

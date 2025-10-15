@@ -10,17 +10,21 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   error?: {
     name: string;
     message: string;
     stack?: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
+type ErrorWithDetails = Error & { details?: unknown };
+type LogListener = (entry: LogEntry) => void;
+
 class Logger {
   private minLevel: LogLevel = LogLevel.INFO;
+  private listeners: Set<LogListener> = new Set();
 
   constructor(minLevel: LogLevel = LogLevel.INFO) {
     this.minLevel = minLevel;
@@ -40,7 +44,7 @@ class Logger {
   private formatMessage(
     level: LogLevel,
     message: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
     error?: Error
   ): LogEntry {
     const logEntry: LogEntry = {
@@ -60,74 +64,117 @@ class Logger {
         stack: error.stack,
       };
       // If it's a custom error with details, include them
-      if ((error as any).details) {
-        logEntry.error.details = (error as any).details;
+      if (this.hasDetails(error)) {
+        logEntry.error.details = error.details;
       }
     }
     return logEntry;
   }
 
-  private output(entry: LogEntry) {
+  private hasDetails(error: Error): error is ErrorWithDetails {
+    return 'details' in error;
+  }
+
+  private formatForStream(entry: LogEntry): string {
     const { timestamp, level, message, context, error } = entry;
     let logString = `[${timestamp}] [${level}] ${message}`;
 
-    if (context && Object.keys(context).length > 0) {
-      logString += ` | Context: ${JSON.stringify(context)}`;
+    if (context) {
+      try {
+        logString += ` | Context: ${JSON.stringify(context)}`;
+      } catch {
+        logString += ' | Context: [unserializable]';
+      }
     }
+
     if (error) {
       logString += ` | Error: ${error.name}: ${error.message}`;
       if (error.details) {
-        logString += ` | Details: ${JSON.stringify(error.details)}`;
+        try {
+          logString += ` | Details: ${JSON.stringify(error.details)}`;
+        } catch {
+          logString += ' | Details: [unserializable]';
+        }
       }
       if (error.stack) {
         logString += `\nStack: ${error.stack}`;
       }
     }
 
-    switch (level) {
-      case LogLevel.DEBUG:
-        console.debug(logString);
-        break;
-      case LogLevel.INFO:
-        console.info(logString);
-        break;
-      case LogLevel.WARN:
-        console.warn(logString);
-        break;
-      case LogLevel.ERROR:
-      case LogLevel.FATAL:
-        console.error(logString);
-        break;
-      default:
-        console.log(logString);
+    return logString;
+  }
+
+  private emit(entry: LogEntry, formatted: string): void {
+    this.listeners.forEach(listener => listener(entry));
+
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.dispatchEvent === 'function'
+    ) {
+      try {
+        window.dispatchEvent(
+          new CustomEvent<LogEntry>('logger:message', { detail: entry })
+        );
+        return;
+      } catch {
+        // Ignore environments without CustomEvent support
+      }
+    }
+
+    if (typeof process !== 'undefined') {
+      const stream =
+        entry.level === LogLevel.ERROR || entry.level === LogLevel.FATAL
+          ? process.stderr
+          : process.stdout;
+      if (stream && typeof stream.write === 'function') {
+        stream.write(`${formatted}\n`);
+      }
     }
   }
 
-  public debug(message: string, context?: Record<string, any>) {
+  public subscribe(listener: LogListener): () => void {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  private output(entry: LogEntry) {
+    const formatted = this.formatForStream(entry);
+    this.emit(entry, formatted);
+  }
+
+  public debug(message: string, context?: Record<string, unknown>) {
     if (this.shouldLog(LogLevel.DEBUG)) {
       this.output(this.formatMessage(LogLevel.DEBUG, message, context));
     }
   }
 
-  public info(message: string, context?: Record<string, any>) {
+  public info(message: string, context?: Record<string, unknown>) {
     if (this.shouldLog(LogLevel.INFO)) {
       this.output(this.formatMessage(LogLevel.INFO, message, context));
     }
   }
 
-  public warn(message: string, context?: Record<string, any>) {
+  public warn(message: string, context?: Record<string, unknown>) {
     if (this.shouldLog(LogLevel.WARN)) {
       this.output(this.formatMessage(LogLevel.WARN, message, context));
     }
   }
 
-  public error(message: string, error?: Error, context?: Record<string, any>) {
+  public error(
+    message: string,
+    error?: Error,
+    context?: Record<string, unknown>
+  ) {
     if (this.shouldLog(LogLevel.ERROR)) {
       this.output(this.formatMessage(LogLevel.ERROR, message, context, error));
     }
   }
 
-  public fatal(message: string, error?: Error, context?: Record<string, any>) {
+  public fatal(
+    message: string,
+    error?: Error,
+    context?: Record<string, unknown>
+  ) {
     if (this.shouldLog(LogLevel.FATAL)) {
       this.output(this.formatMessage(LogLevel.FATAL, message, context, error));
     }

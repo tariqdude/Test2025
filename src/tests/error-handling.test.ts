@@ -8,6 +8,11 @@ import {
   NetworkError,
 } from '../errors';
 
+const expectDetails = <T>(details: unknown): T => {
+  expect(details).toBeDefined();
+  return details as T;
+};
+
 describe('Error Handling System', () => {
   describe('AppError (Base Class)', () => {
     it('should create basic app error with message and code', () => {
@@ -43,8 +48,13 @@ describe('Error Handling System', () => {
       expect(analysisError.code).toBe('ANALYSIS_ERROR');
       expect(analysisError.message).toContain('SyntaxChecker');
       expect(analysisError.message).toContain('Original problem');
-      expect((analysisError.details as any).checkerName).toBe('SyntaxChecker');
-      expect((analysisError.details as any).originalError).toBe(originalError);
+      const analysisDetails = expectDetails<{
+        checkerName: string;
+        originalError: Error;
+      }>(analysisError.details);
+
+      expect(analysisDetails.checkerName).toBe('SyntaxChecker');
+      expect(analysisDetails.originalError).toBe(originalError);
     });
 
     it('should use custom message when provided', () => {
@@ -72,11 +82,19 @@ describe('Error Handling System', () => {
 
       expect(error.name).toBe('CommandExecutionError');
       expect(error.code).toBe('COMMAND_EXECUTION_ERROR');
-      expect((error.details as any).command).toBe('npm test');
-      expect((error.details as any).exitCode).toBe(1);
-      expect((error.details as any).signal).toBe('SIGTERM');
-      expect((error.details as any).stdout).toBe('Test output');
-      expect((error.details as any).stderr).toBe('Error output');
+      const commandDetails = expectDetails<{
+        command: string;
+        exitCode: number | null;
+        signal: NodeJS.Signals | null;
+        stdout: string;
+        stderr: string;
+      }>(error.details);
+
+      expect(commandDetails.command).toBe('npm test');
+      expect(commandDetails.exitCode).toBe(1);
+      expect(commandDetails.signal).toBe('SIGTERM');
+      expect(commandDetails.stdout).toBe('Test output');
+      expect(commandDetails.stderr).toBe('Error output');
     });
 
     it('should handle null exit code and signal', () => {
@@ -88,8 +106,13 @@ describe('Error Handling System', () => {
         'Process killed'
       );
 
-      expect((error.details as any).exitCode).toBeNull();
-      expect((error.details as any).signal).toBeNull();
+      const fallbackDetails = expectDetails<{
+        exitCode: number | null;
+        signal: NodeJS.Signals | null;
+      }>(error.details);
+
+      expect(fallbackDetails.exitCode).toBeNull();
+      expect(fallbackDetails.signal).toBeNull();
     });
   });
 
@@ -106,9 +129,15 @@ describe('Error Handling System', () => {
       expect(fsError.code).toBe('FILE_SYSTEM_ERROR');
       expect(fsError.message).toContain('read on /path/to/file.ts');
       expect(fsError.message).toContain('ENOENT');
-      expect((fsError.details as any).operation).toBe('read');
-      expect((fsError.details as any).filePath).toBe('/path/to/file.ts');
-      expect((fsError.details as any).originalError).toBe(originalError);
+      const fsDetails = expectDetails<{
+        operation: string;
+        filePath: string;
+        originalError: Error;
+      }>(fsError.details);
+
+      expect(fsDetails.operation).toBe('read');
+      expect(fsDetails.filePath).toBe('/path/to/file.ts');
+      expect(fsDetails.originalError).toBe(originalError);
     });
 
     it('should use custom message when provided', () => {
@@ -135,7 +164,9 @@ describe('Error Handling System', () => {
       expect(error.code).toBe('CONFIGURATION_ERROR');
       expect(error.message).toContain('Invalid path specified');
       expect(error.message).toContain('projectRoot');
-      expect((error.details as any).configKey).toBe('projectRoot');
+      const configDetails = expectDetails<{ configKey: string }>(error.details);
+
+      expect(configDetails.configKey).toBe('projectRoot');
     });
 
     it('should use default message when not provided', () => {
@@ -160,15 +191,25 @@ describe('Error Handling System', () => {
       expect(networkError.message).toContain('https://api.example.com');
       expect(networkError.message).toContain('500');
       expect(networkError.message).toContain('Connection timeout');
-      expect((networkError.details as any).url).toBe('https://api.example.com');
-      expect((networkError.details as any).status).toBe(500);
-      expect((networkError.details as any).originalError).toBe(originalError);
+      const networkDetails = expectDetails<{
+        url: string;
+        status: number;
+        originalError?: Error;
+      }>(networkError.details);
+
+      expect(networkDetails.url).toBe('https://api.example.com');
+      expect(networkDetails.status).toBe(500);
+      expect(networkDetails.originalError).toBe(originalError);
     });
 
     it('should work without original error', () => {
       const networkError = new NetworkError('https://api.test.com', 404);
 
-      expect((networkError.details as any).originalError).toBeUndefined();
+      const minimalNetworkDetails = expectDetails<{
+        originalError?: Error;
+      }>(networkError.details);
+
+      expect(minimalNetworkDetails.originalError).toBeUndefined();
       expect(networkError.message).toContain('https://api.test.com');
       expect(networkError.message).toContain('404');
     });
@@ -233,7 +274,11 @@ describe('Error Handling System', () => {
       expect(typeof serialized.message).toBe('string');
       expect(serialized.code).toBe('ANALYSIS_ERROR');
       expect(serialized.details).toBeDefined();
-      expect((serialized.details as any).checkerName).toBe('TestAnalyzer');
+      const serializedDetails = expectDetails<{ checkerName: string }>(
+        serialized.details
+      );
+
+      expect(serializedDetails.checkerName).toBe('TestAnalyzer');
     });
   });
 });

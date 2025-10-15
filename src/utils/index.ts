@@ -1,6 +1,7 @@
 // Modern utility functions for enhanced development experience
 
 import type { BlogPost, SearchFilters, ColorScheme } from '../types/index';
+import { logger } from './logger';
 
 // Export analysis cache utility
 export { AnalysisCache } from './analysis-cache';
@@ -505,7 +506,10 @@ export const measureTime = async <T>(
   const duration = performance.now() - start;
 
   if (label) {
-    console.log(`${label}: ${duration.toFixed(2)}ms`);
+    logger.debug('Function timing captured', {
+      label,
+      duration: Number(duration.toFixed(2)),
+    });
   }
 
   return { result, duration };

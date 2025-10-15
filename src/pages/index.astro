@@ -1,95 +1,48 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import CodeShowcase from "../components/CodeShowcase.astro";
-import PerformanceMonitor from "../components/PerformanceMonitor.astro";
-import ThemeProvider from "../components/ThemeProvider.astro";
-import ThemeSelector from "../components/ThemeSelector.astro";
-import ThreeScene from "../components/react/ThreeScene.tsx";
-import Card3D from "../components/vue/Card3D.vue";
-import ParticleCanvas from "../components/svelte/ParticleCanvas.svelte";
-import ReactiveCounter from "../components/solid/ReactiveCounter.tsx";
-import AnimatedChart from "../components/preact/AnimatedChart.tsx";
-import CTA from "../components/ui/CTA.astro";
-import Testimonials from "../components/ui/Testimonials.astro";
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
-const title = "Astro Capabilities Showcase";
-const description =
-  "Elevate your customer experience with an enterprise-ready platform that unifies observability, collaboration, and executive insight.";
+const headline = 'Purpose-built analytics for calm operations';
+const subheading =
+  'Monitor launches, track customer impact, and share clear status updates without maintaining custom dashboards.';
 
-const heroMetrics = [
-  { value: "45%", label: "Faster incident resolution" },
-  { value: "3x", label: "Reduction in MTTR" },
-  { value: "98%", label: "Customer satisfaction rating" },
+const metrics = [
+  { value: '24/7', label: 'Status visibility' },
+  { value: '-40%', label: 'Incident resolution time' },
+  { value: '+18%', label: 'Customer satisfaction' },
 ];
 
-const trustedLogos = [
-  "Northwind",
-  "Globex",
-  "Acme",
-  "Initech",
-  "Stark Industries",
-  "Wayne Enterprises",
-];
-
-const featureHighlights = [
+const features = [
   {
-    name: "Executive-ready intelligence",
+    title: 'Unified reporting',
     description:
-      "Deliver real-time health summaries, board decks, and exportable analytics that keep leadership aligned and confident.",
-    bullets: [
-      "Weekly automated health briefs",
-      "Role-based insight workspaces",
-      "Native integrations with BI suites",
-    ],
+      'Ship executive-ready updates from a single workspace with exports that look great on every device.',
   },
   {
-    name: "Operational excellence workflows",
+    title: 'Performance guardrails',
     description:
-      "Coordinate product, engineering, and customer teams with a single control plane for observability, incidents, and releases.",
-    bullets: [
-      "AI-backed prioritization and routing",
-      "SLA tracking with smart escalations",
-      "Deep framework and CI/CD integrations",
-    ],
+      'Catch regressions early with lightweight checks that run on every release pipeline.',
   },
   {
-    name: "Customer trust and communication",
+    title: 'Team alignment',
     description:
-      "Keep customers informed with branded status pages, proactive messaging, and accessibility-first experience benchmarking.",
-    bullets: [
-      "Audience segmentation and personalization",
-      "Status page automation with change logs",
-      "Experience analytics with accessibility insights",
-    ],
+      'Invite product, engineering, and support to collaborate on the same shared context.',
   },
 ];
 
-const testimonialsData = [
+const testimonials = [
   {
-    name: "Danielle Ortiz",
-    role: "Head of Engineering",
-    company: "Northwind Finance",
-    content:
-      "Our mean time to resolution dropped by nearly half in the first month. The executive-ready dashboards make alignment effortless.",
-    rating: 5,
+    quote:
+      'The weekly rollups keep leadership focused on trends instead of chasing down screenshots.',
+    name: 'Danielle Ortiz',
+    role: 'VP Engineering, Northwind',
   },
   {
-    name: "Marcus Chen",
-    role: "VP of Product",
-    company: "Globex Retail",
-    content:
-      "We finally have a single pane of glass for product quality, customer impact, and roadmap prioritization.",
-    rating: 5,
-  },
-  {
-    name: "Priya Singh",
-    role: "Director of Customer Success",
-    company: "Acme Cloud",
-    content:
-      "Stakeholder updates are automated, accessible, and beautifully branded. It has transformed our customer communications.",
-    rating: 5,
+    quote:
+      'We replaced three different dashboards with one Astro site and shipping finally feels predictable.',
+    name: 'Marcus Chen',
+    role: 'Head of Product, Globex',
   },
 ];
 ---
@@ -97,266 +50,153 @@ const testimonialsData = [
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={headline} description={subheading} />
   </head>
   <body class="bg-neutral-50 text-neutral-900 antialiased">
-    <ThemeProvider theme="light" className="flex min-h-screen flex-col bg-neutral-50 text-neutral-900">
-      <Header />
-
-      <main class="flex-1">
-        <section class="relative overflow-hidden pt-24 pb-20">
-          <div class="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 via-white to-transparent"></div>
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-end">
-              <ThemeSelector currentTheme="light" />
-            </div>
-            <div class="mt-10 grid items-center gap-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-              <div class="space-y-8">
-                <div class="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/80 px-4 py-2 text-xs font-medium uppercase tracking-[0.3em] text-brand-600 shadow-elevation-xs">
-                  Enterprise launchpad
-                </div>
-                <h1 class="text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl">
-                  Professional error intelligence for high-performing digital teams
-                </h1>
-                <p class="max-w-2xl text-lg leading-8 text-neutral-600">
-                  Align leadership, engineering, and customer teams around a single source of truth. Astro combines multi-framework experiences with executive-ready reporting so you can deliver outcomes, not noise.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                  <a class="btn btn-primary" href="/dashboard">
-                    Explore live dashboard
-                  </a>
-                  <a class="btn btn-secondary" href="/contact">
-                    Talk to our team
-                  </a>
-                </div>
-                <dl class="grid gap-6 pt-8 sm:grid-cols-3">
-                  {heroMetrics.map((metric) => (
-                    <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-elevation-xs">
-                      <dt class="text-sm font-medium text-neutral-500">{metric.label}</dt>
-                      <dd class="mt-2 text-3xl font-semibold text-neutral-900">{metric.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-
-              <div class="relative">
-                <div class="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-elevation-lg">
-                  <div class="absolute right-6 top-6 flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 shadow-elevation-xs">
-                    <span class="inline-flex h-2 w-2 rounded-full bg-success-400"></span>
-                    Live observability
-                  </div>
-                  <div class="grid gap-6 p-6">
-                    <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
-                      <AnimatedChart client:visible />
-                    </div>
-                    <div class="grid gap-4 md:grid-cols-2">
-                      <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
-                        <ReactiveCounter client:load />
-                      </div>
-                      <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
-                        <ParticleCanvas client:idle />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-16 border-t border-neutral-200 pt-10">
-              <p class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-500">
-                Trusted by digital leaders worldwide
-              </p>
-              <div class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm font-semibold text-neutral-400 sm:text-base">
-                {trustedLogos.map((logo) => (
-                  <span class="tracking-[0.2em] uppercase text-neutral-500">{logo}</span>
-                ))}
-              </div>
+    <Header />
+    <main>
+      <section class="relative overflow-hidden">
+        <div class="container mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+          <div class="max-w-3xl">
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-neutral-600"
+            >
+              Built for clarity
+            </span>
+            <h1
+              class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+            >
+              {headline}
+            </h1>
+            <p class="mt-6 text-lg leading-8 text-neutral-600 sm:text-xl">
+              {subheading}
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a
+                class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
+                href="/contact"
+              >
+                Schedule a walkthrough
+              </a>
+              <a
+                class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300 hover:bg-white"
+                href="/blog"
+              >
+                Read customer stories
+              </a>
             </div>
           </div>
-        </section>
+          <dl class="mt-16 grid gap-6 sm:grid-cols-3">
+            {
+              metrics.map(metric => (
+                <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-elevation-xs">
+                  <dt class="text-sm font-medium text-neutral-500">
+                    {metric.label}
+                  </dt>
+                  <dd class="mt-3 text-3xl font-semibold text-neutral-900">
+                    {metric.value}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </section>
 
-        <section class="py-20">
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="section-header">
-              <span class="section-eyebrow">Strategic outcomes</span>
-              <h2 class="section-title text-neutral-950">A business platform engineered for clarity</h2>
-              <p class="section-subtitle text-neutral-600">
-                Combine observability, collaboration, and executive storytelling to accelerate confident decisions.
-              </p>
-            </div>
-
-            <div class="mt-12 grid gap-8 lg:grid-cols-3">
-              {featureHighlights.map((feature) => (
-                <article class="flex h-full flex-col gap-6 rounded-3xl border border-neutral-200 bg-white p-8 shadow-elevation-xs transition-shadow duration-200 hover:shadow-elevation-sm">
-                  <h3 class="text-2xl font-semibold text-neutral-900">{feature.name}</h3>
-                  <p class="text-neutral-600">{feature.description}</p>
-                  <ul class="space-y-3 text-sm leading-6 text-neutral-600">
-                    {feature.bullets.map((bullet) => (
-                      <li class="flex items-start gap-3">
-                        <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-500"></span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+      <section class="bg-white">
+        <div class="container mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+          <div class="max-w-3xl">
+            <p
+              class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-500"
+            >
+              Why teams switch
+            </p>
+            <h2
+              class="mt-4 text-3xl font-semibold text-neutral-950 sm:text-4xl"
+            >
+              Focus on the work that matters
+            </h2>
+            <p class="mt-4 text-lg text-neutral-600">
+              Astro keeps content static and fast so your updates deploy
+              reliably to GitHub Pages. No opaque services, no background
+              daemons—just your copy, visuals, and the data points you want to
+              share.
+            </p>
+          </div>
+          <div class="mt-12 grid gap-8 lg:grid-cols-3">
+            {
+              features.map(feature => (
+                <article class="flex h-full flex-col rounded-2xl border border-neutral-200 bg-neutral-50 p-8 shadow-elevation-xs">
+                  <h3 class="text-2xl font-semibold text-neutral-900">
+                    {feature.title}
+                  </h3>
+                  <p class="mt-4 text-neutral-600">{feature.description}</p>
                 </article>
-              ))}
-            </div>
+              ))
+            }
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="bg-neutral-50 py-20">
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-              <div class="space-y-6">
-                <span class="section-eyebrow">Operational governance</span>
-                <h2 class="text-4xl font-semibold text-neutral-950">
-                  Command your reliability posture with confidence
-                </h2>
-                <p class="text-lg leading-8 text-neutral-600">
-                  Monitor core web vitals, infrastructure health, and customer experience insights in a single command center designed for product delivery at scale.
-                </p>
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
-                    <p class="text-sm font-semibold text-neutral-900">99.98% uptime</p>
-                    <p class="text-sm text-neutral-600">Continuous monitoring with predictive alerts</p>
-                  </div>
-                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
-                    <p class="text-sm font-semibold text-neutral-900">Instant customer context</p>
-                    <p class="text-sm text-neutral-600">Connect CRM, support, and product telemetry</p>
-                  </div>
-                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
-                    <p class="text-sm font-semibold text-neutral-900">Executive-ready exports</p>
-                    <p class="text-sm text-neutral-600">Beautiful, branded reports in one click</p>
-                  </div>
-                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
-                    <p class="text-sm font-semibold text-neutral-900">AI triage and workflows</p>
-                    <p class="text-sm text-neutral-600">Focus teams on the incidents that matter</p>
-                  </div>
-                </div>
-              </div>
-
-              <PerformanceMonitor className="bg-white shadow-elevation-lg border border-neutral-200" />
-            </div>
-          </div>
-        </section>
-
-        <section class="bg-white py-20">
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="section-header text-center">
-              <span class="section-eyebrow">Live product workspaces</span>
-              <h2 class="section-title text-neutral-950">Experiences crafted in every framework</h2>
-              <p class="section-subtitle text-neutral-600">
-                Astro orchestrates the best of React, Vue, Svelte, Solid, and Preact so every team can work the way they want without sacrificing cohesion.
+      <section class="bg-neutral-900 py-20 text-neutral-100">
+        <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div
+            class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]"
+          >
+            <div>
+              <p
+                class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+              >
+                Customer perspective
+              </p>
+              <h2 class="mt-4 text-3xl font-semibold text-white sm:text-4xl">
+                Stories from teams using the template today
+              </h2>
+              <p class="mt-4 text-neutral-300">
+                These quotes come from the pilot group that migrated their
+                internal status sites to Astro. They now deploy straight to
+                GitHub Pages with confidence.
               </p>
             </div>
-
-            <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-              <article class="flex h-full flex-col rounded-3xl border border-neutral-200 bg-neutral-50 p-6 shadow-elevation-sm">
-                <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
-                  <span class="text-neutral-900">Immersive analytics</span>
-                  <span class="uppercase tracking-[0.3em]">React + Three.js</span>
-                </div>
-                <div class="mt-4 flex-1 overflow-hidden rounded-2xl bg-neutral-900">
-                  <ThreeScene client:only="react" />
-                </div>
-                <p class="mt-4 text-sm text-neutral-600">
-                  Visualize complex customer journeys in real time with GPU-accelerated scenes and intuitive controls.
-                </p>
-              </article>
-
-              <div class="grid gap-8">
-                <article class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-elevation-sm">
-                  <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
-                    <span class="text-neutral-900">Executive overview</span>
-                    <span class="uppercase tracking-[0.3em]">Vue</span>
-                  </div>
-                  <div class="mt-4 h-64 overflow-hidden rounded-2xl bg-neutral-50">
-                    <Card3D client:visible />
-                  </div>
-                  <p class="mt-4 text-sm text-neutral-600">
-                    Delight stakeholders with tactile summaries and responsive motion that bring narratives to life.
-                  </p>
-                </article>
-
-                <article class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-elevation-sm">
-                  <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
-                    <span class="text-neutral-900">Predictive insights</span>
-                    <span class="uppercase tracking-[0.3em]">Preact</span>
-                  </div>
-                  <div class="mt-4 h-64 overflow-hidden rounded-2xl bg-neutral-50">
-                    <AnimatedChart client:visible />
-                  </div>
-                  <p class="mt-4 text-sm text-neutral-600">
-                    Surface KPI shifts instantly with adaptive, low-latency charts that scale across devices.
-                  </p>
-                </article>
-              </div>
+            <div class="space-y-6">
+              {
+                testimonials.map(item => (
+                  <blockquote class="rounded-2xl bg-neutral-800/60 p-8 shadow-elevation-sm ring-1 ring-neutral-700/60">
+                    <p class="text-lg text-neutral-100">“{item.quote}”</p>
+                    <footer class="mt-4 text-sm text-neutral-400">
+                      <span class="font-semibold text-neutral-200">
+                        {item.name}
+                      </span>
+                      <span class="ml-2">{item.role}</span>
+                    </footer>
+                  </blockquote>
+                ))
+              }
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="bg-neutral-900 py-20 text-neutral-100">
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)]">
-              <div class="space-y-6">
-                <span class="section-eyebrow text-neutral-400">Developer velocity</span>
-                <h2 class="text-4xl font-semibold text-white">
-                  Built for teams who ship with precision
-                </h2>
-                <p class="text-lg leading-8 text-neutral-300">
-                  Use best-in-class tooling with a unified workflow: type-safe content collections, automated testing, and performance budgets baked in from day one.
-                </p>
-                <ul class="space-y-3 text-sm leading-6 text-neutral-300">
-                  <li class="flex items-start gap-2">
-                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
-                    <span>Composable islands with selective hydration for optimal load times.</span>
-                  </li>
-                  <li class="flex items-start gap-2">
-                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
-                    <span>Integrated quality gates covering linting, testing, and accessibility.</span>
-                  </li>
-                  <li class="flex items-start gap-2">
-                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
-                    <span>Framework-agnostic story-driven documentation for every component.</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="rounded-3xl bg-neutral-950/40 p-6 shadow-elevation-lg ring-1 ring-neutral-800/60">
-                <CodeShowcase />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="py-20">
-          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="section-header text-center">
-              <span class="section-eyebrow">Customer stories</span>
-              <h2 class="section-title text-neutral-950">Trusted by global product leaders</h2>
-              <p class="section-subtitle text-neutral-600">
-                High-growth organizations rely on Astro to deliver reliable, accessible, and delightful digital experiences.
-              </p>
-            </div>
-
-            <div class="mt-12">
-              <Testimonials testimonials={testimonialsData} />
-            </div>
-          </div>
-        </section>
-
-        <section class="pb-24">
-          <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <CTA
-              variant="contact"
-              heading="See the platform in action"
-              subheading="Book a tailored walkthrough and learn how Astro powers digital excellence for enterprises like yours."
-            />
-          </div>
-        </section>
-      </main>
-
-      <Footer />
-    </ThemeProvider>
+      <section class="bg-white">
+        <div
+          class="container mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8"
+        >
+          <h2 class="text-3xl font-semibold text-neutral-950 sm:text-4xl">
+            Ready to publish updates without the overhead?
+          </h2>
+          <p class="mt-4 text-lg text-neutral-600">
+            Start with this streamlined Astro setup, connect your repository,
+            and deploy to GitHub Pages in minutes.
+          </p>
+          <a
+            class="mt-8 inline-flex items-center justify-center rounded-full bg-brand-600 px-8 py-3 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
+            href="/contact"
+          >
+            Talk with our team
+          </a>
+        </div>
+      </section>
+    </main>
+    <Footer />
   </body>
 </html>

@@ -1,3 +1,23 @@
+import { logger } from './logger';
+
+const normalizeErrorContext = (error: unknown): Record<string, unknown> => {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
+  }
+
+  return { error };
+};
+
+const isLocalStorageAvailable = (): boolean => {
+  return (
+    typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
+  );
+};
+
 // Date utilities
 export function formatDate(
   date: Date | string,
@@ -148,28 +168,49 @@ export function clamp(value: number, min: number, max: number): number {
 
 // Local storage utilities
 export function setLocalStorage<T>(key: string, value: T): void {
+  if (!isLocalStorageAvailable()) {
+    logger.warn('localStorage is unavailable in this environment', { key });
+    return;
+  }
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
-    console.warn('Failed to set localStorage:', error);
+    logger.warn('Failed to set localStorage entry', {
+      key,
+      ...normalizeErrorContext(error),
+    });
   }
 }
 
 export function getLocalStorage<T>(key: string, defaultValue?: T): T | null {
+  if (!isLocalStorageAvailable()) {
+    logger.warn('localStorage is unavailable in this environment', { key });
+    return defaultValue ?? null;
+  }
   try {
-    const item = localStorage.getItem(key);
+    const item = window.localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue || null;
   } catch (error) {
-    console.warn('Failed to get localStorage:', error);
-    return defaultValue || null;
+    logger.warn('Failed to read localStorage entry', {
+      key,
+      ...normalizeErrorContext(error),
+    });
+    return defaultValue ?? null;
   }
 }
 
 export function removeLocalStorage(key: string): void {
+  if (!isLocalStorageAvailable()) {
+    logger.warn('localStorage is unavailable in this environment', { key });
+    return;
+  }
   try {
-    localStorage.removeItem(key);
+    window.localStorage.removeItem(key);
   } catch (error) {
-    console.warn('Failed to remove localStorage:', error);
+    logger.warn('Failed to remove localStorage entry', {
+      key,
+      ...normalizeErrorContext(error),
+    });
   }
 }
 

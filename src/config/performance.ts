@@ -1,6 +1,19 @@
 // Performance optimization configuration for Astro
 
 import type { AstroIntegration as _AstroIntegration } from 'astro';
+import { logger } from '../utils/logger';
+
+const describeError = (error: unknown): Record<string, unknown> => {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
+  }
+
+  return { error };
+};
 
 /* ==================== PERFORMANCE CONSTANTS ==================== */
 
@@ -89,8 +102,11 @@ export class PerformanceMonitor {
           buffered: true,
         });
         this.observers.push(lcpObserver);
-      } catch (e) {
-        console.warn('LCP observer not supported');
+      } catch (error) {
+        logger.warn('LCP observer not supported', {
+          observer: 'lcp',
+          ...describeError(error),
+        });
       }
 
       // First Input Delay
@@ -111,8 +127,11 @@ export class PerformanceMonitor {
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
         this.observers.push(fidObserver);
-      } catch (e) {
-        console.warn('FID observer not supported');
+      } catch (error) {
+        logger.warn('FID observer not supported', {
+          observer: 'fid',
+          ...describeError(error),
+        });
       }
 
       // Cumulative Layout Shift
@@ -133,8 +152,11 @@ export class PerformanceMonitor {
         });
         clsObserver.observe({ type: 'layout-shift', buffered: true });
         this.observers.push(clsObserver);
-      } catch (e) {
-        console.warn('CLS observer not supported');
+      } catch (error) {
+        logger.warn('CLS observer not supported', {
+          observer: 'cls',
+          ...describeError(error),
+        });
       }
     }
 
@@ -156,11 +178,9 @@ export class PerformanceMonitor {
   }
 
   public logMetrics(): void {
-    console.group('🚀 Performance Metrics');
-    Object.entries(this.metrics).forEach(([key, value]) => {
-      console.log(`${key.toUpperCase()}: ${Math.round(value)}ms`);
+    logger.info('Performance metrics snapshot', {
+      metrics: { ...this.metrics },
     });
-    console.groupEnd();
   }
 
   public destroy(): void {
@@ -391,7 +411,14 @@ export class CriticalCSSExtractor {
 
       return criticalCSS;
     } catch (error) {
-      console.warn('Critical CSS extraction failed:', error);
+      logger.error(
+        'Critical CSS extraction failed',
+        error instanceof Error ? error : undefined,
+        {
+          stage: 'critical-css-extraction',
+          ...describeError(error),
+        }
+      );
       return '';
     }
   }
@@ -508,7 +535,10 @@ export const performanceUtils = {
     const duration = performance.now() - start;
 
     if (label) {
-      console.log(`${label}: ${duration.toFixed(2)}ms`);
+      logger.debug('Async operation timing captured', {
+        label,
+        duration: Number(duration.toFixed(2)),
+      });
     }
 
     return { result, duration };
