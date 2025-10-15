@@ -10,7 +10,7 @@ const { theme = 'dark', className = '' } = Astro.props;
 const currentTheme = themes[theme] || themes.dark;
 ---
 
-<div 
+<div
   class={`theme-provider ${className}`}
   data-theme={theme}
   style={`
@@ -54,10 +54,15 @@ const currentTheme = themes[theme] || themes.dark;
     --radius-lg: ${currentTheme.borderRadius.lg};
     --radius-xl: ${currentTheme.borderRadius.xl};
     --radius-full: ${currentTheme.borderRadius.full};
-    --shadow-sm: ${currentTheme.boxShadow.sm};
-    --shadow-md: ${currentTheme.boxShadow.md};
-    --shadow-lg: ${currentTheme.boxShadow.lg};
-    --shadow-xl: ${currentTheme.boxShadow.xl};
+  --shadow-sm: ${currentTheme.effects.shadow.sm};
+  --shadow-md: ${currentTheme.effects.shadow.md};
+  --shadow-lg: ${currentTheme.effects.shadow.lg};
+  --shadow-xl: ${currentTheme.effects.shadow.xl};
+  --shadow-2xl: ${currentTheme.effects.shadow['2xl']};
+  --blur-sm: ${currentTheme.effects.blur.sm};
+  --blur-md: ${currentTheme.effects.blur.md};
+  --blur-lg: ${currentTheme.effects.blur.lg};
+  --blur-xl: ${currentTheme.effects.blur.xl};
     --duration-fast: ${currentTheme.animation.duration.fast};
     --duration-normal: ${currentTheme.animation.duration.normal};
     --duration-slow: ${currentTheme.animation.duration.slow};
@@ -75,12 +80,12 @@ const currentTheme = themes[theme] || themes.dark;
     color: var(--color-text-primary);
     background-color: var(--color-background);
     font-family: var(--font-family-sans);
-    transition: 
+    transition:
       color var(--duration-normal) var(--easing-ease-out),
       background-color var(--duration-normal) var(--easing-ease-out);
     min-height: 100vh;
   }
-  
+
   /* Global component styles */
   .theme-provider .btn {
     padding: var(--spacing-sm) var(--spacing-md);
@@ -90,29 +95,29 @@ const currentTheme = themes[theme] || themes.dark;
     cursor: pointer;
     border: none;
   }
-  
+
   .theme-provider .btn-primary {
     background: var(--gradient-primary);
     color: var(--color-text-inverse);
   }
-  
+
   .theme-provider .btn-primary:hover {
     filter: brightness(1.1);
     transform: translateY(-1px);
     box-shadow: var(--shadow-lg);
   }
-  
+
   .theme-provider .btn-secondary {
     background: var(--color-surface);
     color: var(--color-text-primary);
     border: 1px solid var(--color-border);
   }
-  
+
   .theme-provider .btn-secondary:hover {
     background: var(--color-border);
     transform: translateY(-1px);
   }
-  
+
   .theme-provider .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -120,12 +125,12 @@ const currentTheme = themes[theme] || themes.dark;
     box-shadow: var(--shadow-lg);
     transition: all var(--duration-normal) var(--easing-ease-out);
   }
-  
+
   .theme-provider .card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-xl);
   }
-  
+
   .theme-provider .input {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -134,72 +139,81 @@ const currentTheme = themes[theme] || themes.dark;
     border-radius: var(--radius-md);
     transition: all var(--duration-normal) var(--easing-ease-out);
   }
-  
+
   .theme-provider .input:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   }
-  
+
   .theme-provider .text-primary {
     color: var(--color-text-primary);
   }
-  
+
   .theme-provider .text-secondary {
     color: var(--color-text-secondary);
   }
-  
+
   .theme-provider .text-muted {
     color: var(--color-text-muted);
   }
-  
+
   .theme-provider .bg-surface {
     background-color: var(--color-surface);
   }
-  
+
   .theme-provider .bg-primary {
     background: var(--gradient-primary);
   }
-  
+
   .theme-provider .border {
     border-color: var(--color-border);
   }
-  
+
   /* Animation utilities */
   .theme-provider .animate-fade-in {
     animation: fadeIn var(--duration-slow) var(--easing-ease-out);
   }
-  
+
   .theme-provider .animate-slide-up {
     animation: slideUp var(--duration-normal) var(--easing-ease-out);
   }
-  
+
   .theme-provider .animate-bounce {
     animation: bounce 1s var(--easing-bounce);
   }
-  
+
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
-  
+
   @keyframes slideUp {
-    from { 
+    from {
       opacity: 0;
       transform: translateY(20px);
     }
-    to { 
+    to {
       opacity: 1;
       transform: translateY(0);
     }
   }
-  
+
   @keyframes bounce {
-    0%, 20%, 53%, 80%, 100% {
+    0%,
+    20%,
+    53%,
+    80%,
+    100% {
       animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
       transform: translateY(0);
     }
-    40%, 43% {
+    40%,
+    43% {
       animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
       transform: translateY(-15px);
     }
@@ -211,23 +225,23 @@ const currentTheme = themes[theme] || themes.dark;
       transform: translateY(-2px);
     }
   }
-  
+
   /* Responsive breakpoints */
   @media (max-width: 768px) {
     .theme-provider {
       font-size: 14px;
     }
-    
+
     .theme-provider .card {
       padding: var(--spacing-md);
     }
   }
-  
+
   @media (max-width: 480px) {
     .theme-provider {
       font-size: 13px;
     }
-    
+
     .theme-provider .card {
       padding: var(--spacing-sm);
     }

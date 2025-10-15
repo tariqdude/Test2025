@@ -5,9 +5,12 @@ import path from 'path';
 import { logger } from '../utils/logger';
 import { ConfigurationError } from '../errors';
 
+type ReadFileFn = (path: string, encoding: BufferEncoding) => Promise<string>;
+
 export class ConfigLoader {
   static async loadConfig(
-    cliOptions: Partial<AnalyzerConfig>
+    cliOptions: Partial<AnalyzerConfig>,
+    readFile: ReadFileFn = fs.readFile
   ): Promise<AnalyzerConfig> {
     let config: Partial<AnalyzerConfig> = {};
 
@@ -19,7 +22,7 @@ export class ConfigLoader {
       '.analyzer.json'
     );
     try {
-      const fileContent = await fs.readFile(configFilePath, 'utf-8');
+      const fileContent = await readFile(configFilePath, 'utf-8');
       const fileConfig = JSON.parse(fileContent);
       config = { ...config, ...fileConfig };
       logger.info(`Loaded configuration from ${configFilePath}`);

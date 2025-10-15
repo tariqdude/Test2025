@@ -9,6 +9,27 @@ import { ProjectAnalyzer } from '../../../core/analyzer';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    if (import.meta.env.SSR && import.meta.env.PROD) {
+      return new Response(
+        JSON.stringify(
+          {
+            success: false,
+            message:
+              'Auto-fix API is disabled in static builds. Run the CLI locally.',
+          },
+          null,
+          2
+        ),
+        {
+          status: 501,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { projectRoot, issueIds, dryRun = false } = body;
 

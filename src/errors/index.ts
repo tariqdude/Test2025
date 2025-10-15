@@ -8,6 +8,16 @@ export class AppError extends Error {
     this.name = 'AppError';
     Object.setPrototypeOf(this, AppError.prototype);
   }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      code: this.code,
+      details: this.details,
+      stack: this.stack,
+    };
+  }
 }
 
 export class CommandExecutionError extends AppError {
@@ -74,7 +84,7 @@ export class ConfigurationError extends AppError {
 
 export class NetworkError extends AppError {
   public status: number;
-  
+
   constructor(
     url: string,
     status: number,

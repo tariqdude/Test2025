@@ -9,6 +9,27 @@ import { ReportGenerator } from '../../utils/report-generator';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
+    if (import.meta.env.SSR && import.meta.env.PROD) {
+      return new Response(
+        JSON.stringify(
+          {
+            success: false,
+            message:
+              'Report export API is disabled in static builds. Generate reports via the CLI.',
+          },
+          null,
+          2
+        ),
+        {
+          status: 501,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      );
+    }
+
     const searchParams = new URL(url).searchParams;
 
     // Parse query parameters
@@ -121,6 +142,27 @@ export const GET: APIRoute = async ({ url }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    if (import.meta.env.SSR && import.meta.env.PROD) {
+      return new Response(
+        JSON.stringify(
+          {
+            success: false,
+            message:
+              'Report export API is disabled in static builds. Generate reports via the CLI.',
+          },
+          null,
+          2
+        ),
+        {
+          status: 501,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { format = 'markdown', projectRoot, enabledAnalyzers = [] } = body;
 

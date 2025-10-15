@@ -30,10 +30,12 @@ vi.mock('../utils/command-executor', () => ({
 
 vi.mock('../utils/logger', () => ({
   logger: {
+    debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     fatal: vi.fn(),
+    setMinLevel: vi.fn(),
   },
 }));
 

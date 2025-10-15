@@ -2,19 +2,34 @@
 // Provides comprehensive project analysis data
 
 import type { APIRoute } from 'astro';
-import { AppError, AnalysisError } from '../../../errors';
+import { AppError } from '../../../errors';
 import { logger } from '../../../utils/logger';
 import { ProjectAnalyzer } from '../../../core/analyzer';
-import type {
-  AnalysisResult,
-  CodeIssue,
-  ProjectHealth,
-  GitAnalysis,
-  DeploymentChecklist,
-} from '../../../types/analysis';
+import type { AnalysisResult } from '../../../types/analysis';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
+    if (import.meta.env.SSR && import.meta.env.PROD) {
+      return new Response(
+        JSON.stringify(
+          {
+            success: false,
+            message:
+              'Runtime analysis API is disabled in static builds. Use the CLI locally.',
+          },
+          null,
+          2
+        ),
+        {
+          status: 501,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      );
+    }
+
     const searchParams = new URL(url).searchParams;
 
     // Parse query parameters
@@ -119,6 +134,27 @@ export const GET: APIRoute = async ({ url }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    if (import.meta.env.SSR && import.meta.env.PROD) {
+      return new Response(
+        JSON.stringify(
+          {
+            success: false,
+            message:
+              'Runtime analysis API is disabled in static builds. Use the CLI locally.',
+          },
+          null,
+          2
+        ),
+        {
+          status: 501,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { projectRoot, enabledAnalyzers = [] } = body;
 

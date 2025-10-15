@@ -13,7 +13,6 @@ const { currentTheme = 'dark' } = Astro.props;
   <select id="theme-select" class="theme-select" data-current={currentTheme}>
     <option value="dark">🌙 Dark</option>
     <option value="light">☀️ Light</option>
-    <option value="cyberpunk">⚡ Cyberpunk</option>
   </select>
 </div>
 
@@ -70,35 +69,42 @@ const { currentTheme = 'dark' } = Astro.props;
   }
 </style>
 
-<script>
+<script is:inline lang="ts">
+  import type { ThemeName } from '../styles/theme';
+
   // Theme switching functionality
-  function setTheme(themeName) {
+  function setTheme(themeName: ThemeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem('preferred-theme', themeName);
-    
+
     // Update CSS variables by reloading the theme provider
     location.reload();
   }
-  
-  function getPreferredTheme() {
+
+  function getPreferredTheme(): ThemeName {
     const saved = localStorage.getItem('preferred-theme');
-    if (saved) return saved;
-    
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (saved === 'dark' || saved === 'light') {
+      return saved;
+    }
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   }
-  
+
   // Initialize theme selector
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const selector = document.getElementById('theme-select');
     const preferredTheme = getPreferredTheme();
-    
-    if (selector && selector instanceof HTMLSelectElement) {
+
+    if (selector instanceof HTMLSelectElement) {
       selector.value = preferredTheme;
-      
-      selector.addEventListener('change', function(e) {
-        const target = e.target;
-        if (target && target instanceof HTMLSelectElement) {
-          setTheme(target.value);
+
+      selector.addEventListener('change', event => {
+        const target = event.target;
+        if (target instanceof HTMLSelectElement) {
+          const value = target.value as ThemeName;
+          setTheme(value);
         }
       });
     }

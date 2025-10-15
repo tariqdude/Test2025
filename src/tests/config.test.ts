@@ -4,22 +4,17 @@ import { AnalyzerConfigSchema } from '../config/schema';
 import { ConfigurationError } from '../errors';
 import type { AnalyzerConfig } from '../config/schema';
 
-// Mock fs operations
-vi.mock('fs', async () => {
-  const actual = (await vi.importActual('fs')) as any;
-  return {
-    ...actual,
-    promises: {
-      readFile: vi.fn(),
-    },
-  };
-});
+const createFsError = (code: string, message: string) =>
+  Object.assign(new Error(message), { code });
 
 vi.mock('../utils/logger', () => ({
   logger: {
+    debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
+    fatal: vi.fn(),
+    setMinLevel: vi.fn(),
   },
 }));
 
@@ -92,7 +87,8 @@ describe('Configuration System', () => {
 
     it('should reject invalid severity threshold', () => {
       const invalidConfig = {
-        severityThreshold: 'invalid' as any,
+        severityThreshold:
+          'invalid' as unknown as AnalyzerConfig['severityThreshold'],
       };
 
       expect(() => AnalyzerConfigSchema.parse(invalidConfig)).toThrow();
@@ -100,7 +96,7 @@ describe('Configuration System', () => {
 
     it('should reject invalid output format', () => {
       const invalidConfig = {
-        outputFormat: 'invalid' as any,
+        outputFormat: 'invalid' as unknown as AnalyzerConfig['outputFormat'],
       };
 
       expect(() => AnalyzerConfigSchema.parse(invalidConfig)).toThrow();
@@ -124,16 +120,20 @@ describe('Configuration System', () => {
 
   describe('ConfigLoader', () => {
     it('should load configuration with CLI options only', async () => {
-      const { promises: fs } = await import('fs');
-      vi.mocked(fs.readFile).mockRejectedValueOnce(new Error('ENOENT'));
-
       const cliOptions: Partial<AnalyzerConfig> = {
         projectRoot: '/custom/path',
         severityThreshold: 'critical',
         outputFormat: 'json',
       };
 
-      const result = await ConfigLoader.loadConfig(cliOptions);
+      const missingFileReader = async () => {
+        throw createFsError('ENOENT', 'not found');
+      };
+
+      const result = await ConfigLoader.loadConfig(
+        cliOptions,
+        missingFileReader
+      );
 
       expect(result.projectRoot).toBe('/custom/path');
       expect(result.severityThreshold).toBe('critical');
@@ -143,21 +143,20 @@ describe('Configuration System', () => {
     });
 
     it('should merge file configuration with CLI options', async () => {
-      const { promises: fs } = await import('fs');
       const fileConfig = {
         severityThreshold: 'high',
         githubIntegration: false,
         ignore: ['custom-ignore'],
       };
 
-      vi.mocked(fs.readFile).mockResolvedValueOnce(JSON.stringify(fileConfig));
-
       const cliOptions: Partial<AnalyzerConfig> = {
         severityThreshold: 'critical', // Should override file config
         outputFormat: 'html',
       };
 
-      const result = await ConfigLoader.loadConfig(cliOptions);
+      const readFile = async () => JSON.stringify(fileConfig);
+
+      const result = await ConfigLoader.loadConfig(cliOptions, readFile);
 
       expect(result.severityThreshold).toBe('critical'); // CLI wins
       expect(result.outputFormat).toBe('html'); // From CLI
@@ -166,37 +165,34 @@ describe('Configuration System', () => {
     });
 
     it('should handle invalid JSON in config file', async () => {
-      const { promises: fs } = await import('fs');
-      vi.mocked(fs.readFile).mockResolvedValueOnce('{ invalid json }');
+      const invalidReader = async () => '{ invalid json }';
 
-      await expect(ConfigLoader.loadConfig({})).rejects.toThrow(
+      await expect(ConfigLoader.loadConfig({}, invalidReader)).rejects.toThrow(
         ConfigurationError
       );
     });
 
     it('should handle file read errors gracefully', async () => {
-      const { promises: fs } = await import('fs');
-      vi.mocked(fs.readFile).mockRejectedValueOnce(
-        new Error('Permission denied')
-      );
+      const permissionDenied = async () => {
+        throw createFsError('EACCES', 'Permission denied');
+      };
 
-      // Should not throw, should log warning and continue with defaults
-      const result = await ConfigLoader.loadConfig({});
-      expect(result).toBeDefined();
-      expect(result.projectRoot).toBe(process.cwd());
+      await expect(
+        ConfigLoader.loadConfig({}, permissionDenied)
+      ).rejects.toThrow(ConfigurationError);
     });
 
     it('should validate merged configuration', async () => {
-      const { promises: fs } = await import('fs');
-      vi.mocked(fs.readFile).mockRejectedValueOnce(new Error('ENOENT'));
-
       const invalidOptions = {
-        severityThreshold: 'invalid' as any,
+        severityThreshold:
+          'invalid' as unknown as AnalyzerConfig['severityThreshold'],
       };
 
-      await expect(ConfigLoader.loadConfig(invalidOptions)).rejects.toThrow(
-        ConfigurationError
-      );
+      await expect(
+        ConfigLoader.loadConfig(invalidOptions, async () => {
+          throw createFsError('ENOENT', 'not found');
+        })
+      ).rejects.toThrow(ConfigurationError);
     });
   });
 
@@ -234,7 +230,7 @@ describe('Configuration System', () => {
 
     it('should reject non-string array elements', () => {
       const invalidConfig = {
-        ignore: ['valid', 123, 'also-valid'] as any,
+        ignore: ['valid', 123 as unknown as string, 'also-valid'],
       };
 
       expect(() => AnalyzerConfigSchema.parse(invalidConfig)).toThrow();

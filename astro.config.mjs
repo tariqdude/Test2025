@@ -8,6 +8,7 @@ import react from '@astrojs/react';
 import svelte from '@astrojs/svelte';
 import solid from '@astrojs/solid-js';
 import preact from '@astrojs/preact';
+import vue from '@astrojs/vue';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
@@ -33,6 +34,9 @@ export default defineConfig({
     }),
     preact({
       include: ['**/preact/**/*'],
+    }),
+    vue({
+      include: ['src/components/vue/**/*.vue'],
     }),
   ],
 });

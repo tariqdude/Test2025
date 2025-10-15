@@ -118,37 +118,37 @@ export interface GlobalTheme {
 export const darkTheme: GlobalTheme = {
   name: 'dark',
   colors: {
-    primary: '#8b5cf6',
-    secondary: '#06b6d4',
-    accent: '#ec4899',
-    background: '#0f172a',
-    surface: '#1e293b',
-    overlay: 'rgba(15, 23, 42, 0.9)',
+    primary: '#4a6ce3',
+    secondary: '#5f92f6',
+    accent: '#f27214',
+    background: '#0b1324',
+    surface: '#151d2f',
+    overlay: 'rgba(11, 19, 36, 0.85)',
     text: {
       primary: '#f8fafc',
-      secondary: '#cbd5e1',
-      muted: '#64748b',
-      inverse: '#0f172a',
+      secondary: '#c7d2e5',
+      muted: '#8a94ab',
+      inverse: '#0b1324',
     },
-    border: '#334155',
-    shadow: 'rgba(0, 0, 0, 0.25)',
-    success: '#22c55e',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    info: '#3b82f6',
+    border: '#1f2a3d',
+    shadow: 'rgba(16, 24, 40, 0.4)',
+    success: '#3fac74',
+    warning: '#f27214',
+    error: '#d53c3c',
+    info: '#2f72de',
   },
   gradients: {
-    primary: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-    secondary: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-    accent: 'linear-gradient(135deg, #ec4899 0%, #f97316 100%)',
-    hero: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    surface: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+    primary: 'linear-gradient(135deg, #0b1324 0%, #1a285f 60%, #304ec8 100%)',
+    secondary: 'linear-gradient(135deg, #1e2f80 0%, #4a6ce3 100%)',
+    accent: 'linear-gradient(135deg, #f27214 0%, #ff9333 100%)',
+    hero: 'linear-gradient(135deg, #0b1324 0%, #1e2f80 70%, #4a6ce3 100%)',
+    surface: 'linear-gradient(135deg, #151d2f 0%, #1f2a3d 100%)',
   },
   typography: {
     fontFamily: {
-      sans: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+      sans: '"Plus Jakarta Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
       mono: 'JetBrains Mono, SF Mono, Monaco, Cascadia Code, Roboto Mono, Consolas, monospace',
-      display: 'Inter Display, Inter, system-ui, sans-serif',
+      display: '"DM Serif Display", Inter, system-ui, sans-serif',
     },
     fontSize: {
       xs: '0.75rem',
@@ -227,31 +227,31 @@ export const darkTheme: GlobalTheme = {
 export const lightTheme: GlobalTheme = {
   name: 'light',
   colors: {
-    primary: '#6366f1',
-    secondary: '#0ea5e9',
-    accent: '#e11d48',
-    background: '#ffffff',
-    surface: '#f8fafc',
-    overlay: 'rgba(255, 255, 255, 0.9)',
+    primary: '#304ec8',
+    secondary: '#4a6ce3',
+    accent: '#cc6210',
+    background: '#f5f6f8',
+    surface: '#ffffff',
+    overlay: 'rgba(255, 255, 255, 0.8)',
     text: {
-      primary: '#0f172a',
-      secondary: '#475569',
-      muted: '#64748b',
-      inverse: '#f8fafc',
+      primary: '#121720',
+      secondary: '#3d4554',
+      muted: '#6b7283',
+      inverse: '#f5f6f8',
     },
-    border: '#e2e8f0',
-    shadow: 'rgba(0, 0, 0, 0.1)',
-    success: '#16a34a',
-    warning: '#d97706',
-    error: '#dc2626',
-    info: '#2563eb',
+    border: '#dce1ea',
+    shadow: 'rgba(15, 23, 42, 0.1)',
+    success: '#2c8a58',
+    warning: '#cc6210',
+    error: '#c03636',
+    info: '#2157b4',
   },
   gradients: {
-    primary: 'linear-gradient(135deg, #6366f1 0%, #e11d48 100%)',
-    secondary: 'linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)',
-    accent: 'linear-gradient(135deg, #e11d48 0%, #ea580c 100%)',
-    hero: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    surface: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+    primary: 'linear-gradient(135deg, #f5f6f8 0%, #ccd8ff 60%, #304ec8 100%)',
+    secondary: 'linear-gradient(135deg, #ffffff 0%, #a1b8ff 70%, #304ec8 100%)',
+    accent: 'linear-gradient(135deg, #fef4eb 0%, #f27214 100%)',
+    hero: 'linear-gradient(135deg, #f5f6f8 0%, #ccd8ff 65%, #304ec8 100%)',
+    surface: 'linear-gradient(135deg, #ffffff 0%, #eef1f7 100%)',
   },
   typography: darkTheme.typography,
   spacing: darkTheme.spacing,
@@ -260,49 +260,13 @@ export const lightTheme: GlobalTheme = {
   effects: {
     blur: darkTheme.effects.blur,
     shadow: {
-      sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-      md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-      xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-      '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+      sm: '0 1px 2px rgba(15, 23, 42, 0.05)',
+      md: '0 6px 12px -4px rgba(15, 23, 42, 0.12)',
+      lg: '0 18px 32px -12px rgba(15, 23, 42, 0.14)',
+      xl: '0 32px 56px -20px rgba(15, 23, 42, 0.18)',
+      '2xl': '0 48px 80px -32px rgba(15, 23, 42, 0.22)',
     },
   },
-};
-
-export const cyberpunkTheme: GlobalTheme = {
-  name: 'cyberpunk',
-  colors: {
-    primary: '#00ff88',
-    secondary: '#ff0080',
-    accent: '#ffff00',
-    background: '#0a0a0a',
-    surface: '#1a1a2e',
-    overlay: 'rgba(10, 10, 10, 0.95)',
-    text: {
-      primary: '#00ff88',
-      secondary: '#ff0080',
-      muted: '#888888',
-      inverse: '#000000',
-    },
-    border: '#333333',
-    shadow: 'rgba(0, 255, 136, 0.3)',
-    success: '#00ff88',
-    warning: '#ffff00',
-    error: '#ff0080',
-    info: '#00aaff',
-  },
-  gradients: {
-    primary: 'linear-gradient(135deg, #00ff88 0%, #00aaff 100%)',
-    secondary: 'linear-gradient(135deg, #ff0080 0%, #ffff00 100%)',
-    accent: 'linear-gradient(135deg, #ffff00 0%, #ff0080 100%)',
-    hero: 'linear-gradient(135deg, #00ff88 0%, #ff0080 50%, #ffff00 100%)',
-    surface: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-  },
-  typography: darkTheme.typography,
-  spacing: darkTheme.spacing,
-  borderRadius: darkTheme.borderRadius,
-  animation: darkTheme.animation,
-  effects: darkTheme.effects,
 };
 
 // ===============================================
@@ -312,7 +276,6 @@ export const cyberpunkTheme: GlobalTheme = {
 export const themes = {
   dark: darkTheme,
   light: lightTheme,
-  cyberpunk: cyberpunkTheme,
 } as const;
 
 export type ThemeName = keyof typeof themes;
@@ -341,19 +304,19 @@ export function generateCSSVariables(theme: GlobalTheme): string {
       --color-warning: ${theme.colors.warning};
       --color-error: ${theme.colors.error};
       --color-info: ${theme.colors.info};
-      
+
       /* Gradients */
       --gradient-primary: ${theme.gradients.primary};
       --gradient-secondary: ${theme.gradients.secondary};
       --gradient-accent: ${theme.gradients.accent};
       --gradient-hero: ${theme.gradients.hero};
       --gradient-surface: ${theme.gradients.surface};
-      
+
       /* Typography */
       --font-family-sans: ${theme.typography.fontFamily.sans};
       --font-family-mono: ${theme.typography.fontFamily.mono};
       --font-family-display: ${theme.typography.fontFamily.display};
-      
+
       /* Spacing */
       --spacing-xs: ${theme.spacing.xs};
       --spacing-sm: ${theme.spacing.sm};
@@ -363,7 +326,7 @@ export function generateCSSVariables(theme: GlobalTheme): string {
       --spacing-2xl: ${theme.spacing['2xl']};
       --spacing-3xl: ${theme.spacing['3xl']};
       --spacing-4xl: ${theme.spacing['4xl']};
-      
+
       /* Border Radius */
       --radius-sm: ${theme.borderRadius.sm};
       --radius-md: ${theme.borderRadius.md};
@@ -371,24 +334,24 @@ export function generateCSSVariables(theme: GlobalTheme): string {
       --radius-xl: ${theme.borderRadius.xl};
       --radius-2xl: ${theme.borderRadius['2xl']};
       --radius-full: ${theme.borderRadius.full};
-      
+
       /* Animation */
       --duration-fast: ${theme.animation.duration.fast};
       --duration-normal: ${theme.animation.duration.normal};
       --duration-slow: ${theme.animation.duration.slow};
-      
+
       --easing-linear: ${theme.animation.easing.linear};
       --easing-ease-in: ${theme.animation.easing.easeIn};
       --easing-ease-out: ${theme.animation.easing.easeOut};
       --easing-ease-in-out: ${theme.animation.easing.easeInOut};
       --easing-bounce: ${theme.animation.easing.bounce};
-      
+
       /* Effects */
       --blur-sm: ${theme.effects.blur.sm};
       --blur-md: ${theme.effects.blur.md};
       --blur-lg: ${theme.effects.blur.lg};
       --blur-xl: ${theme.effects.blur.xl};
-      
+
       --shadow-sm: ${theme.effects.shadow.sm};
       --shadow-md: ${theme.effects.shadow.md};
       --shadow-lg: ${theme.effects.shadow.lg};
