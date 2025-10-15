@@ -38,25 +38,30 @@ export class AnalysisCache {
   async initialize(): Promise<void> {
     try {
       await fs.mkdir(this.cacheDir, { recursive: true });
-      
+
       try {
         const data = await fs.readFile(this.cacheFile, 'utf-8');
         const cached = JSON.parse(data) as CacheData;
-        
+
         // Invalidate if version mismatch
         if (cached.version !== this.CACHE_VERSION) {
           logger.warn('Cache version mismatch, clearing cache');
           await this.clear();
         } else {
           this.cache = cached;
-          logger.debug(`Loaded cache with ${Object.keys(this.cache.files).length} entries`);
+          logger.debug(
+            `Loaded cache with ${Object.keys(this.cache.files).length} entries`
+          );
         }
       } catch (error) {
         // Cache file doesn't exist or is invalid, start fresh
         logger.debug('No existing cache found, starting fresh');
       }
     } catch (error) {
-      logger.warn('Failed to initialize cache', error as Record<string, unknown>);
+      logger.warn(
+        'Failed to initialize cache',
+        error as Record<string, unknown>
+      );
     }
   }
 
@@ -81,7 +86,7 @@ export class AnalysisCache {
   ): Promise<CodeIssue[] | null> {
     try {
       const entry = this.cache.files[filePath];
-      
+
       if (!entry) {
         return null;
       }
@@ -102,10 +107,10 @@ export class AnalysisCache {
       }
 
       // Check if all required analyzers were run
-      const hasAllAnalyzers = analyzerModules.every((module) =>
+      const hasAllAnalyzers = analyzerModules.every(module =>
         entry.analyzedBy.includes(module)
       );
-      
+
       if (!hasAllAnalyzers) {
         logger.debug(`Missing analyzer results for ${filePath}`);
         return null;
@@ -114,7 +119,10 @@ export class AnalysisCache {
       logger.debug(`Cache hit for ${filePath}`);
       return entry.issues;
     } catch (error) {
-      logger.warn(`Error reading cache for ${filePath}`, error as Record<string, unknown>);
+      logger.warn(
+        `Error reading cache for ${filePath}`,
+        error as Record<string, unknown>
+      );
       return null;
     }
   }
@@ -129,7 +137,7 @@ export class AnalysisCache {
   ): Promise<void> {
     try {
       const fileHash = await this.getFileHash(filePath);
-      
+
       this.cache.files[filePath] = {
         fileHash,
         issues,
@@ -139,7 +147,10 @@ export class AnalysisCache {
 
       logger.debug(`Cached ${issues.length} issues for ${filePath}`);
     } catch (error) {
-      logger.warn(`Failed to cache results for ${filePath}`, error as Record<string, unknown>);
+      logger.warn(
+        `Failed to cache results for ${filePath}`,
+        error as Record<string, unknown>
+      );
     }
   }
 
@@ -167,7 +178,7 @@ export class AnalysisCache {
       version: this.CACHE_VERSION,
       files: {},
     };
-    
+
     try {
       await fs.unlink(this.cacheFile);
       logger.info('Cache cleared');
@@ -196,8 +207,11 @@ export class AnalysisCache {
     newestEntry: number | null;
   } {
     const files = Object.values(this.cache.files);
-    const totalIssues = files.reduce((sum, entry) => sum + entry.issues.length, 0);
-    const timestamps = files.map((entry) => entry.timestamp);
+    const totalIssues = files.reduce(
+      (sum, entry) => sum + entry.issues.length,
+      0
+    );
+    const timestamps = files.map(entry => entry.timestamp);
 
     return {
       totalFiles: files.length,

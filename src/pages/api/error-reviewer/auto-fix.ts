@@ -21,12 +21,13 @@ export const POST: APIRoute = async ({ request }) => {
     if (dryRun) {
       const analysis = await analyzer.analyze();
       const fixableIssues = analysis.issues.filter(issue => issue.autoFixable);
-      
-      const filteredIssues = issueIds && issueIds.length > 0
-        ? fixableIssues.filter(issue => 
-            issueIds.includes(issue.id || `${issue.file}:${issue.line}`)
-          )
-        : fixableIssues;
+
+      const filteredIssues =
+        issueIds && issueIds.length > 0
+          ? fixableIssues.filter(issue =>
+              issueIds.includes(issue.id || `${issue.file}:${issue.line}`)
+            )
+          : fixableIssues;
 
       return new Response(
         JSON.stringify({

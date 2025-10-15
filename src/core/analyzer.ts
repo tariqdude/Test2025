@@ -72,18 +72,21 @@ export class ProjectAnalyzer {
    */
   async autoFix(
     issueIds?: string[]
-  ): Promise<{ fixed: CodeIssue[]; failed: Array<{ issue: CodeIssue; reason: string }> }> {
+  ): Promise<{
+    fixed: CodeIssue[];
+    failed: Array<{ issue: CodeIssue; reason: string }>;
+  }> {
     logger.info('Starting auto-fix process...');
-    
+
     try {
       // First, analyze the project to get current issues
       const analysis = await this.analyze();
-      
+
       // Filter issues to fix
       let issuesToFix = analysis.issues.filter(issue => issue.autoFixable);
-      
+
       if (issueIds && issueIds.length > 0) {
-        issuesToFix = issuesToFix.filter(issue => 
+        issuesToFix = issuesToFix.filter(issue =>
           issueIds.includes(issue.id || `${issue.file}:${issue.line}`)
         );
       }
@@ -108,7 +111,9 @@ export class ProjectAnalyzer {
         }
       }
 
-      logger.info(`Auto-fix complete: ${fixed.length} fixed, ${failed.length} failed`);
+      logger.info(
+        `Auto-fix complete: ${fixed.length} fixed, ${failed.length} failed`
+      );
       return { fixed, failed };
     } catch (error) {
       logger.error('Auto-fix process failed', error as Error);
@@ -125,7 +130,7 @@ export class ProjectAnalyzer {
    */
   private async applyFix(issue: CodeIssue): Promise<void> {
     const fs = await import('fs/promises');
-    
+
     if (!issue.file || !issue.suggestion) {
       throw new Error('Issue missing file path or suggestion');
     }
@@ -138,10 +143,16 @@ export class ProjectAnalyzer {
       // Apply the fix based on suggestion
       let fixedContent = content;
 
-      if (issue.category === 'accessibility' && issue.suggestion.includes('aria-label')) {
+      if (
+        issue.category === 'accessibility' &&
+        issue.suggestion.includes('aria-label')
+      ) {
         // Add aria-label to elements
         fixedContent = this.fixAccessibilityIssue(content, issue);
-      } else if (issue.category === 'security' && issue.suggestion.includes('sanitize')) {
+      } else if (
+        issue.category === 'security' &&
+        issue.suggestion.includes('sanitize')
+      ) {
         // Add input sanitization
         fixedContent = this.fixSecurityIssue(content, issue);
       } else if (issue.category === 'performance') {
@@ -150,7 +161,8 @@ export class ProjectAnalyzer {
       } else {
         // Generic fix: apply suggestion as comment
         if (issue.line && issue.line > 0 && issue.line <= lines.length) {
-          lines[issue.line - 1] = `${lines[issue.line - 1]} // ${issue.suggestion}`;
+          lines[issue.line - 1] =
+            `${lines[issue.line - 1]} // ${issue.suggestion}`;
           fixedContent = lines.join('\n');
         }
       }
@@ -192,10 +204,7 @@ export class ProjectAnalyzer {
   private fixPerformanceIssue(content: string, issue: CodeIssue): string {
     // Add lazy loading to images
     if (issue.suggestion && issue.suggestion.includes('lazy')) {
-      content = content.replace(
-        /<img([^>]*)>/g,
-        '<img$1 loading="lazy">'
-      );
+      content = content.replace(/<img([^>]*)>/g, '<img$1 loading="lazy">');
     }
     return content;
   }

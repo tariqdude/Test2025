@@ -134,7 +134,7 @@ class Cli {
       if (loadedConfig.watchMode) {
         logger.info(`Watching for changes in ${loadedConfig.projectRoot}...`);
         logger.info('Press Ctrl+C to stop watching');
-        
+
         const watcher = chokidar.watch(loadedConfig.projectRoot, {
           ignored: loadedConfig.ignore, // Use configured ignore patterns
           persistent: true,
@@ -150,7 +150,7 @@ class Cli {
 
         watcher.on('all', async (event, changedPath) => {
           changedFiles.add(changedPath);
-          
+
           if (debounceTimer) {
             clearTimeout(debounceTimer);
           }
@@ -159,20 +159,28 @@ class Cli {
             logger.info(
               `${changedFiles.size} file(s) changed, re-analyzing...`
             );
-            logger.debug(`Changed files: ${Array.from(changedFiles).join(', ')}`);
+            logger.debug(
+              `Changed files: ${Array.from(changedFiles).join(', ')}`
+            );
             changedFiles.clear();
-            
+
             try {
               await this.performAnalysisAndReport(loadedConfig);
               logger.info('Analysis complete. Watching for more changes...');
             } catch (error) {
-              logger.error('Analysis failed during watch', error instanceof Error ? error : undefined);
+              logger.error(
+                'Analysis failed during watch',
+                error instanceof Error ? error : undefined
+              );
             }
           }, 1000); // Wait 1 second after last change before re-analyzing
         });
 
-        watcher.on('error', (error) => {
-          logger.error('File watcher error', error instanceof Error ? error : undefined);
+        watcher.on('error', error => {
+          logger.error(
+            'File watcher error',
+            error instanceof Error ? error : undefined
+          );
         });
 
         // Graceful shutdown
