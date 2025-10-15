@@ -1,574 +1,362 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import AstroShowcase from '../components/AstroShowcase.astro';
-import CodeShowcase from '../components/CodeShowcase.astro';
-import FrameworkShowcase from '../components/FrameworkShowcase.astro';
-import PerformanceMonitor from '../components/PerformanceMonitor.astro';
-import ThemeProvider from '../components/ThemeProvider.astro';
-import ThemeSelector from '../components/ThemeSelector.astro';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CodeShowcase from "../components/CodeShowcase.astro";
+import PerformanceMonitor from "../components/PerformanceMonitor.astro";
+import ThemeProvider from "../components/ThemeProvider.astro";
+import ThemeSelector from "../components/ThemeSelector.astro";
+import ThreeScene from "../components/react/ThreeScene.tsx";
+import Card3D from "../components/vue/Card3D.vue";
+import ParticleCanvas from "../components/svelte/ParticleCanvas.svelte";
+import ReactiveCounter from "../components/solid/ReactiveCounter.tsx";
+import AnimatedChart from "../components/preact/AnimatedChart.tsx";
+import CTA from "../components/ui/CTA.astro";
+import Testimonials from "../components/ui/Testimonials.astro";
 
-// Framework Components
-import ThreeScene from '../components/react/ThreeScene.tsx';
-import Card3D from '../components/vue/Card3D.vue';
-import ParticleCanvas from '../components/svelte/ParticleCanvas.svelte';
-import ReactiveCounter from '../components/solid/ReactiveCounter.tsx';
-import AnimatedChart from '../components/preact/AnimatedChart.tsx';
-
-const title = 'Astro Capabilities Showcase';
+const title = "Astro Capabilities Showcase";
 const description =
-  'Explore the full power of Astro with multiple frameworks, advanced animations, and cutting-edge web technologies.';
+  "Elevate your customer experience with an enterprise-ready platform that unifies observability, collaboration, and executive insight.";
+
+const heroMetrics = [
+  { value: "45%", label: "Faster incident resolution" },
+  { value: "3x", label: "Reduction in MTTR" },
+  { value: "98%", label: "Customer satisfaction rating" },
+];
+
+const trustedLogos = [
+  "Northwind",
+  "Globex",
+  "Acme",
+  "Initech",
+  "Stark Industries",
+  "Wayne Enterprises",
+];
+
+const featureHighlights = [
+  {
+    name: "Executive-ready intelligence",
+    description:
+      "Deliver real-time health summaries, board decks, and exportable analytics that keep leadership aligned and confident.",
+    bullets: [
+      "Weekly automated health briefs",
+      "Role-based insight workspaces",
+      "Native integrations with BI suites",
+    ],
+  },
+  {
+    name: "Operational excellence workflows",
+    description:
+      "Coordinate product, engineering, and customer teams with a single control plane for observability, incidents, and releases.",
+    bullets: [
+      "AI-backed prioritization and routing",
+      "SLA tracking with smart escalations",
+      "Deep framework and CI/CD integrations",
+    ],
+  },
+  {
+    name: "Customer trust and communication",
+    description:
+      "Keep customers informed with branded status pages, proactive messaging, and accessibility-first experience benchmarking.",
+    bullets: [
+      "Audience segmentation and personalization",
+      "Status page automation with change logs",
+      "Experience analytics with accessibility insights",
+    ],
+  },
+];
+
+const testimonialsData = [
+  {
+    name: "Danielle Ortiz",
+    role: "Head of Engineering",
+    company: "Northwind Finance",
+    content:
+      "Our mean time to resolution dropped by nearly half in the first month. The executive-ready dashboards make alignment effortless.",
+    rating: 5,
+  },
+  {
+    name: "Marcus Chen",
+    role: "VP of Product",
+    company: "Globex Retail",
+    content:
+      "We finally have a single pane of glass for product quality, customer impact, and roadmap prioritization.",
+    rating: 5,
+  },
+  {
+    name: "Priya Singh",
+    role: "Director of Customer Success",
+    company: "Acme Cloud",
+    content:
+      "Stakeholder updates are automated, accessible, and beautifully branded. It has transformed our customer communications.",
+    rating: 5,
+  },
+];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
-    <style>
-      /* Global animations and effects */
-      .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        opacity: 0.1;
-      }
-
-      .floating-shapes {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-      }
-
-      .shape {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.1;
-        animation: float 20s infinite ease-in-out;
-      }
-
-      .shape:nth-child(1) {
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-        top: 20%;
-        left: 10%;
-        animation-delay: 0s;
-      }
-
-      .shape:nth-child(2) {
-        width: 150px;
-        height: 150px;
-        background: linear-gradient(45deg, #a8edea, #fed6e3);
-        top: 60%;
-        right: 10%;
-        animation-delay: -5s;
-      }
-
-      .shape:nth-child(3) {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(45deg, #ffecd2, #fcb69f);
-        bottom: 30%;
-        left: 20%;
-        animation-delay: -10s;
-      }
-
-      .shape:nth-child(4) {
-        width: 120px;
-        height: 120px;
-        background: linear-gradient(45deg, #a8edea, #fed6e3);
-        top: 10%;
-        right: 30%;
-        animation-delay: -15s;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px) rotate(0deg);
-        }
-        33% {
-          transform: translateY(-30px) rotate(120deg);
-        }
-        66% {
-          transform: translateY(20px) rotate(240deg);
-        }
-      }
-
-      .section-divider {
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          #8b5cf6,
-          #ec4899,
-          transparent
-        );
-        margin: 4rem 0;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .section-divider::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.4),
-          transparent
-        );
-        animation: shimmer 3s infinite;
-      }
-
-      @keyframes shimmer {
-        0% {
-          left: -100%;
-        }
-        100% {
-          left: 100%;
-        }
-      }
-
-      .framework-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        gap: 2rem;
-        margin: 2rem 0;
-      }
-
-      @media (max-width: 768px) {
-        .framework-grid {
-          grid-template-columns: 1fr;
-          gap: 1rem;
-        }
-      }
-
-      .scroll-indicator {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
-        transform-origin: left;
-        transform: scaleX(0);
-        z-index: 1000;
-        transition: transform 0.1s ease-out;
-      }
-
-      .theme-controls {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1001;
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-    </style>
   </head>
-  <body class="bg-gray-900 text-white">
-    <ThemeProvider theme="dark">
-      <!-- Animated background -->
-      <div class="gradient-bg"></div>
-      <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-      </div>
-
-      <!-- Scroll progress indicator -->
-      <div class="scroll-indicator" id="scroll-progress"></div>
-
-      <!-- Theme Selector -->
-      <div class="theme-controls">
-        <ThemeSelector currentTheme="dark" />
-      </div>
-
+  <body class="bg-neutral-50 text-neutral-900 antialiased">
+    <ThemeProvider theme="light" className="flex min-h-screen flex-col bg-neutral-50 text-neutral-900">
       <Header />
 
-      <main class="container mx-auto px-4 py-8 space-y-16">
-        <!-- Astro Showcase Hero -->
-        <section>
-          <AstroShowcase />
-        </section>
+      <main class="flex-1">
+        <section class="relative overflow-hidden pt-24 pb-20">
+          <div class="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 via-white to-transparent"></div>
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-end">
+              <ThemeSelector currentTheme="light" />
+            </div>
+            <div class="mt-10 grid items-center gap-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+              <div class="space-y-8">
+                <div class="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/80 px-4 py-2 text-xs font-medium uppercase tracking-[0.3em] text-brand-600 shadow-elevation-xs">
+                  Enterprise launchpad
+                </div>
+                <h1 class="text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl">
+                  Professional error intelligence for high-performing digital teams
+                </h1>
+                <p class="max-w-2xl text-lg leading-8 text-neutral-600">
+                  Align leadership, engineering, and customer teams around a single source of truth. Astro combines multi-framework experiences with executive-ready reporting so you can deliver outcomes, not noise.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                  <a class="btn btn-primary" href="/dashboard">
+                    Explore live dashboard
+                  </a>
+                  <a class="btn btn-secondary" href="/contact">
+                    Talk to our team
+                  </a>
+                </div>
+                <dl class="grid gap-6 pt-8 sm:grid-cols-3">
+                  {heroMetrics.map((metric) => (
+                    <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-elevation-xs">
+                      <dt class="text-sm font-medium text-neutral-500">{metric.label}</dt>
+                      <dd class="mt-2 text-3xl font-semibold text-neutral-900">{metric.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
 
-        <div class="section-divider"></div>
-
-        <!-- Framework Integration Demo -->
-        <section class="space-y-8">
-          <div class="text-center space-y-4">
-            <h2
-              class="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-            >
-              Live Framework Demonstrations
-            </h2>
-            <p class="text-xl text-gray-300 max-w-4xl mx-auto">
-              Experience how Astro seamlessly integrates multiple frameworks in
-              a single application. Each component below is built with a
-              different framework, showcasing Astro's island architecture.
-            </p>
-          </div>
-
-          <FrameworkShowcase
-            title="Multi-Framework Integration"
-            framework="astro"
-            color="purple"
-          />
-
-          <div class="framework-grid">
-            <!-- React + Three.js 3D Scene -->
-            <div
-              class="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50"
-            >
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse">
+              <div class="relative">
+                <div class="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-elevation-lg">
+                  <div class="absolute right-6 top-6 flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 shadow-elevation-xs">
+                    <span class="inline-flex h-2 w-2 rounded-full bg-success-400"></span>
+                    Live observability
                   </div>
-                  <h3 class="text-xl font-semibold text-white">
-                    React + Three.js
-                  </h3>
-                </div>
-                <span
-                  class="text-xs text-blue-400 px-2 py-1 bg-blue-400/20 rounded"
-                  >client:load</span
-                >
-              </div>
-              <div class="h-80 rounded-lg overflow-hidden">
-                <ThreeScene client:only="react" />
-              </div>
-              <p class="text-gray-300 text-sm mt-4">
-                Interactive 3D scene with particle systems, distortion
-                materials, and orbit controls powered by React Three Fiber.
-              </p>
-            </div>
-
-            <!-- Vue 3D Card -->
-            <div
-              class="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50"
-            >
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse">
+                  <div class="grid gap-6 p-6">
+                    <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
+                      <AnimatedChart client:visible />
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                      <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
+                        <ReactiveCounter client:load />
+                      </div>
+                      <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 shadow-elevation-xs">
+                        <ParticleCanvas client:idle />
+                      </div>
+                    </div>
                   </div>
-                  <h3 class="text-xl font-semibold text-white">
-                    Vue 3 Composition
-                  </h3>
-                </div>
-                <span
-                  class="text-xs text-green-400 px-2 py-1 bg-green-400/20 rounded"
-                  >client:visible</span
-                >
-              </div>
-              <div class="h-80">
-                <Card3D client:visible />
-              </div>
-              <p class="text-gray-300 text-sm mt-4">
-                3D transforming card with mouse tracking, progress animations,
-                and reactive Vue 3 Composition API.
-              </p>
-            </div>
-
-            <!-- Svelte Particle Canvas -->
-            <div
-              class="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50"
-            >
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <div class="w-3 h-3 bg-orange-400 rounded-full animate-pulse">
-                  </div>
-                  <h3 class="text-xl font-semibold text-white">
-                    Svelte Canvas
-                  </h3>
-                </div>
-                <span
-                  class="text-xs text-orange-400 px-2 py-1 bg-orange-400/20 rounded"
-                  >client:idle</span
-                >
-              </div>
-              <div class="h-80 rounded-lg overflow-hidden">
-                <ParticleCanvas client:idle />
-              </div>
-              <p class="text-gray-300 text-sm mt-4">
-                Interactive particle system with click events, gradient
-                backgrounds, and Svelte's reactive patterns.
-              </p>
-            </div>
-
-            <!-- Solid.js Reactive Counter -->
-            <div
-              class="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50"
-            >
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse">
-                  </div>
-                  <h3 class="text-xl font-semibold text-white">
-                    Solid.js Signals
-                  </h3>
-                </div>
-                <span
-                  class="text-xs text-blue-500 px-2 py-1 bg-blue-500/20 rounded"
-                  >client:load</span
-                >
-              </div>
-              <div class="h-80 flex items-center justify-center">
-                <ReactiveCounter client:load />
-              </div>
-              <p class="text-gray-300 text-sm mt-4">
-                Reactive counter with signals, effects, auto-increment features,
-                and particle explosion animations.
-              </p>
-            </div>
-
-            <!-- Preact Animated Chart -->
-            <div
-              class="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 md:col-span-2"
-            >
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <div class="w-3 h-3 bg-purple-400 rounded-full animate-pulse">
-                  </div>
-                  <h3 class="text-xl font-semibold text-white">
-                    Preact Data Visualization
-                  </h3>
-                </div>
-                <span
-                  class="text-xs text-purple-400 px-2 py-1 bg-purple-400/20 rounded"
-                  >client:visible</span
-                >
-              </div>
-              <div class="h-80">
-                <AnimatedChart client:visible />
-              </div>
-              <p class="text-gray-300 text-sm mt-4">
-                Animated bar chart with smooth transitions, real-time data
-                updates, and interactive hover effects using Preact hooks.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- Code Examples -->
-        <section class="space-y-8">
-          <div class="text-center space-y-4">
-            <h2
-              class="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent"
-            >
-              Code Examples & Patterns
-            </h2>
-            <p class="text-xl text-gray-300 max-w-4xl mx-auto">
-              Explore real-world Astro patterns and see how easy it is to build
-              modern web applications.
-            </p>
-          </div>
-
-          <CodeShowcase />
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- Performance & Developer Experience -->
-        <section class="space-y-8">
-          <div class="text-center space-y-4">
-            <h2
-              class="text-5xl font-bold bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent"
-            >
-              Developer Experience
-            </h2>
-            <p class="text-xl text-gray-300 max-w-4xl mx-auto">
-              Built for developers who want the best of both worlds: modern
-              tooling and optimal performance.
-            </p>
-          </div>
-
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- TypeScript -->
-            <div
-              class="bg-gradient-to-br from-blue-900/50 to-blue-800/50 p-8 rounded-2xl border border-blue-700/30"
-            >
-              <div class="text-4xl mb-4">📘</div>
-              <h3 class="text-2xl font-bold text-blue-300 mb-4">
-                TypeScript First
-              </h3>
-              <p class="text-gray-300 mb-4">
-                Full TypeScript support out of the box with intelligent
-                autocomplete and type checking.
-              </p>
-              <div class="space-y-2 text-sm">
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span class="text-gray-300">Type-safe component props</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span class="text-gray-300">Content collection schemas</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span class="text-gray-300">API route validation</span>
                 </div>
               </div>
             </div>
 
-            <!-- Hot Reload -->
-            <div
-              class="bg-gradient-to-br from-orange-900/50 to-red-800/50 p-8 rounded-2xl border border-orange-700/30"
-            >
-              <div class="text-4xl mb-4">🔥</div>
-              <h3 class="text-2xl font-bold text-orange-300 mb-4">
-                Lightning Fast HMR
-              </h3>
-              <p class="text-gray-300 mb-4">
-                Instant hot module replacement keeps your development flow
-                uninterrupted.
+            <div class="mt-16 border-t border-neutral-200 pt-10">
+              <p class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                Trusted by digital leaders worldwide
               </p>
-              <div class="space-y-2 text-sm">
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                  <span class="text-gray-300">Sub-second rebuilds</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                  <span class="text-gray-300">State preservation</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                  <span class="text-gray-300">Error overlay</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Deployment -->
-            <div
-              class="bg-gradient-to-br from-purple-900/50 to-pink-800/50 p-8 rounded-2xl border border-purple-700/30"
-            >
-              <div class="text-4xl mb-4">🚀</div>
-              <h3 class="text-2xl font-bold text-purple-300 mb-4">
-                Deploy Anywhere
-              </h3>
-              <p class="text-gray-300 mb-4">
-                Static sites, SSR, edge functions - deploy to any platform with
-                zero configuration.
-              </p>
-              <div class="space-y-2 text-sm">
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span class="text-gray-300">Vercel, Netlify, Cloudflare</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span class="text-gray-300">Node.js, Deno, Edge</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span class="text-gray-300">Static or SSR</span>
-                </div>
+              <div class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm font-semibold text-neutral-400 sm:text-base">
+                {trustedLogos.map((logo) => (
+                  <span class="tracking-[0.2em] uppercase text-neutral-500">{logo}</span>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Call to Action -->
-        <section class="text-center space-y-8 py-16">
-          <div class="space-y-6">
-            <h2
-              class="text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-            >
-              Ready to Build?
-            </h2>
-            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-              Join thousands of developers building the next generation of web
-              applications with Astro.
-            </p>
-          </div>
+        <section class="py-20">
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="section-header">
+              <span class="section-eyebrow">Strategic outcomes</span>
+              <h2 class="section-title text-neutral-950">A business platform engineered for clarity</h2>
+              <p class="section-subtitle text-neutral-600">
+                Combine observability, collaboration, and executive storytelling to accelerate confident decisions.
+              </p>
+            </div>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://docs.astro.build/en/getting-started/"
-              class="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105"
-            >
-              Get Started
-            </a>
-            <a
-              href="https://github.com/withastro/astro"
-              class="px-8 py-4 bg-transparent border-2 border-gray-700 rounded-full text-white font-semibold hover:border-gray-600 hover:bg-gray-800/50 transition-all duration-300"
-            >
-              View on GitHub
-            </a>
+            <div class="mt-12 grid gap-8 lg:grid-cols-3">
+              {featureHighlights.map((feature) => (
+                <article class="flex h-full flex-col gap-6 rounded-3xl border border-neutral-200 bg-white p-8 shadow-elevation-xs transition-shadow duration-200 hover:shadow-elevation-sm">
+                  <h3 class="text-2xl font-semibold text-neutral-900">{feature.name}</h3>
+                  <p class="text-neutral-600">{feature.description}</p>
+                  <ul class="space-y-3 text-sm leading-6 text-neutral-600">
+                    {feature.bullets.map((bullet) => (
+                      <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-500"></span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-neutral-50 py-20">
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <div class="space-y-6">
+                <span class="section-eyebrow">Operational governance</span>
+                <h2 class="text-4xl font-semibold text-neutral-950">
+                  Command your reliability posture with confidence
+                </h2>
+                <p class="text-lg leading-8 text-neutral-600">
+                  Monitor core web vitals, infrastructure health, and customer experience insights in a single command center designed for product delivery at scale.
+                </p>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
+                    <p class="text-sm font-semibold text-neutral-900">99.98% uptime</p>
+                    <p class="text-sm text-neutral-600">Continuous monitoring with predictive alerts</p>
+                  </div>
+                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
+                    <p class="text-sm font-semibold text-neutral-900">Instant customer context</p>
+                    <p class="text-sm text-neutral-600">Connect CRM, support, and product telemetry</p>
+                  </div>
+                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
+                    <p class="text-sm font-semibold text-neutral-900">Executive-ready exports</p>
+                    <p class="text-sm text-neutral-600">Beautiful, branded reports in one click</p>
+                  </div>
+                  <div class="rounded-2xl border border-neutral-200 bg-white p-4 shadow-elevation-xs">
+                    <p class="text-sm font-semibold text-neutral-900">AI triage and workflows</p>
+                    <p class="text-sm text-neutral-600">Focus teams on the incidents that matter</p>
+                  </div>
+                </div>
+              </div>
+
+              <PerformanceMonitor className="bg-white shadow-elevation-lg border border-neutral-200" />
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-white py-20">
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="section-header text-center">
+              <span class="section-eyebrow">Live product workspaces</span>
+              <h2 class="section-title text-neutral-950">Experiences crafted in every framework</h2>
+              <p class="section-subtitle text-neutral-600">
+                Astro orchestrates the best of React, Vue, Svelte, Solid, and Preact so every team can work the way they want without sacrificing cohesion.
+              </p>
+            </div>
+
+            <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+              <article class="flex h-full flex-col rounded-3xl border border-neutral-200 bg-neutral-50 p-6 shadow-elevation-sm">
+                <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
+                  <span class="text-neutral-900">Immersive analytics</span>
+                  <span class="uppercase tracking-[0.3em]">React + Three.js</span>
+                </div>
+                <div class="mt-4 flex-1 overflow-hidden rounded-2xl bg-neutral-900">
+                  <ThreeScene client:only="react" />
+                </div>
+                <p class="mt-4 text-sm text-neutral-600">
+                  Visualize complex customer journeys in real time with GPU-accelerated scenes and intuitive controls.
+                </p>
+              </article>
+
+              <div class="grid gap-8">
+                <article class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-elevation-sm">
+                  <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
+                    <span class="text-neutral-900">Executive overview</span>
+                    <span class="uppercase tracking-[0.3em]">Vue</span>
+                  </div>
+                  <div class="mt-4 h-64 overflow-hidden rounded-2xl bg-neutral-50">
+                    <Card3D client:visible />
+                  </div>
+                  <p class="mt-4 text-sm text-neutral-600">
+                    Delight stakeholders with tactile summaries and responsive motion that bring narratives to life.
+                  </p>
+                </article>
+
+                <article class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-elevation-sm">
+                  <div class="flex items-center justify-between text-sm font-medium text-neutral-500">
+                    <span class="text-neutral-900">Predictive insights</span>
+                    <span class="uppercase tracking-[0.3em]">Preact</span>
+                  </div>
+                  <div class="mt-4 h-64 overflow-hidden rounded-2xl bg-neutral-50">
+                    <AnimatedChart client:visible />
+                  </div>
+                  <p class="mt-4 text-sm text-neutral-600">
+                    Surface KPI shifts instantly with adaptive, low-latency charts that scale across devices.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-neutral-900 py-20 text-neutral-100">
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)]">
+              <div class="space-y-6">
+                <span class="section-eyebrow text-neutral-400">Developer velocity</span>
+                <h2 class="text-4xl font-semibold text-white">
+                  Built for teams who ship with precision
+                </h2>
+                <p class="text-lg leading-8 text-neutral-300">
+                  Use best-in-class tooling with a unified workflow: type-safe content collections, automated testing, and performance budgets baked in from day one.
+                </p>
+                <ul class="space-y-3 text-sm leading-6 text-neutral-300">
+                  <li class="flex items-start gap-2">
+                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
+                    <span>Composable islands with selective hydration for optimal load times.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
+                    <span>Integrated quality gates covering linting, testing, and accessibility.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="mt-1 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-brand-400"></span>
+                    <span>Framework-agnostic story-driven documentation for every component.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="rounded-3xl bg-neutral-950/40 p-6 shadow-elevation-lg ring-1 ring-neutral-800/60">
+                <CodeShowcase />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-20">
+          <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="section-header text-center">
+              <span class="section-eyebrow">Customer stories</span>
+              <h2 class="section-title text-neutral-950">Trusted by global product leaders</h2>
+              <p class="section-subtitle text-neutral-600">
+                High-growth organizations rely on Astro to deliver reliable, accessible, and delightful digital experiences.
+              </p>
+            </div>
+
+            <div class="mt-12">
+              <Testimonials testimonials={testimonialsData} />
+            </div>
+          </div>
+        </section>
+
+        <section class="pb-24">
+          <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <CTA
+              variant="contact"
+              heading="See the platform in action"
+              subheading="Book a tailored walkthrough and learn how Astro powers digital excellence for enterprises like yours."
+            />
           </div>
         </section>
       </main>
 
       <Footer />
-
-      <!-- Performance Monitor -->
-      <PerformanceMonitor />
     </ThemeProvider>
-
-    <script>
-      // Import theme utilities
-      import '../styles/theme';
-
-      // Scroll progress indicator
-      function updateScrollProgress() {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.body.scrollHeight - window.innerHeight;
-        const scrollPercent = scrollTop / docHeight;
-
-        const progressBar = document.getElementById('scroll-progress');
-        if (progressBar) {
-          progressBar.style.transform = `scaleX(${scrollPercent})`;
-        }
-      }
-
-      window.addEventListener('scroll', updateScrollProgress);
-
-      // Intersection Observer for animations
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
-      };
-
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const element = entry.target;
-            if (element instanceof HTMLElement) {
-              element.style.opacity = '1';
-              element.style.transform = 'translateY(0)';
-            }
-          }
-        });
-      }, observerOptions);
-
-      // Observe all sections
-      document.querySelectorAll('section').forEach(section => {
-        if (section instanceof HTMLElement) {
-          section.style.opacity = '0';
-          section.style.transform = 'translateY(30px)';
-          section.style.transition =
-            'opacity 0.6s ease-out, transform 0.6s ease-out';
-          observer.observe(section);
-        }
-      });
-    </script>
   </body>
 </html>
