@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SystemHighlights from '../components/SystemHighlights.astro';
 
 const offerings = [
   {
@@ -36,10 +37,64 @@ const offerings = [
   },
 ];
 
+const highlightItems = [
+  {
+    label: '01',
+    title: 'Static-first implementation',
+    description:
+      'We adapt the starter with your routes, copy, and assets while preserving static builds that deploy cleanly to GitHub Pages.',
+  },
+  {
+    label: '02',
+    title: 'Operational playbooks',
+    description:
+      'You receive maintenance guides, content workflows, and CLI scripts so teams can publish confidently without new tooling.',
+  },
+  {
+    label: '03',
+    title: 'Long-term resilience',
+    description:
+      'Accessibility, performance checks, and type-safe content collections keep the site stable as your library grows.',
+  },
+];
+
 const deliverables = [
-  'Astro + Tailwind project configured for static hosting.',
-  'Documentation for maintaining content and running quality checks.',
-  'Optional GitHub Actions workflow for automated builds.',
+  {
+    name: 'Static-ready codebase',
+    detail:
+      'Astro + Tailwind project tuned for base paths, asset handling, and repeatable GitHub Pages deploys.',
+  },
+  {
+    name: 'Documented workflows',
+    detail:
+      'Publishing handbook covering content collections, quality checks, RSS updates, and rollout cadence.',
+  },
+  {
+    name: 'Optional automation',
+    detail:
+      'GitHub Actions blueprints for type checks, linting, and scheduled builds when your team is ready.',
+  },
+];
+
+const process = [
+  {
+    phase: 'Discovery',
+    duration: 'Week 1',
+    focus:
+      'Audit existing content, confirm hosting constraints, and align on navigation hierarchy.',
+  },
+  {
+    phase: 'Implementation',
+    duration: 'Weeks 2-3',
+    focus:
+      'Adapt the starter, wire in your copy, and align Tailwind tokens with your brand palette.',
+  },
+  {
+    phase: 'Transition',
+    duration: 'Week 4',
+    focus:
+      'Deliver documentation, run training sessions, and set up optional automation for ongoing updates.',
+  },
 ];
 ---
 
@@ -53,41 +108,114 @@ const deliverables = [
   </head>
   <body class="bg-white text-neutral-900">
     <Header />
-    <main>
-      <section class="bg-neutral-900 text-neutral-50">
-        <div class="mx-auto max-w-5xl px-6 py-24">
-          <p
-            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+    <main class="bg-white">
+      <section class="relative overflow-hidden bg-neutral-950">
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+        >
+        </div>
+        <div
+          class="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-24 pt-28 lg:flex-row lg:items-center"
+        >
+          <div class="max-w-xl text-neutral-50">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+            >
+              Services
+            </p>
+            <h1 class="mt-6 text-4xl font-semibold sm:text-5xl lg:text-6xl">
+              Practical support for static operations teams.
+            </h1>
+            <p class="mt-6 text-lg text-neutral-300">
+              Every engagement focuses on delivering a GitHub Pages-ready Astro
+              build, with documentation and tooling that keep your releases
+              predictable.
+            </p>
+            <div class="mt-10 flex flex-wrap gap-4">
+              <a
+                href="/pricing"
+                class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+              >
+                View pricing guide
+              </a>
+              <a
+                href="/contact"
+                class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
+              >
+                Schedule a scoping call
+              </a>
+            </div>
+          </div>
+          <div
+            class="grid flex-1 gap-4 rounded-3xl border border-white/10 bg-neutral-900/60 p-6 backdrop-blur lg:max-w-md"
           >
-            Services
-          </p>
-          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
-            Practical support for publishing static sites that scale with you.
-          </h1>
-          <p class="mt-6 max-w-3xl text-lg text-neutral-300">
-            We keep implementation scoped to Astro and Tailwind so you can focus
-            on content. Each engagement results in a maintainable GitHub Pages
-            workflow and a confident team.
-          </p>
+            <div
+              class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5"
+            >
+              <p class="text-sm font-semibold text-white">Engagement span</p>
+              <p class="mt-2 text-xs text-neutral-400">
+                Typical delivery completes within four weeks including
+                documentation and training handover.
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div
+                class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5"
+              >
+                <p class="text-3xl font-semibold text-white">48h</p>
+                <p class="mt-2 text-xs text-neutral-400">
+                  Average first content publish after onboarding
+                </p>
+              </div>
+              <div
+                class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5"
+              >
+                <p class="text-3xl font-semibold text-white">0</p>
+                <p class="mt-2 text-xs text-neutral-400">
+                  Server dependencies introduced
+                </p>
+              </div>
+            </div>
+            <div
+              class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5"
+            >
+              <p class="text-sm font-semibold text-white">Coverage</p>
+              <p class="mt-2 text-xs text-neutral-400">
+                Includes accessibility sweeps, performance checks, and
+                CI-friendly scripts ready for your repositories.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-b border-neutral-200 bg-neutral-50">
+        <div class="mx-auto max-w-6xl px-6 py-20">
+          <SystemHighlights
+            eyebrow="Why teams hire us"
+            title="Outcomes we commit to"
+            intro="Each package focuses on predictable releases and maintainable infrastructure for static documentation and operations hubs."
+            items={highlightItems}
+          />
         </div>
       </section>
 
       <section class="bg-white">
-        <div class="mx-auto max-w-5xl space-y-8 px-6 py-16">
+        <div class="mx-auto max-w-6xl space-y-10 px-6 py-20">
           {
             offerings.map(offering => (
-              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
+              <article class="rounded-3xl border border-neutral-200 bg-neutral-50 p-8 shadow-[0_30px_80px_-60px_rgba(15,23,42,0.35)]">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div class="max-w-xl">
                     <h2 class="text-2xl font-semibold text-neutral-900">
                       {offering.name}
                     </h2>
-                    <p class="mt-2 text-sm text-neutral-600">
+                    <p class="mt-3 text-sm text-neutral-600">
                       {offering.summary}
                     </p>
                   </div>
                   <a
-                    class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+                    class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400"
                     href="/contact"
                   >
                     Discuss this service
@@ -107,33 +235,105 @@ const deliverables = [
         </div>
       </section>
 
+      <section class="bg-neutral-950 text-neutral-50">
+        <div class="mx-auto max-w-6xl px-6 py-20">
+          <div
+            class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between"
+          >
+            <div class="max-w-xl">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+              >
+                Implementation cadence
+              </p>
+              <h2 class="mt-4 text-3xl font-semibold text-white">
+                How we deliver
+              </h2>
+              <p class="mt-4 text-base text-neutral-300">
+                We work in focused weekly sprints with demos at each milestone.
+                The plan adapts to your content volume and internal review
+                cycles.
+              </p>
+            </div>
+            <div class="flex-1">
+              <div class="grid gap-5 lg:grid-cols-3">
+                {
+                  process.map(step => (
+                    <article class="rounded-2xl border border-white/15 bg-neutral-900/60 p-6">
+                      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
+                        {step.duration}
+                      </p>
+                      <h3 class="mt-3 text-lg font-semibold text-white">
+                        {step.phase}
+                      </h3>
+                      <p class="mt-3 text-sm text-neutral-300">{step.focus}</p>
+                    </article>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="bg-neutral-50">
-        <div class="mx-auto max-w-4xl px-6 py-16 text-center">
-          <h2 class="text-2xl font-semibold text-neutral-900">
-            What you receive
+        <div class="mx-auto max-w-5xl px-6 py-20">
+          <h2 class="text-3xl font-semibold text-neutral-900">
+            Deliverables at handover
           </h2>
-          <ul class="mt-6 space-y-3 text-sm text-neutral-600">
+          <p class="mt-4 max-w-2xl text-base text-neutral-600">
+            You leave with more than files. Every project wraps with
+            documentation, automation hooks, and assurances that your content
+            team can ship updates without additional support.
+          </p>
+          <div class="mt-10 grid gap-6 md:grid-cols-3">
             {
-              deliverables.map(line => (
-                <li class="mx-auto max-w-2xl rounded-full border border-neutral-200 bg-white px-4 py-3">
-                  {line}
-                </li>
+              deliverables.map(item => (
+                <article class="rounded-2xl border border-neutral-200 bg-white p-6">
+                  <h3 class="text-lg font-semibold text-neutral-900">
+                    {item.name}
+                  </h3>
+                  <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                    {item.detail}
+                  </p>
+                </article>
               ))
             }
-          </ul>
-          <div class="mt-10 flex flex-wrap justify-center gap-3">
-            <a
-              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-              href="/pricing"
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white">
+        <div class="mx-auto max-w-5xl px-6 py-20">
+          <div
+            class="rounded-3xl border border-neutral-200 bg-neutral-950/95 px-8 py-14 text-center text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.45)]"
+          >
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-400"
             >
-              View pricing guide
-            </a>
-            <a
-              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-              href="/contact"
-            >
-              Plan a call
-            </a>
+              Next step
+            </p>
+            <h2 class="mt-6 text-3xl font-semibold text-white">
+              Bring us in when you need reliable documentation infrastructure
+            </h2>
+            <p class="mt-5 text-base text-neutral-300">
+              Share your current stack and launch goals—we will identify the
+              fastest path to a static site your team can extend.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+              <a
+                class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+                href="/contact"
+              >
+                Book a consultation
+              </a>
+              <a
+                class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
+                href="/pricing"
+              >
+                Review pricing tiers
+              </a>
+            </div>
           </div>
         </div>
       </section>

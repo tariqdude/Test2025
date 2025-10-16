@@ -2,32 +2,33 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SystemHighlights from '../components/SystemHighlights.astro';
 
-const headline = 'Purpose-built analytics for calm operations';
+const headline = 'Industrial reporting that looks sharp and ships fast';
 const subheading =
-  'Monitor launches, track customer impact, and share clear status updates without maintaining custom dashboards.';
+  'Align product, engineering, and operations on a single static hub. No fragile dashboards, just clear metrics and reliable publishing.';
 
 const metrics = [
-  { value: '24/7', label: 'Status visibility' },
-  { value: '-40%', label: 'Incident resolution time' },
-  { value: '+18%', label: 'Customer satisfaction' },
+  { value: '12 min', label: 'Average build time to ship' },
+  { value: '0 deps', label: 'Client frameworks required' },
+  { value: '100%', label: 'Static uptime on GitHub Pages' },
 ];
 
 const features = [
   {
-    title: 'Unified reporting',
+    title: 'Operational clarity',
     description:
-      'Ship executive-ready updates from a single workspace with exports that look great on every device.',
+      'Roll critical metrics, risk notes, and shipping updates into calm, long-lived sections that stay version controlled.',
   },
   {
-    title: 'Performance guardrails',
+    title: 'Industrial-grade polish',
     description:
-      'Catch regressions early with lightweight checks that run on every release pipeline.',
+      'Use pre-built cards, badges, and timelines tuned for enterprise stakeholders without pulling in new dependencies.',
   },
   {
-    title: 'Team alignment',
+    title: 'Audit-ready history',
     description:
-      'Invite product, engineering, and support to collaborate on the same shared context.',
+      'Keep evidence of deployments, approvals, and incident write-ups in collection-backed archives for auditors and leadership.',
   },
 ];
 
@@ -45,6 +46,66 @@ const testimonials = [
     role: 'Head of Product, Globex',
   },
 ];
+
+const highlightItems = [
+  {
+    label: '01',
+    title: 'Runtime zero',
+    description:
+      'Every widget renders at build time. No hydration scripts, no runtime costs, and nothing to babysit once deployed.',
+  },
+  {
+    label: '02',
+    title: 'Design tokens',
+    description:
+      'Tailwind defaults ship with a balanced industrial palette, typography scale, and consistent radii for hard-working UI.',
+  },
+  {
+    label: '03',
+    title: 'Governance ready',
+    description:
+      'Collections enforce schema rules so status updates, changelogs, and compliance notes stay structured and audit friendly.',
+  },
+  {
+    label: '04',
+    title: 'Trusted rollouts',
+    description:
+      'Preview pipelines and a pre-deploy script combine lint, type-check, and error review into one repeatable command.',
+  },
+  {
+    label: '05',
+    title: 'Reporting cadence',
+    description:
+      'Templates cover weekly health, major launches, and incident retros with carefully spaced typography for readability.',
+  },
+  {
+    label: '06',
+    title: 'Static integrations',
+    description:
+      'Embed charts, badges, and data snapshots as generated assets—no need for third-party scripts or live connections.',
+  },
+];
+
+const playbook = [
+  {
+    step: '01',
+    title: 'Capture the essentials',
+    detail:
+      'Start with project health, key metrics, and last deployment summary. The hero section keeps copy tight and scannable.',
+  },
+  {
+    step: '02',
+    title: 'Frame executive updates',
+    detail:
+      'Use highlights and testimonials to communicate wins, risk, and customer impact without shipping new dashboards.',
+  },
+  {
+    step: '03',
+    title: 'Publish with confidence',
+    detail:
+      'Run the bundled pre-deploy script. Once green, push to main and let GitHub Pages handle the static release.',
+  },
+];
 ---
 
 <!doctype html>
@@ -56,81 +117,105 @@ const testimonials = [
     <Header />
     <main>
       <section class="relative overflow-hidden">
-        <div class="container mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-          <div class="max-w-3xl">
-            <span
-              class="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-neutral-600"
-            >
-              Built for clarity
-            </span>
-            <h1
-              class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
-            >
-              {headline}
-            </h1>
-            <p class="mt-6 text-lg leading-8 text-neutral-600 sm:text-xl">
-              {subheading}
-            </p>
-            <div class="mt-8 flex flex-wrap gap-4">
-              <a
-                class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
-                href="/contact"
+        <div
+          class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(74,108,227,0.12),_transparent_60%)]"
+        >
+        </div>
+        <div
+          class="container mx-auto max-w-6xl px-4 pb-24 pt-28 sm:px-6 lg:px-8"
+        >
+          <div
+            class="grid gap-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]"
+          >
+            <div class="space-y-8">
+              <span
+                class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-brand-700"
               >
-                Schedule a walkthrough
-              </a>
-              <a
-                class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300 hover:bg-white"
-                href="/blog"
+                Built for control rooms
+              </span>
+              <h1
+                class="text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl"
               >
-                Read customer stories
-              </a>
+                {headline}
+              </h1>
+              <p class="text-lg leading-8 text-neutral-600 sm:text-xl">
+                {subheading}
+              </p>
+              <div class="flex flex-wrap gap-4">
+                <a
+                  class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-elevation-sm transition hover:bg-brand-700"
+                  href="/contact"
+                >
+                  Schedule a walkthrough
+                </a>
+                <a
+                  class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-6 py-3 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400 hover:bg-white"
+                  href="/showcase"
+                >
+                  Explore the templates
+                </a>
+              </div>
+            </div>
+
+            <div
+              class="rounded-3xl border border-neutral-200 bg-white/80 p-8 shadow-elevation-md backdrop-blur"
+            >
+              <h2
+                class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-500"
+              >
+                Confidence indicators
+              </h2>
+              <dl class="mt-6 grid gap-6 sm:grid-cols-3">
+                {
+                  metrics.map(metric => (
+                    <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
+                      <dt class="text-xs font-medium uppercase tracking-[0.25em] text-neutral-500">
+                        {metric.label}
+                      </dt>
+                      <dd class="mt-3 text-2xl font-semibold text-neutral-900">
+                        {metric.value}
+                      </dd>
+                    </div>
+                  ))
+                }
+              </dl>
+              <p class="mt-8 text-sm text-neutral-500">
+                Results pulled from live engagements using the Elite Project
+                starter with GitHub Pages pipelines.
+              </p>
             </div>
           </div>
-          <dl class="mt-16 grid gap-6 sm:grid-cols-3">
-            {
-              metrics.map(metric => (
-                <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-elevation-xs">
-                  <dt class="text-sm font-medium text-neutral-500">
-                    {metric.label}
-                  </dt>
-                  <dd class="mt-3 text-3xl font-semibold text-neutral-900">
-                    {metric.value}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
         </div>
       </section>
 
       <section class="bg-white">
         <div class="container mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
-          <div class="max-w-3xl">
+          <div class="max-w-3xl space-y-4">
             <p
-              class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-500"
+              class="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500"
             >
               Why teams switch
             </p>
-            <h2
-              class="mt-4 text-3xl font-semibold text-neutral-950 sm:text-4xl"
-            >
-              Focus on the work that matters
+            <h2 class="text-3xl font-semibold text-neutral-950 sm:text-4xl">
+              Focus on the work that moves operations forward
             </h2>
-            <p class="mt-4 text-lg text-neutral-600">
+            <p class="text-base text-neutral-600">
               Astro keeps content static and fast so your updates deploy
               reliably to GitHub Pages. No opaque services, no background
-              daemons—just your copy, visuals, and the data points you want to
-              share.
+              daemons—just your copy, visuals, and the data you trust.
             </p>
           </div>
           <div class="mt-12 grid gap-8 lg:grid-cols-3">
             {
               features.map(feature => (
-                <article class="flex h-full flex-col rounded-2xl border border-neutral-200 bg-neutral-50 p-8 shadow-elevation-xs">
+                <article class="flex h-full flex-col gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-8 shadow-elevation-xs">
+                  <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-brand-200 bg-brand-50 text-sm font-semibold text-brand-600">
+                    {feature.title.slice(0, 1)}
+                  </span>
                   <h3 class="text-2xl font-semibold text-neutral-900">
                     {feature.title}
                   </h3>
-                  <p class="mt-4 text-neutral-600">{feature.description}</p>
+                  <p class="text-neutral-600">{feature.description}</p>
                 </article>
               ))
             }
@@ -138,33 +223,81 @@ const testimonials = [
         </div>
       </section>
 
+      <SystemHighlights
+        eyebrow="System highlights"
+        intro="Each module is tuned for industrial stakeholders—from compliance teams to product leadership—while keeping the markup approachable."
+        items={highlightItems}
+        title="A calm surface. A disciplined build."
+      />
+
+      <section class="bg-neutral-950 py-20 text-neutral-200">
+        <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div
+            class="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+          >
+            <div class="space-y-5">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500"
+              >
+                Operations playbook
+              </p>
+              <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+                From empty repo to trusted status hub in three moves
+              </h2>
+              <p class="text-sm text-neutral-400">
+                These steps are baked into the starter documentation. Follow
+                them verbatim or adjust the cadence to match your governance
+                process.
+              </p>
+            </div>
+            <div class="space-y-4">
+              {
+                playbook.map(item => (
+                  <article class="flex gap-5 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6">
+                    <span class="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-neutral-700 text-sm font-semibold text-neutral-300">
+                      {item.step}
+                    </span>
+                    <div class="space-y-2">
+                      <h3 class="text-lg font-semibold text-white">
+                        {item.title}
+                      </h3>
+                      <p class="text-sm text-neutral-400">{item.detail}</p>
+                    </div>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="bg-neutral-900 py-20 text-neutral-100">
         <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div
-            class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]"
+            class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
           >
-            <div>
+            <div class="space-y-4">
               <p
-                class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+                class="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400"
               >
                 Customer perspective
               </p>
-              <h2 class="mt-4 text-3xl font-semibold text-white sm:text-4xl">
-                Stories from teams using the template today
+              <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+                Stories from teams running mission-critical updates
               </h2>
-              <p class="mt-4 text-neutral-300">
-                These quotes come from the pilot group that migrated their
-                internal status sites to Astro. They now deploy straight to
-                GitHub Pages with confidence.
+              <p class="text-sm text-neutral-300">
+                Every quote below comes from a production rollout of the Elite
+                Project starter. Each team now pushes consistent updates without
+                owning runtime infrastructure.
               </p>
             </div>
             <div class="space-y-6">
               {
                 testimonials.map(item => (
-                  <blockquote class="rounded-2xl bg-neutral-800/60 p-8 shadow-elevation-sm ring-1 ring-neutral-700/60">
+                  <blockquote class="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-8 shadow-elevation-sm">
                     <p class="text-lg text-neutral-100">“{item.quote}”</p>
                     <footer class="mt-4 text-sm text-neutral-400">
-                      <span class="font-semibold text-neutral-200">
+                      <span class="font-semibold text-neutral-100">
                         {item.name}
                       </span>
                       <span class="ml-2">{item.role}</span>
@@ -178,22 +311,40 @@ const testimonials = [
       </section>
 
       <section class="bg-white">
-        <div
-          class="container mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8"
-        >
-          <h2 class="text-3xl font-semibold text-neutral-950 sm:text-4xl">
-            Ready to publish updates without the overhead?
-          </h2>
-          <p class="mt-4 text-lg text-neutral-600">
-            Start with this streamlined Astro setup, connect your repository,
-            and deploy to GitHub Pages in minutes.
-          </p>
-          <a
-            class="mt-8 inline-flex items-center justify-center rounded-full bg-brand-600 px-8 py-3 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
-            href="/contact"
+        <div class="container mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
+          <div
+            class="rounded-3xl border border-neutral-200 bg-neutral-50 px-8 py-14 text-center shadow-elevation-sm"
           >
-            Talk with our team
-          </a>
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500"
+            >
+              Next step
+            </p>
+            <h2
+              class="mt-4 text-3xl font-semibold text-neutral-950 sm:text-4xl"
+            >
+              Ready to publish status updates without operational drag?
+            </h2>
+            <p class="mt-4 text-base text-neutral-600">
+              Clone the repo, run through the included quality checklist, and
+              deploy to GitHub Pages. When you need a partner, our team can
+              fast-track the rollout.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+              <a
+                class="inline-flex items-center justify-center rounded-full bg-brand-600 px-7 py-3 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
+                href="/contact"
+              >
+                Talk with our team
+              </a>
+              <a
+                class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-7 py-3 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400 hover:bg-white"
+                href="https://github.com/tariqdude/Test2025"
+              >
+                Download the starter
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>

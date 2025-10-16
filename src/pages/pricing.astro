@@ -42,6 +42,24 @@ const tiers = [
     href: '/contact',
   },
 ];
+
+const faqs = [
+  {
+    question: 'Do you offer payment schedules?',
+    answer:
+      'Yes. For Team Launch and Retainer packages we split payments into kickoff and handover invoices, with optional monthly plans for retainers.',
+  },
+  {
+    question: 'Can we start from an existing Astro project?',
+    answer:
+      'Absolutely. We audit your current repository, identify blockers to static deployment, and adapt this system to fit without rewriting every page.',
+  },
+  {
+    question: 'What happens after handover?',
+    answer:
+      'You keep the documentation, scripts, and workshop recordings. Retainers add quarterly reviews and priority support from the maintainers.',
+  },
+];
 ---
 
 <!doctype html>
@@ -54,11 +72,15 @@ const tiers = [
   </head>
   <body class="bg-white text-neutral-900">
     <Header />
-    <main>
-      <section class="bg-neutral-900 text-neutral-50">
-        <div class="mx-auto max-w-5xl px-6 py-24 text-center">
+    <main class="bg-white">
+      <section class="relative overflow-hidden bg-neutral-950 text-neutral-50">
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+        >
+        </div>
+        <div class="relative mx-auto max-w-5xl px-6 pb-24 pt-28 text-center">
           <p
-            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+            class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
           >
             Pricing
           </p>
@@ -67,71 +89,167 @@ const tiers = [
           </h1>
           <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
             Whether you want to self-host or rely on our team for ongoing
-            improvements, each tier focuses on keeping the Astro site simple,
-            reliable, and well documented.
+            improvements, every tier keeps the Astro site simple, reliable, and
+            well documented.
           </p>
+          <div
+            class="mt-10 inline-flex items-center gap-6 rounded-full border border-white/10 bg-neutral-900/60 px-6 py-3 text-sm text-neutral-300"
+          >
+            <span class="inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+            <span
+              >All paid tiers include documentation, training, and priority
+              inbox access.</span
+            >
+          </div>
         </div>
       </section>
 
       <section class="bg-white">
-        <div class="mx-auto grid max-w-6xl gap-8 px-6 py-16 lg:grid-cols-3">
+        <div class="mx-auto grid max-w-6xl gap-8 px-6 py-20 lg:grid-cols-3">
           {
             tiers.map(tier => (
               <article
-                class={`flex flex-col gap-6 rounded-2xl border ${tier.highlight ? 'border-brand-500 shadow-lg' : 'border-neutral-200'} bg-neutral-50 p-8`}
+                class={`flex h-full flex-col gap-6 rounded-3xl border ${tier.highlight ? 'border-brand-500 bg-neutral-950 text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.55)]' : 'border-neutral-200 bg-neutral-50'} p-8`}
               >
-                <div class="space-y-2">
-                  <h2 class="text-2xl font-semibold text-neutral-900">
+                <div class="space-y-3">
+                  <span
+                    class={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${tier.highlight ? 'bg-brand-500/20 text-brand-200' : 'bg-neutral-200 text-neutral-600'}`}
+                  >
+                    {tier.highlight ? 'Recommended' : 'Package'}
+                  </span>
+                  <h2
+                    class={`text-3xl font-semibold ${tier.highlight ? 'text-white' : 'text-neutral-900'}`}
+                  >
                     {tier.name}
                   </h2>
-                  <p class="text-3xl font-bold text-neutral-900">
+                  <p
+                    class={`text-4xl font-semibold ${tier.highlight ? 'text-white' : 'text-neutral-900'}`}
+                  >
                     {tier.price}
                   </p>
-                  <p class="text-sm text-neutral-600">{tier.description}</p>
+                  <p
+                    class={`text-sm ${tier.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}
+                  >
+                    {tier.description}
+                  </p>
                 </div>
-                <ul class="space-y-3 text-sm text-neutral-600">
+                <ul
+                  class={`space-y-3 text-sm ${tier.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}
+                >
                   {tier.perks.map(perk => (
                     <li class="flex items-start gap-2">
-                      <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                      <span
+                        class={`mt-1 inline-flex h-2 w-2 rounded-full ${tier.highlight ? 'bg-brand-400' : 'bg-brand-500'}`}
+                      />
                       <span>{perk}</span>
                     </li>
                   ))}
                 </ul>
-                <a
-                  class={`inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition ${tier.highlight ? 'bg-brand-600 text-white hover:bg-brand-700' : 'border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
-                  href={tier.href}
-                >
-                  {tier.cta}
-                </a>
+                <div class="mt-auto">
+                  <a
+                    class={`inline-flex w-full items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition ${tier.highlight ? 'bg-brand-500 text-white hover:bg-brand-600' : 'border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
+                    href={tier.href}
+                  >
+                    {tier.cta}
+                  </a>
+                </div>
               </article>
             ))
           }
         </div>
       </section>
 
-      <section class="bg-neutral-50">
-        <div class="mx-auto max-w-4xl px-6 py-16 text-center">
-          <h2 class="text-2xl font-semibold text-neutral-900">
-            Need something different?
+      <section class="border-y border-neutral-200 bg-neutral-50">
+        <div class="mx-auto max-w-5xl px-6 py-20">
+          <div class="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div>
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600"
+              >
+                Not sure where to start?
+              </p>
+              <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+                We tailor every engagement scope before you commit.
+              </h2>
+              <p class="mt-6 text-base text-neutral-600">
+                Send a short brief or link to your existing site. We will
+                suggest the tier that best balances your requirements,
+                infrastructure, and timeline.
+              </p>
+              <div class="mt-8 flex flex-wrap gap-4">
+                <a
+                  class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+                  href="/contact"
+                >
+                  Talk with the team
+                </a>
+                <a
+                  class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+                  href="/services"
+                >
+                  Review services
+                </a>
+              </div>
+            </div>
+            <div
+              class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-[0_40px_80px_-60px_rgba(17,17,17,0.25)]"
+            >
+              <h3 class="text-lg font-semibold text-neutral-900">
+                Every plan includes
+              </h3>
+              <ul class="mt-5 space-y-3 text-sm text-neutral-600">
+                <li class="flex items-start gap-2">
+                  <span
+                    class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+                  ></span>
+                  <span
+                    >Documentation bundle covering setup, content publishing,
+                    and maintenance routines.</span
+                  >
+                </li>
+                <li class="flex items-start gap-2">
+                  <span
+                    class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+                  ></span>
+                  <span
+                    >Recorded walkthrough and Q&A session with your team.</span
+                  >
+                </li>
+                <li class="flex items-start gap-2">
+                  <span
+                    class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+                  ></span>
+                  <span
+                    >30 days of follow-up support for clarifying questions.</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white">
+        <div class="mx-auto max-w-4xl px-6 py-20">
+          <h2 class="text-3xl font-semibold text-neutral-900 text-center">
+            Frequently asked questions
           </h2>
-          <p class="mt-4 text-sm text-neutral-600">
-            We are happy to scope custom migrations, component design, or
-            platform integrations. Share your goals and we will map out the
-            milestone plan before any commitment.
-          </p>
-          <div class="mt-6 flex flex-wrap justify-center gap-3">
-            <a
-              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-              href="/contact"
-            >
-              Talk with the team
-            </a>
-            <a
-              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-              href="/services"
-            >
-              Review services
-            </a>
+          <div class="mt-10 space-y-6">
+            {
+              faqs.map(item => (
+                <details class="group rounded-3xl border border-neutral-200 bg-neutral-50 p-6">
+                  <summary class="flex cursor-pointer list-none items-center justify-between text-left text-base font-semibold text-neutral-900">
+                    {item.question}
+                    <span class="ml-4 inline-flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 text-sm text-neutral-500 transition group-open:rotate-45">
+                      +
+                    </span>
+                  </summary>
+                  <p class="mt-4 text-sm leading-relaxed text-neutral-600">
+                    {item.answer}
+                  </p>
+                </details>
+              ))
+            }
           </div>
         </div>
       </section>
