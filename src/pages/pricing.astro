@@ -1,0 +1,141 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const tiers = [
+  {
+    name: 'Starter',
+    price: '$0',
+    description: 'Clone the repo, follow the README, and deploy manually.',
+    perks: [
+      'Fully static Astro + Tailwind build configured for GitHub Pages.',
+      'Sample content collections and RSS feed.',
+      'MIT license for personal and commercial use.',
+    ],
+    cta: 'Get the template',
+    href: 'https://github.com/tariqdude/Test2025',
+  },
+  {
+    name: 'Team Launch',
+    price: '$1,200',
+    description: 'One-week engagement to tailor the template to your org.',
+    perks: [
+      'Brand styling updates and content migration assistance.',
+      'Automation scripts for lint, test, and GitHub Pages deploy.',
+      'Live working session to review maintenance workflows.',
+    ],
+    cta: 'Book a kickoff call',
+    href: '/contact',
+    highlight: true,
+  },
+  {
+    name: 'Retainer',
+    price: 'Custom',
+    description: 'Ongoing support for releases, audits, and new sections.',
+    perks: [
+      'Quarterly accessibility, performance, and security reviews.',
+      'Copywriting and content strategy assistance for updates.',
+      'Priority response from the maintainers.',
+    ],
+    cta: 'Start a conversation',
+    href: '/contact',
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Pricing | Elite Project"
+      description="Transparent pricing for adapting and maintaining the Elite Project starter."
+    />
+  </head>
+  <body class="bg-white text-neutral-900">
+    <Header />
+    <main>
+      <section class="bg-neutral-900 text-neutral-50">
+        <div class="mx-auto max-w-5xl px-6 py-24 text-center">
+          <p
+            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+          >
+            Pricing
+          </p>
+          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
+            Choose the level of support that keeps you shipping.
+          </h1>
+          <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
+            Whether you want to self-host or rely on our team for ongoing
+            improvements, each tier focuses on keeping the Astro site simple,
+            reliable, and well documented.
+          </p>
+        </div>
+      </section>
+
+      <section class="bg-white">
+        <div class="mx-auto grid max-w-6xl gap-8 px-6 py-16 lg:grid-cols-3">
+          {
+            tiers.map(tier => (
+              <article
+                class={`flex flex-col gap-6 rounded-2xl border ${tier.highlight ? 'border-brand-500 shadow-lg' : 'border-neutral-200'} bg-neutral-50 p-8`}
+              >
+                <div class="space-y-2">
+                  <h2 class="text-2xl font-semibold text-neutral-900">
+                    {tier.name}
+                  </h2>
+                  <p class="text-3xl font-bold text-neutral-900">
+                    {tier.price}
+                  </p>
+                  <p class="text-sm text-neutral-600">{tier.description}</p>
+                </div>
+                <ul class="space-y-3 text-sm text-neutral-600">
+                  {tier.perks.map(perk => (
+                    <li class="flex items-start gap-2">
+                      <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                      <span>{perk}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  class={`inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition ${tier.highlight ? 'bg-brand-600 text-white hover:bg-brand-700' : 'border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
+                  href={tier.href}
+                >
+                  {tier.cta}
+                </a>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="bg-neutral-50">
+        <div class="mx-auto max-w-4xl px-6 py-16 text-center">
+          <h2 class="text-2xl font-semibold text-neutral-900">
+            Need something different?
+          </h2>
+          <p class="mt-4 text-sm text-neutral-600">
+            We are happy to scope custom migrations, component design, or
+            platform integrations. Share your goals and we will map out the
+            milestone plan before any commitment.
+          </p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <a
+              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+              href="/contact"
+            >
+              Talk with the team
+            </a>
+            <a
+              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+              href="/services"
+            >
+              Review services
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

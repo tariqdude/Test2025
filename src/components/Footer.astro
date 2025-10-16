@@ -8,10 +8,11 @@ const baseUrl = import.meta.env.BASE_URL;
     <div class="grid md:grid-cols-4 gap-8 mb-8">
       <!-- Company Info -->
       <div class="md:col-span-2">
-        <h3 class="text-white text-lg font-semibold mb-4">Your Company</h3>
+        <h3 class="text-white text-lg font-semibold mb-4">Elite Project</h3>
         <p class="text-gray-400 mb-4 max-w-md">
-          Delivering enterprise-grade technology solutions and strategic
-          consulting to drive innovation and growth.
+          A lean Astro starter focused on reliable GitHub Pages deployments.
+          Clean markup, fast builds, and content you can maintain without
+          juggling multiple frameworks.
         </p>
         <div class="flex space-x-4">
           <a
@@ -61,19 +62,36 @@ const baseUrl = import.meta.env.BASE_URL;
             <a
               href={baseUrl + 'about/'}
               class="text-gray-400 hover:text-white transition-colors duration-200"
-              >About</a>
+              >About</a
+            >
           </li>
           <li>
             <a
               href={baseUrl + 'blog/'}
               class="text-gray-400 hover:text-white transition-colors duration-200"
-              >Blog</a>
+              >Blog</a
+            >
+          </li>
+          <li>
+            <a
+              href={baseUrl + 'services/'}
+              class="text-gray-400 hover:text-white transition-colors duration-200"
+              >Services</a
+            >
+          </li>
+          <li>
+            <a
+              href={baseUrl + 'pricing/'}
+              class="text-gray-400 hover:text-white transition-colors duration-200"
+              >Pricing</a
+            >
           </li>
           <li>
             <a
               href={baseUrl + 'contact/'}
               class="text-gray-400 hover:text-white transition-colors duration-200"
-              >Contact</a>
+              >Contact</a
+            >
           </li>
         </ul>
       </div>
@@ -82,10 +100,10 @@ const baseUrl = import.meta.env.BASE_URL;
       <div>
         <h4 class="text-white font-semibold mb-4">Contact</h4>
         <ul class="space-y-2 text-sm">
-          <li class="text-gray-400">123 Business Plaza</li>
-          <li class="text-gray-400">New York, NY 10001</li>
+          <li class="text-gray-400">123 Innovation Street</li>
+          <li class="text-gray-400">Tech City, USA</li>
           <li class="text-gray-400">+1 (555) 123-4567</li>
-          <li class="text-gray-400">contact@company.com</li>
+          <li class="text-gray-400">hello@eliteproject.dev</li>
         </ul>
       </div>
     </div>
@@ -95,10 +113,10 @@ const baseUrl = import.meta.env.BASE_URL;
       class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center"
     >
       <p class="text-gray-400 text-sm">
-        &copy; {today.getFullYear()} Your Company. All rights reserved.
+        &copy; {today.getFullYear()} Elite Project. All rights reserved.
       </p>
       <p class="text-gray-400 text-sm mt-4 md:mt-0">
-        Built with Astro and Tailwind CSS.
+        Built with Astro and Tailwind CSS, deployed on GitHub Pages.
       </p>
     </div>
   </div>

@@ -8,39 +8,47 @@ interface CodeExample {
 
 const examples: CodeExample[] = [
   {
-    title: "Astro Component Islands",
+    title: "Static Data Mapping",
     language: "astro",
     code: `---
-// Component script (runs at build time)
-const data = await fetch('https://api.example.com/data');
-const items = await data.json();
+const caseStudies = [
+  { name: 'Northwind Ops', outcome: 'Deployed as a static status site' },
+  { name: 'Globex Support', outcome: 'Migrated marketing flow to Markdown' },
+];
 ---
 
-<!-- Template (rendered to HTML) -->
-<div class="grid">
-  {items.map(item => (
-    <Card title={item.title}>
-      <ReactComponent client:visible data={item} />
-    </Card>
+<ul class="grid gap-4">
+  {caseStudies.map((study) => (
+    <li class="rounded-lg border border-neutral-200 p-4">
+      <h3>{study.name}</h3>
+      <p>{study.outcome}</p>
+    </li>
   ))}
-</div>`,
-    description: "Zero JS by default, hydrate only when needed"
+</ul>`,
+    description: "Render repeatable sections with plain data—no client runtime needed."
   },
   {
-    title: "Multi-Framework Integration",
+    title: "Build-Time Collections",
     language: "astro",
     code: `---
-import ReactCounter from './react/Counter.tsx';
-import VueChart from './vue/Chart.vue';
-import SvelteParticles from './svelte/Particles.svelte';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => data.published);
+const latest = posts.slice(0, 3);
 ---
 
-<div class="framework-showcase">
-  <ReactCounter client:load />
-  <VueChart client:visible data={chartData} />
-  <SvelteParticles client:idle />
-</div>`,
-    description: "Use any framework together in one project"
+<section>
+  <h2>Latest updates</h2>
+  <ul>
+    {latest.map(({ slug, data }) => (
+      <li>
+        <a href=\`/blog/\${slug}/\`>{data.title}</a>
+        <span>{data.pubDate.toLocaleDateString()}</span>
+      </li>
+    ))}
+  </ul>
+</section>`,
+    description: "Query Markdown content at build time and ship a static listing."
   },
   {
     title: "Content Collections",
@@ -52,35 +60,30 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     pubDate: z.date(),
-    author: z.string(),
-    tags: z.array(z.string()),
+    author: z.string().default('Docs Team'),
+    tags: z.array(z.string()).default([]),
   }),
 });
 
 export const collections = { blog };`,
-    description: "Type-safe content management with Zod validation"
+    description: "Type-safe Markdown frontmatter keeps every post consistent."
   },
   {
-    title: "Server-Side Rendering",
+    title: "No-Backend Contact Form",
     language: "astro",
-    code: `---
-// This runs on the server
-export const prerender = false;
-
-const userAgent = Astro.request.headers.get('user-agent');
-const isBot = /bot|crawler|spider/i.test(userAgent || '');
-
-if (isBot) {
-  return Astro.redirect('/sitemap.xml');
-}
----
-
-<html>
-  <head>
-    <meta name="user-agent" content={userAgent} />
-  </head>
-</html>`,
-    description: "Full control over server-side logic and rendering"
+    code: `<form action="https://formspree.io/f/demo" method="POST">
+  <label>
+    Your email
+    <input type="email" name="email" required />
+  </label>
+  <label>
+    Message
+    <textarea name="message" required></textarea>
+  </label>
+  <p class="note">Hosted forms forward submissions by email.</p>
+  <button type="submit">Send message</button>
+</form>`,
+    description: "Pair the static site with a hosted form service when submissions are required."
   }
 ];
 ---
@@ -111,11 +114,11 @@ if (isBot) {
             </button>
           </div>
         </div>
-        
+
         <!-- Code content -->
         <div class="relative">
           <pre class="p-6 text-sm overflow-x-auto"><code class={`language-${example.language} text-gray-300`}>{example.code}</code></pre>
-          
+
           <!-- Line numbers -->
           <div class="absolute left-0 top-0 p-6 text-gray-500 text-sm font-mono select-none pointer-events-none">
             {example.code.split('\n').map((_, i) => (
@@ -123,7 +126,7 @@ if (isBot) {
             ))}
           </div>
         </div>
-        
+
         <!-- Description -->
         <div class="p-4 bg-gray-800/50 border-t border-gray-700">
           <p class="text-gray-300 text-sm">{example.description}</p>
@@ -137,11 +140,11 @@ if (isBot) {
   pre {
     font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
   }
-  
+
   code {
     counter-reset: line;
   }
-  
+
   .group:hover .code-container {
     transform: translateY(-2px);
   }

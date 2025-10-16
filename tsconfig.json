@@ -1,7 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*", "tailwind.config.ts"],
-  "exclude": ["dist", "node_modules"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/components/preact",
+    "src/components/react",
+    "src/components/solid",
+    "src/components/svelte",
+    "src/components/vue",
+    "src/scripts/error-dashboard.ts"
+  ],
   "compilerOptions": {
     "strictNullChecks": true,
     "module": "ESNext",

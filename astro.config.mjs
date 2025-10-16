@@ -4,11 +4,6 @@ import 'dotenv/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
-import react from '@astrojs/react';
-import svelte from '@astrojs/svelte';
-import solid from '@astrojs/solid-js';
-import preact from '@astrojs/preact';
-import vue from '@astrojs/vue';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
@@ -22,21 +17,6 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
       configFile: './tailwind.config.ts',
-    }),
-    react({
-      include: ['**/react/**/*'],
-    }),
-    svelte({
-      include: ['**/svelte/**/*'],
-    }),
-    solid({
-      include: ['**/solid/**/*'],
-    }),
-    preact({
-      include: ['**/preact/**/*'],
-    }),
-    vue({
-      include: ['src/components/vue/**/*.vue'],
     }),
   ],
 });

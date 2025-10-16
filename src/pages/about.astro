@@ -1,0 +1,146 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pillars = [
+  {
+    title: 'Opinionated by default',
+    description:
+      'We trimmed the starter down to Astro, Tailwind, and content collections so every build works on static hosting without additional services.',
+  },
+  {
+    title: 'Optimized for GitHub Pages',
+    description:
+      'Base paths, asset handling, and prerendered routes are set up for repository pages. Deploy straight from main and know the site will publish.',
+  },
+  {
+    title: 'Documented patterns',
+    description:
+      'Each section uses plain Astro components and utility classes so you can scan a file, change copy, and ship updates quickly.',
+  },
+];
+
+const timeline = [
+  {
+    year: '2023',
+    heading: 'Prototype',
+    copy: 'Created the original multi-framework playground to evaluate Astro islands and real-time charts.',
+  },
+  {
+    year: '2024',
+    heading: 'Reality check',
+    copy: 'Discovered GitHub Pages limitations and the maintenance overhead introduced by several client runtimes.',
+  },
+  {
+    year: '2025',
+    heading: 'Simplified starter',
+    copy: 'Rebuilt the template around static content and pragmatic sections so teams can publish status updates without friction.',
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="About | Elite Project"
+      description="Learn why this Astro starter prioritises reliability and static-friendly patterns."
+    />
+  </head>
+  <body class="bg-white text-neutral-900">
+    <Header />
+    <main>
+      <section class="bg-neutral-900 text-neutral-50">
+        <div class="mx-auto max-w-5xl px-6 py-24">
+          <p
+            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+          >
+            Our mission
+          </p>
+          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
+            Shipping faster by cutting every unnecessary dependency.
+          </h1>
+          <p class="mt-6 max-w-3xl text-lg text-neutral-300">
+            Elite Project began as a sandbox for flashy UI experiments. The 2025
+            rewrite moves in the opposite direction: a calm foundation that
+            keeps Astro sites light, maintainable, and compatible with GitHub
+            Pages.
+          </p>
+        </div>
+      </section>
+
+      <section class="bg-white">
+        <div class="mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-3">
+          {
+            pillars.map(pillar => (
+              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+                <h2 class="text-xl font-semibold text-neutral-900">
+                  {pillar.title}
+                </h2>
+                <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                  {pillar.description}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="bg-neutral-50">
+        <div class="mx-auto max-w-4xl px-6 py-20">
+          <h2 class="text-3xl font-semibold text-neutral-900">
+            How we arrived here
+          </h2>
+          <div class="mt-10 space-y-8 border-l border-neutral-200 pl-8">
+            {
+              timeline.map(entry => (
+                <div class="relative">
+                  <div class="absolute -left-[1.125rem] top-1 h-3 w-3 rounded-full border border-white bg-brand-600" />
+                  <p class="text-sm font-semibold text-brand-600">
+                    {entry.year}
+                  </p>
+                  <h3 class="mt-2 text-xl font-semibold text-neutral-900">
+                    {entry.heading}
+                  </h3>
+                  <p class="mt-2 text-sm text-neutral-600">{entry.copy}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white">
+        <div
+          class="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16 rounded-3xl border border-neutral-200 bg-neutral-50 text-center"
+        >
+          <h2 class="text-2xl font-semibold text-neutral-900">
+            Built for content teams and maintainers
+          </h2>
+          <p class="text-base text-neutral-600">
+            Treat this project as a living playbook. Swap in your own copy,
+            remove the sections you do not need, and extend the design system
+            with the same utility-first approach. The goal is to keep velocity
+            high without leaving the safety of static hosting.
+          </p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a
+              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+              href="/contact"
+            >
+              Start a project discussion
+            </a>
+            <a
+              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+              href="/services"
+            >
+              Explore services
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,378 +1,172 @@
+﻿---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+type PainPoint = { title: string; description: string };
+type WorkflowStep = { heading: string; detail: string };
+type ChecklistItem = { label: string; bullets: string[] };
+type ResourceLink = { label: string; description: string; href: string };
+
+const painPoints: PainPoint[] = [
+  {
+    title: "Live scripts add fragility",
+    description:
+      "Client-side charts and hot reloading APIs fail on static hosts such as GitHub Pages, so outages were common.",
+  },
+  {
+    title: "Opaque runtime state",
+    description:
+      "Troubleshooting required digging through console logs and timers instead of reviewing commit history.",
+  },
+  {
+    title: "Heavy dependency footprint",
+    description:
+      "Multiple framework islands forced extra npm installs, slowing every build despite little day-to-day value.",
+  },
+];
+
+const workflow: WorkflowStep[] = [
+  {
+    heading: "Capture signals",
+    detail: "Gather lint, test, and monitoring results from your CI provider or local scripts as markdown-ready notes.",
+  },
+  {
+    heading: "Summarise trends",
+    detail: "Translate raw logs into a short narrative that highlights regressions, mitigations, and owners.",
+  },
+  {
+    heading: "Version the report",
+    detail: "Commit the update alongside code changes so reviewers can diff new risks before approving merges.",
+  },
+  {
+    heading: "Share with stakeholders",
+    detail: "Post the rendered page or exported PDF to Slack, email, or status channels for full visibility.",
+  },
+];
+
+const checklist: ChecklistItem[] = [
+  {
+    label: "Accessibility",
+    bullets: ["Keyboard traps cleared", "Color contrast verified", "ARIA labels audited"],
+  },
+  {
+    label: "Performance",
+    bullets: ["Largest Contentful Paint target met", "Bundle size delta recorded", "Image optimisations reviewed"],
+  },
+  {
+    label: "Security",
+    bullets: ["Dependency scan exported", "Headers configuration noted", "Secrets rotation schedule confirmed"],
+  },
+];
+
+const resources: ResourceLink[] = [
+  {
+    label: "Read the static analysis playbook",
+    description: "Learn how to translate live dashboards into lightweight, maintainable review checklists.",
+    href: "/services",
+  },
+  {
+    label: "Talk to the team",
+    description: "Need help wiring reports into CI? Drop us a note and we will walk through the migration plan.",
+    href: "/contact",
+  },
+];
 ---
-// Error Reviewer Dashboard Page
-// Comprehensive real-time project health monitoring
 
-import Layout from '../layouts/BlogPost.astro';
-import ErrorDashboard from '../components/ErrorDashboard.astro';
-
-const title = 'Elite Error Reviewer Dashboard';
-const description =
-  'Comprehensive project health monitoring and error analysis dashboard';
-const pubDate = new Date();
-const updatedDate = new Date();
----
-
-<Layout
-  title={title}
-  description={description}
-  pubDate={pubDate}
-  updatedDate={updatedDate}
->
-  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-    <!-- Header Section -->
-    <section
-      class="py-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white"
-    >
-      <div class="container mx-auto px-4">
-        <div class="text-center">
-          <h1 class="text-5xl font-bold mb-4">🔍 Elite Error Reviewer</h1>
-          <p class="text-xl text-blue-100 mb-8">
-            Comprehensive project health monitoring and error analysis
-          </p>
-
-          <div class="flex justify-center space-x-4 flex-wrap">
-            <button
-              id="refresh-btn"
-              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              🔄 Refresh Analysis
-            </button>
-
-            <button
-              id="auto-fix-btn"
-              class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              🔧 Auto-fix Issues
-            </button>
-
-            <button
-              id="export-btn"
-              class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              📄 Export Report
-            </button>
-
-            <button
-              id="run-analysis-btn"
-              class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              🧠 Run Full Analysis
-            </button>
-          </div>
-
-          <p class="mt-6 text-sm text-blue-200">
-            Tip: Use Ctrl+R to refresh, Ctrl+F to auto-fix, Ctrl+E to export
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Error Dashboard | Elite Project"
+      description="Learn why the interactive dashboard was retired and how to run static error reviews instead."
+    />
+  </head>
+  <body class="bg-neutral-50 text-neutral-900">
+    <Header />
+    <main>
+      <section class="bg-neutral-900 text-neutral-50">
+        <div class="mx-auto max-w-4xl px-6 py-24">
+          <p class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Error reviews</p>
+          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">Operational insight without live dashboards.</h1>
+          <p class="mt-6 text-lg text-neutral-300">
+            The original error dashboard relied on client-only frameworks and background polling. On static hosting we now
+            document issues through curated updates, providing the same context with zero runtime surprises.
           </p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="py-8 bg-white border-b border-slate-200">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-4 gap-4" id="status-indicators"></div>
-      </div>
-    </section>
-
-    <section class="py-12">
-      <div class="container mx-auto px-4">
-        <ErrorDashboard />
-      </div>
-    </section>
-
-    <section class="py-12 bg-white border-t border-slate-200">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div
-            class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm"
-          >
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">
-              ⚙️ Automation Controls
-            </h2>
-
-            <div class="space-y-4 text-slate-700">
-              <div class="flex items-start space-x-3">
-                <span class="text-blue-600 text-xl">🔄</span>
-                <div>
-                  <h3 class="font-semibold">Auto-refresh monitoring</h3>
-                  <p>
-                    Continuously reconciles project state and identifies newly
-                    introduced issues.
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-3">
-                <span class="text-green-600 text-xl">⚡</span>
-                <div>
-                  <h3 class="font-semibold">Rapid remediation</h3>
-                  <p>
-                    Applies guided fixes to common configuration and
-                    implementation mistakes.
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-3">
-                <span class="text-purple-600 text-xl">🧠</span>
-                <div>
-                  <h3 class="font-semibold">Full stack analysis</h3>
-                  <p>
-                    Combines accessibility, performance, deployment, and
-                    security audits in one sweep.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-slate-900 to-blue-900 p-6 rounded-2xl shadow-lg text-white"
-          >
-            <h2 class="text-2xl font-bold mb-4">📊 Executive Metrics</h2>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                <p class="text-sm uppercase tracking-widest text-blue-200">
-                  Total Issues
-                </p>
-                <p id="total-issues" class="text-3xl font-bold mt-2">0</p>
-              </div>
-
-              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                <p class="text-sm uppercase tracking-widest text-blue-200">
-                  Critical
-                </p>
-                <p
-                  id="critical-issues"
-                  class="text-3xl font-bold mt-2 text-red-300"
-                >
-                  0
-                </p>
-              </div>
-
-              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                <p class="text-sm uppercase tracking-widest text-blue-200">
-                  Auto-fixable
-                </p>
-                <p
-                  id="auto-fixable"
-                  class="text-3xl font-bold mt-2 text-green-300"
-                >
-                  0
-                </p>
-              </div>
-
-              <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                <p class="text-sm uppercase tracking-widest text-blue-200">
-                  Health Score
-                </p>
-                <p
-                  id="health-score"
-                  class="text-4xl font-bold mt-2 text-emerald-300"
-                >
-                  92
-                </p>
-              </div>
-            </div>
+      <section class="bg-white">
+        <div class="mx-auto max-w-5xl px-6 py-16">
+          <h2 class="text-2xl font-semibold text-neutral-900">Why we removed the live dashboard</h2>
+          <div class="mt-8 grid gap-6 sm:grid-cols-3">
+            {painPoints.map((item) => (
+              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+                <h3 class="text-lg font-semibold text-neutral-900">{item.title}</h3>
+                <p class="mt-3 text-sm text-neutral-600">{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="py-12">
-      <div class="container mx-auto px-4">
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-xl">
-          <div class="p-6 border-b border-slate-200 bg-slate-50 rounded-t-2xl">
-            <h2 class="text-2xl font-bold text-slate-900">
-              📡 Real-time Status Stream
-            </h2>
-            <p class="text-slate-600">
-              Observe live updates from automated analysis, auto-fix operations,
-              and manual interventions.
-            </p>
-          </div>
+      <section class="bg-neutral-50">
+        <div class="mx-auto max-w-4xl px-6 py-16">
+          <h2 class="text-2xl font-semibold text-neutral-900">Static error review workflow</h2>
+          <ol class="mt-8 space-y-4 text-sm text-neutral-600">
+            {workflow.map((step, index) => (
+              <li class="flex items-start gap-4 rounded-2xl border border-neutral-200 bg-white px-5 py-4">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-sm font-semibold text-white">
+                  {index + 1}
+                </span>
+                <span>
+                  <span class="block text-base font-semibold text-neutral-900">{step.heading}</span>
+                  <span class="mt-1 block">{step.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-          <div class="p-6">
-            <div id="status-log" class="h-96 overflow-y-auto space-y-3">
-              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                <p class="text-sm text-slate-500">
-                  No events yet. Trigger an analysis to start monitoring.
-                </p>
-              </div>
-            </div>
+      <section class="bg-white">
+        <div class="mx-auto max-w-5xl px-6 py-16">
+          <h2 class="text-2xl font-semibold text-neutral-900">Checks to keep on the radar</h2>
+          <div class="mt-8 grid gap-6 sm:grid-cols-3">
+            {checklist.map((group) => (
+              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+                <h3 class="text-lg font-semibold text-neutral-900">{group.label}</h3>
+                <ul class="mt-3 space-y-2 text-sm text-neutral-600">
+                  {group.bullets.map((bullet) => (
+                    <li class="flex items-center gap-2">
+                      <span class="inline-flex h-2 w-2 rounded-full bg-brand-600"></span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="py-12 bg-blue-900 text-white">
-      <div class="container mx-auto px-4 text-center space-y-6">
-        <h2 class="text-3xl font-bold">🧭 Governance Ready</h2>
-        <p class="text-blue-200 max-w-3xl mx-auto">
-          Tailored for enterprise governance teams that require verifiable
-          compliance, audit-ready reports, and resilience testing. Integrates
-          with your existing CI/CD pipelines, observability tools, and security
-          platforms.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          <div class="bg-white/10 p-5 rounded-xl">
-            <h3 class="font-semibold text-lg mb-2">Risk Prioritization</h3>
-            <p class="text-blue-100">
-              Weighted scoring across severity, frequency, and business impact
-              to guide immediate action.
-            </p>
-          </div>
-
-          <div class="bg-white/10 p-5 rounded-xl">
-            <h3 class="font-semibold text-lg mb-2">Audit-ready Outputs</h3>
-            <p class="text-blue-100">
-              Export detailed findings for compliance, featuring rollback
-              instructions and change verification.
-            </p>
-          </div>
-
-          <div class="bg-white/10 p-5 rounded-xl">
-            <h3 class="font-semibold text-lg mb-2">Live Orchestration</h3>
-            <p class="text-blue-100">
-              Link monitoring signals to incident response workflows and
-              governance dashboards.
-            </p>
+      <section class="bg-neutral-900 text-neutral-50">
+        <div class="mx-auto max-w-4xl px-6 py-16">
+          <h2 class="text-2xl font-semibold text-neutral-50">Keep the conversation going</h2>
+          <div class="mt-8 grid gap-6 sm:grid-cols-2">
+            {resources.map((link) => (
+              <a
+                class="block rounded-2xl border border-neutral-800 bg-neutral-800/60 px-6 py-6 transition hover:border-brand-500 hover:bg-neutral-800"
+                href={link.href}
+              >
+                <span class="text-lg font-semibold text-neutral-50">{link.label}</span>
+                <span class="mt-2 block text-sm text-neutral-300">{link.description}</span>
+              </a>
+            ))}
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="py-12 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-700">
-          <div
-            class="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl shadow-sm border border-slate-200"
-          >
-            <h3 class="text-lg font-semibold text-slate-900 mb-3">
-              📂 Repository Health
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li>✅ Branch hygiene checks</li>
-              <li>✅ Commit verification</li>
-              <li>✅ Merge readiness scoring</li>
-            </ul>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-slate-50 to-green-50 p-6 rounded-2xl shadow-sm border border-slate-200"
-          >
-            <h3 class="text-lg font-semibold text-slate-900 mb-3">
-              🧪 Test Coverage
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li>✅ Unit, integration, and e2e stats</li>
-              <li>✅ Failed test diagnostics</li>
-              <li>✅ Coverage regression warnings</li>
-            </ul>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-slate-50 to-purple-50 p-6 rounded-2xl shadow-sm border border-slate-200"
-          >
-            <h3 class="text-lg font-semibold text-slate-900 mb-3">
-              🛡️ Security & Compliance
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li>✅ Dependency vulnerability scan</li>
-              <li>✅ OWASP guardrail detection</li>
-              <li>✅ Policy adherence scoring</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section
-      class="py-12 bg-gradient-to-br from-slate-900 to-blue-900 text-white"
-    >
-      <div class="container mx-auto px-4 text-center space-y-6">
-        <h2 class="text-3xl font-bold">🚀 Progressive Delivery Confidence</h2>
-        <p class="text-blue-200 max-w-3xl mx-auto">
-          Run targeted health scans before each release, blending automated
-          fixes with human oversight.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
-          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Shift-left Insights</h3>
-            <p class="text-sm text-blue-100">
-              Enforce coding standards and catch regressions directly in
-              developer workflows.
-            </p>
-          </div>
-
-          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Automated Remediation</h3>
-            <p class="text-sm text-blue-100">
-              Suggested patches and guided fixes for lint, dependency, and
-              configuration issues.
-            </p>
-          </div>
-
-          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Release Gates</h3>
-            <p class="text-sm text-blue-100">
-              Deploy with confidence by verifying readiness criteria and
-              rollback plans.
-            </p>
-          </div>
-
-          <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Executive Dashboards</h3>
-            <p class="text-sm text-blue-100">
-              Broadcast status to leadership, compliance, and operations
-              stakeholders.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</Layout>
-
-<script type="module">
-  import '../scripts/error-dashboard.ts';
-</script>
-
-<style>
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f1f5f9;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
-
-  /* Smooth animations */
-  * {
-    transition: all 0.2s ease;
-  }
-
-  /* Button hover effects */
-  button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Feature card hover effects */
-  .bg-gradient-to-br:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  }
-</style>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
