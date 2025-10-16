@@ -12,36 +12,39 @@ const links = [
 ---
 
 <header
-  class="sticky top-0 z-40 border-b border-neutral-200 bg-white/85 backdrop-blur"
+  class="sticky top-0 z-50 border-b border-white/10 bg-[rgba(15,23,42,0.78)] backdrop-blur-xl"
 >
   <nav
-    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+    class="mx-auto flex max-w-[1220px] items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
   >
-    <a class="flex items-center gap-3" href={baseUrl}>
+    <a class="flex items-center gap-3 text-slate-100" href={baseUrl}>
       <span
-        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 text-sm font-semibold text-brand-700 shadow-sm"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xs font-semibold uppercase tracking-[0.32em] text-slate-100"
       >
         EP
       </span>
       <div class="flex flex-col leading-tight">
-        <span class="text-sm font-semibold tracking-tight text-neutral-900">
+        <span class="text-sm font-semibold tracking-tight text-white">
           {SITE_TITLE}
         </span>
         <span
-          class="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500"
+          class="text-[0.7rem] font-medium uppercase tracking-[0.32em] text-slate-400"
         >
           Static Operations Studio
         </span>
       </div>
     </a>
 
-    <div
-      class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600"
-    >
-      <a class="transition hover:text-neutral-900" href={baseUrl}> Home </a>
+    <div class="hidden md:flex items-center gap-9 text-sm font-medium">
+      <a class="text-slate-300 transition hover:text-white" href={baseUrl}>
+        Home
+      </a>
       {
         links.map(link => (
-          <a class="transition hover:text-neutral-900" href={link.href}>
+          <a
+            class="text-slate-300 transition hover:text-white"
+            href={link.href}
+          >
             {link.label}
           </a>
         ))
@@ -49,23 +52,13 @@ const links = [
     </div>
 
     <div class="hidden md:flex items-center gap-3">
-      <a
-        class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400 hover:bg-white"
-        href="/showcase"
-      >
-        View showcase
-      </a>
-      <a
-        class="inline-flex items-center justify-center rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-elevation-xs transition hover:bg-brand-700"
-        href="/contact"
-      >
-        Talk to us
-      </a>
+      <a class="btn btn-secondary" href="/showcase"> View showcase </a>
+      <a class="btn btn-primary" href="/contact"> Request a briefing </a>
     </div>
 
     <div class="md:hidden">
       <button
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-300 text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-slate-200 transition hover:border-white/25 hover:text-white"
         id="mobile-menu-button"
         type="button"
       >
@@ -88,10 +81,10 @@ const links = [
 
   <div class="md:hidden" id="mobile-menu" hidden>
     <div
-      class="space-y-1 border-t border-neutral-200 bg-white px-4 py-4 shadow-sm"
+      class="space-y-2 border-t border-white/10 bg-[rgba(11,19,35,0.92)] px-4 py-5 text-sm"
     >
       <a
-        class="block rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+        class="block rounded-lg px-3 py-2 font-medium text-slate-200 transition hover:bg-white/5"
         href={baseUrl}
       >
         Home
@@ -99,7 +92,7 @@ const links = [
       {
         links.map(link => (
           <a
-            class="block rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+            class="block rounded-lg px-3 py-2 font-medium text-slate-200 transition hover:bg-white/5"
             href={link.href}
           >
             {link.label}
@@ -107,10 +100,16 @@ const links = [
         ))
       }
       <a
-        class="block rounded-lg px-3 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700"
+        class="block rounded-lg px-3 py-2 font-semibold text-slate-100 transition hover:bg-white/5"
+        href="/showcase"
+      >
+        View showcase
+      </a>
+      <a
+        class="block rounded-lg bg-[rgba(99,102,241,0.15)] px-3 py-2 font-semibold text-white transition hover:bg-[rgba(99,102,241,0.25)]"
         href="/contact"
       >
-        Talk to us
+        Request a briefing
       </a>
     </div>
   </div>
