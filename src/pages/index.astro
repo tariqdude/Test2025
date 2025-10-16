@@ -170,6 +170,72 @@ const engagements = [
     ],
   },
 ];
+
+const opsStack = [
+  {
+    name: 'Release discipline',
+    metric: '±48h',
+    metricLabel: 'Deployment forecast',
+    summary:
+      'Keep engineering, compliance, and stakeholders aligned on when the next release lands and what makes it production ready.',
+    bullets: [
+      'Automated status scoring before every push',
+      'Risk narratives surfaced for leadership reviews',
+      'Evidence bundles generated for compliance teams',
+    ],
+  },
+  {
+    name: 'Operations telemetry',
+    metric: '92%',
+    metricLabel: 'Report reuse rate',
+    summary:
+      'Turn recurring reports into governed templates that stay polished, accessible, and painless to update.',
+    bullets: [
+      'Composable sections for launches and retros',
+      'Single source of truth for product and ops data',
+      'Structured archives with search-friendly metadata',
+    ],
+  },
+  {
+    name: 'Stakeholder clarity',
+    metric: '15 min',
+    metricLabel: 'Executive prep time',
+    summary:
+      'Deliver succinct, on-brand briefings that cut through noise while capturing the detail auditors expect.',
+    bullets: [
+      'Narrative frameworks tuned for revenue and risk',
+      'Live-to-static workflows for dashboards and charts',
+      'Versioned approvals with automated changelogs',
+    ],
+  },
+];
+
+const insightReports = [
+  {
+    category: 'Brief',
+    title: 'Incident simulation kit',
+    description:
+      'A ready-to-run exercise playbook that keeps product, operations, and customer teams aligned before the next escalation.',
+    linkLabel: 'Preview the kit',
+    href: '/services/',
+  },
+  {
+    category: 'Checklist',
+    title: 'Launch governance audit',
+    description:
+      'A condensed review flow for security, compliance, and product sign-off designed for static delivery teams.',
+    linkLabel: 'Run the audit',
+    href: '/pricing/',
+  },
+  {
+    category: 'Playbook',
+    title: 'Executive reporting cadence',
+    description:
+      'Weekly, monthly, and quarterly templates that reduce prep while amplifying the story leadership needs to hear.',
+    linkLabel: 'See the cadence',
+    href: '/about/',
+  },
+];
 ---
 
 <!doctype html>
@@ -177,7 +243,7 @@ const engagements = [
   <head>
     <BaseHead title={headline} description={subheading} />
   </head>
-  <body>
+  <body class="bg-slate-950 text-slate-100 antialiased">
     <Header />
     <main class="space-y-24 pb-24">
       <section class="relative overflow-hidden pt-28">
@@ -406,6 +472,61 @@ const engagements = [
       </section>
 
       <section class="relative">
+        <div class="absolute inset-0 -z-10 bg-[rgba(8,13,24,0.78)]"></div>
+        <div class="relative mx-auto max-w-[1220px] px-6 py-24">
+          <div
+            class="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
+          >
+            <div class="space-y-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+              >
+                Control stack
+              </p>
+              <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+                Deploy a consistent operating layer across every release
+              </h2>
+              <p class="text-sm text-slate-300">
+                Each module is designed to drop into your existing workflow,
+                connecting runbooks and audit trails with calm, executive-ready
+                interfaces.
+              </p>
+            </div>
+            <div class="grid gap-6 lg:grid-cols-3">
+              {
+                opsStack.map(stack => (
+                  <article class="glass-panel flex h-full flex-col gap-5 border border-white/10 p-6">
+                    <div class="flex items-start justify-between gap-4">
+                      <h3 class="text-lg font-semibold text-white">
+                        {stack.name}
+                      </h3>
+                      <div class="text-right">
+                        <p class="text-sm font-semibold text-white">
+                          {stack.metric}
+                        </p>
+                        <p class="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
+                          {stack.metricLabel}
+                        </p>
+                      </div>
+                    </div>
+                    <p class="text-sm text-slate-300">{stack.summary}</p>
+                    <ul class="space-y-2 text-sm text-slate-300/90">
+                      {stack.bullets.map(point => (
+                        <li class="flex items-start gap-2">
+                          <span class="mt-1 inline-flex h-2 w-2 flex-shrink-0 rounded-full bg-[rgba(99,102,241,0.55)]" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="relative">
         <div class="absolute inset-0 -z-10 bg-[rgba(7,12,22,0.85)]"></div>
         <div class="relative mx-auto max-w-[1220px] px-6 py-24">
           <div
@@ -441,6 +562,51 @@ const engagements = [
                 ))
               }
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="relative">
+        <div class="absolute inset-0 -z-10 bg-[rgba(6,11,22,0.85)]"></div>
+        <div class="relative mx-auto max-w-[1220px] px-6 py-24">
+          <div class="max-w-3xl space-y-4">
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+            >
+              Ops intelligence
+            </p>
+            <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+              Toolkits that accelerate the way you brief, audit, and recover
+            </h2>
+            <p class="text-sm text-slate-300">
+              Pair the starter with focused resources that walk your teams
+              through messaging, risk posture, and customer narratives without
+              adding overhead.
+            </p>
+          </div>
+          <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {
+              insightReports.map(report => (
+                <article class="glass-panel flex h-full flex-col justify-between gap-5 border border-white/10 p-6">
+                  <div class="space-y-4">
+                    <span class="inline-flex w-max items-center rounded-full border border-white/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-slate-300">
+                      {report.category}
+                    </span>
+                    <h3 class="text-xl font-semibold text-white">
+                      {report.title}
+                    </h3>
+                    <p class="text-sm text-slate-300">{report.description}</p>
+                  </div>
+                  <a
+                    class="inline-flex w-max items-center gap-2 text-sm font-semibold text-slate-200 transition hover:text-white"
+                    href={report.href}
+                  >
+                    {report.linkLabel}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </article>
+              ))
+            }
           </div>
         </div>
       </section>
