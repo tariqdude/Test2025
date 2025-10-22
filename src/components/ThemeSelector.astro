@@ -69,11 +69,9 @@ const { currentTheme = 'dark' } = Astro.props;
   }
 </style>
 
-<script is:inline lang="ts">
-  import type { ThemeName } from '../styles/theme';
-
+<script is:inline>
   // Theme switching functionality
-  function setTheme(themeName: ThemeName) {
+  function setTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem('preferred-theme', themeName);
 
@@ -81,7 +79,7 @@ const { currentTheme = 'dark' } = Astro.props;
     location.reload();
   }
 
-  function getPreferredTheme(): ThemeName {
+  function getPreferredTheme() {
     const saved = localStorage.getItem('preferred-theme');
     if (saved === 'dark' || saved === 'light') {
       return saved;
@@ -103,7 +101,7 @@ const { currentTheme = 'dark' } = Astro.props;
       selector.addEventListener('change', event => {
         const target = event.target;
         if (target instanceof HTMLSelectElement) {
-          const value = target.value as ThemeName;
+          const value = target.value;
           setTheme(value);
         }
       });

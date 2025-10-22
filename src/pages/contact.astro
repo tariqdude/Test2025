@@ -1,7 +1,5 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import MarketingLayout from '../layouts/MarketingLayout.astro';
 
 const contactMethods = [
   {
@@ -37,213 +35,199 @@ const commitments = [
 ];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead
-      title="Contact Us | Elite Project"
-      description="Reach the Elite Project team for support, partnerships, or general questions."
-    />
-  </head>
-  <body class="bg-white text-neutral-900">
-    <Header />
-    <main class="bg-white">
-      <section class="relative overflow-hidden bg-neutral-950 text-neutral-50">
-        <div
-          class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+<MarketingLayout
+  title="Contact Us | Elite Project"
+  description="Reach the Elite Project team for support, partnerships, or general questions."
+>
+  <section class="relative overflow-hidden bg-neutral-950 text-neutral-50">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+    >
+    </div>
+    <div
+      class="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-24 pt-28 lg:flex-row lg:items-start lg:justify-between"
+    >
+      <div class="max-w-xl space-y-6">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
         >
-        </div>
-        <div
-          class="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-24 pt-28 lg:flex-row lg:items-start lg:justify-between"
-        >
-          <div class="max-w-xl space-y-6">
-            <p
-              class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
-            >
-              Contact
-            </p>
-            <h1 class="text-4xl font-semibold text-white sm:text-5xl">
-              We are ready when you need a steady partner.
-            </h1>
-            <p class="text-lg text-neutral-300">
-              Reach out through the form or choose the channel that fits your
-              workflow. The core maintainers reply directly—no handoffs or
-              tiered support.
-            </p>
-            <div class="grid gap-4 sm:grid-cols-2">
-              {
-                contactMethods.map(method => (
-                  <a
-                    class="group flex flex-col rounded-2xl border border-white/10 bg-neutral-900/60 p-5 transition hover:border-white/30"
-                    href={method.href}
-                  >
-                    <span class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-400">
-                      {method.label}
-                    </span>
-                    <span class="mt-2 text-lg font-semibold text-white">
-                      {method.value}
-                    </span>
-                    <span class="mt-3 text-sm text-neutral-300">
-                      {method.description}
-                    </span>
-                  </a>
-                ))
-              }
-            </div>
-          </div>
-
-          <div
-            class="w-full max-w-lg space-y-10 rounded-3xl border border-white/10 bg-neutral-900/60 p-8 backdrop-blur"
-          >
-            <form class="space-y-6">
-              <div class="space-y-2">
-                <label class="text-sm font-medium text-neutral-200" for="name"
-                  >Full name</label
-                >
-                <input
-                  class="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  id="name"
-                  name="name"
-                  type="text"
-                  autocomplete="name"
-                  placeholder="Ada Lovelace"
-                  required
-                />
-              </div>
-
-              <div class="space-y-2">
-                <label class="text-sm font-medium text-neutral-200" for="email"
-                  >Email</label
-                >
-                <input
-                  class="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  id="email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-
-              <div class="space-y-2">
-                <label
-                  class="text-sm font-medium text-neutral-200"
-                  for="subject">Subject</label
-                >
-                <select
-                  class="w-full appearance-none rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  id="subject"
-                  name="subject"
-                  required
-                >
-                  <option value="">Choose an option</option>
-                  <option value="support">Technical support</option>
-                  <option value="feedback">Product feedback</option>
-                  <option value="partnership">Partnership inquiry</option>
-                  <option value="other">Something else</option>
-                </select>
-              </div>
-
-              <div class="space-y-2">
-                <label
-                  class="text-sm font-medium text-neutral-200"
-                  for="message">Message</label
-                >
-                <textarea
-                  class="h-32 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  id="message"
-                  name="message"
-                  placeholder="Share a few details so we can prepare a helpful reply."
-                  required></textarea>
-              </div>
-
-              <button
-                class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-neutral-950"
-                type="submit"
+          Contact
+        </p>
+        <h1 class="text-4xl font-semibold text-white sm:text-5xl">
+          We are ready when you need a steady partner.
+        </h1>
+        <p class="text-lg text-neutral-300">
+          Reach out through the form or choose the channel that fits your
+          workflow. The core maintainers reply directly—no handoffs or tiered
+          support.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            contactMethods.map(method => (
+              <a
+                class="group flex flex-col rounded-2xl border border-white/10 bg-neutral-900/60 p-5 transition hover:border-white/30"
+                href={method.href}
               >
-                Send message
-              </button>
-              <p class="text-xs text-neutral-400">
-                This presentational form keeps submissions in the browser—swap
-                the action or embed a service such as Formspree when you are
-                ready to collect entries.
-              </p>
-            </form>
-
-            <div
-              class="space-y-4 rounded-2xl border border-white/10 bg-neutral-950/50 p-6"
-            >
-              <h2 class="text-base font-semibold text-white">Office hours</h2>
-              <ul class="space-y-2 text-sm text-neutral-300">
-                {
-                  officeHours.map(slot => (
-                    <li class="flex items-center justify-between">
-                      <span>{slot.day}</span>
-                      <span class="text-neutral-400">{slot.hours}</span>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </div>
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-400">
+                  {method.label}
+                </span>
+                <span class="mt-2 text-lg font-semibold text-white">
+                  {method.value}
+                </span>
+                <span class="mt-3 text-sm text-neutral-300">
+                  {method.description}
+                </span>
+              </a>
+            ))
+          }
         </div>
-      </section>
+      </div>
 
-      <section class="border-y border-neutral-200 bg-neutral-50">
-        <div class="mx-auto max-w-5xl px-6 py-16 text-center">
-          <p
-            class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-600"
+      <div
+        class="w-full max-w-lg space-y-10 rounded-3xl border border-white/10 bg-neutral-900/60 p-8 backdrop-blur"
+      >
+        <form class="space-y-6">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-neutral-200" for="name"
+              >Full name</label
+            >
+            <input
+              class="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Ada Lovelace"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-neutral-200" for="email"
+              >Email</label
+            >
+            <input
+              class="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-neutral-200" for="subject"
+              >Subject</label
+            >
+            <select
+              class="w-full appearance-none rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              id="subject"
+              name="subject"
+              required
+            >
+              <option value="">Choose an option</option>
+              <option value="support">Technical support</option>
+              <option value="feedback">Product feedback</option>
+              <option value="partnership">Partnership inquiry</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-neutral-200" for="message"
+              >Message</label
+            >
+            <textarea
+              class="h-32 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              id="message"
+              name="message"
+              placeholder="Share a few details so we can prepare a helpful reply."
+              required></textarea>
+          </div>
+
+          <button
+            class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-neutral-950"
+            type="submit"
           >
-            Response commitments
+            Send message
+          </button>
+          <p class="text-xs text-neutral-400">
+            This presentational form keeps submissions in the browser—swap the
+            action or embed a service such as Formspree when you are ready to
+            collect entries.
           </p>
-          <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
-            Direct access to the maintainers
-          </h2>
-          <p class="mt-4 text-base text-neutral-600">
-            Whether you share a quick question or a full project brief, we
-            respond with specifics, timelines, and the next practical step.
-          </p>
-          <ul class="mt-10 grid gap-4 text-left md:grid-cols-3">
+        </form>
+
+        <div
+          class="space-y-4 rounded-2xl border border-white/10 bg-neutral-950/50 p-6"
+        >
+          <h2 class="text-base font-semibold text-white">Office hours</h2>
+          <ul class="space-y-2 text-sm text-neutral-300">
             {
-              commitments.map(item => (
-                <li class="rounded-2xl border border-neutral-200 bg-white p-5 text-sm text-neutral-600">
-                  {item}
+              officeHours.map(slot => (
+                <li class="flex items-center justify-between">
+                  <span>{slot.day}</span>
+                  <span class="text-neutral-400">{slot.hours}</span>
                 </li>
               ))
             }
           </ul>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="bg-white">
-        <div
-          class="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16 text-center"
+  <section class="border-y border-neutral-200 bg-neutral-50">
+    <div class="mx-auto max-w-5xl px-6 py-16 text-center">
+      <p
+        class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-600"
+      >
+        Response commitments
+      </p>
+      <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+        Direct access to the maintainers
+      </h2>
+      <p class="mt-4 text-base text-neutral-600">
+        Whether you share a quick question or a full project brief, we respond
+        with specifics, timelines, and the next practical step.
+      </p>
+      <ul class="mt-10 grid gap-4 text-left md:grid-cols-3">
+        {
+          commitments.map(item => (
+            <li class="rounded-2xl border border-neutral-200 bg-white p-5 text-sm text-neutral-600">
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16 text-center">
+      <h2 class="text-3xl font-semibold text-neutral-900">
+        Prefer to talk it through?
+      </h2>
+      <p class="text-base text-neutral-600">
+        Share your timeline, the systems in scope, and the level of support you
+        expect. We will prepare a short agenda before hopping on a call.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          class="inline-flex items-center gap-2 rounded-full border border-brand-500/60 px-5 py-2 text-sm font-semibold text-brand-600 transition hover:border-brand-500 hover:text-brand-700"
+          href="mailto:hello@eliteproject.dev"
         >
-          <h2 class="text-3xl font-semibold text-neutral-900">
-            Prefer to talk it through?
-          </h2>
-          <p class="text-base text-neutral-600">
-            Share your timeline, the systems in scope, and the level of support
-            you expect. We will prepare a short agenda before hopping on a call.
-          </p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <a
-              class="inline-flex items-center gap-2 rounded-full border border-brand-500/60 px-5 py-2 text-sm font-semibold text-brand-600 transition hover:border-brand-500 hover:text-brand-700"
-              href="mailto:hello@eliteproject.dev"
-            >
-              Email the team
-            </a>
-            <a
-              class="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-              href="tel:+15551234567"
-            >
-              Book a quick call
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+          Email the team
+        </a>
+        <a
+          class="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+          href="tel:+15551234567"
+        >
+          Book a quick call
+        </a>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>

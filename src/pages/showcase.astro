@@ -1,7 +1,5 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import MarketingLayout from '../layouts/MarketingLayout.astro';
 
 const categories = [
   {
@@ -57,106 +55,96 @@ const caseStudies = [
 ];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead
-      title="Showcase | Elite Project"
-      description="Browse the reusable patterns and content sections that ship with this simplified Astro starter."
-    />
-  </head>
-  <body class="bg-neutral-50 text-neutral-900">
-    <Header />
-    <main>
-      <section class="bg-neutral-900 text-neutral-50">
-        <div class="mx-auto max-w-5xl px-6 py-24 text-center">
-          <p
-            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
-          >
-            Showcase
-          </p>
-          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
-            Plain Astro components that still feel polished.
-          </h1>
-          <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
-            We rebuilt the showcase to highlight what matters: repeatable
-            layouts that stay fully static. Everything on this page renders at
-            build time and works without extra JavaScript bundles.
-          </p>
-        </div>
-      </section>
+<MarketingLayout
+  title="Showcase | Elite Project"
+  description="Browse the reusable patterns and content sections that ship with this simplified Astro starter."
+>
+  <section class="bg-neutral-900 text-neutral-50">
+    <div class="mx-auto max-w-5xl px-6 py-24 text-center">
+      <p
+        class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+      >
+        Showcase
+      </p>
+      <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
+        Plain Astro components that still feel polished.
+      </h1>
+      <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
+        We rebuilt the showcase to highlight what matters: repeatable layouts
+        that stay fully static. Everything on this page renders at build time
+        and works without extra JavaScript bundles.
+      </p>
+    </div>
+  </section>
 
-      <section class="bg-white">
-        <div class="mx-auto max-w-5xl space-y-10 px-6 py-20">
-          {
-            categories.map(category => (
-              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
-                <h2 class="text-2xl font-semibold text-neutral-900">
-                  {category.name}
-                </h2>
-                <p class="mt-3 text-sm text-neutral-600">{category.summary}</p>
-                <ul class="mt-6 grid gap-3 text-sm text-neutral-600">
-                  {category.items.map(item => (
-                    <li class="flex items-start gap-2">
-                      <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))
-          }
-        </div>
-      </section>
+  <section class="bg-white">
+    <div class="mx-auto max-w-5xl space-y-10 px-6 py-20">
+      {
+        categories.map(category => (
+          <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
+            <h2 class="text-2xl font-semibold text-neutral-900">
+              {category.name}
+            </h2>
+            <p class="mt-3 text-sm text-neutral-600">{category.summary}</p>
+            <ul class="mt-6 grid gap-3 text-sm text-neutral-600">
+              {category.items.map(item => (
+                <li class="flex items-start gap-2">
+                  <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
 
-      <section class="bg-neutral-900 text-neutral-50">
-        <div class="mx-auto max-w-5xl px-6 py-20">
-          <h2 class="text-3xl font-semibold">Teams using these patterns</h2>
-          <div class="mt-10 grid gap-8 md:grid-cols-3">
-            {
-              caseStudies.map(study => (
-                <article class="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-6">
-                  <p class="text-sm uppercase tracking-[0.3em] text-neutral-400">
-                    {study.client}
-                  </p>
-                  <h3 class="mt-4 text-xl font-semibold text-white">
-                    {study.result}
-                  </h3>
-                  <p class="mt-3 text-sm text-neutral-300">{study.highlight}</p>
-                </article>
-              ))
-            }
-          </div>
-        </div>
-      </section>
+  <section class="bg-neutral-900 text-neutral-50">
+    <div class="mx-auto max-w-5xl px-6 py-20">
+      <h2 class="text-3xl font-semibold">Teams using these patterns</h2>
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        {
+          caseStudies.map(study => (
+            <article class="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-6">
+              <p class="text-sm uppercase tracking-[0.3em] text-neutral-400">
+                {study.client}
+              </p>
+              <h3 class="mt-4 text-xl font-semibold text-white">
+                {study.result}
+              </h3>
+              <p class="mt-3 text-sm text-neutral-300">{study.highlight}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-      <section class="bg-white">
-        <div class="mx-auto max-w-4xl px-6 py-16 text-center">
-          <h2 class="text-2xl font-semibold text-neutral-900">
-            Want a tailored walkthrough?
-          </h2>
-          <p class="mt-4 text-sm text-neutral-600">
-            We can pair-program through adapting these sections to your product
-            narrative. Every update stays in Astro so the final deploy remains
-            static and dependable.
-          </p>
-          <div class="mt-6 flex flex-wrap justify-center gap-3">
-            <a
-              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-              href="/contact"
-            >
-              Schedule a walkthrough
-            </a>
-            <a
-              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-              href="/services"
-            >
-              View services
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+  <section class="bg-white">
+    <div class="mx-auto max-w-4xl px-6 py-16 text-center">
+      <h2 class="text-2xl font-semibold text-neutral-900">
+        Want a tailored walkthrough?
+      </h2>
+      <p class="mt-4 text-sm text-neutral-600">
+        We can pair-program through adapting these sections to your product
+        narrative. Every update stays in Astro so the final deploy remains
+        static and dependable.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+          href="/contact"
+        >
+          Schedule a walkthrough
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
+          href="/services"
+        >
+          View services
+        </a>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
