@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { withBasePath } from '../utils/helpers';
 
 const reasons = [
   'GitHub Pages cannot run long-lived API routes or server-rendered dashboards.',
@@ -99,13 +100,13 @@ const alternatives = [
           <div class="mt-6 flex flex-wrap justify-center gap-3">
             <a
               class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-              href="/contact"
+              href={withBasePath('contact/')}
             >
               Talk with the team
             </a>
             <a
               class="inline-flex items-center justify-center rounded-full border border-neutral-400 px-5 py-2 text-sm font-semibold text-neutral-50 transition hover:border-neutral-300"
-              href="/services"
+              href={withBasePath('services/')}
             >
               See service options
             </a>

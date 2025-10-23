@@ -72,6 +72,39 @@ export function buildUrl(
   return url.toString();
 }
 
+const EXTERNAL_LINK_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+const BASE_SKIP_PREFIXES = ['mailto:', 'tel:', '#', '?'] as const;
+
+export function withBasePath(path: string): string {
+  const base = import.meta.env.BASE_URL ?? '/';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+
+  if (!path) {
+    return normalizedBase;
+  }
+
+  const trimmedPath = path.trim();
+
+  if (
+    EXTERNAL_LINK_PATTERN.test(trimmedPath) ||
+    BASE_SKIP_PREFIXES.some(prefix => trimmedPath.startsWith(prefix))
+  ) {
+    return trimmedPath;
+  }
+
+  const cleanedPath = trimmedPath.replace(/^\/+/, '');
+
+  if (!cleanedPath) {
+    return normalizedBase;
+  }
+
+  return `${normalizedBase}${cleanedPath}`;
+}
+
+export function resolveHref(href: string): string {
+  return withBasePath(href);
+}
+
 export function getSlugFromTitle(title: string): string {
   return title
     .toLowerCase()

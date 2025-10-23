@@ -1,29 +1,40 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { withBasePath } from '../utils/helpers';
 
 type Props = HTMLAttributes<'a'>;
 
 const { href: rawHref, class: className, ...props } = Astro.props;
 // Ensure href is a string
-const hrefStr = rawHref != null ? rawHref.toString() : '';
-// Build link under BASE_URL
-const base = import.meta.env.BASE_URL ?? '/';
-const trimmed = hrefStr.replace(/^\//, '');
-const resolvedHref = `${base.endsWith('/') ? base : base + '/'}${trimmed}`;
-// Active when current path matches this resolved href
-const isActive = Astro.url.pathname === resolvedHref;
+const hrefStr = rawHref != null ? rawHref.toString() : '/';
+const resolvedHref = withBasePath(hrefStr);
+const isExternal =
+  /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(resolvedHref) ||
+  resolvedHref.startsWith('mailto:') ||
+  resolvedHref.startsWith('tel:');
+const normalizePath = (value: string) => {
+  const normalized = value.replace(/\/+$/, '');
+  return normalized === '' ? '/' : normalized;
+};
+const isActive =
+  !isExternal &&
+  normalizePath(Astro.url.pathname) === normalizePath(resolvedHref);
 ---
 
-<a href={resolvedHref} class:list={[className, { active: isActive }]} {...props}>
-	<slot />
+<a
+  href={resolvedHref}
+  class:list={[className, { active: isActive }]}
+  {...props}
+>
+  <slot />
 </a>
 <style>
-	a {
-		display: inline-block;
-		text-decoration: none;
-	}
-	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
-	}
+  a {
+    display: inline-block;
+    text-decoration: none;
+  }
+  a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+  }
 </style>

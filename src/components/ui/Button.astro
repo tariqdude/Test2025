@@ -22,27 +22,35 @@ const {
   ...rest
 } = Astro.props;
 
-const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu';
+const baseClasses =
+  'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu';
 
 const variants = {
-  primary: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:from-blue-700 hover:to-blue-800 hover:shadow-xl focus:ring-blue-500 hover:-translate-y-0.5 active:translate-y-0',
-  secondary: 'bg-white text-gray-900 border-2 border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md focus:ring-gray-500 hover:-translate-y-0.5 active:translate-y-0 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:border-gray-500',
-  outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white focus:ring-blue-500 backdrop-blur-sm hover:-translate-y-0.5 active:translate-y-0 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white',
-  ghost: 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white',
-  destructive: 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg hover:from-red-700 hover:to-red-800 hover:shadow-xl focus:ring-red-500 hover:-translate-y-0.5 active:translate-y-0'
+  primary:
+    'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:from-blue-700 hover:to-blue-800 hover:shadow-xl focus:ring-blue-500 hover:-translate-y-0.5 active:translate-y-0',
+  secondary:
+    'bg-white text-gray-900 border-2 border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md focus:ring-gray-500 hover:-translate-y-0.5 active:translate-y-0 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:border-gray-500',
+  outline:
+    'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white focus:ring-blue-500 backdrop-blur-sm hover:-translate-y-0.5 active:translate-y-0 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white',
+  ghost:
+    'text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white',
+  destructive:
+    'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg hover:from-red-700 hover:to-red-800 hover:shadow-xl focus:ring-red-500 hover:-translate-y-0.5 active:translate-y-0',
 };
 
 const sizes = {
   sm: 'px-4 py-2 text-sm',
   md: 'px-6 py-3 text-base',
   lg: 'px-8 py-3.5 text-lg',
-  xl: 'px-10 py-4 text-xl'
+  xl: 'px-10 py-4 text-xl',
 };
 
-const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`.trim();
+const classes =
+  `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`.trim();
 
 const Tag = href ? 'a' : 'button';
-const linkProps = href ? { href, target } : {};
+const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+const linkProps = href ? { href, target, ...(rel ? { rel } : {}) } : {};
 const buttonProps = href ? {} : { type, disabled };
 ---
 
@@ -50,7 +58,7 @@ const buttonProps = href ? {} : { type, disabled };
   class={classes}
   {...linkProps}
   {...buttonProps}
-  {...(onClick && { 'onclick': onClick })}
+  {...onClick && { onclick: onClick }}
   {...rest}
 >
   <slot />

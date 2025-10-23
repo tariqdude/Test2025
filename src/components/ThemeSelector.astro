@@ -1,109 +1,165 @@
 ---
-import type { ThemeName } from '../styles/theme.ts';
+import { themes, type ThemeName } from '../styles/theme.ts';
+import type { GlobalTheme } from '../styles/theme.ts';
 
 interface Props {
   currentTheme?: ThemeName;
 }
 
 const { currentTheme = 'dark' } = Astro.props;
+
+type ThemeVariables = Record<string, string>;
+
+const flattenTheme = (theme: GlobalTheme): ThemeVariables => ({
+  '--color-primary': theme.colors.primary,
+  '--color-secondary': theme.colors.secondary,
+  '--color-accent': theme.colors.accent,
+  '--color-background': theme.colors.background,
+  '--color-surface': theme.colors.surface,
+  '--color-text-primary': theme.colors.text.primary,
+  '--color-text-secondary': theme.colors.text.secondary,
+  '--color-text-muted': theme.colors.text.muted,
+  '--color-text-inverse': theme.colors.text.inverse,
+  '--color-border': theme.colors.border,
+  '--color-success': theme.colors.success,
+  '--color-warning': theme.colors.warning,
+  '--color-error': theme.colors.error,
+  '--color-info': theme.colors.info,
+  '--card-bg': theme.colors.surface,
+  '--border-color': theme.colors.border,
+  '--text-primary': theme.colors.text.primary,
+  '--text-muted': theme.colors.text.muted,
+  '--primary-color': theme.colors.primary,
+  '--accent-color': theme.colors.accent,
+  '--gradient-primary': theme.gradients.primary,
+  '--gradient-secondary': theme.gradients.secondary,
+  '--gradient-accent': theme.gradients.accent,
+  '--font-family-sans': theme.typography.fontFamily.sans,
+  '--font-family-mono': theme.typography.fontFamily.mono,
+  '--font-size-xs': theme.typography.fontSize.xs,
+  '--font-size-sm': theme.typography.fontSize.sm,
+  '--font-size-base': theme.typography.fontSize.base,
+  '--font-size-lg': theme.typography.fontSize.lg,
+  '--font-size-xl': theme.typography.fontSize.xl,
+  '--font-size-2xl': theme.typography.fontSize['2xl'],
+  '--font-size-3xl': theme.typography.fontSize['3xl'],
+  '--font-size-4xl': theme.typography.fontSize['4xl'],
+  '--line-height-tight': theme.typography.lineHeight.tight.toString(),
+  '--line-height-normal': theme.typography.lineHeight.normal.toString(),
+  '--line-height-relaxed': theme.typography.lineHeight.relaxed.toString(),
+  '--spacing-xs': theme.spacing.xs,
+  '--spacing-sm': theme.spacing.sm,
+  '--spacing-md': theme.spacing.md,
+  '--spacing-lg': theme.spacing.lg,
+  '--spacing-xl': theme.spacing.xl,
+  '--spacing-2xl': theme.spacing['2xl'],
+  '--spacing-3xl': theme.spacing['3xl'],
+  '--spacing-4xl': theme.spacing['4xl'],
+  '--radius-sm': theme.borderRadius.sm,
+  '--radius-md': theme.borderRadius.md,
+  '--radius-lg': theme.borderRadius.lg,
+  '--radius-xl': theme.borderRadius.xl,
+  '--radius-2xl': theme.borderRadius['2xl'],
+  '--radius-full': theme.borderRadius.full,
+  '--shadow-sm': theme.effects.shadow.sm,
+  '--shadow-md': theme.effects.shadow.md,
+  '--shadow-lg': theme.effects.shadow.lg,
+  '--shadow-xl': theme.effects.shadow.xl,
+  '--shadow-2xl': theme.effects.shadow['2xl'],
+  '--blur-sm': theme.effects.blur.sm,
+  '--blur-md': theme.effects.blur.md,
+  '--blur-lg': theme.effects.blur.lg,
+  '--blur-xl': theme.effects.blur.xl,
+  '--duration-fast': theme.animation.duration.fast,
+  '--duration-normal': theme.animation.duration.normal,
+  '--duration-slow': theme.animation.duration.slow,
+  '--easing-ease-in': theme.animation.easing.easeIn,
+  '--easing-ease-out': theme.animation.easing.easeOut,
+  '--easing-ease-in-out': theme.animation.easing.easeInOut,
+  '--easing-bounce': theme.animation.easing.bounce,
+});
+
+const themeVariables = Object.fromEntries(
+  (Object.entries(themes) as [ThemeName, GlobalTheme][]).map(
+    ([name, theme]) => [name, flattenTheme(theme)]
+  )
+) as Record<ThemeName, ThemeVariables>;
+
+const availableThemes = Object.keys(themes) as ThemeName[];
 ---
 
-<div class="theme-selector">
+<div class="relative inline-flex">
   <label for="theme-select" class="sr-only">Choose theme</label>
-  <select id="theme-select" class="theme-select" data-current={currentTheme}>
-    <option value="dark">🌙 Dark</option>
-    <option value="light">☀️ Light</option>
+  <select
+    id="theme-select"
+    class="peer inline-flex appearance-none rounded-xl border border-white/15 bg-white/10 px-4 py-2 pr-10 text-sm font-medium text-slate-100 shadow-[0_10px_40px_rgba(15,23,42,0.35)] backdrop-blur transition focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
+    data-current={currentTheme}
+  >
+    {
+      availableThemes.map(themeName => (
+        <option value={themeName} selected={themeName === currentTheme}>
+          {themeName === 'dark' ? '🌙 Dark' : '☀️ Light'}
+        </option>
+      ))
+    }
   </select>
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 transition peer-focus:text-indigo-300"
+  >
+    ▾
+  </span>
 </div>
 
-<style>
-  .theme-selector {
-    position: relative;
-    display: inline-block;
-  }
+<script is:inline define:vars={{ themeVariables }}>
+  const THEME_VARS = themeVariables;
 
-  .theme-select {
-    appearance: none;
-    background: var(--color-surface, #1f2937);
-    border: 1px solid var(--color-border, #374151);
-    border-radius: 8px;
-    color: var(--color-text-primary, #ffffff);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 8px 32px 8px 12px;
-    transition: all 0.2s ease;
-    min-width: 140px;
-  }
+  const ensureProvider = () => {
+    return document.querySelector('.theme-provider');
+  };
 
-  .theme-select:hover {
-    background: var(--color-border, #374151);
-  }
+  const applyTheme = themeName => {
+    const provider = ensureProvider();
+    const resolvedTheme = THEME_VARS[themeName] ? themeName : 'dark';
+    const vars = THEME_VARS[resolvedTheme];
 
-  .theme-select:focus {
-    outline: none;
-    border-color: var(--color-primary, #3b82f6);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
+    if (provider instanceof HTMLElement) {
+      Object.entries(vars).forEach(([token, value]) => {
+        provider.style.setProperty(token, value);
+      });
+      provider.setAttribute('data-theme', resolvedTheme);
+    }
 
-  .theme-selector::after {
-    content: '▼';
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--color-text-secondary, #9ca3af);
-    font-size: 12px;
-  }
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    localStorage.setItem('preferred-theme', resolvedTheme);
+  };
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-</style>
-
-<script is:inline>
-  // Theme switching functionality
-  function setTheme(themeName) {
-    document.documentElement.setAttribute('data-theme', themeName);
-    localStorage.setItem('preferred-theme', themeName);
-
-    // Update CSS variables by reloading the theme provider
-    location.reload();
-  }
-
-  function getPreferredTheme() {
+  const getPreferredTheme = () => {
     const saved = localStorage.getItem('preferred-theme');
-    if (saved === 'dark' || saved === 'light') {
+    if (saved && THEME_VARS[saved]) {
       return saved;
     }
 
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
-  }
+  };
 
-  // Initialize theme selector
   document.addEventListener('DOMContentLoaded', () => {
     const selector = document.getElementById('theme-select');
     const preferredTheme = getPreferredTheme();
+
+    applyTheme(preferredTheme);
 
     if (selector instanceof HTMLSelectElement) {
       selector.value = preferredTheme;
 
       selector.addEventListener('change', event => {
-        const target = event.target;
-        if (target instanceof HTMLSelectElement) {
-          const value = target.value;
-          setTheme(value);
-        }
+        const value =
+          event.target instanceof HTMLSelectElement
+            ? event.target.value
+            : preferredTheme;
+        applyTheme(value);
       });
     }
   });

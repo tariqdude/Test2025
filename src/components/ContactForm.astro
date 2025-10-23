@@ -3,6 +3,7 @@ import Button from './ui/Button.astro';
 import Card from './ui/Card.astro';
 import Icon from './ui/Icon.astro';
 import Animate from './ui/Animate.astro';
+import { withBasePath } from '../utils/helpers';
 
 interface Props {
   title?: string;
@@ -10,49 +11,51 @@ interface Props {
   showContactInfo?: boolean;
 }
 
-const { 
-  title = "Get In Touch",
+const {
+  title = 'Get In Touch',
   subtitle = "Ready to transform your business? Let's discuss your needs.",
-  showContactInfo = true
+  showContactInfo = true,
 } = Astro.props;
 ---
 
 <section class="contact-section section">
   <div class="container">
     <div class="section-header">
-      <Animate animation="fadeIn" delay={200}>
+      <Animate animation="fade-in" delay="md">
         <h2 class="heading-2 text-center">{title}</h2>
-        <p class="text-large text-muted text-center max-w-2xl mx-auto">{subtitle}</p>
+        <p class="text-large text-muted text-center max-w-2xl mx-auto">
+          {subtitle}
+        </p>
       </Animate>
     </div>
 
     <div class="contact-grid grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Contact Form -->
-      <Animate animation="slideRight" delay={400}>
+      <Animate animation="slide-right" delay="lg">
         <Card className="h-full">
           <form id="contact-form" class="contact-form">
             <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="form-group">
                 <label for="firstName" class="form-label">First Name *</label>
-                <input 
-                  type="text" 
-                  id="firstName" 
-                  name="firstName" 
-                  class="form-input" 
-                  required 
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  class="form-input"
+                  required
                   autocomplete="given-name"
                 />
                 <div class="form-error hidden"></div>
               </div>
-              
+
               <div class="form-group">
                 <label for="lastName" class="form-label">Last Name *</label>
-                <input 
-                  type="text" 
-                  id="lastName" 
-                  name="lastName" 
-                  class="form-input" 
-                  required 
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  class="form-input"
+                  required
                   autocomplete="family-name"
                 />
                 <div class="form-error hidden"></div>
@@ -61,12 +64,12 @@ const {
 
             <div class="form-group">
               <label for="email" class="form-label">Email Address *</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                class="form-input" 
-                required 
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                required
                 autocomplete="email"
               />
               <div class="form-error hidden"></div>
@@ -74,22 +77,22 @@ const {
 
             <div class="form-group">
               <label for="company" class="form-label">Company</label>
-              <input 
-                type="text" 
-                id="company" 
-                name="company" 
-                class="form-input" 
+              <input
+                type="text"
+                id="company"
+                name="company"
+                class="form-input"
                 autocomplete="organization"
               />
             </div>
 
             <div class="form-group">
               <label for="phone" class="form-label">Phone</label>
-              <input 
-                type="tel" 
-                id="phone" 
-                name="phone" 
-                class="form-input" 
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="form-input"
                 autocomplete="tel"
               />
               <div class="form-error hidden"></div>
@@ -137,11 +140,11 @@ const {
 
             <div class="form-group">
               <label for="message" class="form-label">Message *</label>
-              <textarea 
-                id="message" 
-                name="message" 
-                class="form-textarea" 
-                required 
+              <textarea
+                id="message"
+                name="message"
+                class="form-textarea"
+                required
                 rows="5"
                 placeholder="Tell us about your project, goals, and how we can help..."
               ></textarea>
@@ -150,44 +153,61 @@ const {
 
             <div class="form-group">
               <label class="flex items-start gap-3">
-                <input 
-                  type="checkbox" 
-                  name="newsletter" 
+                <input
+                  type="checkbox"
+                  name="newsletter"
                   class="form-checkbox mt-1"
                 />
                 <span class="text-small text-muted">
-                  I'd like to receive updates about new services and industry insights
+                  I'd like to receive updates about new services and industry
+                  insights
                 </span>
               </label>
             </div>
 
             <div class="form-group">
               <label class="flex items-start gap-3">
-                <input 
-                  type="checkbox" 
-                  name="terms" 
-                  class="form-checkbox mt-1" 
+                <input
+                  type="checkbox"
+                  name="terms"
+                  class="form-checkbox mt-1"
                   required
                 />
                 <span class="text-small text-muted">
-                  I agree to the <a href="/privacy" class="link">Privacy Policy</a> and <a href="/terms" class="link">Terms of Service</a> *
+                  I agree to the <a href={withBasePath('privacy/')} class="link"
+                    >Privacy Policy</a
+                  > and <a href={withBasePath('terms/')} class="link"
+                    >Terms of Service</a
+                  > *
                 </span>
               </label>
               <div class="form-error hidden"></div>
             </div>
 
             <div class="form-actions">
-              <Button 
-                type="submit" 
-                variant="primary" 
-                size="lg" 
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
                 className="w-full"
-                icon="arrow"
-                iconPosition="right"
               >
-                Send Message
+                <span class="inline-flex items-center gap-2">
+                  <span>Send Message</span>
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                  </svg>
+                </span>
               </Button>
-              
+
               <div class="form-status hidden mt-4 p-4 rounded-md"></div>
             </div>
           </form>
@@ -195,93 +215,131 @@ const {
       </Animate>
 
       <!-- Contact Information -->
-      {showContactInfo && (
-        <Animate animation="slideLeft" delay={600}>
-          <div class="contact-info space-y-8">
-            <Card>
-              <div class="contact-item">
-                <div class="contact-icon">
-                  <Icon name="mapPin" size={24} color="white" />
+      {
+        showContactInfo && (
+          <Animate animation="slide-left" delay="lg">
+            <div class="contact-info space-y-8">
+              <Card>
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <Icon name="mapPin" size={24} color="white" />
+                  </div>
+                  <div class="contact-details">
+                    <h4 class="heading-6">Visit Our Office</h4>
+                    <p class="text-muted">
+                      123 Business District
+                      <br />
+                      Suite 500
+                      <br />
+                      New York, NY 10001
+                    </p>
+                  </div>
                 </div>
-                <div class="contact-details">
-                  <h4 class="heading-6">Visit Our Office</h4>
-                  <p class="text-muted">
-                    123 Business District<br>
-                    Suite 500<br>
-                    New York, NY 10001
-                  </p>
-                </div>
-              </div>
-            </Card>
+              </Card>
 
-            <Card>
-              <div class="contact-item">
-                <div class="contact-icon">
-                  <Icon name="phone" size={24} color="white" />
+              <Card>
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <Icon name="phone" size={24} color="white" />
+                  </div>
+                  <div class="contact-details">
+                    <h4 class="heading-6">Call Us</h4>
+                    <p class="text-muted">
+                      Main:{' '}
+                      <>
+                        <a href="tel:+1-555-123-4567" class="link">
+                          +1 (555) 123-4567
+                        </a>
+                        <br />
+                      </>
+                      Support:{' '}
+                      <a href="tel:+1-555-123-4568" class="link">
+                        +1 (555) 123-4568
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div class="contact-details">
-                  <h4 class="heading-6">Call Us</h4>
-                  <p class="text-muted">
-                    Main: <a href="tel:+1-555-123-4567" class="link">+1 (555) 123-4567</a><br>
-                    Support: <a href="tel:+1-555-123-4568" class="link">+1 (555) 123-4568</a>
-                  </p>
-                </div>
-              </div>
-            </Card>
+              </Card>
 
-            <Card>
-              <div class="contact-item">
-                <div class="contact-icon">
-                  <Icon name="mail" size={24} color="white" />
+              <Card>
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <Icon name="mail" size={24} color="white" />
+                  </div>
+                  <div class="contact-details">
+                    <h4 class="heading-6">Email Us</h4>
+                    <p class="text-muted">
+                      General:{' '}
+                      <>
+                        <a href="mailto:hello@company.com" class="link">
+                          hello@company.com
+                        </a>
+                        <br />
+                      </>
+                      Support:{' '}
+                      <a href="mailto:support@company.com" class="link">
+                        support@company.com
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div class="contact-details">
-                  <h4 class="heading-6">Email Us</h4>
-                  <p class="text-muted">
-                    General: <a href="mailto:hello@company.com" class="link">hello@company.com</a><br>
-                    Support: <a href="mailto:support@company.com" class="link">support@company.com</a>
-                  </p>
-                </div>
-              </div>
-            </Card>
+              </Card>
 
-            <Card>
-              <h4 class="heading-6 mb-4">Business Hours</h4>
-              <div class="business-hours space-y-2">
-                <div class="flex justify-between">
-                  <span class="text-muted">Monday - Friday</span>
-                  <span class="font-medium">9:00 AM - 6:00 PM EST</span>
+              <Card>
+                <h4 class="heading-6 mb-4">Business Hours</h4>
+                <div class="business-hours space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-muted">Monday - Friday</span>
+                    <span class="font-medium">9:00 AM - 6:00 PM EST</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-muted">Saturday</span>
+                    <span class="font-medium">10:00 AM - 4:00 PM EST</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-muted">Sunday</span>
+                    <span class="font-medium">Closed</span>
+                  </div>
                 </div>
-                <div class="flex justify-between">
-                  <span class="text-muted">Saturday</span>
-                  <span class="font-medium">10:00 AM - 4:00 PM EST</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-muted">Sunday</span>
-                  <span class="font-medium">Closed</span>
-                </div>
-              </div>
-            </Card>
+              </Card>
 
-            <Card>
-              <h4 class="heading-6 mb-4">Response Time</h4>
-              <div class="response-times space-y-3">
-                <div class="flex items-center gap-3">
-                  <Icon name="check" size={16} color="var(--color-green-600)" />
-                  <span class="text-small">Email inquiries: Within 2 hours</span>
+              <Card>
+                <h4 class="heading-6 mb-4">Response Time</h4>
+                <div class="response-times space-y-3">
+                  <div class="flex items-center gap-3">
+                    <Icon
+                      name="check"
+                      size={16}
+                      color="var(--color-green-600)"
+                    />
+                    <span class="text-small">
+                      Email inquiries: Within 2 hours
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <Icon
+                      name="check"
+                      size={16}
+                      color="var(--color-green-600)"
+                    />
+                    <span class="text-small">Phone calls: Immediately</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <Icon
+                      name="check"
+                      size={16}
+                      color="var(--color-green-600)"
+                    />
+                    <span class="text-small">
+                      Project proposals: Within 24 hours
+                    </span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-3">
-                  <Icon name="check" size={16} color="var(--color-green-600)" />
-                  <span class="text-small">Phone calls: Immediately</span>
-                </div>
-                <div class="flex items-center gap-3">
-                  <Icon name="check" size={16} color="var(--color-green-600)" />
-                  <span class="text-small">Project proposals: Within 24 hours</span>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </Animate>
-      )}
+              </Card>
+            </div>
+          </Animate>
+        )
+      }
     </div>
   </div>
 </section>
@@ -294,9 +352,13 @@ const {
 
     constructor() {
       this.form = document.getElementById('contact-form') as HTMLFormElement;
-      this.submitButton = this.form?.querySelector('button[type="submit"]') as HTMLButtonElement;
-      this.statusDiv = this.form?.querySelector('.form-status') as HTMLDivElement;
-      
+      this.submitButton = this.form?.querySelector(
+        'button[type="submit"]'
+      ) as HTMLButtonElement;
+      this.statusDiv = this.form?.querySelector(
+        '.form-status'
+      ) as HTMLDivElement;
+
       if (this.form) {
         this.init();
       }
@@ -310,30 +372,39 @@ const {
 
     private async handleSubmit(event: Event) {
       event.preventDefault();
-      
+
       if (!this.validateForm()) {
         return;
       }
 
       this.setLoading(true);
-      
+
       try {
         const formData = new FormData(this.form);
         const response = await fetch('/api/contact', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
 
         const result = await response.json();
 
         if (response.ok) {
-          this.showStatus('success', 'Thank you! Your message has been sent successfully. We\'ll get back to you within 2 hours.');
+          this.showStatus(
+            'success',
+            "Thank you! Your message has been sent successfully. We'll get back to you within 2 hours."
+          );
           this.form.reset();
         } else {
-          this.showStatus('error', result.message || 'Something went wrong. Please try again.');
+          this.showStatus(
+            'error',
+            result.message || 'Something went wrong. Please try again.'
+          );
         }
       } catch (error) {
-        this.showStatus('error', 'Network error. Please check your connection and try again.');
+        this.showStatus(
+          'error',
+          'Network error. Please check your connection and try again.'
+        );
       } finally {
         this.setLoading(false);
       }
@@ -341,23 +412,33 @@ const {
 
     private handleInput(event: Event) {
       const target = event.target as HTMLInputElement;
-      if (target.classList.contains('form-input') || target.classList.contains('form-textarea') || target.classList.contains('form-select')) {
+      if (
+        target.classList.contains('form-input') ||
+        target.classList.contains('form-textarea') ||
+        target.classList.contains('form-select')
+      ) {
         this.clearError(target);
       }
     }
 
     private handleBlur(event: Event) {
       const target = event.target as HTMLInputElement;
-      if (target.classList.contains('form-input') || target.classList.contains('form-textarea') || target.classList.contains('form-select')) {
+      if (
+        target.classList.contains('form-input') ||
+        target.classList.contains('form-textarea') ||
+        target.classList.contains('form-select')
+      ) {
         this.validateField(target);
       }
     }
 
     private validateForm(): boolean {
-      const inputs = this.form.querySelectorAll('input[required], textarea[required], select[required]');
+      const inputs = this.form.querySelectorAll(
+        'input[required], textarea[required], select[required]'
+      );
       let isValid = true;
 
-      inputs.forEach((input) => {
+      inputs.forEach(input => {
         if (!this.validateField(input as HTMLInputElement)) {
           isValid = false;
         }
@@ -414,7 +495,9 @@ const {
 
     private showError(field: HTMLInputElement, message: string) {
       field.classList.add('error');
-      const errorDiv = field.parentElement?.querySelector('.form-error') as HTMLDivElement;
+      const errorDiv = field.parentElement?.querySelector(
+        '.form-error'
+      ) as HTMLDivElement;
       if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.classList.remove('hidden');
@@ -423,7 +506,9 @@ const {
 
     private clearError(field: HTMLInputElement) {
       field.classList.remove('error');
-      const errorDiv = field.parentElement?.querySelector('.form-error') as HTMLDivElement;
+      const errorDiv = field.parentElement?.querySelector(
+        '.form-error'
+      ) as HTMLDivElement;
       if (errorDiv) {
         errorDiv.textContent = '';
         errorDiv.classList.add('hidden');
@@ -442,7 +527,7 @@ const {
         this.statusDiv.className = `form-status alert alert-${type === 'success' ? 'success' : 'error'}`;
         this.statusDiv.textContent = message;
         this.statusDiv.classList.remove('hidden');
-        
+
         // Auto-hide after 5 seconds
         setTimeout(() => {
           this.statusDiv.classList.add('hidden');
@@ -475,7 +560,11 @@ const {
   .contact-icon {
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-600),
+      var(--color-primary-800)
+    );
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -519,7 +608,7 @@ const {
     .form-grid {
       grid-template-columns: 1fr;
     }
-    
+
     .contact-grid {
       grid-template-columns: 1fr;
       gap: 2rem;

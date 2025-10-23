@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import SystemHighlights from '../components/SystemHighlights.astro';
+import { withBasePath } from '../utils/helpers';
 
 const pillars = [
   {
@@ -93,13 +94,13 @@ const principles = [
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
           <a
-            href="/services"
+            href={withBasePath('services/')}
             class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
           >
             Review our services
           </a>
           <a
-            href="/contact"
+            href={withBasePath('contact/')}
             class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
           >
             Meet the maintainers
@@ -261,13 +262,13 @@ const principles = [
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <a
             class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
-            href="/contact"
+            href={withBasePath('contact/')}
           >
             Schedule a discovery call
           </a>
           <a
             class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
-            href="/services"
+            href={withBasePath('services/')}
           >
             View service catalogue
           </a>

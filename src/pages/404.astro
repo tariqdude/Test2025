@@ -1,15 +1,14 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
-
-const baseUrl = import.meta.env.BASE_URL;
+import { withBasePath } from '../utils/helpers';
 
 const quickLinks = [
-  { label: 'Home', href: baseUrl },
-  { label: 'About', href: `${baseUrl}about/` },
-  { label: 'Services', href: `${baseUrl}services/` },
-  { label: 'Pricing', href: `${baseUrl}pricing/` },
-  { label: 'Blog', href: `${baseUrl}blog/` },
-  { label: 'Contact', href: `${baseUrl}contact/` },
+  { label: 'Home', href: withBasePath('/') },
+  { label: 'About', href: withBasePath('about/') },
+  { label: 'Services', href: withBasePath('services/') },
+  { label: 'Pricing', href: withBasePath('pricing/') },
+  { label: 'Blog', href: withBasePath('blog/') },
+  { label: 'Contact', href: withBasePath('contact/') },
 ];
 ---
 
@@ -46,8 +45,8 @@ const quickLinks = [
         </p>
 
         <div class="mt-10 flex flex-wrap justify-center gap-4">
-          <a class="btn btn-primary" href={baseUrl}> Return home </a>
-          <a class="btn btn-secondary" href={`${baseUrl}contact/`}>
+          <a class="btn btn-primary" href={withBasePath('/')}> Return home </a>
+          <a class="btn btn-secondary" href={withBasePath('contact/')}>
             Contact support
           </a>
         </div>

@@ -14,11 +14,11 @@ import {
   insightReports,
   securitySummary,
 } from '../data/marketing';
+import { withBasePath } from '../utils/helpers';
 
 const headline = 'Static intelligence for decisive operators';
 const subheading =
   'Build a single, executive-ready hub that captures status, launches, and incident narratives—hosted statically, governed by design.';
-const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <MarketingLayout title={headline} description={subheading}>
@@ -56,10 +56,10 @@ const baseUrl = import.meta.env.BASE_URL;
             }
           </ul>
           <div class="flex flex-wrap gap-4">
-            <a class="btn btn-primary" href={`${baseUrl}contact/`}>
+            <a class="btn btn-primary" href={withBasePath('contact/')}>
               Schedule a walkthrough
             </a>
-            <a class="btn btn-secondary" href={`${baseUrl}showcase/`}>
+            <a class="btn btn-secondary" href={withBasePath('showcase/')}>
               Explore the templates
             </a>
           </div>
@@ -397,7 +397,7 @@ const baseUrl = import.meta.env.BASE_URL;
               </div>
               <a
                 class="inline-flex w-max items-center gap-2 text-sm font-semibold text-slate-200 transition hover:text-white"
-                href={`${baseUrl}${report.href}`}
+                href={withBasePath(report.href)}
               >
                 {report.linkLabel}
                 <span aria-hidden="true">→</span>
@@ -427,7 +427,7 @@ const baseUrl = import.meta.env.BASE_URL;
           rollout.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-4">
-          <a class="btn btn-primary" href={`${baseUrl}contact/`}>
+          <a class="btn btn-primary" href={withBasePath('contact/')}>
             Talk with our team
           </a>
           <a

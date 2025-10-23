@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import SystemHighlights from '../components/SystemHighlights.astro';
+import { withBasePath } from '../utils/helpers';
 
 const offerings = [
   {
@@ -124,13 +125,13 @@ const process = [
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
           <a
-            href="/pricing"
+            href={withBasePath('pricing/')}
             class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
           >
             View pricing guide
           </a>
           <a
-            href="/contact"
+            href={withBasePath('contact/')}
             class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
           >
             Schedule a scoping call
@@ -197,7 +198,7 @@ const process = [
               </div>
               <a
                 class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400"
-                href="/contact"
+                href={withBasePath('contact/')}
               >
                 Discuss this service
               </a>
@@ -301,13 +302,13 @@ const process = [
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <a
             class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
-            href="/contact"
+            href={withBasePath('contact/')}
           >
             Book a consultation
           </a>
           <a
             class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
-            href="/pricing"
+            href={withBasePath('pricing/')}
           >
             Review pricing tiers
           </a>

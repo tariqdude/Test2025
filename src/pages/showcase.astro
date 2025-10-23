@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import { withBasePath } from '../utils/helpers';
 
 const categories = [
   {
@@ -134,13 +135,13 @@ const caseStudies = [
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a
           class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-          href="/contact"
+          href={withBasePath('contact/')}
         >
           Schedule a walkthrough
         </a>
         <a
           class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-          href="/services"
+          href={withBasePath('services/')}
         >
           View services
         </a>
