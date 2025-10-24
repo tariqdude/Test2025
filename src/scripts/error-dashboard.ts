@@ -1,3 +1,25 @@
+/**
+ * ⚠️ NOTICE: This file is not compatible with static GitHub Pages deployment.
+ *
+ * The error dashboard was designed for a dynamic environment with API endpoints.
+ * It makes calls to:
+ * - /api/error-reviewer/analyze
+ * - /api/error-reviewer/auto-fix
+ * - /api/export-report
+ *
+ * These endpoints do not exist in a static build and will fail.
+ *
+ * This file is excluded from TypeScript compilation (see tsconfig.json).
+ *
+ * Options:
+ * 1. Keep this file for reference/documentation purposes only
+ * 2. Delete if you're certain you'll only use static hosting
+ * 3. Implement a serverless backend (Netlify Functions, Vercel, etc.) to support these features
+ *
+ * The static narrative page at /error-dashboard provides an alternative approach
+ * that documents the error review workflow without requiring live APIs.
+ */
+
 type StatusType = 'info' | 'success' | 'error' | 'warning';
 
 type SummaryData = {

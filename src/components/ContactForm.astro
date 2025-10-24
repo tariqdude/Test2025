@@ -381,29 +381,42 @@ const {
 
       try {
         const formData = new FormData(this.form);
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          body: formData,
-        });
 
-        const result = await response.json();
+        // Static fallback: Build mailto link with form data
+        const name = formData.get('firstName') + ' ' + formData.get('lastName');
+        const email = formData.get('email');
+        const subject = formData.get('subject') || 'Contact Form Submission';
+        const message = formData.get('message');
+        const company = formData.get('company');
+        const phone = formData.get('phone');
 
-        if (response.ok) {
-          this.showStatus(
-            'success',
-            "Thank you! Your message has been sent successfully. We'll get back to you within 2 hours."
-          );
+        const body = `Name: ${name}
+Email: ${email}
+${company ? `Company: ${company}` : ''}
+${phone ? `Phone: ${phone}` : ''}
+Subject: ${subject}
+
+Message:
+${message}`;
+
+        const mailtoLink = `mailto:hello@eliteproject.dev?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(body)}`;
+
+        // For GitHub Pages static deployment, open mailto
+        window.location.href = mailtoLink;
+
+        this.showStatus(
+          'info',
+          'Opening your email client... If nothing happens, please email us directly at hello@eliteproject.dev'
+        );
+
+        // Reset form after short delay
+        setTimeout(() => {
           this.form.reset();
-        } else {
-          this.showStatus(
-            'error',
-            result.message || 'Something went wrong. Please try again.'
-          );
-        }
+        }, 2000);
       } catch (error) {
         this.showStatus(
           'error',
-          'Network error. Please check your connection and try again.'
+          'Unable to open email client. Please email us directly at hello@eliteproject.dev'
         );
       } finally {
         this.setLoading(false);
@@ -522,9 +535,11 @@ const {
       }
     }
 
-    private showStatus(type: 'success' | 'error', message: string) {
+    private showStatus(type: 'success' | 'error' | 'info', message: string) {
       if (this.statusDiv) {
-        this.statusDiv.className = `form-status alert alert-${type === 'success' ? 'success' : 'error'}`;
+        const alertType =
+          type === 'success' ? 'success' : type === 'info' ? 'info' : 'error';
+        this.statusDiv.className = `form-status alert alert-${alertType}`;
         this.statusDiv.textContent = message;
         this.statusDiv.classList.remove('hidden');
 
