@@ -69,6 +69,10 @@ export class ProjectAnalyzer {
   /**
    * Auto-fix issues that have autoFixable = true
    * Returns an object with fixed and failed issues
+   *
+   * @param issueIds - Optional array of issue IDs to fix. If not provided, all auto-fixable issues will be fixed.
+   * @returns Object containing arrays of fixed and failed issues
+   * @throws {AnalysisError} If the auto-fix process encounters a critical error
    */
   async autoFix(issueIds?: string[]): Promise<{
     fixed: CodeIssue[];
@@ -87,6 +91,20 @@ export class ProjectAnalyzer {
         issuesToFix = issuesToFix.filter(issue =>
           issueIds.includes(issue.id || `${issue.file}:${issue.line}`)
         );
+
+        // Warn if some requested issues weren't found
+        const foundIds = issuesToFix.map(i => i.id || `${i.file}:${i.line}`);
+        const missingIds = issueIds.filter(id => !foundIds.includes(id));
+        if (missingIds.length > 0) {
+          logger.warn(
+            `Could not find issues with IDs: ${missingIds.join(', ')}`
+          );
+        }
+      }
+
+      if (issuesToFix.length === 0) {
+        logger.info('No auto-fixable issues found');
+        return { fixed: [], failed: [] };
       }
 
       logger.info(`Found ${issuesToFix.length} auto-fixable issues`);
@@ -101,11 +119,13 @@ export class ProjectAnalyzer {
           fixed.push(issue);
           logger.debug(`Fixed: ${issue.title} in ${issue.file}`);
         } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           failed.push({
             issue,
-            reason: error instanceof Error ? error.message : String(error),
+            reason: errorMessage,
           });
-          logger.warn(`Failed to fix: ${issue.title} - ${error}`);
+          logger.warn(`Failed to fix: ${issue.title} - ${errorMessage}`);
         }
       }
 
@@ -114,26 +134,35 @@ export class ProjectAnalyzer {
       );
       return { fixed, failed };
     } catch (error) {
-      logger.error('Auto-fix process failed', error as Error);
-      throw new AnalysisError(
-        'AutoFix',
-        error instanceof Error ? error : new Error(String(error)),
-        'Auto-fix process failed'
-      );
+      const err = error instanceof Error ? error : new Error(String(error));
+      logger.error('Auto-fix process failed', err);
+      throw new AnalysisError('AutoFix', err, 'Auto-fix process failed');
     }
   }
 
   /**
    * Apply a fix to a single issue
+   *
+   * @param issue - The code issue to fix
+   * @throws {Error} If the issue is missing required information or the fix fails
    */
   private async applyFix(issue: CodeIssue): Promise<void> {
     const fs = await import('fs/promises');
 
     if (!issue.file || !issue.suggestion) {
-      throw new Error('Issue missing file path or suggestion');
+      throw new Error(
+        `Issue missing required information: ${!issue.file ? 'file path' : 'suggestion'}`
+      );
     }
 
     try {
+      // Verify file exists before attempting to read
+      try {
+        await fs.access(issue.file);
+      } catch {
+        throw new Error(`File not found: ${issue.file}`);
+      }
+
       // Read the file
       const content = await fs.readFile(issue.file, 'utf-8');
       const lines = content.split('\n');
@@ -165,10 +194,31 @@ export class ProjectAnalyzer {
         }
       }
 
-      // Write the fixed content back
-      await fs.writeFile(issue.file, fixedContent, 'utf-8');
+      // Only write if content changed
+      if (fixedContent !== content) {
+        // Create backup before modifying
+        try {
+          await fs.writeFile(`${issue.file}.backup`, content, 'utf-8');
+          logger.debug(`Created backup: ${issue.file}.backup`);
+        } catch (backupError) {
+          const err =
+            backupError instanceof Error
+              ? backupError
+              : new Error(String(backupError));
+          logger.warn(
+            `Failed to create backup for ${issue.file}: ${err.message}`
+          );
+        }
+
+        // Write the fixed content back
+        await fs.writeFile(issue.file, fixedContent, 'utf-8');
+      } else {
+        logger.debug(`No changes needed for ${issue.file}`);
+      }
     } catch (error) {
-      throw new Error(`Failed to apply fix: ${error}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to apply fix to ${issue.file}: ${errorMessage}`);
     }
   }
 

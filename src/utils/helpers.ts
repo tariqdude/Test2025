@@ -1,5 +1,8 @@
 import { logger } from './logger';
 
+/**
+ * Normalize error to a structured format for logging
+ */
 const normalizeErrorContext = (error: unknown): Record<string, unknown> => {
   if (error instanceof Error) {
     return {
@@ -9,9 +12,16 @@ const normalizeErrorContext = (error: unknown): Record<string, unknown> => {
     };
   }
 
-  return { error };
+  if (typeof error === 'object' && error !== null) {
+    return error as Record<string, unknown>;
+  }
+
+  return { error: String(error) };
 };
 
+/**
+ * Check if localStorage is available in the current environment
+ */
 const isLocalStorageAvailable = (): boolean => {
   return (
     typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
@@ -19,11 +29,21 @@ const isLocalStorageAvailable = (): boolean => {
 };
 
 // Date utilities
+/**
+ * Format a date using Intl.DateTimeFormat with customizable options
+ * @param date - Date to format (Date object or ISO string)
+ * @param options - Intl DateTimeFormat options
+ * @returns Formatted date string
+ */
 export function formatDate(
   date: Date | string,
   options?: Intl.DateTimeFormatOptions
 ): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(dateObj.getTime())) {
+    logger.warn('Invalid date provided to formatDate', { date });
+    return 'Invalid Date';
+  }
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -32,8 +52,16 @@ export function formatDate(
   return dateObj.toLocaleDateString('en-US', { ...defaultOptions, ...options });
 }
 
+/**
+ * Get relative time string (e.g., "2 hours ago", "3 days ago")
+ * @param date - Date to compare (Date object or ISO string)
+ * @returns Human-readable relative time string
+ */
 export function getRelativeTime(date: Date | string): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(dateObj.getTime())) {
+    return 'Invalid Date';
+  }
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
