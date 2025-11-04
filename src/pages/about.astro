@@ -93,22 +93,16 @@ const principles = [
           Astro sites light, maintainable, and ready for GitHub Pages.
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
-          <a
-            href={withBasePath('services/')}
-            class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-          >
+          <a href={withBasePath('services/')} class="btn btn-primary">
             Review our services
           </a>
-          <a
-            href={withBasePath('contact/')}
-            class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
-          >
+          <a href={withBasePath('contact/')} class="btn btn-secondary">
             Meet the maintainers
           </a>
         </div>
       </div>
       <div
-        class="grid flex-1 gap-4 rounded-3xl border border-white/10 bg-neutral-900/60 p-6 backdrop-blur lg:max-w-md"
+        class="glass-panel grid flex-1 gap-4 rounded-3xl border border-white/10 p-6 lg:max-w-md animate-fade-in-up"
       >
         <div class="flex items-baseline justify-between text-white">
           <p class="text-xs uppercase tracking-[0.25em] text-neutral-400">
@@ -118,20 +112,20 @@ const principles = [
           >
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <div class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5">
+          <div class="card rounded-2xl border border-white/10 p-5">
             <p class="text-3xl font-semibold text-white">4×</p>
             <p class="mt-2 text-xs text-neutral-400">
               Fewer dependencies vs early prototype
             </p>
           </div>
-          <div class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5">
+          <div class="card rounded-2xl border border-white/10 p-5">
             <p class="text-3xl font-semibold text-white">100%</p>
             <p class="mt-2 text-xs text-neutral-400">
               Static-safe routes across every page
             </p>
           </div>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-neutral-950/40 p-5">
+        <div class="card rounded-2xl border border-white/10 p-5">
           <p class="text-sm font-semibold text-white">
             Deployment proof points
           </p>
@@ -176,8 +170,11 @@ const principles = [
         </div>
         <div class="grid gap-6">
           {
-            principles.map(principle => (
-              <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+            principles.map((principle, index) => (
+              <article
+                class="card rounded-2xl border border-neutral-200 bg-neutral-50 p-6 hover:bg-white animate-fade-in-up"
+                style={`animation-delay: ${index * 100}ms; opacity: 0;`}
+              >
                 <h3 class="text-lg font-semibold text-neutral-900">
                   {principle.name}
                 </h3>

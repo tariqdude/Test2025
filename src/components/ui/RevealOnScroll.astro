@@ -24,7 +24,7 @@ export interface Props {
   once?: boolean; // animate only once
   stagger?: number; // delay between child elements in ms
   className?: string;
-  children?: boolean; // animate children individually
+  animateChildren?: boolean; // animate children individually
 }
 
 const {
@@ -35,7 +35,7 @@ const {
   once = true,
   stagger = 0,
   className = '',
-  children = false,
+  animateChildren = false,
 } = Astro.props;
 
 const animations = {
@@ -82,7 +82,7 @@ const uniqueId = `reveal-${Math.random().toString(36).substr(2, 9)}`;
   data-reveal-threshold={threshold}
   data-reveal-once={once}
   data-reveal-stagger={stagger}
-  data-reveal-children={children}
+  data-reveal-children={animateChildren}
   style={animConfig.initial}
 >
   <slot />

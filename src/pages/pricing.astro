@@ -99,13 +99,14 @@ const faqs = [
   <section class="bg-white">
     <div class="mx-auto grid max-w-6xl gap-8 px-6 py-20 lg:grid-cols-3">
       {
-        tiers.map(tier => (
+        tiers.map((tier, index) => (
           <article
-            class={`flex h-full flex-col gap-6 rounded-3xl border ${tier.highlight ? 'border-brand-500 bg-neutral-950 text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.55)]' : 'border-neutral-200 bg-neutral-50'} p-8`}
+            class={`card flex h-full flex-col gap-6 rounded-3xl border ${tier.highlight ? 'border-brand-500 bg-neutral-950 text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.55)]' : 'border-neutral-200 bg-neutral-50'} p-8 animate-fade-in-up`}
+            style={`animation-delay: ${index * 100}ms; opacity: 0;`}
           >
             <div class="space-y-3">
               <span
-                class={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${tier.highlight ? 'bg-brand-500/20 text-brand-200' : 'bg-neutral-200 text-neutral-600'}`}
+                class={`chip inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${tier.highlight ? 'bg-brand-500/20 text-brand-200' : 'bg-neutral-200 text-neutral-600'}`}
               >
                 {tier.highlight ? 'Recommended' : 'Package'}
               </span>
@@ -139,7 +140,7 @@ const faqs = [
             </ul>
             <div class="mt-auto">
               <a
-                class={`inline-flex w-full items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition ${tier.highlight ? 'bg-brand-500 text-white hover:bg-brand-600' : 'border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
+                class={`btn inline-flex w-full items-center justify-center px-5 py-2 text-sm font-semibold ${tier.highlight ? 'btn-primary' : 'btn-secondary border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
                 href={resolveHref(tier.href)}
               >
                 {tier.cta}

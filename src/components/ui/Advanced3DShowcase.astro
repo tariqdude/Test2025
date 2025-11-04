@@ -1,0 +1,782 @@
+---
+/**
+ * Advanced 3D Showcase - Maximum CSS 3D capabilities
+ * Includes: 3D carousel, flip cards, isometric graphics, parallax layers
+ */
+---
+
+<div class="advanced-3d-container">
+  <!-- 3D Rotating Carousel -->
+  <section class="carousel-section">
+    <h2 class="showcase-title">3D Rotating Carousel</h2>
+    <p class="showcase-subtitle">
+      Pure CSS carousel with perspective transform
+    </p>
+
+    <div class="carousel-wrapper">
+      <div class="carousel">
+        <div class="carousel-item" style="--i: 0">
+          <div class="carousel-content">
+            <div class="carousel-number">01</div>
+            <h3>Innovation</h3>
+            <p>Cutting-edge 3D transforms</p>
+          </div>
+        </div>
+        <div class="carousel-item" style="--i: 1">
+          <div class="carousel-content">
+            <div class="carousel-number">02</div>
+            <h3>Performance</h3>
+            <p>GPU-accelerated animations</p>
+          </div>
+        </div>
+        <div class="carousel-item" style="--i: 2">
+          <div class="carousel-content">
+            <div class="carousel-number">03</div>
+            <h3>Design</h3>
+            <p>Beautiful interfaces</p>
+          </div>
+        </div>
+        <div class="carousel-item" style="--i: 3">
+          <div class="carousel-content">
+            <div class="carousel-number">04</div>
+            <h3>Experience</h3>
+            <p>Smooth interactions</p>
+          </div>
+        </div>
+        <div class="carousel-item" style="--i: 4">
+          <div class="carousel-content">
+            <div class="carousel-number">05</div>
+            <h3>Innovation</h3>
+            <p>Next-gen features</p>
+          </div>
+        </div>
+        <div class="carousel-item" style="--i: 5">
+          <div class="carousel-content">
+            <div class="carousel-number">06</div>
+            <h3>Quality</h3>
+            <p>Pixel-perfect details</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D Flip Cards Grid -->
+  <section class="flip-cards-section">
+    <h2 class="showcase-title">3D Flip Cards</h2>
+    <p class="showcase-subtitle">Hover to flip and reveal back content</p>
+
+    <div class="flip-grid">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-icon">🎨</div>
+            <h3>Design</h3>
+          </div>
+          <div class="flip-card-back">
+            <h4>Creative Excellence</h4>
+            <p>Beautiful, functional, and intuitive interfaces</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-icon">⚡</div>
+            <h3>Speed</h3>
+          </div>
+          <div class="flip-card-back">
+            <h4>Lightning Fast</h4>
+            <p>Optimized for maximum performance</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-icon">🔒</div>
+            <h3>Security</h3>
+          </div>
+          <div class="flip-card-back">
+            <h4>Enterprise Grade</h4>
+            <p>Built with security best practices</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-icon">🚀</div>
+            <h3>Scale</h3>
+          </div>
+          <div class="flip-card-back">
+            <h4>Infinite Growth</h4>
+            <p>Scales seamlessly with your needs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Isometric 3D City -->
+  <section class="isometric-section">
+    <h2 class="showcase-title">Isometric 3D Graphics</h2>
+    <p class="showcase-subtitle">Pure CSS 3D isometric illustrations</p>
+
+    <div class="isometric-scene">
+      <!-- Building 1 - Tall tower -->
+      <div class="iso-building building-1">
+        <div class="iso-face iso-top"></div>
+        <div class="iso-face iso-left"></div>
+        <div class="iso-face iso-right"></div>
+      </div>
+
+      <!-- Building 2 - Medium -->
+      <div class="iso-building building-2">
+        <div class="iso-face iso-top"></div>
+        <div class="iso-face iso-left"></div>
+        <div class="iso-face iso-right"></div>
+      </div>
+
+      <!-- Building 3 - Short -->
+      <div class="iso-building building-3">
+        <div class="iso-face iso-top"></div>
+        <div class="iso-face iso-left"></div>
+        <div class="iso-face iso-right"></div>
+      </div>
+
+      <!-- Building 4 - Tall -->
+      <div class="iso-building building-4">
+        <div class="iso-face iso-top"></div>
+        <div class="iso-face iso-left"></div>
+        <div class="iso-face iso-right"></div>
+      </div>
+
+      <!-- Building 5 - Medium-tall -->
+      <div class="iso-building building-5">
+        <div class="iso-face iso-top"></div>
+        <div class="iso-face iso-left"></div>
+        <div class="iso-face iso-right"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D Text with Extrusion -->
+  <section class="text-3d-section">
+    <h2 class="showcase-title">3D Typography</h2>
+    <p class="showcase-subtitle">Extruded text with depth and shadows</p>
+
+    <div class="text-3d-container">
+      <div class="text-3d" data-text="ELITE">ELITE</div>
+    </div>
+
+    <div class="text-3d-container">
+      <div class="text-3d text-3d-alt" data-text="POWER">POWER</div>
+    </div>
+  </section>
+
+  <!-- Parallax 3D Layers -->
+  <section class="parallax-section">
+    <h2 class="showcase-title">Multi-Layer Parallax 3D</h2>
+    <p class="showcase-subtitle">Move your mouse to control perspective</p>
+
+    <div class="parallax-container" id="parallax">
+      <div class="parallax-layer layer-1" data-depth="0.1">
+        <div class="parallax-shape shape-1"></div>
+      </div>
+      <div class="parallax-layer layer-2" data-depth="0.3">
+        <div class="parallax-shape shape-2"></div>
+      </div>
+      <div class="parallax-layer layer-3" data-depth="0.5">
+        <div class="parallax-shape shape-3"></div>
+      </div>
+      <div class="parallax-layer layer-4" data-depth="0.7">
+        <div class="parallax-shape shape-4"></div>
+      </div>
+      <div class="parallax-layer layer-5" data-depth="0.9">
+        <div class="parallax-content">
+          <h3>3D Depth</h3>
+          <p>Interactive parallax effect</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .advanced-3d-container {
+    width: 100%;
+    padding: 4rem 2rem;
+  }
+
+  .showcase-title {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .showcase-subtitle {
+    text-align: center;
+    color: rgba(148, 163, 184, 0.8);
+    margin-bottom: 4rem;
+    font-size: 1.1rem;
+  }
+
+  /* === 3D CAROUSEL === */
+  .carousel-section {
+    margin-bottom: 10rem;
+    min-height: 600px;
+  }
+
+  .carousel-wrapper {
+    perspective: 2000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+  }
+
+  .carousel {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    transform-style: preserve-3d;
+    animation: rotateCarousel 24s linear infinite;
+  }
+
+  @keyframes rotateCarousel {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+
+  .carousel-item {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    transform-style: preserve-3d;
+    transform: rotateY(calc(var(--i) * 60deg)) translateZ(450px);
+    transition: all 0.5s;
+  }
+
+  .carousel-content {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.1),
+      rgba(139, 92, 246, 0.2)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.5),
+      inset 0 0 40px rgba(99, 102, 241, 0.1);
+  }
+
+  .carousel-number {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+
+  .carousel-content h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .carousel-content p {
+    color: rgba(148, 163, 184, 0.9);
+    text-align: center;
+  }
+
+  /* === 3D FLIP CARDS === */
+  .flip-cards-section {
+    margin-bottom: 10rem;
+  }
+
+  .flip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    perspective: 1000px;
+  }
+
+  .flip-card {
+    height: 300px;
+    perspective: 1000px;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  .flip-card-front {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.1),
+      rgba(168, 85, 247, 0.1)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .flip-card-back {
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.2),
+      rgba(236, 72, 153, 0.2)
+    );
+    border: 2px solid rgba(236, 72, 153, 0.4);
+    transform: rotateY(180deg);
+    backdrop-filter: blur(10px);
+  }
+
+  .flip-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.6));
+  }
+
+  .flip-card-front h3 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .flip-card-back h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .flip-card-back p {
+    text-align: center;
+    color: rgba(226, 232, 240, 0.8);
+    line-height: 1.6;
+  }
+
+  /* === ISOMETRIC 3D === */
+  .isometric-section {
+    margin-bottom: 10rem;
+    min-height: 600px;
+  }
+
+  .isometric-scene {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 500px;
+    margin: 0 auto;
+    transform: rotateX(60deg) rotateZ(-45deg);
+    transform-style: preserve-3d;
+  }
+
+  .iso-building {
+    position: absolute;
+    transform-style: preserve-3d;
+    animation: isoFloat 4s ease-in-out infinite;
+  }
+
+  @keyframes isoFloat {
+    0%,
+    100% {
+      transform: translateZ(0);
+    }
+    50% {
+      transform: translateZ(30px);
+    }
+  }
+
+  .building-1 {
+    left: 200px;
+    top: 100px;
+    animation-delay: 0s;
+  }
+
+  .building-2 {
+    left: 400px;
+    top: 150px;
+    animation-delay: 0.8s;
+  }
+
+  .building-3 {
+    left: 300px;
+    top: 250px;
+    animation-delay: 1.6s;
+  }
+
+  .building-4 {
+    left: 500px;
+    top: 200px;
+    animation-delay: 2.4s;
+  }
+
+  .building-5 {
+    left: 350px;
+    top: 50px;
+    animation-delay: 3.2s;
+  }
+
+  .iso-face {
+    position: absolute;
+  }
+
+  .iso-top {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.8),
+      rgba(139, 92, 246, 0.6)
+    );
+    transform: translateZ(var(--height));
+    border: 2px solid rgba(99, 102, 241, 0.4);
+  }
+
+  .iso-left {
+    width: 100px;
+    height: var(--height);
+    background: linear-gradient(
+      180deg,
+      rgba(59, 130, 246, 0.6),
+      rgba(37, 99, 235, 0.8)
+    );
+    transform-origin: top left;
+    transform: rotateY(-90deg) translateZ(0);
+    border: 2px solid rgba(59, 130, 246, 0.4);
+  }
+
+  .iso-right {
+    width: 100px;
+    height: var(--height);
+    background: linear-gradient(
+      180deg,
+      rgba(79, 70, 229, 0.6),
+      rgba(67, 56, 202, 0.8)
+    );
+    transform-origin: top right;
+    transform: rotateY(90deg) translateZ(100px);
+    border: 2px solid rgba(79, 70, 229, 0.4);
+  }
+
+  .building-1 {
+    --height: 250px;
+  }
+  .building-2 {
+    --height: 150px;
+  }
+  .building-3 {
+    --height: 100px;
+  }
+  .building-4 {
+    --height: 200px;
+  }
+  .building-5 {
+    --height: 180px;
+  }
+
+  /* === 3D TEXT === */
+  .text-3d-section {
+    margin-bottom: 10rem;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(99, 102, 241, 0.05),
+      transparent
+    );
+    padding: 6rem 2rem;
+  }
+
+  .text-3d-container {
+    perspective: 1000px;
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .text-3d {
+    font-size: 8rem;
+    font-weight: 900;
+    display: inline-block;
+    position: relative;
+    color: #667eea;
+    text-shadow:
+      1px 1px 0 #5568d3,
+      2px 2px 0 #4556bc,
+      3px 3px 0 #3544a5,
+      4px 4px 0 #25328e,
+      5px 5px 0 #152077,
+      6px 6px 0 #050e60,
+      7px 7px 10px rgba(0, 0, 0, 0.4),
+      8px 8px 15px rgba(0, 0, 0, 0.3),
+      9px 9px 20px rgba(0, 0, 0, 0.2);
+    transform: rotateX(20deg) rotateY(-10deg);
+    animation: text3dRotate 6s ease-in-out infinite;
+  }
+
+  .text-3d-alt {
+    color: #a855f7;
+    text-shadow:
+      1px 1px 0 #9333ea,
+      2px 2px 0 #7e22ce,
+      3px 3px 0 #6b21a8,
+      4px 4px 0 #581c87,
+      5px 5px 0 #451766,
+      6px 6px 0 #321245,
+      7px 7px 10px rgba(0, 0, 0, 0.4),
+      8px 8px 15px rgba(0, 0, 0, 0.3),
+      9px 9px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes text3dRotate {
+    0%,
+    100% {
+      transform: rotateX(20deg) rotateY(-10deg);
+    }
+    50% {
+      transform: rotateX(-20deg) rotateY(10deg);
+    }
+  }
+
+  /* === PARALLAX 3D === */
+  .parallax-section {
+    margin-bottom: 6rem;
+  }
+
+  .parallax-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    height: 600px;
+    margin: 0 auto;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    border-radius: 20px;
+    background: radial-gradient(
+      circle at center,
+      rgba(99, 102, 241, 0.1),
+      transparent
+    );
+    border: 2px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .parallax-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-out;
+  }
+
+  .parallax-shape {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    transform-style: preserve-3d;
+  }
+
+  .shape-1 {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2),
+      rgba(139, 92, 246, 0.1)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    animation: shapeFloat1 8s ease-in-out infinite;
+  }
+
+  .shape-2 {
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.2),
+      rgba(236, 72, 153, 0.1)
+    );
+    border: 2px solid rgba(168, 85, 247, 0.3);
+    transform: rotate(45deg);
+    animation: shapeFloat2 6s ease-in-out infinite;
+  }
+
+  .shape-3 {
+    background: linear-gradient(
+      135deg,
+      rgba(236, 72, 153, 0.2),
+      rgba(251, 113, 133, 0.1)
+    );
+    border: 2px solid rgba(236, 72, 153, 0.3);
+    border-radius: 50%;
+    animation: shapeFloat3 7s ease-in-out infinite;
+  }
+
+  .shape-4 {
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.2),
+      rgba(99, 102, 241, 0.1)
+    );
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    transform: rotate(-30deg);
+    animation: shapeFloat4 5s ease-in-out infinite;
+  }
+
+  @keyframes shapeFloat1 {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+    }
+  }
+
+  @keyframes shapeFloat2 {
+    0%,
+    100% {
+      transform: translateY(0) rotate(45deg);
+    }
+    50% {
+      transform: translateY(40px) rotate(225deg);
+    }
+  }
+
+  @keyframes shapeFloat3 {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(50px);
+    }
+  }
+
+  @keyframes shapeFloat4 {
+    0%,
+    100% {
+      transform: translateX(0) rotate(-30deg);
+    }
+    50% {
+      transform: translateX(-50px) rotate(150deg);
+    }
+  }
+
+  .parallax-content {
+    text-align: center;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.8);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .parallax-content h3 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .parallax-content p {
+    font-size: 1.2rem;
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  @media (max-width: 768px) {
+    .showcase-title {
+      font-size: 2rem;
+    }
+
+    .text-3d {
+      font-size: 4rem;
+    }
+
+    .carousel {
+      width: 250px;
+      height: 350px;
+    }
+
+    .carousel-item {
+      width: 250px;
+      height: 350px;
+    }
+  }
+</style>
+
+<script>
+  // Parallax effect with mouse movement
+  const parallaxContainer = document.getElementById('parallax');
+
+  if (parallaxContainer) {
+    parallaxContainer.addEventListener('mousemove', e => {
+      const rect = parallaxContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const layers = parallaxContainer.querySelectorAll('.parallax-layer');
+      layers.forEach(layer => {
+        const depth = parseFloat(layer.getAttribute('data-depth') || '0');
+        const moveX = x * depth * 100;
+        const moveY = y * depth * 100;
+        const rotateX = y * depth * 20;
+        const rotateY = x * depth * 20;
+
+        (layer as HTMLElement).style.transform =
+          `translateX(${moveX}px) translateY(${moveY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+    });
+
+    parallaxContainer.addEventListener('mouseleave', () => {
+      const layers = parallaxContainer.querySelectorAll('.parallax-layer');
+      layers.forEach(layer => {
+        (layer as HTMLElement).style.transform =
+          'translateX(0) translateY(0) rotateX(0) rotateY(0)';
+      });
+    });
+  }
+</script>

@@ -130,9 +130,12 @@ const subheading =
 
       <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {
-          landingPillars.map(pillar => (
-            <article class="card h-full space-y-4">
-              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-xs font-semibold uppercase tracking-[0.32em] text-slate-200">
+          landingPillars.map((pillar, index) => (
+            <article
+              class="card h-full space-y-4 animate-fade-in-up"
+              style={`animation-delay: ${index * 100}ms; opacity: 0;`}
+            >
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-xs font-semibold uppercase tracking-[0.32em] text-slate-200 hover:bg-indigo-500/20 hover:border-indigo-400/30 transition-all duration-300">
                 {pillar.title.slice(0, 2)}
               </span>
               <h3 class="text-xl font-semibold text-white">{pillar.title}</h3>
@@ -176,8 +179,11 @@ const subheading =
       </div>
       <div class="grid flex-1 gap-6 sm:grid-cols-2">
         {
-          securitySummary.principles.map(principle => (
-            <article class="glass-panel border border-white/10 p-6">
+          securitySummary.principles.map((principle, index) => (
+            <article
+              class="glass-panel border border-white/10 p-6 animate-fade-in-up"
+              style={`animation-delay: ${index * 150}ms; opacity: 0;`}
+            >
               <div class="flex flex-col gap-2">
                 <span class="chip bg-[rgba(99,102,241,0.12)] text-[0.6rem] uppercase tracking-[0.32em] text-slate-200">
                   {principle.indicator}

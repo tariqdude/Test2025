@@ -1,0 +1,265 @@
+---
+/**
+ * Holographic Cards - Cards with prismatic rainbow effects
+ */
+---
+
+<div class="holographic-section">
+  <h2 class="holo-title">Holographic Effects</h2>
+  <p class="holo-subtitle">
+    Interactive prismatic cards with rainbow gradients
+  </p>
+
+  <div class="holo-grid">
+    <div class="holo-card" data-tilt>
+      <div class="holo-shine"></div>
+      <div class="holo-content">
+        <div class="holo-icon">💎</div>
+        <h3>Premium</h3>
+        <p>Exclusive features</p>
+      </div>
+    </div>
+
+    <div class="holo-card" data-tilt>
+      <div class="holo-shine"></div>
+      <div class="holo-content">
+        <div class="holo-icon">⚡</div>
+        <h3>Lightning</h3>
+        <p>Ultra fast speed</p>
+      </div>
+    </div>
+
+    <div class="holo-card" data-tilt>
+      <div class="holo-shine"></div>
+      <div class="holo-content">
+        <div class="holo-icon">🎯</div>
+        <h3>Precision</h3>
+        <p>Pixel perfect</p>
+      </div>
+    </div>
+
+    <div class="holo-card" data-tilt>
+      <div class="holo-shine"></div>
+      <div class="holo-content">
+        <div class="holo-icon">🔮</div>
+        <h3>Magic</h3>
+        <p>Pure innovation</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .holographic-section {
+    padding: 6rem 2rem;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(99, 102, 241, 0.03),
+      transparent
+    );
+  }
+
+  .holo-title {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .holo-subtitle {
+    text-align: center;
+    color: rgba(148, 163, 184, 0.8);
+    margin-bottom: 4rem;
+    font-size: 1.1rem;
+  }
+
+  .holo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    perspective: 1000px;
+  }
+
+  .holo-card {
+    position: relative;
+    height: 350px;
+    border-radius: 24px;
+    padding: 3rem;
+    background: rgba(15, 23, 42, 0.8);
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+  }
+
+  .holo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255, 0, 255, 0.3) 25%,
+      transparent 47%,
+      transparent 53%,
+      rgba(0, 255, 255, 0.3) 75%,
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.6s;
+    mix-blend-mode: color-dodge;
+  }
+
+  .holo-card:hover::before {
+    opacity: 1;
+  }
+
+  .holo-shine {
+    position: absolute;
+    inset: -100%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.03) 40%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.03) 60%,
+      transparent
+    );
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    transition: transform 0.6s;
+  }
+
+  .holo-card:hover .holo-shine {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+
+  .holo-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 119, 255, 0.1) 0px,
+        rgba(0, 255, 255, 0.1) 2px,
+        transparent 4px,
+        transparent 6px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 0, 128, 0.1) 0px,
+        rgba(0, 255, 255, 0.1) 2px,
+        transparent 4px,
+        transparent 6px
+      );
+    opacity: 0;
+    transition: opacity 0.6s;
+    mix-blend-mode: color-dodge;
+    pointer-events: none;
+  }
+
+  .holo-card:hover::after {
+    opacity: 0.15;
+  }
+
+  .holo-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow:
+      0 0 60px rgba(99, 102, 241, 0.4),
+      0 0 100px rgba(168, 85, 247, 0.3),
+      inset 0 0 60px rgba(99, 102, 241, 0.1);
+    border-color: rgba(168, 85, 247, 0.6);
+  }
+
+  .holo-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+  }
+
+  .holo-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8));
+    animation: holoFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes holoFloat {
+    0%,
+    100% {
+      transform: translateY(0) rotateZ(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotateZ(5deg);
+    }
+  }
+
+  .holo-content h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .holo-content p {
+    color: rgba(226, 232, 240, 0.7);
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 768px) {
+    .holo-title {
+      font-size: 2rem;
+    }
+
+    .holo-card {
+      height: 300px;
+    }
+
+    .holo-icon {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced tilt effect for holographic cards
+  const holoCards = document.querySelectorAll('[data-tilt]');
+
+  holoCards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const mouseEvent = e as MouseEvent;
+      const rect = card.getBoundingClientRect();
+      const x = mouseEvent.clientX - rect.left;
+      const y = mouseEvent.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -15;
+      const rotateY = ((x - centerX) / centerX) * 15;
+
+      (card as HTMLElement).style.transform =
+        `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      (card as HTMLElement).style.transform =
+        'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+    });
+  });
+</script>

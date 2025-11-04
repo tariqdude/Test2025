@@ -1,0 +1,196 @@
+---
+/**
+ * Cubic Matrix - 3D Grid of animated cubes with wave effects
+ */
+---
+
+<div class="cubic-matrix-wrapper">
+  <h2 class="matrix-title">3D Cubic Matrix</h2>
+  <p class="matrix-subtitle">Wave-animated 3D grid with depth perspective</p>
+
+  <div class="cubic-matrix">
+    {
+      Array.from({ length: 64 }).map((_, i) => {
+        const row = Math.floor(i / 8);
+        const col = i % 8;
+        return (
+          <div
+            class="matrix-cube"
+            style={`
+            --delay: ${(row + col) * 0.1}s;
+            --x: ${col};
+            --y: ${row};
+          `}
+          >
+            <div class="cube-3d">
+              <div class="cube-face front" />
+              <div class="cube-face back" />
+              <div class="cube-face right" />
+              <div class="cube-face left" />
+              <div class="cube-face top" />
+              <div class="cube-face bottom" />
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .cubic-matrix-wrapper {
+    padding: 6rem 2rem;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(99, 102, 241, 0.05),
+      transparent
+    );
+  }
+
+  .matrix-title {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .matrix-subtitle {
+    text-align: center;
+    color: rgba(148, 163, 184, 0.8);
+    margin-bottom: 4rem;
+    font-size: 1.1rem;
+  }
+
+  .cubic-matrix {
+    perspective: 1500px;
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    margin: 0 auto;
+    max-width: fit-content;
+  }
+
+  .matrix-cube {
+    width: 60px;
+    height: 60px;
+    transform-style: preserve-3d;
+    animation: cubeWave 3s ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  .cube-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spinCube 8s linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes cubeWave {
+    0%,
+    100% {
+      transform: translateZ(0) scale(1);
+    }
+    50% {
+      transform: translateZ(100px) scale(1.2);
+    }
+  }
+
+  @keyframes spinCube {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(360deg) rotateY(360deg);
+    }
+  }
+
+  .cube-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    opacity: 0.9;
+  }
+
+  .front {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.3),
+      rgba(139, 92, 246, 0.2)
+    );
+    transform: translateZ(30px);
+  }
+
+  .back {
+    background: linear-gradient(
+      135deg,
+      rgba(79, 70, 229, 0.3),
+      rgba(109, 40, 217, 0.2)
+    );
+    transform: rotateY(180deg) translateZ(30px);
+  }
+
+  .right {
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.3),
+      rgba(168, 85, 247, 0.2)
+    );
+    transform: rotateY(90deg) translateZ(30px);
+  }
+
+  .left {
+    background: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.3),
+      rgba(147, 51, 234, 0.2)
+    );
+    transform: rotateY(-90deg) translateZ(30px);
+  }
+
+  .top {
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.4),
+      rgba(192, 132, 252, 0.3)
+    );
+    transform: rotateX(90deg) translateZ(30px);
+  }
+
+  .bottom {
+    background: linear-gradient(
+      135deg,
+      rgba(109, 40, 217, 0.3),
+      rgba(124, 58, 237, 0.2)
+    );
+    transform: rotateX(-90deg) translateZ(30px);
+  }
+
+  @media (max-width: 768px) {
+    .cubic-matrix {
+      grid-template-columns: repeat(6, 50px);
+      grid-template-rows: repeat(6, 50px);
+      gap: 10px;
+    }
+
+    .matrix-cube,
+    .cube-face {
+      width: 50px;
+      height: 50px;
+    }
+
+    .matrix-title {
+      font-size: 2rem;
+    }
+  }
+</style>
