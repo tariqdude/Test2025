@@ -53,45 +53,78 @@
     padding: 8rem 2rem;
     background: radial-gradient(
       ellipse at center,
-      rgba(168, 85, 247, 0.1),
-      transparent
+      rgba(168, 85, 247, 0.15),
+      transparent 70%
     );
     overflow: hidden;
+    min-height: 900px;
+    position: relative;
+  }
+
+  .dna-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(236, 72, 153, 0.15),
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 50%,
+        rgba(168, 85, 247, 0.15),
+        transparent 50%
+      );
+    pointer-events: none;
   }
 
   .dna-title {
-    font-size: 3rem;
-    font-weight: 800;
+    font-size: 4rem;
+    font-weight: 900;
     text-align: center;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #f472b6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 10;
+    filter: drop-shadow(0 0 40px rgba(236, 72, 153, 0.4));
   }
 
   .dna-subtitle {
     text-align: center;
-    color: rgba(148, 163, 184, 0.8);
-    margin-bottom: 4rem;
-    font-size: 1.1rem;
+    color: rgba(203, 213, 225, 0.9);
+    margin-bottom: 5rem;
+    font-size: 1.25rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 10;
   }
 
   .dna-container {
-    perspective: 2000px;
-    height: 800px;
+    perspective: 2500px;
+    height: 850px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    z-index: 10;
+    filter: drop-shadow(0 0 60px rgba(236, 72, 153, 0.3));
   }
 
   .dna-helix {
     position: relative;
-    width: 400px;
-    height: 800px;
+    width: 450px;
+    height: 850px;
     transform-style: preserve-3d;
-    animation: rotateDNA 20s linear infinite;
+    animation: rotateDNA 24s linear infinite;
+  }
+
+  .dna-helix:hover {
+    animation-play-state: paused;
   }
 
   @keyframes rotateDNA {
@@ -105,23 +138,26 @@
 
   .dna-sphere {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     transform-style: preserve-3d;
     animation: pulseGlow 2s ease-in-out infinite;
     animation-delay: var(--delay);
-    box-shadow: 0 0 30px currentColor;
+    box-shadow:
+      0 0 40px currentColor,
+      0 0 60px currentColor;
+    border: 2px solid currentColor;
   }
 
   .strand-1 {
-    background: radial-gradient(circle, #a855f7, #7c3aed);
+    background: radial-gradient(circle, #c084fc, #a855f7, #7c3aed);
     color: #a855f7;
-    transform: translateY(var(--y)) rotateY(var(--angle)) translateX(120px);
+    transform: translateY(var(--y)) rotateY(var(--angle)) translateX(140px);
   }
 
   .strand-2 {
-    background: radial-gradient(circle, #ec4899, #db2777);
+    background: radial-gradient(circle, #f9a8d4, #ec4899, #db2777);
     color: #ec4899;
     transform: translateY(var(--y)) rotateY(var(--angle)) translateX(120px);
   }

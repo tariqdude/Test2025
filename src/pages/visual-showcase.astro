@@ -62,20 +62,42 @@ const description =
 
       <!-- Advanced 3D Showcase - Maximum Capabilities -->
       <section
-        class="py-20 relative bg-gradient-to-b from-transparent via-indigo-950/10 to-transparent"
+        class="py-32 relative bg-gradient-to-b from-neutral-950 via-indigo-950/20 to-neutral-900"
       >
-        <div class="container mx-auto px-6">
+        <div class="absolute inset-0 opacity-20">
+          <div
+            class="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full filter blur-[128px] animate-pulse"
+          >
+          </div>
+          <div
+            class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500 rounded-full filter blur-[128px] animate-pulse"
+            style="animation-delay: 1s"
+          >
+          </div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
           <RevealOnScroll animation="slide-up">
-            <h2
-              class="text-7xl font-bold text-center mb-6 text-gradient-purple"
-            >
-              Advanced 3D Capabilities
-            </h2>
-            <p
-              class="text-2xl text-neutral-300 text-center mb-12 max-w-3xl mx-auto"
-            >
-              Pure CSS 3D transforms showcasing maximum static site potential
-            </p>
+            <div class="text-center mb-20">
+              <div
+                class="inline-block px-6 py-3 mb-6 rounded-full border border-purple-500/30 bg-purple-500/10 backdrop-blur-sm"
+              >
+                <span
+                  class="text-purple-300 text-sm font-semibold tracking-wider uppercase"
+                  >Pure CSS • No JavaScript</span
+                >
+              </div>
+              <h2
+                class="text-8xl md:text-9xl font-black text-center mb-8 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
+              >
+                3D Mastery
+              </h2>
+              <p
+                class="text-2xl md:text-3xl text-neutral-300 text-center max-w-4xl mx-auto leading-relaxed"
+              >
+                Experience the absolute limits of CSS 3D transforms, perspective
+                depth, and GPU-accelerated animations
+              </p>
+            </div>
           </RevealOnScroll>
 
           <Advanced3DShowcase />
@@ -83,18 +105,50 @@ const description =
       </section>
 
       <!-- Cubic Matrix Section -->
-      <section class="py-20 relative">
-        <CubicMatrix />
+      <section
+        class="py-32 relative bg-gradient-to-b from-neutral-900 to-neutral-950"
+      >
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.1),transparent_70%)]"
+        >
+        </div>
+        <div class="relative z-10">
+          <CubicMatrix />
+        </div>
       </section>
 
       <!-- Holographic Cards Section -->
-      <section class="py-20 relative">
-        <HolographicCards />
+      <section
+        class="py-32 relative bg-gradient-to-b from-neutral-950 via-purple-950/10 to-neutral-900"
+      >
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-1/2 left-0 w-[500px] h-[500px] bg-purple-600 rounded-full filter blur-[150px] opacity-20"
+          >
+          </div>
+          <div
+            class="absolute top-1/2 right-0 w-[500px] h-[500px] bg-pink-600 rounded-full filter blur-[150px] opacity-20"
+          >
+          </div>
+        </div>
+        <div class="relative z-10">
+          <HolographicCards />
+        </div>
       </section>
 
       <!-- DNA Helix Section -->
-      <section class="py-20 relative">
-        <DNAHelix />
+      <section
+        class="py-32 relative bg-gradient-to-b from-neutral-900 to-black"
+      >
+        <div class="absolute inset-0">
+          <div
+            class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM2MzY2ZjEiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHptMCAwIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"
+          >
+          </div>
+        </div>
+        <div class="relative z-10">
+          <DNAHelix />
+        </div>
       </section>
 
       <!-- Interactive Demo Section -->
