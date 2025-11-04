@@ -1,0 +1,274 @@
+---
+/**
+ * Matrix Rain - Digital rain effect with 3D depth
+ */
+---
+
+<div class="matrix-wrapper">
+  <h2 class="matrix-title">Digital Matrix Rain</h2>
+  <p class="matrix-subtitle">Cascading code with depth perspective</p>
+
+  <div class="matrix-container">
+    <div class="matrix-scene">
+      {
+        Array.from({ length: 30 }).map((_, i) => {
+          const characters =
+            'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          const columnHeight = 15 + Math.floor(Math.random() * 20);
+          return (
+            <div
+              class="matrix-column"
+              style={`
+              --column-index: ${i};
+              --column-delay: ${i * 0.2}s;
+              --column-speed: ${3 + Math.random() * 4}s;
+              --column-depth: ${Math.random() * 200 - 100}px;
+            `}
+            >
+              {Array.from({ length: columnHeight }).map(() => {
+                const char =
+                  characters[Math.floor(Math.random() * characters.length)];
+                return <div class="matrix-char">{char}</div>;
+              })}
+            </div>
+          );
+        })
+      }
+
+      <!-- Glowing core -->
+      <div class="matrix-core"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .matrix-wrapper {
+    padding: 8rem 2rem;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(34, 197, 94, 0.1),
+      #000
+    );
+    min-height: 800px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .matrix-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        0deg,
+        transparent 0%,
+        rgba(34, 197, 94, 0.05) 50%,
+        transparent 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(34, 197, 94, 0.05) 50%,
+        transparent 100%
+      );
+    background-size:
+      100% 50px,
+      50px 100%;
+    animation: gridScroll 20s linear infinite;
+  }
+
+  @keyframes gridScroll {
+    0% {
+      background-position:
+        0 0,
+        0 0;
+    }
+    100% {
+      background-position:
+        0 50px,
+        50px 0;
+    }
+  }
+
+  .matrix-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #22c55e 0%, #10b981 50%, #14b8a6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 10;
+    filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.5));
+  }
+
+  .matrix-subtitle {
+    text-align: center;
+    color: rgba(203, 213, 225, 0.9);
+    margin-bottom: 5rem;
+    font-size: 1.25rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 10;
+  }
+
+  .matrix-container {
+    perspective: 1500px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .matrix-scene {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+
+  .matrix-column {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation:
+      columnFall var(--column-speed) linear infinite,
+      columnSway 8s ease-in-out infinite;
+    animation-delay: var(--column-delay);
+    transform: translateZ(var(--column-depth));
+    filter: blur(calc(abs(var(--column-depth)) / 100));
+  }
+
+  @keyframes columnFall {
+    0% {
+      transform: translateY(-100%) translateZ(var(--column-depth));
+    }
+    100% {
+      transform: translateY(700px) translateZ(var(--column-depth));
+    }
+  }
+
+  @keyframes columnSway {
+    0%,
+    100% {
+      transform: translateX(0) translateZ(var(--column-depth));
+    }
+    50% {
+      transform: translateX(10px) translateZ(var(--column-depth));
+    }
+  }
+
+  .matrix-char {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #22c55e;
+    text-align: center;
+    text-shadow:
+      0 0 10px rgba(34, 197, 94, 1),
+      0 0 20px rgba(34, 197, 94, 0.8),
+      0 0 30px rgba(34, 197, 94, 0.6);
+    animation: charFlicker 0.5s ease-in-out infinite;
+    animation-delay: calc(var(--column-delay) + random() * 1s);
+    opacity: 0.8;
+  }
+
+  .matrix-char:first-child {
+    color: #fff;
+    font-size: 2rem;
+    text-shadow:
+      0 0 20px rgba(255, 255, 255, 1),
+      0 0 40px rgba(34, 197, 94, 1),
+      0 0 60px rgba(34, 197, 94, 0.8);
+    opacity: 1;
+  }
+
+  .matrix-char:nth-child(2),
+  .matrix-char:nth-child(3) {
+    color: #86efac;
+  }
+
+  .matrix-char:nth-last-child(-n + 3) {
+    color: rgba(34, 197, 94, 0.4);
+    text-shadow: 0 0 5px rgba(34, 197, 94, 0.6);
+  }
+
+  @keyframes charFlicker {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .matrix-core {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(34, 197, 94, 0.4),
+      rgba(34, 197, 94, 0.2),
+      transparent
+    );
+    border-radius: 50%;
+    animation: corePulse 4s ease-in-out infinite;
+    filter: blur(40px);
+  }
+
+  @keyframes corePulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.5);
+      opacity: 0.6;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .matrix-title {
+      font-size: 2.5rem;
+    }
+
+    .matrix-char {
+      font-size: 1rem;
+    }
+
+    .matrix-char:first-child {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Add random character changes for extra effect
+  setInterval(() => {
+    const chars = document.querySelectorAll('.matrix-char');
+    const characters =
+      'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    chars.forEach(char => {
+      if (Math.random() > 0.95) {
+        char.textContent =
+          characters[Math.floor(Math.random() * characters.length)];
+      }
+    });
+  }, 50);
+</script>

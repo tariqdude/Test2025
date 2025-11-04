@@ -1,0 +1,222 @@
+---
+/**
+ * Layered Cards - Stacked 3D cards with parallax depth
+ */
+---
+
+<div class="layered-wrapper">
+  <h2 class="layered-title">3D Layered Cards</h2>
+  <p class="layered-subtitle">Stacked depth with parallax on hover</p>
+
+  <div class="layered-grid">
+    {
+      ['Design', 'Code', 'Deploy', 'Scale'].map((title, idx) => (
+        <div class="layered-card-container" data-tilt-multi>
+          <div class="layered-card layer-back" />
+          <div class="layered-card layer-middle" />
+          <div class="layered-card layer-front">
+            <div class="layer-content">
+              <div class="layer-icon">{['🎨', '⚡', '🚀', '📈'][idx]}</div>
+              <h3>{title}</h3>
+              <p>Multi-layer depth effect</p>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .layered-wrapper {
+    padding: 8rem 2rem;
+    background: linear-gradient(
+      180deg,
+      rgba(99, 102, 241, 0.05),
+      transparent,
+      rgba(139, 92, 246, 0.05)
+    );
+    min-height: 700px;
+  }
+
+  .layered-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+
+  .layered-subtitle {
+    text-align: center;
+    color: rgba(203, 213, 225, 0.9);
+    margin-bottom: 5rem;
+    font-size: 1.25rem;
+    font-weight: 300;
+  }
+
+  .layered-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    perspective: 1500px;
+  }
+
+  .layered-card-container {
+    position: relative;
+    height: 400px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+  }
+
+  .layered-card {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .layer-back {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.1),
+      rgba(139, 92, 246, 0.1)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    transform: translateZ(-60px) scale(0.95);
+    filter: blur(1px);
+  }
+
+  .layer-middle {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.15),
+      rgba(139, 92, 246, 0.15)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    transform: translateZ(-30px) scale(0.975);
+    filter: blur(0.5px);
+  }
+
+  .layer-front {
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2),
+      rgba(139, 92, 246, 0.2)
+    );
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    transform: translateZ(0);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(99, 102, 241, 0.3);
+  }
+
+  .layered-card-container:hover .layer-back {
+    transform: translateZ(-80px) scale(0.93) rotateZ(-2deg);
+    filter: blur(2px);
+  }
+
+  .layered-card-container:hover .layer-middle {
+    transform: translateZ(-40px) scale(0.965) rotateZ(1deg);
+    filter: blur(1px);
+  }
+
+  .layered-card-container:hover .layer-front {
+    transform: translateZ(20px) scale(1.02);
+    box-shadow:
+      0 30px 90px rgba(0, 0, 0, 0.5),
+      0 0 80px rgba(139, 92, 246, 0.5);
+    border-color: rgba(168, 85, 247, 0.8);
+  }
+
+  .layer-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+  }
+
+  .layer-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.8));
+    animation: iconFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes iconFloat {
+    0%,
+    100% {
+      transform: translateY(0) rotateZ(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotateZ(5deg);
+    }
+  }
+
+  .layer-content h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 20px rgba(139, 92, 246, 0.5);
+  }
+
+  .layer-content p {
+    color: rgba(203, 213, 225, 0.9);
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .layered-title {
+      font-size: 2.5rem;
+    }
+
+    .layered-card-container {
+      height: 350px;
+    }
+
+    .layer-icon {
+      font-size: 4rem;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced multi-layer tilt effect
+  const containers = document.querySelectorAll('[data-tilt-multi]');
+
+  containers.forEach(container => {
+    container.addEventListener('mousemove', e => {
+      const mouseEvent = e as MouseEvent;
+      const rect = container.getBoundingClientRect();
+      const x = mouseEvent.clientX - rect.left;
+      const y = mouseEvent.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -20;
+      const rotateY = ((x - centerX) / centerX) * 20;
+
+      (container as HTMLElement).style.transform =
+        `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      (container as HTMLElement).style.transform =
+        'perspective(1500px) rotateX(0) rotateY(0)';
+    });
+  });
+</script>

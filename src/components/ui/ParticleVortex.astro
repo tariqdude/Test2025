@@ -1,0 +1,234 @@
+---
+/**
+ * Particle Vortex - 3D spiral of particles with physics
+ */
+---
+
+<div class="vortex-wrapper">
+  <h2 class="vortex-title">Particle Vortex</h2>
+  <p class="vortex-subtitle">3D spiral with orbital physics</p>
+
+  <div class="vortex-container">
+    <div class="vortex">
+      {
+        Array.from({ length: 80 }).map((_, i) => {
+          const angle = (i / 80) * 360 * 5;
+          const radius = 50 + (i / 80) * 250;
+          const height = (i / 80) * 600 - 300;
+          return (
+            <div
+              class="vortex-particle"
+              style={`
+              --angle: ${angle}deg;
+              --radius: ${radius}px;
+              --height: ${height}px;
+              --delay: ${i * 0.05}s;
+              --hue: ${(i / 80) * 360};
+            `}
+            />
+          );
+        })
+      }
+
+      {/* Core energy sphere */}
+      <div class="vortex-core"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .vortex-wrapper {
+    padding: 8rem 2rem;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(139, 92, 246, 0.15),
+      transparent
+    );
+    min-height: 800px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vortex-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 30% 40%,
+        rgba(168, 85, 247, 0.1),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 70% 60%,
+        rgba(59, 130, 246, 0.1),
+        transparent 60%
+      );
+    animation: backgroundShift 10s ease-in-out infinite;
+  }
+
+  @keyframes backgroundShift {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: rotate(180deg);
+    }
+  }
+
+  .vortex-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 10;
+  }
+
+  .vortex-subtitle {
+    text-align: center;
+    color: rgba(203, 213, 225, 0.9);
+    margin-bottom: 5rem;
+    font-size: 1.25rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 10;
+  }
+
+  .vortex-container {
+    perspective: 2000px;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+  }
+
+  .vortex {
+    position: relative;
+    width: 600px;
+    height: 700px;
+    transform-style: preserve-3d;
+    animation: vortexSpin 30s linear infinite;
+  }
+
+  @keyframes vortexSpin {
+    0% {
+      transform: rotateY(0deg) rotateX(20deg);
+    }
+    100% {
+      transform: rotateY(360deg) rotateX(20deg);
+    }
+  }
+
+  .vortex-particle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      hsl(var(--hue), 80%, 60%),
+      hsl(var(--hue), 70%, 50%)
+    );
+    transform: translateX(-50%) translateY(-50%) rotateY(var(--angle))
+      translateX(var(--radius)) translateZ(var(--height));
+    box-shadow:
+      0 0 20px hsl(var(--hue), 80%, 60%),
+      0 0 40px hsl(var(--hue), 70%, 50%);
+    animation: particlePulse 2s ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes particlePulse {
+    0%,
+    100% {
+      transform: translateX(-50%) translateY(-50%) rotateY(var(--angle))
+        translateX(var(--radius)) translateZ(var(--height)) scale(1);
+    }
+    50% {
+      transform: translateX(-50%) translateY(-50%) rotateY(var(--angle))
+        translateX(var(--radius)) translateZ(var(--height)) scale(1.5);
+    }
+  }
+
+  .vortex-core {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 1),
+      rgba(168, 85, 247, 0.8),
+      rgba(59, 130, 246, 0.4)
+    );
+    box-shadow:
+      0 0 60px rgba(139, 92, 246, 1),
+      0 0 120px rgba(168, 85, 247, 0.8),
+      inset 0 0 40px rgba(255, 255, 255, 0.5);
+    animation:
+      coreRotate 10s linear infinite,
+      corePulse 3s ease-in-out infinite;
+  }
+
+  @keyframes coreRotate {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @keyframes corePulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 60px rgba(139, 92, 246, 1),
+        0 0 120px rgba(168, 85, 247, 0.8),
+        inset 0 0 40px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      box-shadow:
+        0 0 100px rgba(139, 92, 246, 1),
+        0 0 180px rgba(168, 85, 247, 1),
+        inset 0 0 60px rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vortex-title {
+      font-size: 2.5rem;
+    }
+
+    .vortex {
+      width: 400px;
+      height: 500px;
+    }
+
+    .vortex-particle {
+      width: 8px;
+      height: 8px;
+    }
+
+    .vortex-core {
+      width: 60px;
+      height: 60px;
+    }
+  }
+</style>
