@@ -7,8 +7,14 @@ import { z } from 'zod';
 // Email validation schema
 export const emailSchema = z.string().email('Invalid email address');
 
-// URL validation schema
-export const urlSchema = z.string().url('Invalid URL format');
+// URL validation schema (HTTP/HTTPS only)
+export const urlSchema = z
+  .string()
+  .url('Invalid URL format')
+  .refine(
+    url => url.startsWith('http://') || url.startsWith('https://'),
+    'URL must use HTTP or HTTPS protocol'
+  );
 
 // File path validation (basic security check)
 export const filePathSchema = z
