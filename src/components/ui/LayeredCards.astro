@@ -6,20 +6,81 @@
 
 <div class="layered-wrapper">
   <h2 class="layered-title">3D Layered Cards</h2>
-  <p class="layered-subtitle">Stacked depth with parallax on hover</p>
+  <p class="layered-subtitle">
+    Stacked depth with parallax • Click to expand • Hold to separate layers
+  </p>
 
-  <div class="layered-grid">
+  <div class="layered-controls">
+    <button class="layer-btn active" data-depth="normal">Normal Depth</button>
+    <button class="layer-btn" data-depth="extreme">Extreme Depth</button>
+    <button class="layer-btn" data-depth="flat">Flatten Layers</button>
+    <button class="layer-btn" data-action="explode">💥 Explode All</button>
+  </div>
+
+  <div class="layered-grid" data-layer-system>
     {
-      ['Design', 'Code', 'Deploy', 'Scale'].map((title, idx) => (
-        <div class="layered-card-container" data-tilt-multi>
-          <div class="layered-card layer-back" />
-          <div class="layered-card layer-middle" />
+      [
+        {
+          title: 'Design',
+          icon: '🎨',
+          color: '#6366f1',
+          desc: 'Creative vision',
+        },
+        { title: 'Code', icon: '⚡', color: '#8b5cf6', desc: 'Implementation' },
+        {
+          title: 'Deploy',
+          icon: '🚀',
+          color: '#a855f7',
+          desc: 'Production ready',
+        },
+        {
+          title: 'Scale',
+          icon: '📈',
+          color: '#c084fc',
+          desc: 'Growth strategy',
+        },
+        {
+          title: 'Test',
+          icon: '✅',
+          color: '#d946ef',
+          desc: 'Quality assurance',
+        },
+        {
+          title: 'Monitor',
+          icon: '👁️',
+          color: '#e879f9',
+          desc: 'Performance tracking',
+        },
+      ].map((card, idx) => (
+        <div
+          class="layered-card-container"
+          data-tilt-multi
+          data-card-index={idx}
+          data-color={card.color}
+        >
+          <div class="layered-card layer-5" data-layer="5">
+            <div class="layer-pattern" />
+          </div>
+          <div class="layered-card layer-4" data-layer="4">
+            <div class="layer-pattern" />
+          </div>
+          <div class="layered-card layer-3" data-layer="3">
+            <div class="layer-pattern" />
+          </div>
+          <div class="layered-card layer-2" data-layer="2">
+            <div class="layer-pattern" />
+          </div>
+          <div class="layered-card layer-1" data-layer="1">
+            <div class="layer-pattern" />
+          </div>
           <div class="layered-card layer-front">
             <div class="layer-content">
-              <div class="layer-icon">{['🎨', '⚡', '🚀', '📈'][idx]}</div>
-              <h3>{title}</h3>
-              <p>Multi-layer depth effect</p>
+              <div class="layer-icon">{card.icon}</div>
+              <h3>{card.title}</h3>
+              <p>{card.desc}</p>
+              <div class="layer-badge">Click to expand</div>
             </div>
+            <div class="layer-glow" />
           </div>
         </div>
       ))
@@ -54,25 +115,82 @@
   .layered-subtitle {
     text-align: center;
     color: rgba(203, 213, 225, 0.9);
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
     font-size: 1.25rem;
     font-weight: 300;
   }
 
+  .layered-controls {
+    display: flex;
+    gap: 12px;
+    margin: 0 auto 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+  }
+
+  .layer-btn {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    color: #a855f7;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .layer-btn:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .layer-btn.active {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: #a855f7;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  }
+
   .layered-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 4rem;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    perspective: 1500px;
+    perspective: 2000px;
   }
 
   .layered-card-container {
     position: relative;
-    height: 400px;
+    height: 450px;
     transform-style: preserve-3d;
     transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .layered-card-container.expanded {
+    z-index: 100;
+  }
+
+  .layered-card-container.exploded .layered-card {
+    animation: explodeLayer 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  @keyframes explodeLayer {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateZ(calc(var(--layer-depth) * -20))
+        translateX(calc(var(--random-x) * 200px))
+        translateY(calc(var(--random-y) * 200px))
+        rotateX(calc(var(--random-rx) * 180deg))
+        rotateY(calc(var(--random-ry) * 180deg)) scale(0.5);
+      opacity: 0;
+    }
   }
 
   .layered-card {
@@ -80,36 +198,88 @@
     inset: 0;
     border-radius: 24px;
     backdrop-filter: blur(20px);
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    --layer-depth: 0;
   }
 
-  .layer-back {
+  .layer-pattern {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.03) 10px,
+      rgba(255, 255, 255, 0.03) 20px
+    );
+    border-radius: 24px;
+  }
+
+  .layer-5 {
+    --layer-depth: 5;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.08),
+      rgba(139, 92, 246, 0.08)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.15);
+    transform: translateZ(-150px) scale(0.88);
+    filter: blur(2px);
+  }
+
+  .layer-4 {
+    --layer-depth: 4;
     background: linear-gradient(
       135deg,
       rgba(99, 102, 241, 0.1),
       rgba(139, 92, 246, 0.1)
     );
     border: 2px solid rgba(99, 102, 241, 0.2);
-    transform: translateZ(-60px) scale(0.95);
+    transform: translateZ(-120px) scale(0.91);
+    filter: blur(1.5px);
+  }
+
+  .layer-3 {
+    --layer-depth: 3;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.12),
+      rgba(139, 92, 246, 0.12)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.25);
+    transform: translateZ(-90px) scale(0.94);
     filter: blur(1px);
   }
 
-  .layer-middle {
+  .layer-2 {
+    --layer-depth: 2;
     background: linear-gradient(
       135deg,
       rgba(99, 102, 241, 0.15),
       rgba(139, 92, 246, 0.15)
     );
     border: 2px solid rgba(99, 102, 241, 0.3);
-    transform: translateZ(-30px) scale(0.975);
+    transform: translateZ(-60px) scale(0.97);
     filter: blur(0.5px);
   }
 
-  .layer-front {
+  .layer-1 {
+    --layer-depth: 1;
     background: linear-gradient(
       135deg,
-      rgba(99, 102, 241, 0.2),
-      rgba(139, 92, 246, 0.2)
+      rgba(99, 102, 241, 0.18),
+      rgba(139, 92, 246, 0.18)
+    );
+    border: 2px solid rgba(99, 102, 241, 0.35);
+    transform: translateZ(-30px) scale(0.985);
+  }
+
+  .layer-front {
+    --layer-depth: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.25),
+      rgba(139, 92, 246, 0.25)
     );
     border: 2px solid rgba(139, 92, 246, 0.5);
     transform: translateZ(0);
@@ -118,22 +288,101 @@
       0 0 60px rgba(99, 102, 241, 0.3);
   }
 
-  .layered-card-container:hover .layer-back {
-    transform: translateZ(-80px) scale(0.93) rotateZ(-2deg);
+  [data-depth='extreme'] .layer-5 {
+    transform: translateZ(-250px) scale(0.8);
+  }
+  [data-depth='extreme'] .layer-4 {
+    transform: translateZ(-200px) scale(0.85);
+  }
+  [data-depth='extreme'] .layer-3 {
+    transform: translateZ(-150px) scale(0.9);
+  }
+  [data-depth='extreme'] .layer-2 {
+    transform: translateZ(-100px) scale(0.95);
+  }
+  [data-depth='extreme'] .layer-1 {
+    transform: translateZ(-50px) scale(0.975);
+  }
+
+  [data-depth='flat'] .layer-5,
+  [data-depth='flat'] .layer-4,
+  [data-depth='flat'] .layer-3,
+  [data-depth='flat'] .layer-2,
+  [data-depth='flat'] .layer-1 {
+    transform: translateZ(0) scale(1);
+    filter: blur(0);
+  }
+
+  .layered-card-container:hover .layer-5 {
+    transform: translateZ(-180px) scale(0.86) rotateZ(-3deg);
+    filter: blur(3px);
+  }
+
+  .layered-card-container:hover .layer-4 {
+    transform: translateZ(-140px) scale(0.89) rotateZ(-2deg);
     filter: blur(2px);
   }
 
-  .layered-card-container:hover .layer-middle {
-    transform: translateZ(-40px) scale(0.965) rotateZ(1deg);
-    filter: blur(1px);
+  .layered-card-container:hover .layer-3 {
+    transform: translateZ(-100px) scale(0.92) rotateZ(-1deg);
+    filter: blur(1.5px);
+  }
+
+  .layered-card-container:hover .layer-2 {
+    transform: translateZ(-70px) scale(0.96) rotateZ(1deg);
+    filter: blur(0.8px);
+  }
+
+  .layered-card-container:hover .layer-1 {
+    transform: translateZ(-35px) scale(0.98) rotateZ(2deg);
   }
 
   .layered-card-container:hover .layer-front {
-    transform: translateZ(20px) scale(1.02);
+    transform: translateZ(30px) scale(1.03);
     box-shadow:
       0 30px 90px rgba(0, 0, 0, 0.5),
-      0 0 80px rgba(139, 92, 246, 0.5);
-    border-color: rgba(168, 85, 247, 0.8);
+      0 0 80px rgba(139, 92, 246, 0.6);
+    border-color: rgba(168, 85, 247, 0.9);
+  }
+
+  .layered-card-container.expanded .layered-card {
+    animation: separateLayers 0.6s ease-out forwards;
+  }
+
+  @keyframes separateLayers {
+    to {
+      transform: translateZ(calc(var(--layer-depth) * -80px)) scale(1)
+        rotateY(calc(var(--layer-depth) * 5deg));
+    }
+  }
+
+  .layer-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.4),
+      transparent 70%
+    );
+    border-radius: 44px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .layered-card-container:hover .layer-glow {
+    opacity: 1;
+  }
+
+  .layer-badge {
+    margin-top: 1.5rem;
+    padding: 8px 16px;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
   }
 
   .layer-content {
@@ -184,39 +433,152 @@
     }
 
     .layered-card-container {
-      height: 350px;
+      height: 380px;
     }
 
     .layer-icon {
       font-size: 4rem;
     }
+
+    .layered-controls {
+      gap: 8px;
+    }
+
+    .layer-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
   }
 </style>
 
 <script>
-  // Enhanced multi-layer tilt effect
-  const containers = document.querySelectorAll('[data-tilt-multi]');
+  const layerSystem = document.querySelector(
+    '[data-layer-system]'
+  ) as HTMLElement | null;
+  const containers = document.querySelectorAll(
+    '[data-tilt-multi]'
+  ) as NodeListOf<HTMLElement>;
+  const depthButtons = document.querySelectorAll(
+    '[data-depth]'
+  ) as NodeListOf<HTMLElement>;
+  const explodeButton = document.querySelector(
+    '[data-action="explode"]'
+  ) as HTMLElement | null;
 
-  containers.forEach(container => {
-    container.addEventListener('mousemove', e => {
-      const mouseEvent = e as MouseEvent;
-      const rect = container.getBoundingClientRect();
-      const x = mouseEvent.clientX - rect.left;
-      const y = mouseEvent.clientY - rect.top;
+  if (layerSystem && containers) {
+    // Depth mode control
+    depthButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        depthButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = ((y - centerY) / centerY) * -20;
-      const rotateY = ((x - centerX) / centerX) * 20;
-
-      (container as HTMLElement).style.transform =
-        `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        const depth = btn.dataset.depth;
+        layerSystem.dataset.depth = depth || 'normal';
+      });
     });
 
-    container.addEventListener('mouseleave', () => {
-      (container as HTMLElement).style.transform =
-        'perspective(1500px) rotateX(0) rotateY(0)';
+    // Card click to expand layers
+    containers.forEach(container => {
+      container.addEventListener('click', e => {
+        if (!(e.target as HTMLElement).closest('[data-action]')) {
+          container.classList.toggle('expanded');
+
+          // Remove expanded from other cards
+          containers.forEach(other => {
+            if (other !== container) {
+              other.classList.remove('expanded');
+            }
+          });
+        }
+      });
+
+      // Enhanced multi-layer tilt effect
+      container.addEventListener('mousemove', (e: MouseEvent) => {
+        if (container.classList.contains('expanded')) return;
+
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -25;
+        const rotateY = ((x - centerX) / centerX) * 25;
+
+        container.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      container.addEventListener('mouseleave', () => {
+        if (!container.classList.contains('expanded')) {
+          container.style.transform =
+            'perspective(2000px) rotateX(0) rotateY(0)';
+        }
+      });
+
+      // Long press to separate layers
+      let pressTimer: ReturnType<typeof setTimeout>;
+      container.addEventListener('mousedown', () => {
+        pressTimer = setTimeout(() => {
+          container.classList.add('expanded');
+        }, 800);
+      });
+
+      container.addEventListener('mouseup', () => {
+        clearTimeout(pressTimer);
+      });
+
+      container.addEventListener('mouseleave', () => {
+        clearTimeout(pressTimer);
+      });
     });
-  });
+
+    // Explode all cards
+    if (explodeButton) {
+      explodeButton.addEventListener('click', () => {
+        containers.forEach(container => {
+          // Set random values for explosion
+          const layers = container.querySelectorAll(
+            '.layered-card'
+          ) as NodeListOf<HTMLElement>;
+          layers.forEach(layer => {
+            layer.style.setProperty(
+              '--random-x',
+              (Math.random() - 0.5).toString()
+            );
+            layer.style.setProperty(
+              '--random-y',
+              (Math.random() - 0.5).toString()
+            );
+            layer.style.setProperty(
+              '--random-rx',
+              (Math.random() - 0.5).toString()
+            );
+            layer.style.setProperty(
+              '--random-ry',
+              (Math.random() - 0.5).toString()
+            );
+          });
+
+          container.classList.add('exploded');
+        });
+
+        // Reset after animation
+        setTimeout(() => {
+          containers.forEach(c => {
+            c.classList.remove('exploded', 'expanded');
+            const layers = c.querySelectorAll(
+              '.layered-card'
+            ) as NodeListOf<HTMLElement>;
+            layers.forEach(layer => {
+              layer.style.animation = 'none';
+              setTimeout(() => {
+                layer.style.animation = '';
+              }, 10);
+            });
+          });
+        }, 1200);
+      });
+    }
+  }
 </script>
