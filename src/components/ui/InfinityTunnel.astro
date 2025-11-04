@@ -1,17 +1,27 @@
 ---
 /**
  * Infinity Tunnel - 3D recursive tunnel with perspective depth
+ * Enhanced with mouse interaction and dynamic speed control
  */
 ---
 
 <div class="tunnel-wrapper">
   <h2 class="tunnel-title">Infinite 3D Tunnel</h2>
-  <p class="tunnel-subtitle">Recursive depth with perspective illusion</p>
+  <p class="tunnel-subtitle">
+    Interactive depth with mouse-controlled perspective • Click to toggle speed
+  </p>
 
-  <div class="tunnel-container">
-    <div class="tunnel">
+  <div class="tunnel-controls">
+    <button class="tunnel-btn" data-speed="slow">Slow</button>
+    <button class="tunnel-btn active" data-speed="normal">Normal</button>
+    <button class="tunnel-btn" data-speed="fast">Fast</button>
+    <button class="tunnel-btn" data-speed="reverse">Reverse</button>
+  </div>
+
+  <div class="tunnel-container" data-tunnel-interactive>
+    <div class="tunnel" data-tunnel-rotation>
       {
-        Array.from({ length: 50 }).map((_, i) => (
+        Array.from({ length: 60 }).map((_, i) => (
           <div
             class="tunnel-ring"
             style={`
@@ -23,9 +33,23 @@
             <div class="ring-segment segment-2" />
             <div class="ring-segment segment-3" />
             <div class="ring-segment segment-4" />
+            <div class="ring-glow" />
           </div>
         ))
       }
+
+      <!-- Energy beams -->
+      {
+        Array.from({ length: 8 }).map((_, i) => (
+          <div
+            class="energy-beam"
+            style={`--beam-angle: ${i * 45}deg; --beam-delay: ${i * 0.2}s;`}
+          />
+        ))
+      }
+
+      <!-- Center vortex -->
+      <div class="tunnel-vortex"></div>
     </div>
   </div>
 </div>
@@ -39,6 +63,7 @@
       transparent
     );
     min-height: 800px;
+    position: relative;
   }
 
   .tunnel-title {
@@ -51,14 +76,51 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.02em;
+    filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.5));
   }
 
   .tunnel-subtitle {
     text-align: center;
     color: rgba(203, 213, 225, 0.9);
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
     font-size: 1.25rem;
     font-weight: 300;
+  }
+
+  .tunnel-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .tunnel-btn {
+    px: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 9999px;
+    color: rgba(203, 213, 225, 0.9);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .tunnel-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  }
+
+  .tunnel-btn.active {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.8);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
   }
 
   .tunnel-container {
@@ -159,6 +221,96 @@
     transform: translateY(-50%);
   }
 
+  .ring-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.3),
+      transparent 70%
+    );
+    filter: blur(15px);
+    animation: glowPulse 3s ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes glowPulse {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+  }
+
+  .energy-beam {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(59, 130, 246, 0.6) 30%,
+      rgba(139, 92, 246, 0.8) 50%,
+      rgba(59, 130, 246, 0.6) 70%,
+      transparent
+    );
+    transform-origin: 50% 50%;
+    transform: translateX(-50%) rotate(var(--beam-angle));
+    animation: beamPulse 2s ease-in-out infinite;
+    animation-delay: var(--beam-delay);
+    filter: blur(1px);
+  }
+
+  @keyframes beamPulse {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  .tunnel-vortex {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translateZ(-5000px);
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.8),
+      rgba(59, 130, 246, 0.6),
+      rgba(139, 92, 246, 0.4),
+      transparent
+    );
+    border-radius: 50%;
+    box-shadow:
+      0 0 80px rgba(59, 130, 246, 1),
+      0 0 120px rgba(139, 92, 246, 0.8);
+    animation: vortexPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes vortexPulse {
+    0%,
+    100% {
+      opacity: 0.6;
+      transform: translate(-50%, -50%) translateZ(-5000px) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateZ(-5000px) scale(1.3);
+    }
+  }
+
   @media (max-width: 768px) {
     .tunnel-title {
       font-size: 2.5rem;
@@ -168,5 +320,64 @@
       width: 300px;
       height: 300px;
     }
+
+    .tunnel-controls {
+      gap: 0.5rem;
+    }
+
+    .tunnel-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
   }
 </style>
+
+<script>
+  const tunnelContainer = document.querySelector(
+    '[data-tunnel-interactive]'
+  ) as HTMLElement;
+  const tunnel = document.querySelector(
+    '[data-tunnel-rotation]'
+  ) as HTMLElement;
+  const buttons = document.querySelectorAll('.tunnel-btn');
+
+  if (tunnelContainer && tunnel) {
+    // Mouse interaction for 3D perspective
+    tunnelContainer.addEventListener('mousemove', e => {
+      const rect = tunnelContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const rotateX = y * 30;
+      const rotateY = x * 30;
+
+      tunnelContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    tunnelContainer.addEventListener('mouseleave', () => {
+      tunnelContainer.style.transform =
+        'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+
+    // Speed controls
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const speed = btn.getAttribute('data-speed');
+        tunnel.style.animationDuration =
+          speed === 'slow'
+            ? '40s'
+            : speed === 'fast'
+              ? '10s'
+              : speed === 'reverse'
+                ? '20s'
+                : '20s';
+
+        tunnel.style.animationDirection =
+          speed === 'reverse' ? 'reverse' : 'normal';
+      });
+    });
+  }
+</script>

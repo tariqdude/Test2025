@@ -70,11 +70,76 @@ const description =
               🚀 Ultimate Gallery
             </a>
           </div>
+
+          <!-- Quick Navigation -->
+          <div class="mt-16 max-w-5xl mx-auto">
+            <p class="text-sm text-neutral-500 text-center mb-4">
+              Jump to Section:
+            </p>
+            <div class="flex flex-wrap gap-3 justify-center text-sm">
+              <a
+                href="#advanced-3d"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Advanced 3D</a
+              >
+              <a
+                href="#cubic-matrix"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Cubic Matrix</a
+              >
+              <a
+                href="#holographic"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Holographic</a
+              >
+              <a
+                href="#dna-helix"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >DNA Helix</a
+              >
+              <a
+                href="#infinity-tunnel"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Infinity Tunnel</a
+              >
+              <a
+                href="#floating-islands"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Floating Islands</a
+              >
+              <a
+                href="#particle-vortex"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Particle Vortex</a
+              >
+              <a
+                href="#layered-cards"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Layered Cards</a
+              >
+              <a
+                href="#exploding-grid"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Exploding Grid</a
+              >
+              <a
+                href="#prismatic-sphere"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Prismatic Sphere</a
+              >
+              <a
+                href="#matrix-rain"
+                class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                >Matrix Rain</a
+              >
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- Advanced 3D Showcase - Maximum Capabilities -->
       <section
+        id="advanced-3d"
         class="py-32 relative bg-gradient-to-b from-neutral-950 via-indigo-950/20 to-neutral-900"
       >
         <div class="absolute inset-0 opacity-20">
@@ -119,6 +184,7 @@ const description =
 
       <!-- Cubic Matrix Section -->
       <section
+        id="cubic-matrix"
         class="py-32 relative bg-gradient-to-b from-neutral-900 to-neutral-950"
       >
         <div
@@ -132,6 +198,7 @@ const description =
 
       <!-- Holographic Cards Section -->
       <section
+        id="holographic"
         class="py-32 relative bg-gradient-to-b from-neutral-950 via-purple-950/10 to-neutral-900"
       >
         <div class="absolute inset-0">
@@ -151,6 +218,7 @@ const description =
 
       <!-- DNA Helix Section -->
       <section
+        id="dna-helix"
         class="py-32 relative bg-gradient-to-b from-neutral-900 to-black"
       >
         <div class="absolute inset-0">
@@ -166,6 +234,7 @@ const description =
 
       <!-- Infinity Tunnel Section -->
       <section
+        id="infinity-tunnel"
         class="py-32 relative bg-gradient-to-b from-black via-blue-950/10 to-neutral-900"
       >
         <div class="absolute inset-0">
@@ -181,6 +250,7 @@ const description =
 
       <!-- Floating Islands Section -->
       <section
+        id="floating-islands"
         class="py-32 relative bg-gradient-to-b from-neutral-900 to-neutral-950"
       >
         <div class="absolute inset-0 overflow-hidden">
@@ -200,6 +270,7 @@ const description =
 
       <!-- Particle Vortex Section -->
       <section
+        id="particle-vortex"
         class="py-32 relative bg-gradient-to-b from-neutral-950 via-purple-950/10 to-black"
       >
         <div class="absolute inset-0">
@@ -216,6 +287,7 @@ const description =
 
       <!-- Layered Cards Section -->
       <section
+        id="layered-cards"
         class="py-32 relative bg-gradient-to-b from-black to-neutral-900"
       >
         <div class="absolute inset-0">
@@ -235,6 +307,7 @@ const description =
 
       <!-- Exploding Grid Section -->
       <section
+        id="exploding-grid"
         class="py-32 relative bg-gradient-to-b from-neutral-900 via-pink-950/10 to-neutral-950"
       >
         <div class="absolute inset-0">
@@ -250,6 +323,7 @@ const description =
 
       <!-- Prismatic Sphere Section -->
       <section
+        id="prismatic-sphere"
         class="py-32 relative bg-gradient-to-b from-neutral-950 to-black"
       >
         <div class="absolute inset-0 overflow-hidden">
@@ -266,6 +340,7 @@ const description =
 
       <!-- Matrix Rain Section -->
       <section
+        id="matrix-rain"
         class="py-32 relative bg-gradient-to-b from-black via-green-950/20 to-neutral-900"
       >
         <div class="absolute inset-0">
@@ -789,6 +864,20 @@ const description =
           if (!(el instanceof HTMLElement)) return;
           el.style.transform = '';
         });
+      });
+
+      // Scroll progress indicator
+      const progressBar = document.createElement('div');
+      progressBar.style.cssText =
+        'position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, #8b5cf6, #ec4899, #3b82f6); width: 0%; z-index: 9999; transition: width 0.1s ease;';
+      document.body.appendChild(progressBar);
+
+      window.addEventListener('scroll', () => {
+        const scrolled =
+          (window.scrollY /
+            (document.documentElement.scrollHeight - window.innerHeight)) *
+          100;
+        progressBar.style.width = scrolled + '%';
       });
     </script>
   </body>
