@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -333,6 +333,25 @@
     animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .animate-fade-in,
+    .animate-fade-in-up {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -582,5 +601,34 @@
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     background: rgba(99, 102, 241, 0.7);
+  }
+
+  /* Print Styles */
+  @media print {
+    body {
+      background: white;
+      color: black;
+    }
+
+    header,
+    footer,
+    .no-print {
+      display: none;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    a[href^='http']::after {
+      content: ' (' attr(href) ')';
+      font-size: 0.8em;
+    }
+
+    .glass-panel,
+    .card {
+      border: 1px solid #ccc;
+      box-shadow: none;
+    }
   }
 }
