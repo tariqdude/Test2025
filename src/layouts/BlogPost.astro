@@ -56,27 +56,35 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body>
+		<a
+			href="#main-content"
+			class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+		>
+			Skip to main content
+		</a>
 		<Header />
-		<main>
+		<main id="main-content">
 			<article>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt={`Cover image for ${title}`} />}
 				</div>
 				<div class="prose">
-					<div class="title">
+					<header class="title">
 						<div class="date">
-							<FormattedDate date={pubDate} />
+							<time datetime={pubDate.toISOString()}>
+								<FormattedDate date={pubDate} />
+							</time>
 							{
 								updatedDate && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
+										Last updated on <time datetime={updatedDate.toISOString()}><FormattedDate date={updatedDate} /></time>
 									</div>
 								)
 							}
 						</div>
 						<h1>{title}</h1>
 						<hr />
-					</div>
+					</header>
 					<slot />
 				</div>
 			</article>

@@ -67,6 +67,37 @@
     transition: background 0.3s ease;
   }
 
+  /* Loading indicator for link clicks */
+  body.navigating {
+    cursor: progress;
+  }
+
+  body.navigating::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-primary),
+      transparent
+    );
+    z-index: 9999;
+    animation: loading 1s ease-in-out infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
   /* Smooth scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
