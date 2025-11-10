@@ -44,12 +44,25 @@ const quickLinks = [
           of the links below to get back on track.
         </p>
 
+        <p class="mt-4 text-sm text-slate-400">
+          Current URL: <code class="rounded bg-slate-900 px-2 py-1 text-slate-300" id="current-url"></code>
+        </p>
+
         <div class="mt-10 flex flex-wrap justify-center gap-4">
           <a class="btn btn-primary" href={withBasePath('/')}> Return home </a>
           <a class="btn btn-secondary" href={withBasePath('contact/')}>
             Contact support
           </a>
         </div>
+
+        <script is:inline>
+          document.addEventListener('DOMContentLoaded', () => {
+            const urlElement = document.getElementById('current-url');
+            if (urlElement) {
+              urlElement.textContent = window.location.pathname;
+            }
+          });
+        </script>
 
         <div class="mt-12 border-t border-white/10 pt-10">
           <p

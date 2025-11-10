@@ -86,10 +86,10 @@ const commitments = [
       <div
         class="w-full max-w-lg space-y-10 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl"
       >
-        <form class="space-y-6">
+        <form class="space-y-6" id="contact-form">
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-200" for="name"
-              >Full name</label
+              >Full name <span class="text-red-400">*</span></label
             >
             <input
               class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
@@ -98,13 +98,16 @@ const commitments = [
               type="text"
               autocomplete="name"
               placeholder="Ada Lovelace"
+              aria-required="true"
+              minlength="2"
               required
             />
+            <span class="text-xs text-red-400 hidden" id="name-error" role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-200" for="email"
-              >Email</label
+              >Email <span class="text-red-400">*</span></label
             >
             <input
               class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
@@ -113,18 +116,21 @@ const commitments = [
               type="email"
               autocomplete="email"
               placeholder="you@example.com"
+              aria-required="true"
               required
             />
+            <span class="text-xs text-red-400 hidden" id="email-error" role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-200" for="subject"
-              >Subject</label
+              >Subject <span class="text-red-400">*</span></label
             >
             <select
               class="w-full appearance-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
               id="subject"
               name="subject"
+              aria-required="true"
               required
             >
               <option value="">Choose an option</option>
@@ -133,25 +139,37 @@ const commitments = [
               <option value="partnership">Partnership inquiry</option>
               <option value="other">Something else</option>
             </select>
+            <span class="text-xs text-red-400 hidden" id="subject-error" role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-200" for="message"
-              >Message</label
+              >Message <span class="text-red-400">*</span></label
             >
             <textarea
               class="h-32 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
               id="message"
               name="message"
               placeholder="Share a few details so we can prepare a helpful reply."
+              aria-required="true"
+              minlength="10"
               required></textarea>
+            <span class="text-xs text-red-400 hidden" id="message-error" role="alert"></span>
+          </div>
+
+          <div class="hidden rounded-2xl border border-green-500/20 bg-green-500/10 p-4" id="success-message" role="status">
+            <p class="text-sm font-medium text-green-300">
+              ✓ Thank you for your message! We'll get back to you soon.
+            </p>
           </div>
 
           <button
-            class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
             type="submit"
+            id="submit-button"
           >
-            Send message
+            <span id="button-text">Send message</span>
+            <span class="hidden" id="button-loading">Sending...</span>
           </button>
           <p class="text-xs text-slate-400">
             This presentational form keeps submissions in the browser—swap the
@@ -159,6 +177,87 @@ const commitments = [
             collect entries.
           </p>
         </form>
+
+        <script is:inline>
+          document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('contact-form');
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+            const buttonLoading = document.getElementById('button-loading');
+            const successMessage = document.getElementById('success-message');
+
+            if (!form) return;
+
+            // Form validation
+            const validateField = (field) => {
+              const errorSpan = document.getElementById(`${field.id}-error`);
+              if (!errorSpan) return true;
+
+              if (!field.validity.valid) {
+                let message = '';
+                if (field.validity.valueMissing) {
+                  message = 'This field is required.';
+                } else if (field.validity.typeMismatch && field.type === 'email') {
+                  message = 'Please enter a valid email address.';
+                } else if (field.validity.tooShort) {
+                  message = `Please enter at least ${field.minLength} characters.`;
+                }
+                errorSpan.textContent = message;
+                errorSpan.classList.remove('hidden');
+                field.classList.add('border-red-400');
+                return false;
+              } else {
+                errorSpan.classList.add('hidden');
+                field.classList.remove('border-red-400');
+                return true;
+              }
+            };
+
+            // Add real-time validation
+            form.querySelectorAll('input, select, textarea').forEach((field) => {
+              field.addEventListener('blur', () => validateField(field));
+              field.addEventListener('input', () => {
+                if (field.classList.contains('border-red-400')) {
+                  validateField(field);
+                }
+              });
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', (e) => {
+              e.preventDefault();
+              
+              // Validate all fields
+              let isValid = true;
+              form.querySelectorAll('input, select, textarea').forEach((field) => {
+                if (!validateField(field)) {
+                  isValid = false;
+                }
+              });
+
+              if (!isValid) return;
+
+              // Show loading state
+              submitButton.disabled = true;
+              buttonText.classList.add('hidden');
+              buttonLoading.classList.remove('hidden');
+
+              // Simulate form submission (replace with actual submission logic)
+              setTimeout(() => {
+                submitButton.disabled = false;
+                buttonText.classList.remove('hidden');
+                buttonLoading.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+                form.reset();
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                  successMessage.classList.add('hidden');
+                }, 5000);
+              }, 1000);
+            });
+          });
+        </script>
 
         <div
           class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/50 p-6"

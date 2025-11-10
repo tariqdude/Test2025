@@ -18,8 +18,9 @@ const links = [
 >
   <nav
     class="mx-auto flex max-w-[1220px] items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
+    aria-label="Main navigation"
   >
-    <a class="flex items-center gap-3 text-slate-100" href={homeHref}>
+    <a class="flex items-center gap-3 text-slate-100" href={homeHref} aria-label="Elite Project home">
       <span
         class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xs font-semibold uppercase tracking-[0.32em] text-slate-100"
       >
@@ -135,22 +136,52 @@ const links = [
     const closeMenu = () => {
       menu.setAttribute('hidden', '');
       toggle.setAttribute('aria-expanded', 'false');
+      // Return focus to toggle button when menu closes
+      toggle.focus();
+    };
+
+    const openMenu = () => {
+      menu.removeAttribute('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+      // Focus first link in menu for better keyboard navigation
+      const firstLink = menu.querySelector('a');
+      if (firstLink) {
+        setTimeout(() => firstLink.focus(), 50);
+      }
     };
 
     toggle.addEventListener('click', () => {
       const isHidden = menu.hasAttribute('hidden');
       if (isHidden) {
-        menu.removeAttribute('hidden');
-        toggle.setAttribute('aria-expanded', 'true');
+        openMenu();
       } else {
         closeMenu();
       }
     });
 
+    // Close menu on Escape key
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && !menu.hasAttribute('hidden')) {
         closeMenu();
       }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', event => {
+      const target = event.target;
+      if (!menu.hasAttribute('hidden') && 
+          !menu.contains(target) && 
+          !toggle.contains(target)) {
+        closeMenu();
+      }
+    });
+
+    // Close menu when navigating to a page
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        // Small delay to allow navigation to proceed
+        setTimeout(closeMenu, 100);
+      });
     });
   });
 </script>
