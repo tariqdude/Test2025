@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import { withBasePath } from '../utils/helpers';
+import ThemeToggle from './ui/ThemeToggle.astro';
 
 const homeHref = withBasePath('/');
 
@@ -9,6 +10,7 @@ const links = [
   { label: 'Services', href: withBasePath('services/') },
   { label: 'Pricing', href: withBasePath('pricing/') },
   { label: 'Demo Center', href: withBasePath('demo/'), featured: true },
+  { label: 'Components', href: withBasePath('components/') },
   { label: 'Visual Showcase', href: withBasePath('visual-showcase/') },
   { label: 'Blog', href: withBasePath('blog/') },
 ];
@@ -64,6 +66,7 @@ const links = [
     </div>
 
     <div class="hidden md:flex items-center gap-3">
+      <ThemeToggle variant="icon" />
       <a class="btn btn-secondary" href={withBasePath('showcase/')}>
         View showcase
       </a>
@@ -179,6 +182,7 @@ const links = [
     document.addEventListener('click', event => {
       const target = event.target;
       if (
+        target instanceof Node &&
         !menu.hasAttribute('hidden') &&
         !menu.contains(target) &&
         !toggle.contains(target)

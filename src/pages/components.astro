@@ -1,0 +1,614 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Card from '../components/ui/Card.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
+import AdvancedCard from '../components/ui/AdvancedCard.astro';
+import Button from '../components/ui/Button.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
+import HyperButton from '../components/ui/HyperButton.astro';
+import Animate from '../components/ui/Animate.astro';
+import ModernAnimate from '../components/ui/ModernAnimate.astro';
+import Grid from '../components/ui/Grid.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import LazyImage from '../components/ui/LazyImage.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const title = 'Component Library';
+const description =
+  'Comprehensive showcase of all UI components with usage examples and props documentation';
+---
+
+<MarketingLayout title={title} description={description}>
+  <main class="container mx-auto px-4 py-16">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <h1
+          class="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+        >
+          Component Library
+        </h1>
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+          Explore our collection of reusable UI components built with Astro and
+          Tailwind CSS
+        </p>
+      </div>
+
+      <!-- Cards Section -->
+      <section class="mb-20">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-white mb-2">Card Components</h2>
+          <p class="text-slate-400">
+            Versatile card layouts for content presentation
+          </p>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Basic Card -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              Card <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;Card /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Basic card component with optional header, body, and footer slots
+            </p>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <Card variant="default" href="#">
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Card Title
+                </h3>
+                <p class="text-slate-400">
+                  This is a basic card with a title and description. Perfect for
+                  blog posts, products, or team members.
+                </p>
+              </Card>
+              <Card variant="gradient" href="#">
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Gradient Card
+                </h3>
+                <p class="text-slate-400">
+                  Cards can have different variants like gradient backgrounds.
+                </p>
+              </Card>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  title?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  href?: string;
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Modern Card -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              ModernCard <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;ModernCard /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Enhanced card with hover effects, gradients, and modern styling
+            </p>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <ModernCard variant="default">
+                <div class="text-4xl mb-3">✨</div>
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Modern Design
+                </h3>
+                <p class="text-slate-400">
+                  Cards with gradient borders and smooth animations
+                </p>
+              </ModernCard>
+              <ModernCard variant="gradient">
+                <div class="text-4xl mb-3">🎨</div>
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Interactive
+                </h3>
+                <p class="text-slate-400">
+                  Hover effects and transform animations
+                </p>
+              </ModernCard>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  title?: string;
+  description?: string;
+  icon?: string;
+  href?: string;
+  variant?: 'default' | 'gradient' | 'glow';
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Advanced Card -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              AdvancedCard <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;AdvancedCard /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Feature-rich card with badges, tags, actions, and advanced layouts
+            </p>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <AdvancedCard variant="default">
+                <div class="mb-2">
+                  <span
+                    class="inline-block px-2 py-1 text-xs font-semibold bg-blue-500 text-white rounded"
+                    >New</span
+                  >
+                </div>
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Advanced Features
+                </h3>
+                <p class="text-slate-400 mb-3">
+                  Support for badges, tags, custom footers and more
+                </p>
+                <div class="flex gap-2">
+                  <span
+                    class="text-xs px-2 py-1 bg-slate-700 text-slate-300 rounded"
+                    >Feature</span
+                  >
+                  <span
+                    class="text-xs px-2 py-1 bg-slate-700 text-slate-300 rounded"
+                    >Premium</span
+                  >
+                </div>
+              </AdvancedCard>
+              <AdvancedCard variant="glass">
+                <div class="mb-2">
+                  <span
+                    class="inline-block px-2 py-1 text-xs font-semibold bg-purple-500 text-white rounded"
+                    >Popular</span
+                  >
+                </div>
+                <h3 class="text-xl font-semibold text-slate-200 mb-2">
+                  Customizable
+                </h3>
+                <p class="text-slate-400 mb-3">
+                  Multiple variants and styling options
+                </p>
+                <div class="flex gap-2">
+                  <span
+                    class="text-xs px-2 py-1 bg-slate-700 text-slate-300 rounded"
+                    >Flexible</span
+                  >
+                  <span
+                    class="text-xs px-2 py-1 bg-slate-700 text-slate-300 rounded"
+                    >Modern</span
+                  >
+                </div>
+              </AdvancedCard>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  title?: string;
+  description?: string;
+  badge?: string;
+  tags?: string[];
+  href?: string;
+  variant?: 'default' | 'bordered' | 'elevated';
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Buttons Section -->
+      <section class="mb-20">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-white mb-2">Button Components</h2>
+          <p class="text-slate-400">
+            Interactive buttons with various styles and animations
+          </p>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Basic Button -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              Button <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;Button /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Standard button component with multiple variants and sizes
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6">
+              <Button variant="primary">Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="outline">Outline</Button>
+              <Button variant="ghost">Ghost</Button>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Modern Button -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              ModernButton <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;ModernButton /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Modern button with gradients, glows, and advanced hover effects
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6">
+              <ModernButton variant="gradient">Gradient</ModernButton>
+              <ModernButton variant="neon">Neon Effect</ModernButton>
+              <ModernButton variant="primary">Primary</ModernButton>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  variant?: 'gradient' | 'glow' | 'shine' | 'pulse';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Hyper Button -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              HyperButton <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;HyperButton /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Ultra-modern button with particle effects and advanced animations
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6">
+              <HyperButton>Hyper Effect</HyperButton>
+              <HyperButton variant="neon">Neon Style</HyperButton>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  variant?: 'default' | 'neon' | 'cyber';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Animation Section -->
+      <section class="mb-20">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-white mb-2">
+            Animation Components
+          </h2>
+          <p class="text-slate-400">
+            Smooth reveal and transition animations for content
+          </p>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Basic Animate -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              Animate <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;Animate /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Basic reveal animation using Intersection Observer
+            </p>
+            <div class="space-y-4 mb-6">
+              <Animate animation="fade-in">
+                <div class="p-4 bg-slate-800 rounded-lg text-slate-200">
+                  Fade in animation
+                </div>
+              </Animate>
+              <Animate animation="slide-up">
+                <div class="p-4 bg-slate-800 rounded-lg text-slate-200">
+                  Slide up animation
+                </div>
+              </Animate>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  animation?: 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
+  delay?: number;
+  duration?: number;
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Modern Animate -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              ModernAnimate <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;ModernAnimate /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Enhanced animations with spring physics and advanced easing
+            </p>
+            <div class="space-y-4 mb-6">
+              <ModernAnimate animation="bounce">
+                <div class="p-4 bg-slate-800 rounded-lg text-slate-200">
+                  Bounce animation
+                </div>
+              </ModernAnimate>
+              <ModernAnimate animation="scale">
+                <div class="p-4 bg-slate-800 rounded-lg text-slate-200">
+                  Scale animation
+                </div>
+              </ModernAnimate>
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  animation?: 'bounce' | 'scale' | 'rotate' | 'flip';
+  delay?: number;
+  duration?: number;
+  easing?: 'ease' | 'spring' | 'bounce';
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Layout Section -->
+      <section class="mb-20">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-white mb-2">Layout Components</h2>
+          <p class="text-slate-400">Responsive grid systems and layouts</p>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Basic Grid -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              Grid <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;Grid /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Responsive grid with configurable columns and gaps
+            </p>
+            <Grid cols={3} gap="md" className="mb-6">
+              <div
+                class="p-4 bg-slate-800 rounded-lg text-slate-200 text-center"
+              >
+                Item 1
+              </div>
+              <div
+                class="p-4 bg-slate-800 rounded-lg text-slate-200 text-center"
+              >
+                Item 2
+              </div>
+              <div
+                class="p-4 bg-slate-800 rounded-lg text-slate-200 text-center"
+              >
+                Item 3
+              </div>
+            </Grid>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  cols?: number | { sm?: number; md?: number; lg?: number };
+  gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Utility Section -->
+      <section class="mb-20">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-white mb-2">Utility Components</h2>
+          <p class="text-slate-400">
+            Helpful utilities for theming, lazy loading, and icons
+          </p>
+        </div>
+
+        <div class="space-y-12">
+          <!-- Theme Toggle -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              ThemeToggle <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;ThemeToggle /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Theme switcher with localStorage persistence and system preference
+              detection
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6">
+              <ThemeToggle variant="icon" />
+              <ThemeToggle variant="button" showLabel={true} />
+              <ThemeToggle variant="dropdown" />
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  variant?: 'icon' | 'button' | 'dropdown';
+  showLabel?: boolean;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Lazy Image -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              LazyImage <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;LazyImage /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              Performant lazy loading with Intersection Observer and blur
+              placeholder
+            </p>
+            <div class="max-w-md mb-6">
+              <LazyImage
+                src="https://via.placeholder.com/600x400"
+                alt="Demo image"
+                width={600}
+                height={400}
+              />
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  blurHash?: string;
+  sizes?: string;
+  srcset?: string;
+}`}</code></pre>
+            </details>
+          </div>
+
+          <!-- Icon -->
+          <div class="border border-white/10 rounded-xl p-8 bg-slate-900/50">
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              Icon <span class="text-sm font-mono text-slate-400 ml-2"
+                >&lt;Icon /&gt;</span
+              >
+            </h3>
+            <p class="text-slate-300 mb-6">
+              SVG icon component with customizable size and color
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6 items-center">
+              <Icon name="check" size="sm" />
+              <Icon name="check" size="md" />
+              <Icon name="check" size="lg" />
+            </div>
+            <details class="text-sm">
+              <summary
+                class="cursor-pointer text-blue-400 hover:text-blue-300 mb-2"
+                >View Props</summary
+              >
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-slate-300"><code>{`interface Props {
+  name: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+}`}</code></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Usage Guidelines -->
+      <section class="mb-20">
+        <div
+          class="border border-blue-500/20 rounded-xl p-8 bg-gradient-to-br from-blue-900/20 to-purple-900/20"
+        >
+          <h2 class="text-3xl font-bold text-white mb-6">Usage Guidelines</h2>
+          <div class="space-y-4 text-slate-300">
+            <div>
+              <h3 class="text-xl font-semibold text-white mb-2">
+                Import Components
+              </h3>
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-sm"><code>---
+import Card from '../components/ui/Card.astro';
+import Button from '../components/ui/Button.astro';
+---</code></pre>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-white mb-2">
+                Use in Templates
+              </h3>
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-sm"><code>&lt;Card title="My Card"&gt;
+  &lt;p&gt;Card content goes here&lt;/p&gt;
+&lt;/Card&gt;
+
+&lt;Button variant="primary" href="/contact"&gt;
+  Get Started
+&lt;/Button&gt;</code></pre>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-white mb-2">
+                Customize with Classes
+              </h3>
+              <pre
+                class="bg-slate-950 p-4 rounded-lg overflow-x-auto text-sm"><code>&lt;Card class="hover:scale-105 transition-transform"&gt;
+  Custom styling
+&lt;/Card&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</MarketingLayout>

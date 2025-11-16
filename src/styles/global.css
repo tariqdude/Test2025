@@ -11,7 +11,8 @@
     box-sizing: border-box;
   }
 
-  :root {
+  :root,
+  html.dark {
     --color-background: #0f172a;
     --color-surface: #101d38;
     --color-surface-subtle: rgba(15, 23, 42, 0.6);
@@ -36,6 +37,24 @@
       sans-serif;
     --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+  }
+
+  html.light {
+    --color-background: #ffffff;
+    --color-surface: #f8fafc;
+    --color-surface-subtle: rgba(248, 250, 252, 0.8);
+    --color-border: rgba(51, 65, 85, 0.15);
+    --color-primary: #6366f1;
+    --color-primary-strong: #4f46e5;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    --color-text-inverse: #ffffff;
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    --shadow-strong: 0 20px 60px -15px rgba(0, 0, 0, 0.2);
   }
 
   html {

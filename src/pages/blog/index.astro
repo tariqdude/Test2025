@@ -7,6 +7,7 @@ import Card from '../../components/ui/Card.astro';
 import Button from '../../components/ui/Button.astro';
 import Grid from '../../components/ui/Grid.astro';
 import Animate from '../../components/ui/Animate.astro';
+import Search from '../../components/ui/Search.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { withBasePath } from '../../utils/helpers';
 
@@ -35,6 +36,13 @@ const posts = (await getCollection('blog')).sort(
             Insights, tutorials, and updates from the team keeping static ops
             sharp.
           </p>
+        </div>
+      </Animate>
+
+      <!-- Search Bar -->
+      <Animate animation="fade-in" duration="slow">
+        <div class="mx-auto max-w-2xl">
+          <Search placeholder="Search blog posts..." maxResults={5} />
         </div>
       </Animate>
 

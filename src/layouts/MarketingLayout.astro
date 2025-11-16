@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingDemoButton from '../components/ui/FloatingDemoButton.astro';
+import PWARegistration from '../components/PWARegistration.astro';
 
 interface Props {
   title: string;
@@ -61,5 +62,6 @@ const {
         });
       });
     </script>
+    <PWARegistration />
   </body>
 </html>

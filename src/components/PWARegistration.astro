@@ -1,0 +1,144 @@
+---
+/**
+ * PWA Registration Component
+ * Registers service worker and handles PWA installation
+ */
+---
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/Test2025/sw.js', { scope: '/Test2025/' })
+        .then(registration => {
+          console.log('[PWA] Service Worker registered:', registration.scope);
+
+          // Check for updates periodically
+          setInterval(() => {
+            registration.update();
+          }, 60000); // Check every minute
+
+          // Handle updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker?.addEventListener('statechange', () => {
+              if (
+                newWorker.state === 'installed' &&
+                navigator.serviceWorker.controller
+              ) {
+                // New service worker available
+                showUpdateNotification();
+              }
+            });
+          });
+        })
+        .catch(error => {
+          console.error('[PWA] Service Worker registration failed:', error);
+        });
+
+      // Handle controller change
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          refreshing = true;
+          window.location.reload();
+        }
+      });
+    });
+  }
+
+  function showUpdateNotification() {
+    const notification = document.createElement('div');
+    notification.className =
+      'fixed bottom-4 right-4 z-50 max-w-sm p-4 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl';
+    notification.innerHTML = `
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-blue-500/20 rounded-lg">
+          <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-sm font-semibold text-white">Update Available</h3>
+          <p class="mt-1 text-sm text-slate-300">A new version of the app is ready.</p>
+          <div class="mt-3 flex gap-2">
+            <button
+              id="update-btn"
+              class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition"
+            >
+              Update Now
+            </button>
+            <button
+              id="dismiss-btn"
+              class="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition"
+            >
+              Later
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    document.getElementById('update-btn')?.addEventListener('click', () => {
+      navigator.serviceWorker.getRegistration().then(reg => {
+        reg?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+      });
+    });
+
+    document.getElementById('dismiss-btn')?.addEventListener('click', () => {
+      notification.remove();
+    });
+  }
+
+  // PWA install prompt
+  let deferredPrompt: any;
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallButton();
+  });
+
+  function showInstallButton() {
+    const installBtn = document.getElementById('pwa-install-btn');
+    if (installBtn) {
+      installBtn.classList.remove('hidden');
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`[PWA] Install prompt outcome: ${outcome}`);
+          deferredPrompt = null;
+          installBtn.classList.add('hidden');
+        }
+      });
+    }
+  }
+
+  window.addEventListener('appinstalled', () => {
+    console.log('[PWA] App installed successfully');
+    deferredPrompt = null;
+  });
+</script>
+
+<!-- Optional install button (add to your header or footer) -->
+<button
+  id="pwa-install-btn"
+  class="hidden fixed bottom-4 left-4 z-50 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+>
+  <svg
+    class="inline-block w-5 h-5 mr-2 -mt-0.5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+  </svg>
+  Install App
+</button>
