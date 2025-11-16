@@ -88,7 +88,10 @@ const commitments = [
       >
         <form class="space-y-6" id="contact-form">
           <div class="space-y-2">
-            <label class="text-sm font-medium text-slate-200" for="name"
+            <label
+              class="text-sm font-medium text-slate-200"
+              for="name"
+              id="label-name"
               >Full name <span class="text-red-400">*</span></label
             >
             <input
@@ -98,16 +101,22 @@ const commitments = [
               type="text"
               autocomplete="name"
               placeholder="Ada Lovelace"
+              aria-labelledby="label-name"
               aria-required="true"
               minlength="2"
               required
             />
-            <span class="text-xs text-red-400 hidden" id="name-error" role="alert"></span>
+            <span
+              class="text-xs text-red-400 hidden"
+              id="name-error"
+              role="alert"></span>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-slate-200" for="email"
-              >Email <span class="text-red-400">*</span></label
+            <label
+              class="text-sm font-medium text-slate-200"
+              for="email"
+              id="label-email">Email <span class="text-red-400">*</span></label
             >
             <input
               class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
@@ -116,20 +125,28 @@ const commitments = [
               type="email"
               autocomplete="email"
               placeholder="you@example.com"
+              aria-labelledby="label-email"
               aria-required="true"
               required
             />
-            <span class="text-xs text-red-400 hidden" id="email-error" role="alert"></span>
+            <span
+              class="text-xs text-red-400 hidden"
+              id="email-error"
+              role="alert"></span>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-slate-200" for="subject"
+            <label
+              class="text-sm font-medium text-slate-200"
+              for="subject"
+              id="label-subject"
               >Subject <span class="text-red-400">*</span></label
             >
             <select
               class="w-full appearance-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
               id="subject"
               name="subject"
+              aria-labelledby="label-subject"
               aria-required="true"
               required
             >
@@ -139,11 +156,17 @@ const commitments = [
               <option value="partnership">Partnership inquiry</option>
               <option value="other">Something else</option>
             </select>
-            <span class="text-xs text-red-400 hidden" id="subject-error" role="alert"></span>
+            <span
+              class="text-xs text-red-400 hidden"
+              id="subject-error"
+              role="alert"></span>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-slate-200" for="message"
+            <label
+              class="text-sm font-medium text-slate-200"
+              for="message"
+              id="label-message"
               >Message <span class="text-red-400">*</span></label
             >
             <textarea
@@ -151,13 +174,21 @@ const commitments = [
               id="message"
               name="message"
               placeholder="Share a few details so we can prepare a helpful reply."
+              aria-labelledby="label-message"
               aria-required="true"
               minlength="10"
               required></textarea>
-            <span class="text-xs text-red-400 hidden" id="message-error" role="alert"></span>
+            <span
+              class="text-xs text-red-400 hidden"
+              id="message-error"
+              role="alert"></span>
           </div>
 
-          <div class="hidden rounded-2xl border border-green-500/20 bg-green-500/10 p-4" id="success-message" role="status">
+          <div
+            class="hidden rounded-2xl border border-green-500/20 bg-green-500/10 p-4"
+            id="success-message"
+            role="status"
+          >
             <p class="text-sm font-medium text-green-300">
               ✓ Thank you for your message! We'll get back to you soon.
             </p>
@@ -189,7 +220,7 @@ const commitments = [
             if (!form) return;
 
             // Form validation
-            const validateField = (field) => {
+            const validateField = field => {
               const errorSpan = document.getElementById(`${field.id}-error`);
               if (!errorSpan) return true;
 
@@ -197,7 +228,10 @@ const commitments = [
                 let message = '';
                 if (field.validity.valueMissing) {
                   message = 'This field is required.';
-                } else if (field.validity.typeMismatch && field.type === 'email') {
+                } else if (
+                  field.validity.typeMismatch &&
+                  field.type === 'email'
+                ) {
                   message = 'Please enter a valid email address.';
                 } else if (field.validity.tooShort) {
                   message = `Please enter at least ${field.minLength} characters.`;
@@ -214,7 +248,7 @@ const commitments = [
             };
 
             // Add real-time validation
-            form.querySelectorAll('input, select, textarea').forEach((field) => {
+            form.querySelectorAll('input, select, textarea').forEach(field => {
               field.addEventListener('blur', () => validateField(field));
               field.addEventListener('input', () => {
                 if (field.classList.contains('border-red-400')) {
@@ -224,16 +258,18 @@ const commitments = [
             });
 
             // Handle form submission
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', e => {
               e.preventDefault();
-              
+
               // Validate all fields
               let isValid = true;
-              form.querySelectorAll('input, select, textarea').forEach((field) => {
-                if (!validateField(field)) {
-                  isValid = false;
-                }
-              });
+              form
+                .querySelectorAll('input, select, textarea')
+                .forEach(field => {
+                  if (!validateField(field)) {
+                    isValid = false;
+                  }
+                });
 
               if (!isValid) return;
 

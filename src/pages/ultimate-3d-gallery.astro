@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { withBasePath } from '../utils/helpers';
 
 const title = 'Ultimate 3D Gallery - Experimental Showcase';
 const description =
@@ -62,7 +63,7 @@ const description =
               Start Journey
             </a>
             <a
-              href="/visual-showcase"
+              href={withBasePath('visual-showcase/')}
               class="px-8 py-4 bg-white/10 backdrop-blur-sm rounded-full font-bold border border-white/20 hover:bg-white/20 transition-colors"
             >
               Main Showcase

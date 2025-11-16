@@ -8,4 +8,12 @@ export default defineConfig({
       plugins: [tailwindcss],
     },
   },
+  build: {
+    cssMinify: 'lightningcss',
+  },
+  esbuild: {
+    logOverride: {
+      'css-syntax-error': 'silent',
+    },
+  },
 });

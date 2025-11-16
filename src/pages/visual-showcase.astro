@@ -18,6 +18,7 @@ import LayeredCards from '../components/ui/LayeredCards.astro';
 import ExplodingGrid from '../components/ui/ExplodingGrid.astro';
 import PrismaticSphere from '../components/ui/PrismaticSphere.astro';
 import MatrixRain from '../components/ui/MatrixRain.astro';
+import { withBasePath } from '../utils/helpers';
 
 const title = 'Visual Showcase - Interactive 2D & 3D Demonstrations';
 const description =
@@ -64,7 +65,7 @@ const description =
               Start Exploring
             </ModernButton>
             <a
-              href="/ultimate-3d-gallery"
+              href={withBasePath('ultimate-3d-gallery')}
               class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-lg hover:scale-105 transition-transform inline-flex items-center gap-2"
             >
               🚀 Ultimate Gallery

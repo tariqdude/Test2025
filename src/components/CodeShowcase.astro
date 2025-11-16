@@ -74,11 +74,11 @@ export const collections = { blog };`,
     code: `<form action="https://formspree.io/f/demo" method="POST">
   <label>
     Your email
-    <input type="email" name="email" required />
+    <input type="email" name="email" aria-label="Your email" required />
   </label>
   <label>
     Message
-    <textarea name="message" required></textarea>
+    <textarea name="message" aria-label="Message" required></textarea>
   </label>
   <p class="note">Hosted forms forward submissions by email.</p>
   <button type="submit">Send message</button>
