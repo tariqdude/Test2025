@@ -1,0 +1,445 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
+import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
+import { withBasePath } from '../utils/helpers';
+
+const demos = [
+  {
+    id: 'visual',
+    title: 'Visual Showcase',
+    description: 'Explore cutting-edge 3D graphics, animations, and interactive effects',
+    icon: '🎨',
+    features: ['3D CSS Transforms', 'Particle Systems', 'Advanced Animations', 'WebGL Effects'],
+    difficulty: 'Advanced',
+    duration: '15-20 min',
+    link: withBasePath('visual-showcase/'),
+    color: 'from-purple-600 to-pink-600',
+  },
+  {
+    id: 'interactive',
+    title: 'Interactive Components',
+    description: 'Test forms, validation, real-time feedback, and user interactions',
+    icon: '⚡',
+    features: ['Form Validation', 'Live Updates', 'Keyboard Navigation', 'Accessibility'],
+    difficulty: 'Intermediate',
+    duration: '10-15 min',
+    link: withBasePath('contact/'),
+    color: 'from-blue-600 to-cyan-600',
+  },
+  {
+    id: 'performance',
+    title: 'Performance Monitor',
+    description: 'See real-time metrics, load times, and optimization techniques',
+    icon: '📊',
+    features: ['Core Web Vitals', 'Load Analytics', 'Resource Timing', 'Optimization Tips'],
+    difficulty: 'Beginner',
+    duration: '5-10 min',
+    link: withBasePath('about/'),
+    color: 'from-green-600 to-emerald-600',
+  },
+  {
+    id: 'code',
+    title: 'Code Examples',
+    description: 'Browse syntax-highlighted code samples and implementation patterns',
+    icon: '💻',
+    features: ['TypeScript', 'Astro Components', 'Tailwind CSS', 'Best Practices'],
+    difficulty: 'All Levels',
+    duration: '10-15 min',
+    link: withBasePath('showcase/'),
+    color: 'from-orange-600 to-red-600',
+  },
+  {
+    id: 'architecture',
+    title: 'System Architecture',
+    description: 'Understand the build pipeline, static generation, and deployment',
+    icon: '🏗️',
+    features: ['Build Process', 'Static Generation', 'GitHub Pages', 'CI/CD Pipeline'],
+    difficulty: 'Advanced',
+    duration: '15-20 min',
+    link: withBasePath('dashboard-v2/'),
+    color: 'from-indigo-600 to-purple-600',
+  },
+  {
+    id: 'accessibility',
+    title: 'Accessibility Tour',
+    description: 'Experience WCAG-compliant design and assistive technology support',
+    icon: '♿',
+    features: ['Screen Reader Support', 'Keyboard Navigation', 'ARIA Labels', 'Color Contrast'],
+    difficulty: 'Intermediate',
+    duration: '10-15 min',
+    link: withBasePath('services/'),
+    color: 'from-teal-600 to-green-600',
+  },
+];
+
+const advancedOptions = [
+  {
+    title: 'Guided Walkthrough',
+    description: 'Step-by-step interactive tour with tooltips and highlights',
+    icon: '🧭',
+    action: 'start-tour',
+  },
+  {
+    title: 'Sandbox Mode',
+    description: 'Experiment with components in an isolated environment',
+    icon: '🔬',
+    action: 'open-sandbox',
+  },
+  {
+    title: 'API Playground',
+    description: 'Test API endpoints and explore response data structures',
+    icon: '🎮',
+    action: 'api-playground',
+  },
+  {
+    title: 'Custom Demo Builder',
+    description: 'Create your own demo by selecting specific components',
+    icon: '🛠️',
+    action: 'demo-builder',
+  },
+];
+
+const quickActions = [
+  { label: 'View Source Code', icon: '📂', href: 'https://github.com/tariqdude/Test2025' },
+  { label: 'Download Starter', icon: '⬇️', href: 'https://github.com/tariqdude/Test2025/archive/refs/heads/main.zip' },
+  { label: 'Read Documentation', icon: '📚', href: withBasePath('blog/') },
+  { label: 'Contact Support', icon: '💬', href: withBasePath('contact/') },
+];
+---
+
+<MarketingLayout
+  title="Interactive Demo Center | Elite Project"
+  description="Explore comprehensive demos, tutorials, and interactive experiences showcasing modern web capabilities"
+>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 pt-24 pb-16">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(99,102,241,0.15),_transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,_rgba(168,85,247,0.15),_transparent_50%)]"></div>
+    </div>
+
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-4xl mx-auto">
+        <span class="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-sm font-semibold mb-6">
+          🚀 Interactive Demo Center
+        </span>
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-200 bg-clip-text text-transparent">
+          Experience It Live
+        </h1>
+        <p class="text-xl md:text-2xl text-neutral-300 mb-8">
+          Choose your adventure through interactive demos, code examples, and advanced features
+        </p>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
+          <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-3xl font-bold text-indigo-400">6</div>
+            <div class="text-sm text-neutral-400">Demo Paths</div>
+          </div>
+          <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-3xl font-bold text-purple-400">20+</div>
+            <div class="text-sm text-neutral-400">Components</div>
+          </div>
+          <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-3xl font-bold text-pink-400">100%</div>
+            <div class="text-sm text-neutral-400">Interactive</div>
+          </div>
+          <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-3xl font-bold text-cyan-400">A11y</div>
+            <div class="text-sm text-neutral-400">Accessible</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Bar -->
+        <div class="flex flex-wrap gap-3 justify-center mb-8">
+          {quickActions.map((action) => (
+            <a
+              href={action.href}
+              class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-sm text-neutral-300 transition-all hover:scale-105"
+              target={action.href.startsWith('http') ? '_blank' : undefined}
+              rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              <span>{action.icon}</span>
+              <span>{action.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Demo Grid -->
+  <section class="py-20 bg-neutral-900">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+          Choose Your Demo Experience
+        </h2>
+        <p class="text-xl text-neutral-400">
+          Each demo is fully interactive and showcases different aspects of the platform
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {demos.map((demo, index) => (
+          <RevealOnScroll delay={index * 100}>
+            <div class="group h-full bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <!-- Card Header -->
+              <div class={`p-6 bg-gradient-to-r ${demo.color}`}>
+                <div class="text-5xl mb-3">{demo.icon}</div>
+                <h3 class="text-2xl font-bold text-white mb-2">{demo.title}</h3>
+                <p class="text-white/90 text-sm">{demo.description}</p>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-6">
+                <!-- Features -->
+                <div class="mb-6">
+                  <h4 class="text-xs uppercase tracking-wider text-neutral-500 font-semibold mb-3">Features Included</h4>
+                  <div class="flex flex-wrap gap-2">
+                    {demo.features.map((feature) => (
+                      <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-neutral-300">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Meta Info -->
+                <div class="flex items-center justify-between mb-6 text-sm">
+                  <div class="flex items-center gap-2 text-neutral-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{demo.duration}</span>
+                  </div>
+                  <span class={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    demo.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-400' :
+                    demo.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                  }`}>
+                    {demo.difficulty}
+                  </span>
+                </div>
+
+                <!-- CTA -->
+                <a
+                  href={demo.link}
+                  class={`block w-full py-3 px-6 text-center font-semibold rounded-xl bg-gradient-to-r ${demo.color} text-white hover:opacity-90 transition-opacity`}
+                >
+                  Launch Demo →
+                </a>
+              </div>
+            </div>
+          </RevealOnScroll>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Advanced Options Section -->
+  <section class="py-20 bg-gradient-to-b from-neutral-900 to-neutral-950">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-sm font-semibold mb-4">
+          ⚡ Power User Features
+        </span>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+          Advanced Demo Options
+        </h2>
+        <p class="text-xl text-neutral-400 max-w-3xl mx-auto">
+          Take your exploration to the next level with these advanced tools and interactive experiences
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        {advancedOptions.map((option, index) => (
+          <div
+            class="group bg-neutral-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 cursor-pointer"
+            data-action={option.action}
+          >
+            <div class="flex items-start gap-4">
+              <div class="text-5xl">{option.icon}</div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
+                  {option.title}
+                </h3>
+                <p class="text-neutral-400 mb-4">{option.description}</p>
+                <button
+                  class="inline-flex items-center gap-2 text-purple-400 font-semibold hover:gap-3 transition-all"
+                  data-action={option.action}
+                >
+                  Get Started
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Demo Builder Section -->
+  <section class="py-20 bg-neutral-950">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 backdrop-blur-sm border border-indigo-500/20 rounded-3xl p-12">
+          <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+              Build Your Custom Demo
+            </h2>
+            <p class="text-xl text-neutral-300">
+              Select the features you want to explore and create a personalized demo experience
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {[
+              { name: '3D Graphics', icon: '🎨', value: '3d' },
+              { name: 'Animations', icon: '✨', value: 'animations' },
+              { name: 'Forms', icon: '📝', value: 'forms' },
+              { name: 'Performance', icon: '⚡', value: 'performance' },
+              { name: 'Accessibility', icon: '♿', value: 'a11y' },
+              { name: 'Dark Mode', icon: '🌙', value: 'theme' },
+              { name: 'Responsive', icon: '📱', value: 'responsive' },
+              { name: 'Code Samples', icon: '💻', value: 'code' },
+            ].map((feature) => (
+              <label class="flex items-center gap-3 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl cursor-pointer transition-all group">
+                <input type="checkbox" class="w-5 h-5 rounded border-white/20 bg-white/10 text-indigo-600 focus:ring-2 focus:ring-indigo-500" value={feature.value} />
+                <span class="text-2xl">{feature.icon}</span>
+                <span class="text-sm text-neutral-300 group-hover:text-white transition-colors">{feature.name}</span>
+              </label>
+            ))}
+          </div>
+
+          <div class="text-center">
+            <button
+              id="build-custom-demo"
+              class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg rounded-xl hover:scale-105 transition-transform shadow-lg shadow-indigo-500/50"
+            >
+              🚀 Generate Custom Demo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Help & Support Section -->
+  <section class="py-20 bg-neutral-900">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+          Need Help Getting Started?
+        </h2>
+        <p class="text-xl text-neutral-400 mb-8">
+          Our team is here to guide you through any demo or answer your questions
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a
+            href={withBasePath('contact/')}
+            class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+          >
+            Contact Support
+          </a>
+          <a
+            href={withBasePath('blog/')}
+            class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl transition-all"
+          >
+            Read Documentation
+          </a>
+          <a
+            href="https://github.com/tariqdude/Test2025"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl transition-all"
+          >
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<script>
+  // Advanced Options Interaction
+  document.querySelectorAll('[data-action]').forEach(element => {
+    element.addEventListener('click', (e) => {
+      const action = (e.currentTarget as HTMLElement).dataset.action;
+
+      switch(action) {
+        case 'start-tour':
+          alert('🧭 Guided tour feature coming soon! This will provide step-by-step walkthroughs of key features.');
+          break;
+        case 'open-sandbox':
+          alert('🔬 Sandbox mode coming soon! Experiment with components in an isolated environment.');
+          break;
+        case 'api-playground':
+          alert('🎮 API Playground coming soon! Test endpoints and explore data structures interactively.');
+          break;
+        case 'demo-builder':
+          document.getElementById('build-custom-demo')?.scrollIntoView({ behavior: 'smooth' });
+          break;
+      }
+    });
+  });
+
+  // Custom Demo Builder
+  document.getElementById('build-custom-demo')?.addEventListener('click', () => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const selected = Array.from(checkboxes).map(cb => (cb as HTMLInputElement).value);
+
+    if (selected.length === 0) {
+      alert('⚠️ Please select at least one feature to build your custom demo!');
+      return;
+    }
+
+    const features = selected.join(', ');
+    const message = `✨ Custom demo created with: ${features}\n\nThis feature will generate a personalized demo page based on your selections. Coming soon!`;
+    alert(message);
+  });
+
+  // Keyboard navigation enhancement
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+      alert('⌨️ Keyboard Shortcuts:\n\n• ? - Show this help\n• 1-6 - Jump to demo\n• Esc - Close modals\n• Tab - Navigate elements');
+      e.preventDefault();
+    }
+  });
+</script>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .group:hover .text-5xl {
+    animation: float 2s ease-in-out infinite;
+  }
+
+  /* Custom scrollbar for demo cards */
+  .demo-card::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .demo-card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+
+  .demo-card::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  .demo-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+</style>

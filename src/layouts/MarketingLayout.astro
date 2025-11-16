@@ -2,12 +2,14 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FloatingDemoButton from '../components/ui/FloatingDemoButton.astro';
 
 interface Props {
   title: string;
   description: string;
   mainClass?: string;
   bodyClass?: string;
+  showDemoButton?: boolean;
 }
 
 const {
@@ -15,6 +17,7 @@ const {
   description,
   mainClass = 'space-y-24 pb-24',
   bodyClass = '',
+  showDemoButton = true,
 } = Astro.props as Props;
 ---
 
@@ -35,7 +38,13 @@ const {
       <slot />
     </main>
     <Footer />
-    
+
+    {
+      showDemoButton && (
+        <FloatingDemoButton variant="default" position="bottom-right" />
+      )
+    }
+
     <script is:inline>
       // Add loading indicator for internal navigation
       document.addEventListener('DOMContentLoaded', () => {
@@ -46,7 +55,7 @@ const {
             if (link.getAttribute('href')?.startsWith('#')) return;
             // Don't show for external links
             if (link.target === '_blank') return;
-            
+
             document.body.classList.add('navigating');
           });
         });

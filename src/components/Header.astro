@@ -8,6 +8,7 @@ const links = [
   { label: 'About', href: withBasePath('about/') },
   { label: 'Services', href: withBasePath('services/') },
   { label: 'Pricing', href: withBasePath('pricing/') },
+  { label: 'Demo Center', href: withBasePath('demo/'), featured: true },
   { label: 'Visual Showcase', href: withBasePath('visual-showcase/') },
   { label: 'Blog', href: withBasePath('blog/') },
 ];
@@ -20,7 +21,11 @@ const links = [
     class="mx-auto flex max-w-[1220px] items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
     aria-label="Main navigation"
   >
-    <a class="flex items-center gap-3 text-slate-100" href={homeHref} aria-label="Elite Project home">
+    <a
+      class="flex items-center gap-3 text-slate-100"
+      href={homeHref}
+      aria-label="Elite Project home"
+    >
       <span
         class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xs font-semibold uppercase tracking-[0.32em] text-slate-100"
       >
@@ -45,7 +50,11 @@ const links = [
       {
         links.map(link => (
           <a
-            class="text-slate-300 transition hover:text-white"
+            class={
+              link.featured
+                ? "relative text-indigo-400 transition hover:text-indigo-300 font-semibold after:content-['✨'] after:absolute after:-top-1 after:-right-4 after:text-xs"
+                : 'text-slate-300 transition hover:text-white'
+            }
             href={link.href}
           >
             {link.label}
@@ -169,9 +178,11 @@ const links = [
     // Close menu when clicking outside
     document.addEventListener('click', event => {
       const target = event.target;
-      if (!menu.hasAttribute('hidden') && 
-          !menu.contains(target) && 
-          !toggle.contains(target)) {
+      if (
+        !menu.hasAttribute('hidden') &&
+        !menu.contains(target) &&
+        !toggle.contains(target)
+      ) {
         closeMenu();
       }
     });

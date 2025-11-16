@@ -4,7 +4,7 @@ import { withBasePath } from '../../utils/helpers';
 export interface Props {
   heading?: string;
   subheading?: string;
-  variant?: 'newsletter' | 'contact' | 'demo';
+  variant?: 'newsletter' | 'contact' | 'demo' | 'demo-center';
   className?: string;
 }
 
@@ -87,6 +87,33 @@ const {
             />
           </svg>
         </a>
+      )
+    }
+
+    {
+      variant === 'demo-center' && (
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href={withBasePath('demo/')}
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg hover:scale-105 transition-transform text-lg shadow-lg shadow-indigo-500/50"
+          >
+            <span class="text-xl">🚀</span>
+            <span>Interactive Demo Center</span>
+          </a>
+          <a
+            href={withBasePath('visual-showcase/')}
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-lg"
+          >
+            <span class="text-xl">🎨</span>
+            <span>Visual Showcase</span>
+          </a>
+          <a
+            href={withBasePath('contact/')}
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-lg hover:bg-white/20 transition-colors"
+          >
+            <span>Get Personalized Demo</span>
+          </a>
+        </div>
       )
     }
   </div>
