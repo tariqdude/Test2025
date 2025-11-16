@@ -1,0 +1,172 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { withBasePath } from '../utils/helpers';
+
+const title = 'You are offline';
+const description = 'This page is available offline thanks to service workers';
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1 flex items-center px-4">
+      <div class="max-w-2xl mx-auto text-center w-full">
+        <div class="mb-8">
+          <svg
+            class="w-32 h-32 mx-auto text-slate-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"
+            ></path>
+          </svg>
+        </div>
+
+        <h1 class="text-4xl font-bold text-white mb-4">You're offline</h1>
+        <p class="text-xl text-slate-300 mb-8">
+          Don't worry! Thanks to our service worker, you can still browse cached
+          pages.
+        </p>
+
+        <div class="space-y-4 mb-12">
+          <div
+            class="p-6 bg-slate-900/50 border border-slate-800 rounded-xl text-left"
+          >
+            <h2 class="text-lg font-semibold text-white mb-2">
+              What you can do:
+            </h2>
+            <ul class="space-y-2 text-slate-300">
+              <li class="flex items-start gap-2">
+                <svg
+                  class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Browse previously visited pages</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg
+                  class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Read cached blog posts</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg
+                  class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Check connection status below</span>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            id="connection-status"
+            class="p-4 bg-amber-900/20 border border-amber-800/30 rounded-xl"
+          >
+            <p class="text-amber-200 font-medium">
+              <span id="status-icon">⚠️</span>
+              <span id="status-text">Checking connection...</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button id="retry-button" class="btn btn-primary"> Try Again </button>
+          <a href={withBasePath('/')} class="btn btn-secondary">
+            Go to Homepage
+          </a>
+        </div>
+      </div>
+    </main>
+    <Footer />
+
+    <script>
+      // Check connection status
+      function updateConnectionStatus() {
+        const statusIcon = document.getElementById('status-icon');
+        const statusText = document.getElementById('status-text');
+        const statusDiv = document.getElementById('connection-status');
+
+        if (navigator.onLine) {
+          if (statusIcon && statusText && statusDiv) {
+            statusIcon.textContent = '✅';
+            statusText.textContent =
+              'Connection restored! You can reload the page.';
+            statusDiv.className =
+              'p-4 bg-green-900/20 border border-green-800/30 rounded-xl';
+          }
+        } else {
+          if (statusIcon && statusText && statusDiv) {
+            statusIcon.textContent = '⚠️';
+            statusText.textContent =
+              'Still offline. Please check your connection.';
+            statusDiv.className =
+              'p-4 bg-amber-900/20 border border-amber-800/30 rounded-xl';
+          }
+        }
+      }
+
+      // Initial check
+      updateConnectionStatus();
+
+      // Listen for connection changes
+      window.addEventListener('online', updateConnectionStatus);
+      window.addEventListener('offline', updateConnectionStatus);
+
+      // Retry button
+      const retryButton = document.getElementById('retry-button');
+      retryButton?.addEventListener('click', () => {
+        if (navigator.onLine) {
+          window.location.reload();
+        } else {
+          alert('Still offline. Please check your connection and try again.');
+        }
+      });
+
+      // Auto-reload when connection restored
+      window.addEventListener('online', () => {
+        setTimeout(() => {
+          if (confirm('Connection restored! Reload page?')) {
+            window.location.reload();
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

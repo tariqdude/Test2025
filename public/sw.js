@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   `${BASE_PATH}/pricing/`,
   `${BASE_PATH}/demo/`,
   `${BASE_PATH}/components/`,
+  `${BASE_PATH}/offline/`,
   `${BASE_PATH}/manifest.json`,
   `${BASE_PATH}/favicon.svg`,
 ];
@@ -85,7 +86,13 @@ self.addEventListener('fetch', event => {
 
           // Return offline page for navigation requests
           if (request.mode === 'navigate') {
-            return caches.match(`${BASE_PATH}/offline.html`);
+            return (
+              caches.match(`${BASE_PATH}/offline/`) ||
+              caches.match(`${BASE_PATH}/offline.html`) ||
+              new Response('<h1>Offline</h1>', {
+                headers: { 'Content-Type': 'text/html' },
+              })
+            );
           }
 
           // Return generic offline response

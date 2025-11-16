@@ -4,6 +4,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingDemoButton from '../components/ui/FloatingDemoButton.astro';
 import PWARegistration from '../components/PWARegistration.astro';
+import WebVitals from '../components/WebVitals.astro';
+import ErrorTracking from '../components/ErrorTracking.astro';
+import StructuredData from '../components/StructuredData.astro';
 
 interface Props {
   title: string;
@@ -26,6 +29,7 @@ const {
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
+    <StructuredData type="website" />
   </head>
   <body class={`bg-slate-950 text-slate-100 antialiased ${bodyClass}`.trim()}>
     <a
@@ -63,5 +67,7 @@ const {
       });
     </script>
     <PWARegistration />
+    <WebVitals />
+    <ErrorTracking />
   </body>
 </html>

@@ -35,7 +35,12 @@
     "health-check": "tsx src/utils/error-reviewer-cli.ts analyze --severity critical --format terminal",
     "security-audit": "npm audit --audit-level moderate && npm run error-review:security",
     "code-quality": "npm run error-review && npm run lint && npm run typecheck",
-    "deploy-ready": "npm run error-review:deployment && npm run pre-deploy"
+    "deploy-ready": "npm run error-review:deployment && npm run pre-deploy",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:all": "npm run test && npm run test:e2e"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.3",
@@ -52,12 +57,14 @@
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.17",
+    "web-vitals": "^5.1.0",
     "yargs": "^18.0.0",
     "zod": "^4.0.15"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",
     "@headlessui/tailwindcss": "^0.2.2",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^24.2.0",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
@@ -74,6 +81,7 @@
     "jsdom": "^21.1.0",
     "lightningcss": "^1.30.2",
     "lint-staged": "^13.1.0",
+    "playwright": "^1.56.1",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.5.14",

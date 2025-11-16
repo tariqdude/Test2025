@@ -1,0 +1,104 @@
+---
+/**
+ * Structured Data (JSON-LD) Component
+ * Adds schema.org markup for better SEO and rich results
+ */
+
+export interface Props {
+  type?: 'website' | 'article' | 'blog' | 'organization' | 'breadcrumbs';
+  data?: Record<string, any>;
+}
+
+const { type = 'website', data = {} } = Astro.props;
+
+const baseUrl =
+  Astro.site?.toString() || 'https://tariqdude.github.io/Test2025';
+const currentUrl = new URL(Astro.url.pathname, baseUrl).toString();
+
+// Website schema
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Elite Project',
+  alternateName: 'EP',
+  url: baseUrl,
+  description:
+    'Static intelligence for decisive operators. Build executive-ready status hubs with Astro.',
+  inLanguage: 'en-US',
+  ...data,
+};
+
+// Organization schema
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Elite Project',
+  alternateName: 'EP',
+  url: baseUrl,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${baseUrl}/favicon.svg`,
+  },
+  sameAs: [
+    // Add social media profiles here
+  ],
+  ...data,
+};
+
+// Article schema
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: data.title || 'Article',
+  description: data.description || '',
+  image: data.image || `${baseUrl}/og-image.png`,
+  datePublished: data.pubDate || new Date().toISOString(),
+  dateModified: data.updatedDate || data.pubDate || new Date().toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: 'Elite Project',
+    url: baseUrl,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Elite Project',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/favicon.svg`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': currentUrl,
+  },
+  ...data,
+};
+
+// Breadcrumbs schema
+const breadcrumbsSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: data.items || [],
+};
+
+// Select appropriate schema
+let schema;
+switch (type) {
+  case 'organization':
+    schema = organizationSchema;
+    break;
+  case 'article':
+  case 'blog':
+    schema = articleSchema;
+    break;
+  case 'breadcrumbs':
+    schema = breadcrumbsSchema;
+    break;
+  default:
+    schema = websiteSchema;
+}
+
+const schemaJson = JSON.stringify(schema);
+---
+
+<script type="application/ld+json" is:inline set:text={schemaJson} />
