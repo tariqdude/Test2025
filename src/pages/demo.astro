@@ -1,7 +1,5 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
-import ModernCard from '../components/ui/ModernCard.astro';
-import ModernButton from '../components/ui/ModernButton.astro';
 import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
 import { withBasePath } from '../utils/helpers';
 
@@ -255,7 +253,7 @@ const quickActions = [
       </div>
 
       <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        {advancedOptions.map((option, index) => (
+        {advancedOptions.map((option) => (
           <div
             class="group bg-neutral-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 cursor-pointer"
             data-action={option.action}
