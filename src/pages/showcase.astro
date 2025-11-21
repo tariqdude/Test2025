@@ -60,37 +60,57 @@ const caseStudies = [
   title="Showcase | Elite Project"
   description="Browse the reusable patterns and content sections that ship with this simplified Astro starter."
 >
-  <section class="bg-neutral-900 text-neutral-50">
-    <div class="mx-auto max-w-5xl px-6 py-24 text-center">
-      <p
-        class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+  <section
+    class="bg-zinc-950 text-zinc-50 relative overflow-hidden border-b border-zinc-800"
+  >
+    <div
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+    >
+    </div>
+    <div class="mx-auto max-w-5xl px-6 py-24 text-center relative">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 mb-6"
       >
-        Showcase
-      </p>
-      <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
-        Plain Astro components that still feel polished.
+        <span class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"></span>
+        <span class="text-xs font-mono text-zinc-400 tracking-wider"
+          >PATTERN_LIBRARY_V1</span
+        >
+      </div>
+      <h1
+        class="mt-6 text-4xl font-display font-bold sm:text-5xl uppercase tracking-tight"
+      >
+        Plain Astro components that still feel <span class="text-accent-500"
+          >polished</span
+        >.
       </h1>
-      <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
-        We rebuilt the showcase to highlight what matters: repeatable layouts
+      <p
+        class="mt-6 mx-auto max-w-3xl text-lg text-zinc-400 font-mono leading-relaxed"
+      >
+        // We rebuilt the showcase to highlight what matters: repeatable layouts
         that stay fully static. Everything on this page renders at build time
         and works without extra JavaScript bundles.
       </p>
     </div>
   </section>
 
-  <section class="bg-white">
+  <section class="bg-zinc-900">
     <div class="mx-auto max-w-5xl space-y-10 px-6 py-20">
       {
         categories.map(category => (
-          <article class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
-            <h2 class="text-2xl font-semibold text-neutral-900">
+          <article class="border border-zinc-800 bg-zinc-950 p-8 relative group hover:border-accent-500 transition-colors">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-700 group-hover:border-accent-500 transition-colors" />
+
+            <h2 class="text-2xl font-display font-bold text-white uppercase tracking-wide">
               {category.name}
             </h2>
-            <p class="mt-3 text-sm text-neutral-600">{category.summary}</p>
-            <ul class="mt-6 grid gap-3 text-sm text-neutral-600">
+            <p class="mt-3 text-sm text-zinc-400 font-mono border-b border-zinc-800 pb-4 mb-4">
+              {category.summary}
+            </p>
+            <ul class="mt-6 grid gap-3 text-sm text-zinc-300 font-mono">
               {category.items.map(item => (
                 <li class="flex items-start gap-2">
-                  <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                  <span class="mt-1 text-accent-500">&gt;</span>
                   <span>{item}</span>
                 </li>
               ))}

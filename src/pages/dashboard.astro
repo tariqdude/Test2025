@@ -18,28 +18,41 @@ const alternatives = [
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <BaseHead
       title="Dashboard | Elite Project"
       description="Why the live dashboard was retired in favour of static, reliable reporting."
     />
   </head>
-  <body class="bg-neutral-50 text-neutral-900">
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col">
     <Header />
-    <main>
-      <section class="bg-neutral-900 text-neutral-50">
-        <div class="mx-auto max-w-4xl px-6 py-24">
-          <p
-            class="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400"
+    <main class="flex-1">
+      <section
+        class="bg-zinc-950 text-zinc-50 relative overflow-hidden border-b border-zinc-800"
+      >
+        <div
+          class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+        >
+        </div>
+        <div class="mx-auto max-w-4xl px-6 py-24 relative">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 mb-6"
           >
-            Legacy update
-          </p>
-          <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
-            The interactive dashboard has been sunset.
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <span class="text-xs font-mono text-zinc-400 tracking-wider"
+              >SYSTEM_STATUS: DEPRECATED</span
+            >
+          </div>
+          <h1
+            class="mt-6 text-4xl font-display font-bold sm:text-5xl uppercase tracking-tight"
+          >
+            The interactive dashboard has been <span class="text-accent-500"
+              >sunset</span
+            >.
           </h1>
-          <p class="mt-6 text-lg text-neutral-300">
-            Earlier versions of this project loaded Solid, React, Svelte, and
+          <p class="mt-6 text-lg text-zinc-400 font-mono leading-relaxed">
+            // Earlier versions of this project loaded Solid, React, Svelte, and
             Three.js just to render charts. The new release keeps everything
             static so the site builds cleanly on GitHub Pages and remains easy
             to audit.
@@ -47,19 +60,25 @@ const alternatives = [
         </div>
       </section>
 
-      <section class="bg-white">
+      <section class="bg-zinc-900">
         <div class="mx-auto grid max-w-4xl gap-10 px-6 py-16 sm:grid-cols-2">
           <article
-            class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6"
+            class="border border-zinc-800 bg-zinc-950 p-6 relative group hover:border-accent-500 transition-colors"
           >
-            <h2 class="text-xl font-semibold text-neutral-900">
+            <div
+              class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors"
+            >
+            </div>
+            <h2
+              class="text-xl font-display font-bold text-white uppercase tracking-wide"
+            >
               Why we changed course
             </h2>
-            <ul class="mt-4 space-y-3 text-sm text-neutral-600">
+            <ul class="mt-4 space-y-3 text-sm text-zinc-400 font-mono">
               {
                 reasons.map(reason => (
                   <li class="flex items-start gap-2">
-                    <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                    <span class="mt-1 text-accent-500">&gt;</span>
                     <span>{reason}</span>
                   </li>
                 ))
@@ -68,16 +87,22 @@ const alternatives = [
           </article>
 
           <article
-            class="rounded-2xl border border-neutral-200 bg-neutral-50 p-6"
+            class="border border-zinc-800 bg-zinc-950 p-6 relative group hover:border-accent-500 transition-colors"
           >
-            <h2 class="text-xl font-semibold text-neutral-900">
+            <div
+              class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-700 group-hover:border-accent-500 transition-colors"
+            >
+            </div>
+            <h2
+              class="text-xl font-display font-bold text-white uppercase tracking-wide"
+            >
               What to use instead
             </h2>
-            <ul class="mt-4 space-y-3 text-sm text-neutral-600">
+            <ul class="mt-4 space-y-3 text-sm text-zinc-400 font-mono">
               {
                 alternatives.map(item => (
                   <li class="flex items-start gap-2">
-                    <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                    <span class="mt-1 text-accent-500">&gt;</span>
                     <span>{item}</span>
                   </li>
                 ))
@@ -87,13 +112,13 @@ const alternatives = [
         </div>
       </section>
 
-      <section class="bg-neutral-900 text-neutral-50">
+      <section class="bg-zinc-950 text-zinc-50 border-t border-zinc-800">
         <div class="mx-auto max-w-4xl px-6 py-16 text-center">
-          <h2 class="text-2xl font-semibold">
+          <h2 class="text-2xl font-display font-bold uppercase tracking-wide">
             Need guidance replicating a dashboard statically?
           </h2>
-          <p class="mt-4 text-sm text-neutral-300">
-            We can help create scheduled exports, build markdown-based status
+          <p class="mt-4 text-sm text-zinc-400 font-mono">
+            // We can help create scheduled exports, build markdown-based status
             pages, or integrate lightweight embeds that do not break static
             hosting rules.
           </p>
