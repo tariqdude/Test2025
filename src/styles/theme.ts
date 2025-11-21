@@ -118,37 +118,38 @@ export interface GlobalTheme {
 export const darkTheme: GlobalTheme = {
   name: 'dark',
   colors: {
-    primary: '#4a6ce3',
-    secondary: '#5f92f6',
-    accent: '#f27214',
-    background: '#0b1324',
-    surface: '#151d2f',
-    overlay: 'rgba(11, 19, 36, 0.85)',
+    primary: '#64748b', // Slate 500
+    secondary: '#475569', // Slate 600
+    accent: '#f97316', // Orange 500
+    background: '#09090b', // Zinc 950
+    surface: '#18181b', // Zinc 900
+    overlay: 'rgba(9, 9, 11, 0.8)',
     text: {
-      primary: '#f8fafc',
-      secondary: '#c7d2e5',
-      muted: '#8a94ab',
-      inverse: '#0b1324',
+      primary: '#e4e4e7', // Zinc 200
+      secondary: '#a1a1aa', // Zinc 400
+      muted: '#71717a', // Zinc 500
+      inverse: '#09090b',
     },
-    border: '#1f2a3d',
-    shadow: 'rgba(16, 24, 40, 0.4)',
-    success: '#3fac74',
-    warning: '#f27214',
-    error: '#d53c3c',
-    info: '#2f72de',
+    border: '#27272a', // Zinc 800
+    shadow: 'rgba(0, 0, 0, 0.3)',
+    success: '#10b981',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#3b82f6',
   },
   gradients: {
-    primary: 'linear-gradient(135deg, #0b1324 0%, #1a285f 60%, #304ec8 100%)',
-    secondary: 'linear-gradient(135deg, #1e2f80 0%, #4a6ce3 100%)',
-    accent: 'linear-gradient(135deg, #f27214 0%, #ff9333 100%)',
-    hero: 'linear-gradient(135deg, #0b1324 0%, #1e2f80 70%, #4a6ce3 100%)',
-    surface: 'linear-gradient(135deg, #151d2f 0%, #1f2a3d 100%)',
+    primary: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)', // Slate 900 -> Slate 700
+    secondary: 'linear-gradient(135deg, #1e293b 0%, #475569 100%)', // Slate 800 -> Slate 600
+    accent: 'linear-gradient(135deg, #ea580c 0%, #f97316 100%)', // Orange 600 -> Orange 500
+    hero: 'linear-gradient(135deg, #09090b 0%, #1e293b 100%)', // Zinc 950 -> Slate 800
+    surface: 'linear-gradient(135deg, #18181b 0%, #27272a 100%)', // Zinc 900 -> Zinc 800
   },
   typography: {
     fontFamily: {
-      sans: '"Plus Jakarta Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-      mono: 'JetBrains Mono, SF Mono, Monaco, Cascadia Code, Roboto Mono, Consolas, monospace',
-      display: '"DM Serif Display", Inter, system-ui, sans-serif',
+      sans: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+      mono: '"JetBrains Mono", SF Mono, Monaco, Cascadia Code, monospace',
+      display:
+        '"JetBrains Mono", "Space Grotesk", Inter, system-ui, sans-serif',
     },
     fontSize: {
       xs: '0.75rem',
@@ -186,11 +187,11 @@ export const darkTheme: GlobalTheme = {
     '4xl': '6rem',
   },
   borderRadius: {
-    sm: '0.25rem',
-    md: '0.375rem',
-    lg: '0.5rem',
-    xl: '0.75rem',
-    '2xl': '1rem',
+    sm: '0px',
+    md: '2px',
+    lg: '4px',
+    xl: '6px',
+    '2xl': '8px',
     full: '9999px',
   },
   animation: {
@@ -227,31 +228,31 @@ export const darkTheme: GlobalTheme = {
 export const lightTheme: GlobalTheme = {
   name: 'light',
   colors: {
-    primary: '#304ec8',
-    secondary: '#4a6ce3',
-    accent: '#cc6210',
-    background: '#f5f6f8',
-    surface: '#ffffff',
+    primary: '#475569', // Slate 600
+    secondary: '#64748b', // Slate 500
+    accent: '#ea580c', // Orange 600
+    background: '#ffffff',
+    surface: '#fafafa', // Zinc 50
     overlay: 'rgba(255, 255, 255, 0.8)',
     text: {
-      primary: '#121720',
-      secondary: '#3d4554',
-      muted: '#6b7283',
-      inverse: '#f5f6f8',
+      primary: '#18181b', // Zinc 900
+      secondary: '#52525b', // Zinc 600
+      muted: '#71717a', // Zinc 500
+      inverse: '#ffffff',
     },
-    border: '#dce1ea',
-    shadow: 'rgba(15, 23, 42, 0.1)',
-    success: '#2c8a58',
-    warning: '#cc6210',
-    error: '#c03636',
-    info: '#2157b4',
+    border: '#e4e4e7', // Zinc 200
+    shadow: 'rgba(0, 0, 0, 0.1)',
+    success: '#059669',
+    warning: '#d97706',
+    error: '#dc2626',
+    info: '#2563eb',
   },
   gradients: {
-    primary: 'linear-gradient(135deg, #f5f6f8 0%, #ccd8ff 60%, #304ec8 100%)',
-    secondary: 'linear-gradient(135deg, #ffffff 0%, #a1b8ff 70%, #304ec8 100%)',
-    accent: 'linear-gradient(135deg, #fef4eb 0%, #f27214 100%)',
-    hero: 'linear-gradient(135deg, #f5f6f8 0%, #ccd8ff 65%, #304ec8 100%)',
-    surface: 'linear-gradient(135deg, #ffffff 0%, #eef1f7 100%)',
+    primary: 'linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%)', // Slate 100 -> Slate 300
+    secondary: 'linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)', // Slate 200 -> Slate 400
+    accent: 'linear-gradient(135deg, #ffedd5 0%, #fb923c 100%)', // Orange 100 -> Orange 400
+    hero: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', // Slate 50 -> Slate 200
+    surface: 'linear-gradient(135deg, #ffffff 0%, #f4f4f5 100%)', // White -> Zinc 100
   },
   typography: darkTheme.typography,
   spacing: darkTheme.spacing,
@@ -260,11 +261,11 @@ export const lightTheme: GlobalTheme = {
   effects: {
     blur: darkTheme.effects.blur,
     shadow: {
-      sm: '0 1px 2px rgba(15, 23, 42, 0.05)',
-      md: '0 6px 12px -4px rgba(15, 23, 42, 0.12)',
-      lg: '0 18px 32px -12px rgba(15, 23, 42, 0.14)',
-      xl: '0 32px 56px -20px rgba(15, 23, 42, 0.18)',
-      '2xl': '0 48px 80px -32px rgba(15, 23, 42, 0.22)',
+      sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+      md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+      '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
     },
   },
 };

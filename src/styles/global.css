@@ -13,48 +13,48 @@
 
   :root,
   html.dark {
-    --color-background: #0f172a;
-    --color-surface: #101d38;
-    --color-surface-subtle: rgba(15, 23, 42, 0.6);
-    --color-border: rgba(148, 163, 184, 0.35);
-    --color-primary: #6366f1;
-    --color-primary-strong: #4f46e5;
+    --color-background: #09090b;
+    --color-surface: #18181b;
+    --color-surface-subtle: rgba(24, 24, 27, 0.6);
+    --color-border: #27272a;
+    --color-primary: #cbd5e1; /* Slate 300 */
+    --color-primary-strong: #f8fafc; /* Slate 50 */
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-danger: #ef4444;
-    --color-text-primary: #e2e8f0;
-    --color-text-secondary: #94a3b8;
-    --color-text-muted: #64748b;
-    --color-text-inverse: #0f172a;
-    --shadow-soft: 0 30px 80px -40px rgba(99, 102, 241, 0.45);
-    --shadow-strong: 0 24px 60px -30px rgba(15, 23, 42, 0.65);
-    --radius-sm: 12px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
-    --blur-soft: blur(18px);
+    --color-text-primary: #e4e4e7;
+    --color-text-secondary: #a1a1aa;
+    --color-text-muted: #71717a;
+    --color-text-inverse: #09090b;
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    --shadow-strong: 0 8px 30px -4px rgba(0, 0, 0, 0.8);
+    --radius-sm: 0px;
+    --radius-md: 2px;
+    --radius-lg: 4px;
+    --blur-soft: blur(8px);
     --font-sans:
       'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
       sans-serif;
-    --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-display: 'JetBrains Mono', 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
   }
 
   html.light {
     --color-background: #ffffff;
-    --color-surface: #f8fafc;
-    --color-surface-subtle: rgba(248, 250, 252, 0.8);
-    --color-border: rgba(51, 65, 85, 0.15);
-    --color-primary: #6366f1;
-    --color-primary-strong: #4f46e5;
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
-    --color-text-primary: #0f172a;
-    --color-text-secondary: #475569;
-    --color-text-muted: #64748b;
+    --color-surface: #f4f4f5;
+    --color-surface-subtle: rgba(244, 244, 245, 0.8);
+    --color-border: #e4e4e7;
+    --color-primary: #475569; /* Slate 600 */
+    --color-primary-strong: #0f172a; /* Slate 900 */
+    --color-success: #059669;
+    --color-warning: #d97706;
+    --color-danger: #dc2626;
+    --color-text-primary: #18181b;
+    --color-text-secondary: #52525b;
+    --color-text-muted: #71717a;
     --color-text-inverse: #ffffff;
-    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-    --shadow-strong: 0 20px 60px -15px rgba(0, 0, 0, 0.2);
+    --shadow-soft: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+    --shadow-strong: 0 4px 20px -4px rgba(0, 0, 0, 0.15);
   }
 
   html {
@@ -66,21 +66,17 @@
   body {
     min-height: 100vh;
     margin: 0;
-    background:
-      radial-gradient(
-        circle at top left,
-        rgba(79, 70, 229, 0.18),
-        transparent 45%
-      ),
-      radial-gradient(
-        circle at bottom right,
-        rgba(59, 130, 246, 0.18),
-        transparent 50%
-      ),
-      var(--color-background);
+    background-color: var(--color-background);
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: center top;
+    /* Fade out the grid at the bottom */
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
-    line-height: 1.65;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background 0.3s ease;

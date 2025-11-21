@@ -17,67 +17,80 @@ const links = [
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-white/10 bg-[rgba(15,23,42,0.78)] backdrop-blur-xl"
+  class="sticky top-0 z-50 border-t-4 border-t-accent-500 border-b border-b-zinc-800 bg-zinc-950/95 backdrop-blur-md"
 >
   <nav
-    class="mx-auto flex max-w-[1220px] items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
+    class="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-0 sm:px-6 lg:px-8 h-16"
     aria-label="Main navigation"
   >
     <a
-      class="flex items-center gap-3 text-slate-100"
+      class="flex items-center gap-3 text-zinc-100 group h-full py-3"
       href={homeHref}
       aria-label="Elite Project home"
     >
       <span
-        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xs font-semibold uppercase tracking-[0.32em] text-slate-100"
+        class="inline-flex h-8 w-8 items-center justify-center border border-zinc-700 bg-zinc-900 text-[10px] font-bold uppercase tracking-widest text-zinc-100 transition-colors group-hover:border-accent-500 group-hover:text-accent-500"
       >
         EP
       </span>
-      <div class="flex flex-col leading-tight">
-        <span class="text-sm font-semibold tracking-tight text-white">
+      <div class="flex flex-col leading-none">
+        <span
+          class="text-sm font-bold tracking-tight text-zinc-100 font-display uppercase"
+        >
           {SITE_TITLE}
         </span>
         <span
-          class="text-[0.7rem] font-medium uppercase tracking-[0.32em] text-slate-400"
+          class="text-[0.6rem] font-mono uppercase tracking-widest text-accent-500 mt-0.5"
         >
-          Static Operations Studio
+          SYS.ONLINE
         </span>
       </div>
     </a>
 
-    <div class="hidden md:flex items-center gap-9 text-sm font-medium">
-      <a class="text-slate-300 transition hover:text-white" href={homeHref}>
-        Home
+    <div class="hidden md:flex items-center h-full">
+      <a
+        class="flex items-center h-full px-4 text-zinc-400 transition hover:text-white hover:bg-zinc-900 border-l border-zinc-800/50 font-mono text-xs uppercase tracking-wide"
+        href={homeHref}
+      >
+        [01] Home
       </a>
       {
-        links.map(link => (
+        links.map((link, index) => (
           <a
             class={
               link.featured
-                ? "relative text-indigo-400 transition hover:text-indigo-300 font-semibold after:content-['✨'] after:absolute after:-top-1 after:-right-4 after:text-xs"
-                : 'text-slate-300 transition hover:text-white'
+                ? 'flex items-center h-full px-4 relative text-accent-400 transition hover:text-accent-300 hover:bg-zinc-900 border-l border-zinc-800/50 font-mono text-xs uppercase tracking-wide font-bold'
+                : 'flex items-center h-full px-4 text-zinc-400 transition hover:text-white hover:bg-zinc-900 border-l border-zinc-800/50 font-mono text-xs uppercase tracking-wide'
             }
             href={link.href}
           >
-            {link.label}
+            [{String(index + 2).padStart(2, '0')}] {link.label}
           </a>
         ))
       }
+      <div class="h-full w-px bg-zinc-800/50"></div>
     </div>
 
-    <div class="hidden md:flex items-center gap-3">
+    <div class="hidden md:flex items-center gap-4 pl-6">
       <ThemeToggle variant="icon" />
-      <a class="btn btn-secondary" href={withBasePath('showcase/')}>
-        View showcase
+      <div class="h-6 w-px bg-zinc-800"></div>
+      <a
+        class="btn btn-secondary text-xs uppercase tracking-wider font-mono rounded-sm"
+        href={withBasePath('showcase/')}
+      >
+        Showcase
       </a>
-      <a class="btn btn-primary" href={withBasePath('contact/')}>
-        Request a briefing
+      <a
+        class="btn btn-primary text-xs uppercase tracking-wider font-mono rounded-sm"
+        href={withBasePath('contact/')}
+      >
+        Briefing
       </a>
     </div>
 
     <div class="md:hidden">
       <button
-        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-slate-200 transition hover:border-white/25 hover:text-white"
+        class="inline-flex h-10 w-10 items-center justify-center border border-zinc-800 text-zinc-400 transition hover:border-zinc-600 hover:text-white bg-zinc-900"
         id="mobile-menu-button"
         type="button"
         aria-controls="mobile-menu"
@@ -92,8 +105,8 @@ const links = [
         >
           <path
             d="M4 7h16M4 12h16M4 17h16"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            stroke-linecap="square"
+            stroke-linejoin="miter"
             stroke-width="1.5"></path>
         </svg>
       </button>

@@ -31,7 +31,7 @@ const subheading =
       <div class="grid gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <div class="space-y-9">
           <span
-            class="chip bg-[rgba(99,102,241,0.08)] text-[0.65rem] uppercase tracking-[0.32em] text-slate-200"
+            class="chip bg-zinc-800/50 border border-zinc-700 text-[0.65rem] uppercase tracking-[0.32em] text-accent-400 font-mono"
           >
             High-trust static ops
           </span>
@@ -46,9 +46,9 @@ const subheading =
           <ul class="grid gap-3 sm:grid-cols-2">
             {
               heroSignals.map(signal => (
-                <li class="flex items-start gap-3 text-sm text-slate-300">
-                  <span class="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-white/15 text-[0.7rem] text-slate-100">
-                    •
+                <li class="flex items-start gap-3 text-sm text-slate-300 font-mono">
+                  <span class="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center border border-accent-500/50 text-[0.7rem] text-accent-400 bg-accent-500/10">
+                    +
                   </span>
                   <span>{signal}</span>
                 </li>
@@ -77,11 +77,16 @@ const subheading =
           <dl class="mt-6 grid gap-6 sm:grid-cols-3">
             {
               keyMetrics.map(metric => (
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                  <dt class="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-slate-400">
+                <div class="border border-zinc-800 bg-zinc-900/50 p-5 text-center relative group hover:border-accent-500/50 transition-colors">
+                  <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-600 group-hover:border-accent-500 transition-colors" />
+                  <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-600 group-hover:border-accent-500 transition-colors" />
+                  <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-600 group-hover:border-accent-500 transition-colors" />
+                  <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-600 group-hover:border-accent-500 transition-colors" />
+
+                  <dt class="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-zinc-500 font-mono">
                     {metric.label}
                   </dt>
-                  <dd class="mt-3 text-2xl font-semibold text-white">
+                  <dd class="mt-3 text-2xl font-semibold text-white font-display">
                     {metric.value}
                   </dd>
                 </div>
