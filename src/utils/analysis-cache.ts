@@ -53,7 +53,7 @@ export class AnalysisCache {
             `Loaded cache with ${Object.keys(this.cache.files).length} entries`
           );
         }
-      } catch (error) {
+      } catch {
         // Cache file doesn't exist or is invalid, start fresh
         logger.debug('No existing cache found, starting fresh');
       }
@@ -182,7 +182,7 @@ export class AnalysisCache {
     try {
       await fs.unlink(this.cacheFile);
       logger.info('Cache cleared');
-    } catch (error) {
+    } catch {
       // File doesn't exist, that's fine
     }
   }

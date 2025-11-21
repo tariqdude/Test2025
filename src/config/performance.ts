@@ -1,6 +1,5 @@
 // Performance optimization configuration for Astro
 
-import type { AstroIntegration as _AstroIntegration } from 'astro';
 import { logger } from '../utils/logger';
 
 const describeError = (error: unknown): Record<string, unknown> => {
@@ -292,7 +291,6 @@ export class ImageOptimizer {
       loading = 'lazy',
       decoding = 'async',
       fetchPriority = 'auto',
-      quality: _quality = 'medium',
     } = options;
 
     return {
@@ -394,9 +392,6 @@ export class CriticalCSSExtractor {
     const {
       html,
       css,
-      width: _width = PERFORMANCE_CONFIG.CRITICAL_CSS.width,
-      height: _height = PERFORMANCE_CONFIG.CRITICAL_CSS.height,
-      timeout: _timeout = PERFORMANCE_CONFIG.CRITICAL_CSS.timeout,
       ignore = PERFORMANCE_CONFIG.CRITICAL_CSS.ignore,
     } = options;
 
@@ -602,7 +597,7 @@ export const criticalCSSExtractor = CriticalCSSExtractor;
 // Auto-initialize performance monitoring in browser
 if (typeof window !== 'undefined') {
   // Start performance monitoring
-  performanceMonitor;
+  // performanceMonitor is already initialized
 
   // Log metrics after page load
   window.addEventListener('load', () => {

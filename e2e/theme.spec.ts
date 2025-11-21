@@ -20,7 +20,7 @@ test.describe('Theme Toggle', () => {
     expect(newClass).not.toBe(initialClass);
   });
 
-  test('should persist theme preference', async ({ page, context }) => {
+  test('should persist theme preference', async ({ page }) => {
     await page.goto('/');
 
     // Set theme

@@ -20,7 +20,7 @@ jobs:
       - name: Format check
         run: npm run format:check
       - name: Type check
-        run: npm run build -- --noEmit
+        run: npm run typecheck
       - name: Test
         run: npm run test
       - name: Build
