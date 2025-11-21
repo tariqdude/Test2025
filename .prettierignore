@@ -24,3 +24,10 @@ node_modules/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Playwright
+playwright-report/
+test-results/
+
+# Coverage
+coverage/

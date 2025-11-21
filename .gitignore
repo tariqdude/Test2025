@@ -43,3 +43,7 @@ coverage/
 error-report.html
 error-analysis.json
 README-ERRORS.md
+
+# Playwright
+playwright-report/
+test-results/
