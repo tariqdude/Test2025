@@ -68,69 +68,101 @@ const principles = [
   title="About | Elite Project"
   description="Learn why this Astro starter prioritises reliability and static-friendly patterns."
 >
-  <section class="relative overflow-hidden bg-neutral-950">
+  <section class="relative overflow-hidden bg-zinc-950">
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
     >
     </div>
     <div
       class="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-24 pt-28 lg:flex-row lg:items-center"
     >
       <div class="max-w-xl">
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 mb-6"
         >
-          Our mission
-        </p>
+          <span class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"></span>
+          <span class="text-xs font-mono text-zinc-400 tracking-wider"
+            >MISSION_STATEMENT</span
+          >
+        </div>
         <h1
-          class="mt-6 text-4xl font-semibold text-white sm:text-5xl lg:text-6xl"
+          class="mt-6 text-4xl font-display font-bold text-white sm:text-5xl lg:text-6xl uppercase tracking-tight"
         >
-          Shipping faster by cutting every unnecessary dependency.
+          Shipping faster by <span class="text-accent-500">cutting</span> every unnecessary
+          dependency.
         </h1>
-        <p class="mt-6 text-lg text-neutral-300">
-          Elite Project began as a sandbox for flashy UI experiments. The 2025
-          rewrite moves in the opposite direction: a calm foundation that keeps
-          Astro sites light, maintainable, and ready for GitHub Pages.
+        <p class="mt-6 text-lg text-zinc-400 font-mono leading-relaxed">
+          // Elite Project began as a sandbox for flashy UI experiments. The
+          2025 rewrite moves in the opposite direction: a calm foundation that
+          keeps Astro sites light, maintainable, and ready for GitHub Pages.
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
-          <a href={withBasePath('services/')} class="btn btn-primary">
-            Review our services
+          <a
+            href={withBasePath('services/')}
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-900 bg-zinc-100 border border-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all uppercase tracking-wider font-mono"
+          >
+            Review_Services
           </a>
-          <a href={withBasePath('contact/')} class="btn btn-secondary">
-            Meet the maintainers
+          <a
+            href={withBasePath('contact/')}
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-100 border border-zinc-700 hover:bg-zinc-900 hover:border-accent-500 hover:text-accent-500 transition-all uppercase tracking-wider font-mono"
+          >
+            Meet_Maintainers
           </a>
         </div>
       </div>
       <div
-        class="glass-panel grid flex-1 gap-4 rounded-3xl border border-white/10 p-6 lg:max-w-md animate-fade-in-up"
+        class="grid flex-1 gap-4 border border-zinc-800 bg-zinc-900/50 p-6 lg:max-w-md relative"
       >
-        <div class="flex items-baseline justify-between text-white">
-          <p class="text-xs uppercase tracking-[0.25em] text-neutral-400">
-            Version cadence
+        <div class="absolute -top-1 -left-1 w-3 h-3 bg-accent-500"></div>
+        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-zinc-700"></div>
+
+        <div
+          class="flex items-baseline justify-between text-white border-b border-zinc-800 pb-4 mb-2"
+        >
+          <p class="text-xs font-mono uppercase tracking-wider text-zinc-500">
+            VERSION_CADENCE
           </p>
-          <span class="text-sm font-semibold text-neutral-300">2024 → 2025</span
+          <span class="text-sm font-mono font-bold text-accent-500"
+            >2024 -> 2025</span
           >
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <div class="card rounded-2xl border border-white/10 p-5">
-            <p class="text-3xl font-semibold text-white">4×</p>
-            <p class="mt-2 text-xs text-neutral-400">
-              Fewer dependencies vs early prototype
+          <div
+            class="border border-zinc-800 bg-zinc-950 p-5 hover:border-accent-500 transition-colors group"
+          >
+            <p
+              class="text-3xl font-display font-bold text-white group-hover:text-accent-500 transition-colors"
+            >
+              4×
+            </p>
+            <p class="mt-2 text-xs text-zinc-500 font-mono uppercase">
+              Reduced_Dependencies
             </p>
           </div>
-          <div class="card rounded-2xl border border-white/10 p-5">
-            <p class="text-3xl font-semibold text-white">100%</p>
-            <p class="mt-2 text-xs text-neutral-400">
-              Static-safe routes across every page
+          <div
+            class="border border-zinc-800 bg-zinc-950 p-5 hover:border-accent-500 transition-colors group"
+          >
+            <p
+              class="text-3xl font-display font-bold text-white group-hover:text-accent-500 transition-colors"
+            >
+              100%
+            </p>
+            <p class="mt-2 text-xs text-zinc-500 font-mono uppercase">
+              Static_Safe_Routes
             </p>
           </div>
         </div>
-        <div class="card rounded-2xl border border-white/10 p-5">
-          <p class="text-sm font-semibold text-white">
-            Deployment proof points
+        <div
+          class="border border-zinc-800 bg-zinc-950 p-5 hover:border-accent-500 transition-colors"
+        >
+          <p
+            class="text-sm font-mono font-bold text-white uppercase tracking-wider"
+          >
+            DEPLOYMENT_PROOF
           </p>
-          <p class="mt-2 text-xs text-neutral-400">
-            Validated with clean type checks, reproducible builds, and GitHub
+          <p class="mt-2 text-xs text-zinc-400 font-mono">
+            // Validated with clean type checks, reproducible builds, and GitHub
             Pages-friendly asset paths.
           </p>
         </div>
@@ -138,47 +170,51 @@ const principles = [
     </div>
   </section>
 
-  <section class="border-y border-neutral-200 bg-neutral-50">
+  <section class="border-y border-zinc-800 bg-zinc-900/50">
     <div class="mx-auto max-w-6xl px-6 py-20">
       <SystemHighlights
-        eyebrow="What guides the system"
+        eyebrow="SYSTEM_GUIDELINES"
         title="Three pillars keep the starter pragmatic"
-        intro="Everything in this repository is there for a reason: faster delivery, lower runtime risk, and clearer documentation for stakeholders."
+        intro="// Everything in this repository is there for a reason: faster delivery, lower runtime risk, and clearer documentation for stakeholders."
         items={highlightItems}
       />
     </div>
   </section>
 
-  <section class="bg-white">
-    <div class="mx-auto max-w-5xl px-6 py-20">
+  <section class="bg-zinc-950 relative overflow-hidden">
+    <div
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+    >
+    </div>
+    <div class="mx-auto max-w-5xl px-6 py-20 relative">
       <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <div>
           <p
-            class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600"
+            class="text-xs font-mono font-bold uppercase tracking-widest text-accent-500"
           >
-            Operating principles
+            OPERATING_PRINCIPLES
           </p>
-          <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+          <h2 class="mt-4 text-3xl font-display font-bold text-white">
             Why we invest in calm delivery surfaces
           </h2>
-          <p class="mt-6 text-base text-neutral-600">
-            The best documentation sites look uneventful. We remove distractions
-            so leadership and engineers can review status updates and service
-            playbooks without fighting UI flourishes. Every decision below feeds
-            that outcome.
+          <p class="mt-6 text-base text-zinc-400 font-mono leading-relaxed">
+            // The best documentation sites look uneventful. We remove
+            distractions so leadership and engineers can review status updates
+            and service playbooks without fighting UI flourishes. Every decision
+            below feeds that outcome.
           </p>
         </div>
         <div class="grid gap-6">
           {
             principles.map((principle, index) => (
-              <article
-                class="card rounded-2xl border border-neutral-200 bg-neutral-50 p-6 hover:bg-white animate-fade-in-up"
-                style={`animation-delay: ${index * 100}ms; opacity: 0;`}
-              >
-                <h3 class="text-lg font-semibold text-neutral-900">
+              <article class="border border-zinc-800 bg-zinc-900/50 p-6 hover:border-accent-500 transition-colors group relative">
+                <div class="absolute top-0 right-0 w-3 h-3 border-t border-r border-zinc-700 group-hover:border-accent-500 transition-colors" />
+                <div class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
+
+                <h3 class="text-lg font-mono font-bold text-white group-hover:text-accent-500 transition-colors uppercase tracking-wider">
                   {principle.name}
                 </h3>
-                <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                <p class="mt-3 text-sm leading-relaxed text-zinc-400 font-mono">
                   {principle.detail}
                 </p>
               </article>
@@ -189,45 +225,42 @@ const principles = [
     </div>
   </section>
 
-  <section class="bg-neutral-950 text-neutral-50">
+  <section class="bg-zinc-900 border-y border-zinc-800">
     <div class="mx-auto max-w-6xl px-6 py-20">
       <div
         class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between"
       >
         <div class="max-w-xl">
           <p
-            class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+            class="text-xs font-mono font-bold uppercase tracking-widest text-zinc-500"
           >
-            Milestones
+            MILESTONES
           </p>
-          <h2 class="mt-4 text-3xl font-semibold text-white">
+          <h2 class="mt-4 text-3xl font-display font-bold text-white">
             How we arrived here
           </h2>
-          <p class="mt-4 text-base text-neutral-300">
-            We integrated every lesson from past deployments into a repeatable
-            starter. The timeline shows where we trimmed noise and doubled down
-            on static clarity.
+          <p class="mt-4 text-base text-zinc-400 font-mono">
+            // We integrated every lesson from past deployments into a
+            repeatable starter. The timeline shows where we trimmed noise and
+            doubled down on static clarity.
           </p>
         </div>
         <div class="flex-1">
-          <div class="relative border-l border-neutral-700 pl-8">
-            <div
-              class="absolute inset-y-0 -left-0.5 w-1 bg-gradient-to-b from-brand-500/60 via-brand-600 to-brand-700/60"
-              aria-hidden="true"
-            >
-            </div>
-            <div class="space-y-9">
+          <div class="relative border-l border-zinc-800 pl-8 ml-4">
+            <div class="space-y-12">
               {
                 timeline.map(entry => (
-                  <div class="relative">
-                    <div class="absolute -left-[1.25rem] top-2 h-3 w-3 rounded-full border border-neutral-950 bg-brand-500" />
-                    <p class="text-sm font-semibold text-brand-400">
-                      {entry.year}
+                  <div class="relative group">
+                    <div class="absolute -left-[2.4rem] top-1 h-4 w-4 border border-zinc-600 bg-zinc-900 group-hover:border-accent-500 group-hover:bg-accent-500 transition-colors" />
+                    <p class="text-sm font-mono font-bold text-accent-500">
+                      [{entry.year}]
                     </p>
-                    <h3 class="mt-2 text-xl font-semibold text-white">
+                    <h3 class="mt-2 text-xl font-display font-bold text-white group-hover:text-accent-500 transition-colors">
                       {entry.heading}
                     </h3>
-                    <p class="mt-2 text-sm text-neutral-300">{entry.copy}</p>
+                    <p class="mt-2 text-sm text-zinc-400 font-mono border-l-2 border-zinc-800 pl-4 group-hover:border-accent-500 transition-colors">
+                      {entry.copy}
+                    </p>
                   </div>
                 ))
               }
@@ -238,36 +271,45 @@ const principles = [
     </div>
   </section>
 
-  <section class="bg-white">
-    <div class="mx-auto max-w-5xl px-6 py-20">
+  <section class="bg-zinc-950 relative overflow-hidden">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(249,115,22,0.05),_transparent_70%)]"
+    >
+    </div>
+    <div class="mx-auto max-w-5xl px-6 py-20 relative">
       <div
-        class="rounded-3xl border border-neutral-200 bg-neutral-950/95 px-8 py-14 text-center text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.45)]"
+        class="border border-zinc-800 bg-zinc-900/80 px-8 py-14 text-center text-zinc-50 backdrop-blur-sm relative"
       >
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-400"
+        <div
+          class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-500 to-transparent opacity-50"
         >
-          Next steps
+        </div>
+
+        <p
+          class="text-xs font-mono font-bold uppercase tracking-widest text-accent-500"
+        >
+          NEXT_STEPS
         </p>
-        <h2 class="mt-6 text-3xl font-semibold text-white">
+        <h2 class="mt-6 text-3xl font-display font-bold text-white">
           Ready to extend the system to your operations?
         </h2>
-        <p class="mt-5 text-base text-neutral-300">
-          Bring your own content strategy and we will translate it into
+        <p class="mt-5 text-base text-zinc-400 font-mono max-w-2xl mx-auto">
+          // Bring your own content strategy and we will translate it into
           static-first sections, CLI helpers, and playbooks that teams can
           maintain long after launch.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <a
-            class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-900 bg-zinc-100 border border-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all uppercase tracking-wider font-mono"
             href={withBasePath('contact/')}
           >
-            Schedule a discovery call
+            Schedule_Discovery
           </a>
           <a
-            class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-100 border border-zinc-700 hover:bg-zinc-900 hover:border-accent-500 hover:text-accent-500 transition-all uppercase tracking-wider font-mono"
             href={withBasePath('services/')}
           >
-            View service catalogue
+            View_Catalogue
           </a>
         </div>
       </div>

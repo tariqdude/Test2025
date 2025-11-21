@@ -39,42 +39,51 @@ const commitments = [
   title="Contact Us | Elite Project"
   description="Reach the Elite Project team for support, partnerships, or general questions."
 >
-  <section class="relative overflow-hidden bg-slate-950 text-slate-100">
+  <section class="relative overflow-hidden bg-zinc-950 text-zinc-100">
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(67,56,202,0.18),_transparent_60%)]"
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
     >
     </div>
     <div
       class="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-24 pt-28 lg:flex-row lg:items-start lg:justify-between"
     >
       <div class="max-w-xl space-y-6">
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400"
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800"
         >
-          Contact
-        </p>
-        <h1 class="text-4xl font-semibold text-white sm:text-5xl">
-          We are ready when you need a steady partner.
+          <span class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"></span>
+          <span class="text-xs font-mono text-zinc-400 tracking-wider"
+            >COMMUNICATION_CHANNEL_OPEN</span
+          >
+        </div>
+        <h1
+          class="text-4xl font-display font-bold text-white sm:text-5xl uppercase tracking-tight"
+        >
+          Ready for <span class="text-accent-500">deployment</span>?
         </h1>
-        <p class="text-lg text-slate-300">
-          Reach out through the form or choose the channel that fits your
-          workflow. The core maintainers reply directly—no handoffs or tiered
-          support.
+        <p class="text-lg text-zinc-400 font-mono leading-relaxed">
+          // Reach out through the form or choose the channel that fits your
+          workflow.
+          <br />
+          // The core maintainers reply directly—no handoffs or tiered support.
         </p>
         <div class="grid gap-4 sm:grid-cols-2">
           {
             contactMethods.map(method => (
               <a
-                class="group flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-white/25"
+                class="group flex flex-col border border-zinc-800 bg-zinc-900/50 p-5 transition hover:border-accent-500 relative overflow-hidden"
                 href={method.href}
               >
-                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-                  {method.label}
+                <div class="absolute top-0 right-0 w-3 h-3 border-t border-r border-zinc-700 group-hover:border-accent-500 transition-colors" />
+                <div class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
+
+                <span class="text-xs font-mono text-accent-500 uppercase tracking-wider mb-2">
+                  [{method.label}]
                 </span>
-                <span class="mt-2 text-lg font-semibold text-white">
+                <span class="text-lg font-display font-bold text-white group-hover:text-accent-500 transition-colors">
                   {method.value}
                 </span>
-                <span class="mt-3 text-sm text-slate-300">
+                <span class="mt-3 text-sm text-zinc-400 font-mono border-t border-zinc-800 pt-3">
                   {method.description}
                 </span>
               </a>
@@ -84,18 +93,21 @@ const commitments = [
       </div>
 
       <div
-        class="w-full max-w-lg space-y-10 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl"
+        class="w-full max-w-lg space-y-10 border border-zinc-800 bg-zinc-900/80 p-8 backdrop-blur-xl relative"
       >
+        <div class="absolute -top-1 -left-1 w-3 h-3 bg-accent-500"></div>
+        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-zinc-700"></div>
+
         <form class="space-y-6" id="contact-form">
           <div class="space-y-2">
             <label
-              class="text-sm font-medium text-slate-200"
+              class="text-xs font-mono text-zinc-400 uppercase tracking-wider"
               for="name"
               id="label-name"
-              >Full name <span class="text-red-400">*</span></label
+              >Full_Name <span class="text-accent-500">*</span></label
             >
             <input
-              class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              class="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500 font-mono transition-colors"
               id="name"
               name="name"
               type="text"
@@ -107,19 +119,20 @@ const commitments = [
               required
             />
             <span
-              class="text-xs text-red-400 hidden"
+              class="text-xs text-red-400 hidden font-mono"
               id="name-error"
               role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label
-              class="text-sm font-medium text-slate-200"
+              class="text-xs font-mono text-zinc-400 uppercase tracking-wider"
               for="email"
-              id="label-email">Email <span class="text-red-400">*</span></label
+              id="label-email"
+              >Email_Address <span class="text-accent-500">*</span></label
             >
             <input
-              class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              class="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500 font-mono transition-colors"
               id="email"
               name="email"
               type="email"
@@ -130,20 +143,20 @@ const commitments = [
               required
             />
             <span
-              class="text-xs text-red-400 hidden"
+              class="text-xs text-red-400 hidden font-mono"
               id="email-error"
               role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label
-              class="text-sm font-medium text-slate-200"
+              class="text-xs font-mono text-zinc-400 uppercase tracking-wider"
               for="subject"
               id="label-subject"
-              >Subject <span class="text-red-400">*</span></label
+              >Subject_Line <span class="text-accent-500">*</span></label
             >
             <select
-              class="w-full appearance-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              class="w-full appearance-none bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm text-white focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500 font-mono transition-colors"
               id="subject"
               name="subject"
               aria-labelledby="label-subject"
@@ -157,20 +170,20 @@ const commitments = [
               <option value="other">Something else</option>
             </select>
             <span
-              class="text-xs text-red-400 hidden"
+              class="text-xs text-red-400 hidden font-mono"
               id="subject-error"
               role="alert"></span>
           </div>
 
           <div class="space-y-2">
             <label
-              class="text-sm font-medium text-slate-200"
+              class="text-xs font-mono text-zinc-400 uppercase tracking-wider"
               for="message"
               id="label-message"
-              >Message <span class="text-red-400">*</span></label
+              >Message_Body <span class="text-accent-500">*</span></label
             >
             <textarea
-              class="h-32 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              class="h-32 w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500 font-mono transition-colors"
               id="message"
               name="message"
               placeholder="Share a few details so we can prepare a helpful reply."
@@ -179,33 +192,31 @@ const commitments = [
               minlength="10"
               required></textarea>
             <span
-              class="text-xs text-red-400 hidden"
+              class="text-xs text-red-400 hidden font-mono"
               id="message-error"
               role="alert"></span>
           </div>
 
           <div
-            class="hidden rounded-2xl border border-green-500/20 bg-green-500/10 p-4"
+            class="hidden border border-green-500/20 bg-green-500/10 p-4"
             id="success-message"
             role="status"
           >
-            <p class="text-sm font-medium text-green-300">
-              ✓ Thank you for your message! We'll get back to you soon.
+            <p class="text-sm font-mono text-green-300">
+              [SUCCESS] Message transmitted. Stand by for response.
             </p>
           </div>
 
           <button
-            class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="inline-flex w-full items-center justify-center gap-2 bg-zinc-100 border border-zinc-100 px-4 py-3 text-sm font-bold text-zinc-900 uppercase tracking-wider hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed font-mono"
             type="submit"
             id="submit-button"
           >
-            <span id="button-text">Send message</span>
-            <span class="hidden" id="button-loading">Sending...</span>
+            <span id="button-text">TRANSMIT_MESSAGE</span>
+            <span class="hidden" id="button-loading">TRANSMITTING...</span>
           </button>
-          <p class="text-xs text-slate-400">
-            This presentational form keeps submissions in the browser—swap the
-            action or embed a service such as Formspree when you are ready to
-            collect entries.
+          <p class="text-xs text-zinc-500 font-mono">
+            // This presentational form keeps submissions in the browser.
           </p>
         </form>
 
@@ -295,16 +306,18 @@ const commitments = [
           });
         </script>
 
-        <div
-          class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/50 p-6"
-        >
-          <h2 class="text-base font-semibold text-white">Office hours</h2>
-          <ul class="space-y-2 text-sm text-slate-300">
+        <div class="space-y-4 border border-zinc-800 bg-zinc-900/50 p-6">
+          <h2
+            class="text-base font-mono font-bold text-white uppercase tracking-wider"
+          >
+            Office_Hours
+          </h2>
+          <ul class="space-y-2 text-sm text-zinc-400 font-mono">
             {
               officeHours.map(slot => (
-                <li class="flex items-center justify-between">
+                <li class="flex items-center justify-between border-b border-zinc-800/50 pb-2 last:border-0 last:pb-0">
                   <span>{slot.day}</span>
-                  <span class="text-slate-400">{slot.hours}</span>
+                  <span class="text-accent-500">{slot.hours}</span>
                 </li>
               ))
             }
@@ -314,31 +327,32 @@ const commitments = [
     </div>
   </section>
 
-  <section class="relative border-y border-white/10 bg-slate-950/80">
+  <section class="relative border-y border-zinc-800 bg-zinc-900/50">
     <div
-      class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.1),_transparent_75%)]"
+      class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
     >
     </div>
     <div
-      class="relative mx-auto max-w-5xl px-6 py-16 text-center text-slate-300"
+      class="relative mx-auto max-w-5xl px-6 py-16 text-center text-zinc-300"
     >
       <p
-        class="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-200/70"
+        class="text-xs font-mono font-bold uppercase tracking-widest text-accent-500"
       >
-        Response commitments
+        SLA_COMMITMENTS
       </p>
-      <h2 class="mt-4 text-3xl font-semibold text-white">
+      <h2 class="mt-4 text-3xl font-display font-bold text-white">
         Direct access to the maintainers
       </h2>
-      <p class="mt-4 text-base text-slate-300">
-        Whether you share a quick question or a full project brief, expect
+      <p class="mt-4 text-base text-zinc-400 font-mono max-w-2xl mx-auto">
+        // Whether you share a quick question or a full project brief, expect
         specifics, realistic timelines, and a clear next step.
       </p>
       <ul class="mt-10 grid gap-4 text-left md:grid-cols-3">
         {
           commitments.map(item => (
-            <li class="glass-panel h-full rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200 shadow-lg shadow-indigo-500/5">
-              {item}
+            <li class="h-full border border-zinc-800 bg-zinc-950 p-5 text-sm text-zinc-300 font-mono hover:border-accent-500 transition-colors relative group">
+              <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
+              <span class="text-accent-500 mr-2">></span> {item}
             </li>
           ))
         }
@@ -346,33 +360,35 @@ const commitments = [
     </div>
   </section>
 
-  <section class="relative overflow-hidden bg-slate-950">
+  <section
+    class="relative overflow-hidden bg-zinc-950 border-t border-zinc-800"
+  >
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(14,165,233,0.12),_transparent_70%)]"
+      class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(249,115,22,0.05),_transparent_70%)]"
     >
     </div>
     <div
-      class="relative mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16 text-center text-slate-300"
+      class="relative mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16 text-center text-zinc-300"
     >
-      <h2 class="text-3xl font-semibold text-white">
+      <h2 class="text-3xl font-display font-bold text-white">
         Prefer to talk it through?
       </h2>
-      <p class="text-base text-slate-300">
-        Share your timeline, the systems in scope, and the level of support you
-        expect. We will prepare a short agenda before hopping on a call.
+      <p class="text-base text-zinc-400 font-mono">
+        // Share your timeline, the systems in scope, and the level of support
+        you expect. We will prepare a short agenda before hopping on a call.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a
-          class="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/35 hover:bg-white/10"
+          class="inline-flex items-center gap-2 border border-zinc-700 px-5 py-2 text-sm font-mono font-bold text-zinc-100 transition hover:border-accent-500 hover:text-accent-500 hover:bg-zinc-900 uppercase tracking-wider"
           href="mailto:hello@eliteproject.dev"
         >
-          Email the team
+          Email_Team
         </a>
         <a
-          class="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/35 hover:bg-white/10"
+          class="inline-flex items-center gap-2 bg-zinc-100 border border-zinc-100 px-5 py-2 text-sm font-mono font-bold text-zinc-900 transition hover:bg-accent-500 hover:border-accent-500 hover:text-white uppercase tracking-wider"
           href="tel:+15551234567"
         >
-          Book a quick call
+          Book_Call
         </a>
       </div>
     </div>

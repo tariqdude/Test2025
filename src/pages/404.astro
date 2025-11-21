@@ -17,41 +17,70 @@ const quickLinks = [
   description="The page you're looking for doesn't exist."
 >
   <section
-    class="relative flex min-h-[80vh] items-center justify-center overflow-hidden"
+    class="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-zinc-950"
   >
     <div
-      class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(148,163,184,0.15),_transparent_70%)]"
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
     >
     </div>
     <div class="relative mx-auto max-w-[800px] px-6 py-20 text-center">
       <div
-        class="glass-panel border border-white/10 px-10 py-16 sm:px-14 sm:py-20"
+        class="border border-zinc-800 bg-zinc-900/80 px-10 py-16 sm:px-14 sm:py-20 backdrop-blur-sm relative"
       >
+        <div
+          class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700"
+        >
+        </div>
+        <div
+          class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-700"
+        >
+        </div>
+        <div
+          class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-700"
+        >
+        </div>
+        <div
+          class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-700"
+        >
+        </div>
+
         <div class="mb-8 flex justify-center">
           <span
-            class="inline-flex h-24 w-24 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-4xl font-semibold text-slate-100"
+            class="inline-flex h-24 w-24 items-center justify-center border border-zinc-800 bg-zinc-950 text-4xl font-mono font-bold text-accent-500"
           >
             404
           </span>
         </div>
 
-        <h1 class="text-4xl font-semibold text-white sm:text-5xl">
-          Page not found
+        <h1
+          class="text-4xl font-display font-bold text-white sm:text-5xl uppercase tracking-tight"
+        >
+          Page_Not_Found
         </h1>
 
-        <p class="mt-6 text-lg text-slate-300">
-          The page you're looking for doesn't exist or has been moved. Try one
-          of the links below to get back on track.
+        <p class="mt-6 text-lg text-zinc-400 font-mono">
+          // The page you're looking for doesn't exist or has been moved. Try
+          one of the links below to get back on track.
         </p>
 
-        <p class="mt-4 text-sm text-slate-400">
-          Current URL: <code class="rounded bg-slate-900 px-2 py-1 text-slate-300" id="current-url"></code>
+        <p class="mt-4 text-sm text-zinc-500 font-mono">
+          Current URL: <code
+            class="bg-zinc-950 border border-zinc-800 px-2 py-1 text-accent-500"
+            id="current-url"></code>
         </p>
 
         <div class="mt-10 flex flex-wrap justify-center gap-4">
-          <a class="btn btn-primary" href={withBasePath('/')}> Return home </a>
-          <a class="btn btn-secondary" href={withBasePath('contact/')}>
-            Contact support
+          <a
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-900 bg-zinc-100 border border-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all uppercase tracking-wider font-mono"
+            href={withBasePath('/')}
+          >
+            Return_Home
+          </a>
+          <a
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-100 border border-zinc-700 hover:bg-zinc-900 hover:border-accent-500 hover:text-accent-500 transition-all uppercase tracking-wider font-mono"
+            href={withBasePath('contact/')}
+          >
+            Contact_Support
           </a>
         </div>
 
@@ -64,17 +93,17 @@ const quickLinks = [
           });
         </script>
 
-        <div class="mt-12 border-t border-white/10 pt-10">
+        <div class="mt-12 border-t border-zinc-800 pt-10">
           <p
-            class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+            class="text-xs font-mono font-bold uppercase tracking-widest text-zinc-500"
           >
-            Quick links
+            QUICK_LINKS
           </p>
           <nav class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3">
             {
               quickLinks.map(link => (
                 <a
-                  class="text-sm font-medium text-slate-300 transition hover:text-white"
+                  class="text-sm font-mono text-zinc-400 transition hover:text-accent-500 uppercase tracking-wider"
                   href={link.href}
                 >
                   {link.label}

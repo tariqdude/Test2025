@@ -65,29 +65,33 @@ const faqs = [
   title="Pricing | Elite Project"
   description="Transparent pricing for adapting and maintaining the Elite Project starter."
 >
-  <section class="relative overflow-hidden bg-neutral-950 text-neutral-50">
+  <section
+    class="relative overflow-hidden bg-zinc-950 text-zinc-50 border-b border-zinc-800"
+  >
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+      class="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"
     >
     </div>
     <div class="relative mx-auto max-w-5xl px-6 pb-24 pt-28 text-center">
       <p
-        class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+        class="text-xs font-bold uppercase tracking-[0.35em] text-accent-500 font-mono"
       >
         Pricing
       </p>
-      <h1 class="mt-6 text-4xl font-semibold sm:text-5xl">
+      <h1
+        class="mt-6 text-4xl font-bold sm:text-5xl font-display uppercase tracking-tight"
+      >
         Choose the level of support that keeps you shipping.
       </h1>
-      <p class="mt-6 mx-auto max-w-3xl text-lg text-neutral-300">
+      <p class="mt-6 mx-auto max-w-3xl text-lg text-zinc-400 font-mono">
         Whether you want to self-host or rely on our team for ongoing
         improvements, every tier keeps the Astro site simple, reliable, and well
         documented.
       </p>
       <div
-        class="mt-10 inline-flex items-center gap-6 rounded-full border border-white/10 bg-neutral-900/60 px-6 py-3 text-sm text-neutral-300"
+        class="mt-10 inline-flex items-center gap-6 border border-zinc-800 bg-zinc-900/60 px-6 py-3 text-sm text-zinc-300 font-mono"
       >
-        <span class="inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+        <span class="inline-flex h-2 w-2 bg-accent-500 animate-pulse"></span>
         <span
           >All paid tiers include documentation, training, and priority inbox
           access.</span
@@ -216,25 +220,24 @@ const faqs = [
     </div>
   </section>
 
-  <section class="bg-white">
-    <div class="mx-auto max-w-4xl px-6 py-20">
-      <h2 class="text-3xl font-semibold text-neutral-900 text-center">
-        Frequently asked questions
+  <section class="border-t border-zinc-800 bg-zinc-900/30 py-24">
+    <div class="mx-auto max-w-4xl px-6">
+      <h2
+        class="text-3xl font-bold text-center text-white font-display uppercase tracking-tight mb-16"
+      >
+        Frequently Asked Questions
       </h2>
-      <div class="mt-10 space-y-6">
+      <div class="grid gap-8">
         {
-          faqs.map(item => (
-            <details class="group rounded-3xl border border-neutral-200 bg-neutral-50 p-6">
-              <summary class="flex cursor-pointer list-none items-center justify-between text-left text-base font-semibold text-neutral-900">
-                {item.question}
-                <span class="ml-4 inline-flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 text-sm text-neutral-500 transition group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p class="mt-4 text-sm leading-relaxed text-neutral-600">
-                {item.answer}
+          faqs.map(faq => (
+            <div class="border border-zinc-800 bg-zinc-950 p-8 hover:border-zinc-700 transition-colors">
+              <h3 class="text-lg font-bold text-white font-display uppercase tracking-wide mb-4">
+                {faq.question}
+              </h3>
+              <p class="text-zinc-400 font-mono leading-relaxed">
+                {faq.answer}
               </p>
-            </details>
+            </div>
           ))
         }
       </div>

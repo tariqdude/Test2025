@@ -101,145 +101,198 @@ const process = [
   title="Services | Elite Project"
   description="A focused list of services to adapt the Elite Project starter to your needs."
 >
-  <section class="relative overflow-hidden bg-neutral-950">
+  <section
+    class="relative overflow-hidden bg-zinc-950 pt-28 pb-20 border-b border-zinc-800"
+  >
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(80,80,80,0.45),_transparent_60%)]"
+      class="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"
     >
     </div>
-    <div
-      class="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-24 pt-28 lg:flex-row lg:items-center"
-    >
-      <div class="max-w-xl text-neutral-50">
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
-        >
-          Services
-        </p>
-        <h1 class="mt-6 text-4xl font-semibold sm:text-5xl lg:text-6xl">
-          Practical support for static operations teams.
-        </h1>
-        <p class="mt-6 text-lg text-neutral-300">
-          Every engagement focuses on delivering a GitHub Pages-ready Astro
-          build, with documentation and tooling that keep your releases
-          predictable.
-        </p>
-        <div class="mt-10 flex flex-wrap gap-4">
-          <a href={withBasePath('pricing/')} class="btn btn-primary">
-            View pricing guide
-          </a>
-          <a href={withBasePath('contact/')} class="btn btn-secondary">
-            Schedule a scoping call
-          </a>
-        </div>
-      </div>
-      <div
-        class="glass-panel grid flex-1 gap-4 rounded-3xl border border-white/10 p-6 lg:max-w-md animate-fade-in-up"
-      >
-        <div class="card rounded-2xl border border-white/10 p-5">
-          <p class="text-sm font-semibold text-white">Engagement span</p>
-          <p class="mt-2 text-xs text-neutral-400">
-            Typical delivery completes within four weeks including documentation
-            and training handover.
-          </p>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="card rounded-2xl border border-white/10 p-5">
-            <p class="text-3xl font-semibold text-white">48h</p>
-            <p class="mt-2 text-xs text-neutral-400">
-              Average first content publish after onboarding
-            </p>
-          </div>
-          <div class="card rounded-2xl border border-white/10 p-5">
-            <p class="text-3xl font-semibold text-white">0</p>
-            <p class="mt-2 text-xs text-neutral-400">
-              Server dependencies introduced
-            </p>
-          </div>
-        </div>
-        <div class="card rounded-2xl border border-white/10 p-5">
-          <p class="text-sm font-semibold text-white">Coverage</p>
-          <p class="mt-2 text-xs text-neutral-400">
-            Includes accessibility sweeps, performance checks, and CI-friendly
-            scripts ready for your repositories.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="border-b border-neutral-200 bg-neutral-50">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <SystemHighlights
-        eyebrow="Why teams hire us"
-        title="Outcomes we commit to"
-        intro="Each package focuses on predictable releases and maintainable infrastructure for static documentation and operations hubs."
-        items={highlightItems}
-      />
-    </div>
-  </section>
-
-  <section class="bg-white">
-    <div class="mx-auto max-w-6xl space-y-10 px-6 py-20">
-      {
-        offerings.map(offering => (
-          <article class="rounded-3xl border border-neutral-200 bg-neutral-50 p-8 shadow-[0_30px_80px_-60px_rgba(15,23,42,0.35)]">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-              <div class="max-w-xl">
-                <h2 class="text-2xl font-semibold text-neutral-900">
-                  {offering.name}
-                </h2>
-                <p class="mt-3 text-sm text-neutral-600">{offering.summary}</p>
-              </div>
-              <a
-                class="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-400"
-                href={withBasePath('contact/')}
-              >
-                Discuss this service
-              </a>
-            </div>
-            <ul class="mt-6 grid gap-3 text-sm text-neutral-600">
-              {offering.details.map(item => (
-                <li class="flex items-start gap-2">
-                  <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="bg-neutral-950 text-neutral-50">
-    <div class="mx-auto max-w-6xl px-6 py-20">
-      <div
-        class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between"
-      >
-        <div class="max-w-xl">
+    <div class="relative mx-auto max-w-[1220px] px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="max-w-2xl">
+          <span
+            class="inline-block border border-accent-500/30 bg-accent-500/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-accent-400 font-mono mb-6"
+          >
+            Services
+          </span>
+          <h1
+            class="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl font-display uppercase tracking-tight"
+          >
+            Practical support for <span class="text-accent-500">static ops</span
+            >.
+          </h1>
           <p
-            class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+            class="mt-6 text-lg text-zinc-400 font-mono border-l-2 border-zinc-800 pl-6"
+          >
+            Every engagement focuses on delivering a GitHub Pages-ready Astro
+            build, with documentation and tooling that keep your releases
+            predictable.
+          </p>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href={withBasePath('pricing/')}
+              class="btn btn-primary rounded-sm font-mono uppercase tracking-wider text-xs"
+            >
+              View pricing guide
+            </a>
+            <a
+              href={withBasePath('contact/')}
+              class="btn btn-secondary rounded-sm font-mono uppercase tracking-wider text-xs"
+            >
+              Schedule a scoping call
+            </a>
+          </div>
+        </div>
+
+        <div class="grid gap-4">
+          <div
+            class="border border-zinc-800 bg-zinc-900/50 p-6 relative group hover:border-accent-500/50 transition-colors"
+          >
+            <div
+              class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-600 group-hover:border-accent-500 transition-colors"
+            >
+            </div>
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-zinc-500 font-mono mb-2"
+            >
+              Engagement span
+            </p>
+            <p class="text-sm text-zinc-300 font-mono">
+              Typical delivery completes within four weeks including
+              documentation and training handover.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div
+              class="border border-zinc-800 bg-zinc-900/50 p-6 relative group hover:border-accent-500/50 transition-colors"
+            >
+              <div
+                class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-600 group-hover:border-accent-500 transition-colors"
+              >
+              </div>
+              <p class="text-3xl font-bold text-white font-display">48h</p>
+              <p
+                class="mt-2 text-[0.65rem] uppercase tracking-wider text-zinc-500 font-mono"
+              >
+                First content publish
+              </p>
+            </div>
+            <div
+              class="border border-zinc-800 bg-zinc-900/50 p-6 relative group hover:border-accent-500/50 transition-colors"
+            >
+              <div
+                class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-600 group-hover:border-accent-500 transition-colors"
+              >
+              </div>
+              <p class="text-3xl font-bold text-white font-display">0</p>
+              <p
+                class="mt-2 text-[0.65rem] uppercase tracking-wider text-zinc-500 font-mono"
+              >
+                Server dependencies
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SystemHighlights
+    eyebrow="Why teams hire us"
+    title="Outcomes we commit to"
+    intro="Each package focuses on predictable releases and maintainable infrastructure for static documentation and operations hubs."
+    items={highlightItems}
+  />
+
+  <section class="bg-zinc-950 py-24 border-t border-zinc-800">
+    <div class="mx-auto max-w-[1220px] px-6">
+      <div class="grid gap-8">
+        {
+          offerings.map((offering, index) => (
+            <article class="border border-zinc-800 bg-zinc-900/20 p-8 hover:border-accent-500/50 transition-colors group relative overflow-hidden">
+              <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono text-6xl font-bold text-zinc-800 group-hover:text-accent-500/10">
+                  0{index + 1}
+                </span>
+              </div>
+
+              <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between relative z-10">
+                <div class="max-w-2xl">
+                  <h2 class="text-2xl font-bold text-white font-display uppercase tracking-wide">
+                    {offering.name}
+                  </h2>
+                  <p class="mt-3 text-sm text-zinc-400 font-mono border-l border-zinc-800 pl-4">
+                    {offering.summary}
+                  </p>
+
+                  <ul class="mt-6 grid gap-3 text-sm text-zinc-300 font-mono">
+                    {offering.details.map(item => (
+                      <li class="flex items-start gap-3">
+                        <span class="mt-1.5 h-1.5 w-1.5 bg-accent-500 flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <a
+                  class="inline-flex items-center justify-center border border-zinc-700 bg-zinc-800 px-6 py-3 text-xs font-bold uppercase tracking-widest text-zinc-300 transition hover:border-accent-500 hover:text-white font-mono"
+                  href={withBasePath('contact/')}
+                >
+                  Discuss Service
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-zinc-900/30 border-t border-zinc-800 py-24">
+    <div class="mx-auto max-w-[1220px] px-6">
+      <div
+        class="flex flex-col gap-16 lg:flex-row lg:items-start lg:justify-between"
+      >
+        <div class="max-w-sm sticky top-24">
+          <p
+            class="text-xs font-bold uppercase tracking-[0.35em] text-accent-500 font-mono"
           >
             Implementation cadence
           </p>
-          <h2 class="mt-4 text-3xl font-semibold text-white">How we deliver</h2>
-          <p class="mt-4 text-base text-neutral-300">
+          <h2
+            class="mt-4 text-3xl font-bold text-white font-display uppercase tracking-tight"
+          >
+            How we deliver
+          </h2>
+          <p
+            class="mt-4 text-sm text-zinc-400 font-mono leading-relaxed border-l-2 border-zinc-800 pl-4"
+          >
             We work in focused weekly sprints with demos at each milestone. The
             plan adapts to your content volume and internal review cycles.
           </p>
         </div>
-        <div class="flex-1">
-          <div class="grid gap-5 lg:grid-cols-3">
+        <div class="flex-1 w-full">
+          <div class="grid gap-6">
             {
-              process.map(step => (
-                <article class="rounded-2xl border border-white/15 bg-neutral-900/60 p-6">
-                  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
-                    {step.duration}
-                  </p>
-                  <h3 class="mt-3 text-lg font-semibold text-white">
-                    {step.phase}
-                  </h3>
-                  <p class="mt-3 text-sm text-neutral-300">{step.focus}</p>
+              process.map((step, index) => (
+                <article class="border border-zinc-800 bg-zinc-950 p-8 hover:border-accent-500/50 transition-colors group relative">
+                  <div class="absolute left-0 top-0 bottom-0 w-1 bg-zinc-800 group-hover:bg-accent-500 transition-colors" />
+                  <div class="flex flex-col md:flex-row md:items-center gap-6">
+                    <div class="md:w-32 flex-shrink-0">
+                      <p class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 font-mono group-hover:text-accent-400 transition-colors">
+                        {step.duration}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-bold text-white font-display uppercase tracking-wide mb-2">
+                        {step.phase}
+                      </h3>
+                      <p class="text-sm text-zinc-400 font-mono">
+                        {step.focus}
+                      </p>
+                    </div>
+                  </div>
                 </article>
               ))
             }
@@ -249,24 +302,30 @@ const process = [
     </div>
   </section>
 
-  <section class="bg-neutral-50">
-    <div class="mx-auto max-w-5xl px-6 py-20">
-      <h2 class="text-3xl font-semibold text-neutral-900">
-        Deliverables at handover
-      </h2>
-      <p class="mt-4 max-w-2xl text-base text-neutral-600">
-        You leave with more than files. Every project wraps with documentation,
-        automation hooks, and assurances that your content team can ship updates
-        without additional support.
-      </p>
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
+  <section class="bg-zinc-950 border-t border-zinc-800 py-24">
+    <div class="mx-auto max-w-[1220px] px-6">
+      <div class="mb-16">
+        <h2
+          class="text-3xl font-bold text-white font-display uppercase tracking-tight"
+        >
+          Deliverables at handover
+        </h2>
+        <p
+          class="mt-4 max-w-2xl text-sm text-zinc-400 font-mono border-l-2 border-zinc-800 pl-4"
+        >
+          You leave with more than files. Every project wraps with
+          documentation, automation hooks, and assurances that your content team
+          can ship updates without additional support.
+        </p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
         {
           deliverables.map(item => (
-            <article class="rounded-2xl border border-neutral-200 bg-white p-6">
-              <h3 class="text-lg font-semibold text-neutral-900">
+            <article class="border border-zinc-800 bg-zinc-900/20 p-6 hover:border-accent-500/50 transition-colors">
+              <h3 class="text-lg font-bold text-white font-display uppercase tracking-wide">
                 {item.name}
               </h3>
-              <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+              <p class="mt-3 text-sm leading-relaxed text-zinc-400 font-mono">
                 {item.detail}
               </p>
             </article>
@@ -276,32 +335,41 @@ const process = [
     </div>
   </section>
 
-  <section class="bg-white">
-    <div class="mx-auto max-w-5xl px-6 py-20">
+  <section class="bg-zinc-900/30 border-t border-zinc-800">
+    <div class="mx-auto max-w-5xl px-6 py-24">
       <div
-        class="rounded-3xl border border-neutral-200 bg-neutral-950/95 px-8 py-14 text-center text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.45)]"
+        class="border border-zinc-800 bg-zinc-950 px-8 py-14 text-center relative overflow-hidden group"
       >
+        <div
+          class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] bg-no-repeat transition-[background-position] duration-[0s] hover:bg-[position:200%_0,0_0] hover:duration-[1.5s]"
+        >
+        </div>
+
         <p
-          class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-400"
+          class="text-xs font-bold uppercase tracking-[0.35em] text-accent-500 font-mono relative z-10"
         >
           Next step
         </p>
-        <h2 class="mt-6 text-3xl font-semibold text-white">
+        <h2
+          class="mt-6 text-3xl font-bold text-white font-display uppercase tracking-tight relative z-10"
+        >
           Bring us in when you need reliable documentation infrastructure
         </h2>
-        <p class="mt-5 text-base text-neutral-300">
+        <p
+          class="mt-5 text-sm text-zinc-400 font-mono max-w-2xl mx-auto relative z-10"
+        >
           Share your current stack and launch goals—we will identify the fastest
           path to a static site your team can extend.
         </p>
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <div class="mt-8 flex flex-wrap justify-center gap-4 relative z-10">
           <a
-            class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+            class="btn btn-primary rounded-sm font-mono uppercase tracking-wider text-xs"
             href={withBasePath('contact/')}
           >
             Book a consultation
           </a>
           <a
-            class="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white/40"
+            class="btn btn-secondary rounded-sm font-mono uppercase tracking-wider text-xs"
             href={withBasePath('pricing/')}
           >
             Review pricing tiers
