@@ -1,0 +1,245 @@
+---
+/**
+ * ProgressiveImage - Progressive image loading with blur-up effect
+ * Improves perceived performance with low-quality placeholder
+ */
+export interface Props {
+  src: string;
+  alt: string;
+  placeholder?: string;
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  className?: string;
+  loading?: 'lazy' | 'eager';
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
+}
+
+const {
+  src,
+  alt,
+  placeholder,
+  width,
+  height,
+  aspectRatio,
+  className = '',
+  loading = 'lazy',
+  objectFit = 'cover',
+} = Astro.props;
+
+const imageSrc = src;
+const placeholderSrc = placeholder || imageSrc;
+const imageId = `progressive-img-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div
+  class={`progressive-image-wrapper ${className}`}
+  style={aspectRatio ? `aspect-ratio: ${aspectRatio};` : ''}
+  data-progressive-id={imageId}
+>
+  {
+    placeholder && (
+      <img
+        class="progressive-placeholder"
+        src={placeholderSrc}
+        alt=""
+        aria-hidden="true"
+      />
+    )
+  }
+  <img
+    class={`progressive-image object-${objectFit}`}
+    data-src={imageSrc}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+  />
+  <div class="progressive-spinner">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script>
+  class ProgressiveImageLoader {
+    private images: NodeListOf<HTMLElement>;
+    private observer: IntersectionObserver;
+
+    constructor() {
+      this.images = document.querySelectorAll('.progressive-image-wrapper');
+      this.observer = new IntersectionObserver(
+        (entries) => this.handleIntersection(entries),
+        {
+          rootMargin: '50px',
+          threshold: 0.01,
+        }
+      );
+      this.init();
+    }
+
+    init() {
+      this.images.forEach((wrapper) => {
+        this.observer.observe(wrapper);
+      });
+    }
+
+    handleIntersection(entries: IntersectionObserverEntry[]) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const wrapper = entry.target as HTMLElement;
+          this.loadImage(wrapper);
+          this.observer.unobserve(wrapper);
+        }
+      });
+    }
+
+    loadImage(wrapper: HTMLElement) {
+      const img = wrapper.querySelector('.progressive-image') as HTMLImageElement;
+      const spinner = wrapper.querySelector('.progressive-spinner');
+      
+      if (!img) return;
+
+      const src = img.getAttribute('data-src');
+      if (!src) return;
+
+      // Create a new image to preload
+      const tempImg = new Image();
+      
+      tempImg.onload = () => {
+        img.src = src;
+        img.classList.add('progressive-loaded');
+        wrapper.classList.add('loaded');
+        
+        // Remove spinner
+        if (spinner) {
+          spinner.classList.add('hidden');
+        }
+      };
+
+      tempImg.onerror = () => {
+        wrapper.classList.add('error');
+        if (spinner) {
+          spinner.classList.add('hidden');
+        }
+      };
+
+      tempImg.src = src;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new ProgressiveImageLoader();
+  });
+</script>
+
+<style>
+  .progressive-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: rgba(229, 231, 235, 1);
+    border-radius: 0.5rem;
+  }
+
+  :global(.dark) .progressive-image-wrapper {
+    background: rgba(55, 65, 81, 1);
+  }
+
+  .progressive-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: inherit;
+    filter: blur(20px);
+    transform: scale(1.1);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .progressive-image-wrapper.loaded .progressive-placeholder {
+    opacity: 0;
+  }
+
+  .progressive-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .progressive-image.progressive-loaded {
+    opacity: 1;
+  }
+
+  .progressive-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .progressive-spinner.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid rgba(99, 102, 241, 0.2);
+    border-top-color: rgba(99, 102, 241, 1);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .progressive-image-wrapper.error::after {
+    content: '⚠ Failed to load';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(239, 68, 68, 1);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* Object fit utilities */
+  .object-cover {
+    object-fit: cover;
+  }
+
+  .object-contain {
+    object-fit: contain;
+  }
+
+  .object-fill {
+    object-fit: fill;
+  }
+
+  .object-none {
+    object-fit: none;
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .progressive-placeholder,
+    .progressive-image,
+    .progressive-spinner {
+      transition: none;
+    }
+
+    .spinner {
+      animation: none;
+      border-top-color: transparent;
+    }
+  }
+</style>

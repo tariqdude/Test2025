@@ -1,0 +1,122 @@
+---
+/**
+ * ParallaxSection - Smooth parallax scrolling effect
+ * Creates depth perception through differential scrolling speeds
+ */
+export interface Props {
+  speed?: number;
+  direction?: 'up' | 'down';
+  className?: string;
+  id?: string;
+}
+
+const {
+  speed = 0.5,
+  direction = 'up',
+  className = '',
+  id,
+} = Astro.props;
+
+const multiplier = direction === 'up' ? -1 : 1;
+const parallaxSpeed = speed * multiplier;
+---
+
+<div
+  class={`parallax-section ${className}`}
+  data-parallax-speed={parallaxSpeed}
+  id={id}
+>
+  <div class="parallax-content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  // Parallax scrolling effect
+  class ParallaxEffect {
+    private sections: NodeListOf<HTMLElement>;
+    private rafId: number | null = null;
+
+    constructor() {
+      this.sections = document.querySelectorAll('.parallax-section');
+      this.init();
+    }
+
+    init() {
+      if (this.sections.length === 0) return;
+
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      if (prefersReducedMotion) {
+        return;
+      }
+
+      this.onScroll();
+      window.addEventListener('scroll', () => this.requestTick(), {
+        passive: true,
+      });
+      window.addEventListener('resize', () => this.onScroll());
+    }
+
+    requestTick() {
+      if (!this.rafId) {
+        this.rafId = requestAnimationFrame(() => this.onScroll());
+      }
+    }
+
+    onScroll() {
+      this.rafId = null;
+      const scrollTop = window.pageYOffset;
+
+      this.sections.forEach((section) => {
+        const speed = parseFloat(
+          section.getAttribute('data-parallax-speed') || '0'
+        );
+        const rect = section.getBoundingClientRect();
+        const sectionTop = rect.top + scrollTop;
+        const sectionHeight = rect.height;
+
+        // Only apply parallax when section is in viewport
+        if (
+          scrollTop + window.innerHeight > sectionTop &&
+          scrollTop < sectionTop + sectionHeight
+        ) {
+          const translateY = (scrollTop - sectionTop) * speed;
+          const content = section.querySelector(
+            '.parallax-content'
+          ) as HTMLElement;
+
+          if (content) {
+            content.style.transform = `translate3d(0, ${translateY}px, 0)`;
+          }
+        }
+      });
+    }
+  }
+
+  // Initialize parallax effect
+  document.addEventListener('DOMContentLoaded', () => {
+    new ParallaxEffect();
+  });
+</script>
+
+<style>
+  .parallax-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parallax-content {
+    will-change: transform;
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .parallax-content {
+      transform: none !important;
+    }
+  }
+</style>

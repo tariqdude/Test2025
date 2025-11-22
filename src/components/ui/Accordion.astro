@@ -1,0 +1,257 @@
+---
+/**
+ * Accordion - Collapsible content sections
+ * Supports single or multiple open panels
+ */
+export interface Props {
+  items: Array<{
+    id: string;
+    title: string;
+    content: string;
+  }>;
+  allowMultiple?: boolean;
+  defaultOpen?: string[];
+  className?: string;
+}
+
+const {
+  items,
+  allowMultiple = false,
+  defaultOpen = [],
+  className = '',
+} = Astro.props;
+
+const accordionId = `accordion-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div
+  class={`accordion ${className}`}
+  data-accordion-id={accordionId}
+  data-allow-multiple={allowMultiple}
+>
+  {
+    items.map((item) => (
+      <div
+        class={`accordion-item ${defaultOpen.includes(item.id) ? 'accordion-item-open' : ''}`}
+        data-accordion-item={item.id}
+      >
+        <button
+          class="accordion-trigger"
+          aria-expanded={defaultOpen.includes(item.id)}
+          aria-controls={`${accordionId}-panel-${item.id}`}
+          id={`${accordionId}-trigger-${item.id}`}
+        >
+          <span class="accordion-title">{item.title}</span>
+          <svg
+            class="accordion-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        <div
+          class="accordion-panel"
+          id={`${accordionId}-panel-${item.id}`}
+          role="region"
+          aria-labelledby={`${accordionId}-trigger-${item.id}`}
+        >
+          <div class="accordion-content">{item.content}</div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  class AccordionManager {
+    private accordions: Map<string, HTMLElement> = new Map();
+
+    constructor() {
+      this.init();
+    }
+
+    init() {
+      document.querySelectorAll('.accordion').forEach((accordion) => {
+        const id = (accordion as HTMLElement).getAttribute(
+          'data-accordion-id'
+        );
+        if (id) {
+          this.accordions.set(id, accordion as HTMLElement);
+          this.setupAccordion(accordion as HTMLElement);
+        }
+      });
+    }
+
+    setupAccordion(accordion: HTMLElement) {
+      const allowMultiple =
+        accordion.getAttribute('data-allow-multiple') === 'true';
+      const triggers = accordion.querySelectorAll('.accordion-trigger');
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          const item = trigger.closest('.accordion-item') as HTMLElement;
+          const isOpen = item.classList.contains('accordion-item-open');
+
+          if (!allowMultiple) {
+            // Close all other items
+            accordion
+              .querySelectorAll('.accordion-item-open')
+              .forEach((openItem) => {
+                if (openItem !== item) {
+                  this.closeItem(openItem as HTMLElement);
+                }
+              });
+          }
+
+          // Toggle current item
+          if (isOpen) {
+            this.closeItem(item);
+          } else {
+            this.openItem(item);
+          }
+        });
+
+        // Keyboard navigation
+        trigger.addEventListener('keydown', (e) => {
+          const event = e as KeyboardEvent;
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            (trigger as HTMLElement).click();
+          }
+        });
+      });
+    }
+
+    openItem(item: HTMLElement) {
+      const trigger = item.querySelector('.accordion-trigger');
+      const panel = item.querySelector('.accordion-panel') as HTMLElement;
+
+      item.classList.add('accordion-item-open');
+      trigger?.setAttribute('aria-expanded', 'true');
+
+      if (panel) {
+        const content = panel.querySelector(
+          '.accordion-content'
+        ) as HTMLElement;
+        const height = content ? content.scrollHeight : 0;
+        panel.style.maxHeight = height + 'px';
+      }
+    }
+
+    closeItem(item: HTMLElement) {
+      const trigger = item.querySelector('.accordion-trigger');
+      const panel = item.querySelector('.accordion-panel') as HTMLElement;
+
+      item.classList.remove('accordion-item-open');
+      trigger?.setAttribute('aria-expanded', 'false');
+
+      if (panel) {
+        panel.style.maxHeight = '0';
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new AccordionManager();
+  });
+</script>
+
+<style>
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .accordion-item {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+  }
+
+  :global(.dark) .accordion-item {
+    background: rgba(24, 24, 27, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .accordion-item:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .accordion-trigger:hover {
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .accordion-trigger:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: -2px;
+  }
+
+  .accordion-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(15, 23, 42, 0.9);
+  }
+
+  :global(.dark) .accordion-title {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .accordion-icon {
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(99, 102, 241, 0.7);
+  }
+
+  .accordion-item-open .accordion-icon {
+    transform: rotate(-180deg);
+  }
+
+  .accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .accordion-content {
+    padding: 0 1.5rem 1.25rem;
+    color: rgba(71, 85, 105, 1);
+    line-height: 1.6;
+  }
+
+  :global(.dark) .accordion-content {
+    color: rgba(203, 213, 225, 1);
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-item,
+    .accordion-panel,
+    .accordion-icon {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+/**
+ * MagneticButton - Interactive button with magnetic cursor effect
+ * Follows cursor movement for engaging micro-interactions
+ */
+export interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  strength?: number;
+  className?: string;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  strength = 0.3,
+  className = '',
+  href,
+  type = 'button',
+} = Astro.props;
+
+const baseClasses =
+  'magnetic-button relative inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 cursor-pointer overflow-hidden';
+
+const variants = {
+  primary:
+    'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl hover:shadow-blue-500/50',
+  secondary:
+    'bg-gradient-to-r from-gray-700 to-gray-800 text-white hover:shadow-xl hover:shadow-gray-500/30',
+  ghost:
+    'bg-transparent border-2 border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+};
+
+const sizes = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-3 text-base',
+  lg: 'px-8 py-4 text-lg',
+};
+
+const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;
+const Tag = href ? 'a' : 'button';
+const magneticStrength = strength;
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={!href ? type : undefined}
+  data-magnetic-strength={magneticStrength}
+>
+  <span class="magnetic-content relative z-10">
+    <slot />
+  </span>
+  <span class="magnetic-bg absolute inset-0 opacity-0 transition-opacity duration-300"></span>
+</Tag>
+
+<script>
+  // Magnetic effect for buttons
+  class MagneticButton {
+    private element: HTMLElement;
+    private content: HTMLElement;
+    private strength: number;
+    private bounds: DOMRect;
+
+    constructor(element: HTMLElement) {
+      this.element = element;
+      this.content = element.querySelector('.magnetic-content') as HTMLElement;
+      this.strength = parseFloat(
+        element.getAttribute('data-magnetic-strength') || '0.3'
+      );
+      this.bounds = element.getBoundingClientRect();
+
+      this.init();
+    }
+
+    init() {
+      this.element.addEventListener('mouseenter', () => this.onMouseEnter());
+      this.element.addEventListener('mousemove', (e) => this.onMouseMove(e));
+      this.element.addEventListener('mouseleave', () => this.onMouseLeave());
+
+      // Update bounds on window resize
+      window.addEventListener('resize', () => {
+        this.bounds = this.element.getBoundingClientRect();
+      });
+    }
+
+    onMouseEnter() {
+      this.bounds = this.element.getBoundingClientRect();
+    }
+
+    onMouseMove(e: MouseEvent) {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const leftX = mouseX - this.bounds.left;
+      const topY = mouseY - this.bounds.top;
+
+      const centerX = this.bounds.width / 2;
+      const centerY = this.bounds.height / 2;
+
+      const deltaX = (leftX - centerX) * this.strength;
+      const deltaY = (topY - centerY) * this.strength;
+
+      this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      if (this.content) {
+        this.content.style.transform = `translate(${deltaX * 0.5}px, ${deltaY * 0.5}px)`;
+      }
+    }
+
+    onMouseLeave() {
+      this.element.style.transform = 'translate(0, 0)';
+      if (this.content) {
+        this.content.style.transform = 'translate(0, 0)';
+      }
+    }
+  }
+
+  // Initialize all magnetic buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const magneticButtons = document.querySelectorAll('.magnetic-button');
+    magneticButtons.forEach((button) => {
+      new MagneticButton(button as HTMLElement);
+    });
+  });
+</script>
+
+<style>
+  .magnetic-button {
+    will-change: transform;
+  }
+
+  .magnetic-content {
+    will-change: transform;
+  }
+
+  .magnetic-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05)
+    );
+  }
+
+  .magnetic-button:hover .magnetic-bg {
+    opacity: 1;
+  }
+</style>

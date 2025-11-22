@@ -1,0 +1,275 @@
+---
+/**
+ * Tooltip - Accessible tooltip component
+ * Shows contextual information on hover/focus
+ */
+export interface Props {
+  content: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  delay?: number;
+  className?: string;
+}
+
+const {
+  content,
+  position = 'top',
+  delay = 200,
+  className = '',
+} = Astro.props;
+
+const id = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<span class={`tooltip-wrapper ${className}`}>
+  <span
+    class="tooltip-trigger"
+    aria-describedby={id}
+    data-tooltip-delay={delay}
+    role="button"
+    tabindex="0"
+  >
+    <slot />
+  </span>
+  <span
+    id={id}
+    class={`tooltip tooltip-${position}`}
+    role="tooltip"
+    aria-hidden="true"
+  >
+    {content}
+    <span class="tooltip-arrow"></span>
+  </span>
+</span>
+
+<script>
+  class TooltipManager {
+    private triggers: NodeListOf<HTMLElement>;
+    private showTimeouts: Map<HTMLElement, number> = new Map();
+
+    constructor() {
+      this.triggers = document.querySelectorAll('.tooltip-trigger');
+      this.init();
+    }
+
+    init() {
+      this.triggers.forEach((trigger) => {
+        const tooltip = trigger.nextElementSibling as HTMLElement;
+        if (!tooltip || !tooltip.classList.contains('tooltip')) return;
+
+        const delay = parseInt(
+          trigger.getAttribute('data-tooltip-delay') || '200'
+        );
+
+        // Mouse events
+        trigger.addEventListener('mouseenter', () =>
+          this.show(trigger, tooltip, delay)
+        );
+        trigger.addEventListener('mouseleave', () =>
+          this.hide(trigger, tooltip)
+        );
+
+        // Focus events for keyboard accessibility
+        trigger.addEventListener('focus', () =>
+          this.show(trigger, tooltip, delay)
+        );
+        trigger.addEventListener('blur', () => this.hide(trigger, tooltip));
+
+        // Touch events for mobile
+        trigger.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.show(trigger, tooltip, 0);
+        });
+      });
+
+      // Close tooltips on outside click
+      document.addEventListener('click', (e) => {
+        if (!(e.target as HTMLElement).closest('.tooltip-wrapper')) {
+          this.hideAll();
+        }
+      });
+    }
+
+    show(trigger: HTMLElement, tooltip: HTMLElement, delay: number) {
+      // Clear any existing timeout
+      const existingTimeout = this.showTimeouts.get(trigger);
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+      }
+
+      // Set new timeout
+      const timeoutId = window.setTimeout(() => {
+        tooltip.classList.add('tooltip-visible');
+        tooltip.setAttribute('aria-hidden', 'false');
+        this.position(trigger, tooltip);
+      }, delay);
+
+      this.showTimeouts.set(trigger, timeoutId);
+    }
+
+    hide(trigger: HTMLElement, tooltip: HTMLElement) {
+      // Clear timeout
+      const timeoutId = this.showTimeouts.get(trigger);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        this.showTimeouts.delete(trigger);
+      }
+
+      tooltip.classList.remove('tooltip-visible');
+      tooltip.setAttribute('aria-hidden', 'true');
+    }
+
+    hideAll() {
+      document.querySelectorAll('.tooltip-visible').forEach((tooltip) => {
+        tooltip.classList.remove('tooltip-visible');
+        tooltip.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    position(trigger: HTMLElement, tooltip: HTMLElement) {
+      const triggerRect = trigger.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+
+      // Check if tooltip fits in viewport
+      const position = tooltip.className.match(/tooltip-(top|bottom|left|right)/)?.[1];
+      
+      if (position === 'top' && triggerRect.top - tooltipRect.height < 0) {
+        tooltip.classList.add('tooltip-flip');
+      } else if (position === 'bottom' && triggerRect.bottom + tooltipRect.height > window.innerHeight) {
+        tooltip.classList.add('tooltip-flip');
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new TooltipManager();
+  });
+</script>
+
+<style>
+  .tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip-trigger {
+    cursor: help;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tooltip-trigger:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .tooltip {
+    position: absolute;
+    z-index: 1000;
+    padding: 0.5rem 0.75rem;
+    background: rgba(15, 23, 42, 0.95);
+    color: white;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+    max-width: 20rem;
+    pointer-events: none;
+  }
+
+  :global(.dark) .tooltip {
+    background: rgba(255, 255, 255, 0.95);
+    color: rgba(15, 23, 42, 1);
+  }
+
+  .tooltip-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Position variants */
+  .tooltip-top {
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(0.25rem);
+  }
+
+  .tooltip-top.tooltip-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .tooltip-bottom {
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.25rem);
+  }
+
+  .tooltip-bottom.tooltip-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .tooltip-left {
+    right: calc(100% + 0.5rem);
+    top: 50%;
+    transform: translateY(-50%) translateX(0.25rem);
+  }
+
+  .tooltip-left.tooltip-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .tooltip-right {
+    left: calc(100% + 0.5rem);
+    top: 50%;
+    transform: translateY(-50%) translateX(-0.25rem);
+  }
+
+  .tooltip-right.tooltip-visible {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* Arrow */
+  .tooltip-arrow {
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: inherit;
+    transform: rotate(45deg);
+  }
+
+  .tooltip-top .tooltip-arrow {
+    bottom: -0.25rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .tooltip-bottom .tooltip-arrow {
+    top: -0.25rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .tooltip-left .tooltip-arrow {
+    right: -0.25rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .tooltip-right .tooltip-arrow {
+    left: -0.25rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .tooltip {
+      transition: none;
+    }
+  }
+</style>

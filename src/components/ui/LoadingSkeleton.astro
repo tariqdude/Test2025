@@ -1,0 +1,104 @@
+---
+/**
+ * LoadingSkeleton - Animated loading placeholder
+ * Provides visual feedback during content loading
+ */
+export interface Props {
+  variant?: 'text' | 'circular' | 'rectangular' | 'card';
+  width?: string;
+  height?: string;
+  className?: string;
+  animated?: boolean;
+  count?: number;
+}
+
+const {
+  variant = 'rectangular',
+  width,
+  height,
+  className = '',
+  animated = true,
+  count = 1,
+} = Astro.props;
+
+const baseClasses = 'skeleton bg-gray-200 dark:bg-gray-700';
+const animationClass = animated ? 'skeleton-pulse' : '';
+
+const variantClasses = {
+  text: 'rounded h-4 w-full',
+  circular: 'rounded-full',
+  rectangular: 'rounded-lg',
+  card: 'rounded-2xl',
+};
+
+const variantDefaults = {
+  text: { height: '1rem' },
+  circular: { width: '3rem', height: '3rem' },
+  rectangular: { height: '12rem' },
+  card: { height: '20rem' },
+};
+
+const defaultDimensions = variantDefaults[variant];
+const finalWidth = width || defaultDimensions.width;
+const finalHeight = height || defaultDimensions.height;
+
+const classes = `${baseClasses} ${variantClasses[variant]} ${animationClass} ${className}`;
+const style = `${finalWidth ? `width: ${finalWidth};` : ''} ${finalHeight ? `height: ${finalHeight};` : ''}`;
+
+const items = Array.from({ length: count }, (_, i) => i);
+---
+
+{
+  count > 1 ? (
+    <div class="skeleton-group space-y-3">
+      {items.map(() => (
+        <div class={classes} style={style} />
+      ))}
+    </div>
+  ) : (
+    <div class={classes} style={style} />
+  )
+}
+
+<style>
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(229, 231, 235, 1) 0%,
+      rgba(243, 244, 246, 1) 50%,
+      rgba(229, 231, 235, 1) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  :global(.dark) .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(55, 65, 81, 1) 0%,
+      rgba(75, 85, 99, 1) 50%,
+      rgba(55, 65, 81, 1) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  .skeleton-pulse {
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-pulse {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>
