@@ -1,0 +1,325 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import MagneticButton from '../components/ui/MagneticButton.astro';
+import LoadingSkeleton from '../components/ui/LoadingSkeleton.astro';
+import ParallaxSection from '../components/ui/ParallaxSection.astro';
+import Toast from '../components/ui/Toast.astro';
+import Tooltip from '../components/ui/Tooltip.astro';
+import Modal from '../components/ui/Modal.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import ProgressiveImage from '../components/ui/ProgressiveImage.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
+import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
+
+const accordionItems = [
+  {
+    id: 'item1',
+    title: 'What are micro-interactions?',
+    content:
+      'Micro-interactions are small, engaging animations that provide feedback to users and make interfaces feel more alive and responsive.',
+  },
+  {
+    id: 'item2',
+    title: 'Why is accessibility important?',
+    content:
+      'Accessibility ensures that all users, including those with disabilities, can effectively use your website. It\'s not just good practice, it\'s often legally required.',
+  },
+  {
+    id: 'item3',
+    title: 'How do progressive images work?',
+    content:
+      'Progressive images load a low-quality placeholder first, then smoothly transition to the high-quality version, improving perceived performance.',
+  },
+];
+---
+
+<MarketingLayout
+  title="Design Enhancement Showcase"
+  description="Explore the latest design enhancements with micro-interactions, accessibility features, and modern UI components"
+>
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Background Effects -->
+  <BackgroundEffects variant="mesh" intensity="subtle" animated />
+
+  <main id="main-content" class="py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <!-- Hero Section -->
+      <section class="text-center mb-24">
+        <h1 class="text-6xl font-bold mb-6 text-gradient">
+          Design Enhancement Showcase
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Experience the latest design improvements featuring micro-interactions,
+          accessibility enhancements, and modern UI components.
+        </p>
+      </section>
+
+      <!-- Magnetic Buttons Section -->
+      <ParallaxSection speed={0.3} className="mb-24">
+        <ModernCard variant="glass" className="p-12">
+          <h2 class="text-4xl font-bold mb-6 text-gradient-blue">
+            Magnetic Buttons
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Interactive buttons that follow your cursor for engaging micro-interactions
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <MagneticButton variant="primary" strength={0.4}>
+              Primary Magnetic
+            </MagneticButton>
+            <MagneticButton variant="secondary" strength={0.3}>
+              Secondary Magnetic
+            </MagneticButton>
+            <MagneticButton variant="ghost" strength={0.5}>
+              Ghost Magnetic
+            </MagneticButton>
+          </div>
+        </ModernCard>
+      </ParallaxSection>
+
+      <!-- Toast Notifications Section -->
+      <ParallaxSection speed={0.2} direction="down" className="mb-24">
+        <ModernCard variant="gradient" className="p-12">
+          <h2 class="text-4xl font-bold mb-6">Toast Notifications</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Beautiful notification system with smooth animations
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <ModernButton
+              variant="success"
+              onClick="window.showToast('Success! Operation completed.', 'success')"
+            >
+              Show Success
+            </ModernButton>
+            <ModernButton
+              variant="destructive"
+              onClick="window.showToast('Error! Something went wrong.', 'error')"
+            >
+              Show Error
+            </ModernButton>
+            <ModernButton
+              variant="warning"
+              onClick="window.showToast('Warning! Please review.', 'warning')"
+            >
+              Show Warning
+            </ModernButton>
+            <ModernButton
+              variant="primary"
+              onClick="window.showToast('Info: Here is some information.', 'info')"
+            >
+              Show Info
+            </ModernButton>
+          </div>
+        </ModernCard>
+      </ParallaxSection>
+
+      <!-- Tooltips Section -->
+      <section class="mb-24">
+        <ModernCard variant="elevated" className="p-12">
+          <h2 class="text-4xl font-bold mb-6 text-gradient-purple">
+            Accessible Tooltips
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Keyboard-accessible tooltips that provide contextual information
+          </p>
+          <div class="flex flex-wrap gap-8 items-center">
+            <Tooltip content="This tooltip appears on top" position="top">
+              <ModernButton variant="outline">Hover Top</ModernButton>
+            </Tooltip>
+            <Tooltip content="This tooltip appears on bottom" position="bottom">
+              <ModernButton variant="outline">Hover Bottom</ModernButton>
+            </Tooltip>
+            <Tooltip content="This tooltip appears on left" position="left">
+              <ModernButton variant="outline">Hover Left</ModernButton>
+            </Tooltip>
+            <Tooltip content="This tooltip appears on right" position="right">
+              <ModernButton variant="outline">Hover Right</ModernButton>
+            </Tooltip>
+          </div>
+        </ModernCard>
+      </section>
+
+      <!-- Modal Section -->
+      <section class="mb-24">
+        <ModernCard variant="neon" className="p-12">
+          <h2 class="text-4xl font-bold mb-6">Modal Dialogs</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Accessible modals with backdrop blur and smooth animations
+          </p>
+          <ModernButton
+            variant="gradient"
+            onClick="window.openModal('demo-modal')"
+          >
+            Open Modal
+          </ModernButton>
+        </ModernCard>
+      </section>
+
+      <!-- Accordion Section -->
+      <section class="mb-24">
+        <ModernCard variant="bordered" className="p-12">
+          <h2 class="text-4xl font-bold mb-6 text-gradient">
+            Accordion Component
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Collapsible content sections with smooth transitions
+          </p>
+          <Accordion items={accordionItems} allowMultiple={false} />
+        </ModernCard>
+      </section>
+
+      <!-- Loading Skeletons Section -->
+      <section class="mb-24">
+        <ModernCard variant="glass" className="p-12">
+          <h2 class="text-4xl font-bold mb-6 text-gradient-blue">
+            Loading Skeletons
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Animated placeholders that improve perceived performance
+          </p>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold mb-4">Text Skeleton</h3>
+              <LoadingSkeleton variant="text" count={3} />
+            </div>
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold mb-4">Card Skeleton</h3>
+              <LoadingSkeleton variant="card" />
+            </div>
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold mb-4">Circular Skeleton</h3>
+              <div class="flex gap-4">
+                <LoadingSkeleton variant="circular" />
+                <LoadingSkeleton variant="circular" />
+                <LoadingSkeleton variant="circular" />
+              </div>
+            </div>
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold mb-4">Rectangular Skeleton</h3>
+              <LoadingSkeleton variant="rectangular" height="8rem" />
+            </div>
+          </div>
+        </ModernCard>
+      </section>
+
+      <!-- Progressive Image Section -->
+      <section class="mb-24">
+        <ModernCard variant="gradient" className="p-12">
+          <h2 class="text-4xl font-bold mb-6">Progressive Images</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Images that load progressively with blur-up effect
+          </p>
+          <div class="grid md:grid-cols-2 gap-8">
+            <ProgressiveImage
+              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800"
+              alt="Abstract art"
+              aspectRatio="16/9"
+              objectFit="cover"
+            />
+            <ProgressiveImage
+              src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800"
+              alt="Colorful gradient"
+              aspectRatio="16/9"
+              objectFit="cover"
+            />
+          </div>
+        </ModernCard>
+      </section>
+
+      <!-- Focus & Accessibility Section -->
+      <section class="mb-24">
+        <ModernCard variant="elevated" className="p-12">
+          <h2 class="text-4xl font-bold mb-6 text-gradient-purple">
+            Accessibility Features
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Enhanced focus indicators, skip links, and keyboard navigation
+          </p>
+          <div class="space-y-4">
+            <div class="p-4 border-2 border-blue-500 rounded-lg focus-ring">
+              <p class="font-semibold">Enhanced Focus Ring</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Tab through the page to see modern focus indicators
+              </p>
+            </div>
+            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p class="font-semibold">Screen Reader Support</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                All components include proper ARIA labels and semantic HTML
+              </p>
+            </div>
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <p class="font-semibold">Keyboard Navigation</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Navigate modals, accordions, and tooltips with keyboard shortcuts
+              </p>
+            </div>
+          </div>
+        </ModernCard>
+      </section>
+
+      <!-- Animation Utilities Section -->
+      <section class="mb-24">
+        <ModernCard variant="neon" animated className="p-12">
+          <h2 class="text-4xl font-bold mb-6">Animation Utilities</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8">
+            CSS utilities for common animations and effects
+          </p>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="p-6 bg-white dark:bg-gray-800 rounded-xl pulse-glow">
+              <h3 class="font-semibold mb-2">Pulse Glow</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Animated glow effect
+              </p>
+            </div>
+            <div class="p-6 bg-white dark:bg-gray-800 rounded-xl morph-shape">
+              <h3 class="font-semibold mb-2">Morph Shape</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Organic shape animation
+              </p>
+            </div>
+            <div class="p-6 bg-white dark:bg-gray-800 rounded-xl float">
+              <h3 class="font-semibold mb-2">Float</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Gentle floating motion
+              </p>
+            </div>
+          </div>
+        </ModernCard>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal Definition -->
+  <Modal id="demo-modal" title="Demo Modal" size="md">
+    <div class="space-y-4">
+      <p class="text-gray-600 dark:text-gray-300">
+        This is a beautiful modal with backdrop blur and smooth animations.
+      </p>
+      <p class="text-gray-600 dark:text-gray-300">
+        It supports keyboard navigation (press ESC to close) and focus trapping
+        for accessibility.
+      </p>
+      <div class="flex gap-4 mt-6">
+        <ModernButton
+          variant="primary"
+          onClick="window.closeModal('demo-modal')"
+        >
+          Close Modal
+        </ModernButton>
+        <ModernButton
+          variant="outline"
+          onClick="window.showToast('Action performed!', 'success')"
+        >
+          Perform Action
+        </ModernButton>
+      </div>
+    </div>
+  </Modal>
+
+  <!-- Toast Container -->
+  <Toast position="top-right" duration={5000} />
+</MarketingLayout>
