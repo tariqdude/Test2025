@@ -30,8 +30,13 @@ const { variant = 'info', position = 'top-right', duration = 5000 } = Astro.prop
       this.container = document.getElementById(containerId) as HTMLElement;
       this.defaultDuration = defaultDuration;
 
-      // Expose toast function globally
-      (window as any).showToast = this.show.bind(this);
+      // Expose toast function globally with namespacing
+      if (typeof window !== 'undefined') {
+        (window as any).ui = (window as any).ui || {};
+        (window as any).ui.showToast = this.show.bind(this);
+        // Legacy support
+        (window as any).showToast = this.show.bind(this);
+      }
     }
 
     show(message: string, variant = 'info', duration?: number) {

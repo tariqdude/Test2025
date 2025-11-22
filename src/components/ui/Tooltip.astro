@@ -17,7 +17,7 @@ const {
   className = '',
 } = Astro.props;
 
-const id = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
+const id = `tooltip-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <span class={`tooltip-wrapper ${className}`}>

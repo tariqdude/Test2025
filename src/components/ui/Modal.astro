@@ -126,9 +126,15 @@ const sizes = {
         });
       });
 
-      // Expose global functions
-      (window as any).openModal = this.open.bind(this);
-      (window as any).closeModal = this.close.bind(this);
+      // Expose global functions with namespacing
+      if (typeof window !== 'undefined') {
+        (window as any).ui = (window as any).ui || {};
+        (window as any).ui.openModal = this.open.bind(this);
+        (window as any).ui.closeModal = this.close.bind(this);
+        // Legacy support
+        (window as any).openModal = this.open.bind(this);
+        (window as any).closeModal = this.close.bind(this);
+      }
     }
 
     setupModal(modal: HTMLElement) {

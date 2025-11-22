@@ -21,7 +21,7 @@ const {
   className = '',
 } = Astro.props;
 
-const accordionId = `accordion-${Math.random().toString(36).substr(2, 9)}`;
+const accordionId = `accordion-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <div
