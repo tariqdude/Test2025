@@ -1,18 +1,44 @@
 const CACHE_NAME = 'elite-project-v1';
-const BASE_PATH = '/Test2025';
+
+const resolveBasePath = () => {
+  try {
+    const scopeUrl = new URL(self.registration?.scope ?? self.location.href);
+    const pathname = scopeUrl.pathname.replace(/\/$/, '');
+    return pathname === '/' ? '' : pathname;
+  } catch (error) {
+    console.error('[Service Worker] Failed to derive base path:', error);
+    return '';
+  }
+};
+
+const BASE_PATH = resolveBasePath();
+
+const withBase = path => {
+  if (!path) {
+    return BASE_PATH ? `${BASE_PATH}/` : '/';
+  }
+
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  if (!BASE_PATH) {
+    return normalizedPath;
+  }
+
+  return `${BASE_PATH}${normalizedPath}`;
+};
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  `${BASE_PATH}/`,
-  `${BASE_PATH}/about/`,
-  `${BASE_PATH}/blog/`,
-  `${BASE_PATH}/services/`,
-  `${BASE_PATH}/pricing/`,
-  `${BASE_PATH}/demo/`,
-  `${BASE_PATH}/components/`,
-  `${BASE_PATH}/offline/`,
-  `${BASE_PATH}/manifest.json`,
-  `${BASE_PATH}/favicon.svg`,
+  withBase('/'),
+  withBase('/about/'),
+  withBase('/blog/'),
+  withBase('/services/'),
+  withBase('/pricing/'),
+  withBase('/demo/'),
+  withBase('/components/'),
+  withBase('/offline/'),
+  withBase('/manifest.json'),
+  withBase('/favicon.svg'),
 ];
 
 // Install event - cache static assets
@@ -87,8 +113,8 @@ self.addEventListener('fetch', event => {
           // Return offline page for navigation requests
           if (request.mode === 'navigate') {
             return (
-              caches.match(`${BASE_PATH}/offline/`) ||
-              caches.match(`${BASE_PATH}/offline.html`) ||
+              caches.match(withBase('/offline/')) ||
+              caches.match(withBase('/offline.html')) ||
               new Response('<h1>Offline</h1>', {
                 headers: { 'Content-Type': 'text/html' },
               })

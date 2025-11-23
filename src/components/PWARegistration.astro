@@ -3,13 +3,20 @@
  * PWA Registration Component
  * Registers service worker and handles PWA installation
  */
+import { withBasePath } from '../utils/helpers';
+
+const serviceWorkerPath = withBasePath('sw.js');
+const serviceWorkerScope = withBasePath('');
 ---
 
 <script>
+  const SW_PATH = '${serviceWorkerPath}';
+  const SW_SCOPE = '${serviceWorkerScope}';
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
-        .register('/Test2025/sw.js', { scope: '/Test2025/' })
+        .register(SW_PATH, { scope: SW_SCOPE })
         .then(registration => {
           console.log('[PWA] Service Worker registered:', registration.scope);
 
