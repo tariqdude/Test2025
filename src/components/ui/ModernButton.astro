@@ -93,17 +93,21 @@ const hoverEffects =
 const focusEffects = 'focus:translate-y-0 focus:scale-100 focus:brightness-100';
 
 const classes =
-  `${baseClasses} ${variants[variant]} ${sizes[size]} ${roundedClasses[rounded]} ${shadowClasses[shadow]} ${hoverEffects} ${focusEffects} ${className}`.trim();
+  `${baseClasses} ${variants[variant]} ${sizes[size]} ${roundedClasses[rounded]} ${shadowClasses[shadow]} ${hoverEffects} ${focusEffects} ${className} ${disabled || loading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''} modern-button`.trim();
 
 const Tag = href ? 'a' : 'button';
-const linkProps = href ? { href, target } : {};
+const linkProps = href
+  ? { href, target, 'aria-disabled': disabled || loading }
+  : {};
 const buttonProps = href ? {} : { type, disabled: disabled || loading };
+const ariaProps = { 'aria-busy': loading };
 ---
 
 <Tag
   class={classes}
   {...linkProps}
   {...buttonProps}
+  {...ariaProps}
   {...onClick && { onclick: onClick }}
   {...rest}
 >
@@ -141,7 +145,7 @@ const buttonProps = href ? {} : { type, disabled: disabled || loading };
 
 <script>
   // Add ripple effect on click
-  document.querySelectorAll('button, a').forEach(button => {
+  document.querySelectorAll('.modern-button').forEach(button => {
     button.addEventListener('click', e => {
       if (!(e instanceof MouseEvent)) return;
       const target = e.currentTarget as HTMLElement;

@@ -4,16 +4,27 @@ import { getCollection } from 'astro:content';
 import MarketingLayout from '../../layouts/MarketingLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Card from '../../components/ui/Card.astro';
-import Button from '../../components/ui/Button.astro';
+import ModernButton from '../../components/ui/ModernButton.astro';
 import Grid from '../../components/ui/Grid.astro';
 import Animate from '../../components/ui/Animate.astro';
 import Search from '../../components/ui/Search.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { withBasePath } from '../../utils/helpers';
+import type { Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+interface Props {
+  page: Page<CollectionEntry<'blog'>>;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+  return paginate(posts, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
 ---
 
 <MarketingLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -54,7 +65,7 @@ const posts = (await getCollection('blog')).sort(
         className="text-slate-100"
       >
         {
-          posts.map((post, index) => {
+          page.data.map((post, index) => {
             const delayMap = ['none', 'sm', 'md'] as const;
             const delay = index < 3 ? delayMap[index] : 'none';
 
@@ -93,14 +104,14 @@ const posts = (await getCollection('blog')).sort(
                       </p>
                     )}
 
-                    <Button
+                    <ModernButton
                       variant="outline"
                       size="sm"
                       href={withBasePath(`blog/${post.id}/`)}
                       className="w-full border-white/20 text-slate-100 hover:border-white/40 hover:bg-white/10 hover:text-white"
                     >
-                      Read More
-                    </Button>
+                      Read Article
+                    </ModernButton>
                   </div>
                 </Card>
               </Animate>
@@ -110,7 +121,7 @@ const posts = (await getCollection('blog')).sort(
       </Grid>
 
       {
-        posts.length === 0 && (
+        page.data.length === 0 && (
           <div class="glass-panel mx-auto max-w-xl border border-white/10 bg-white/5 p-10 text-center text-slate-300">
             <div class="mb-6 text-slate-400">
               <svg
@@ -134,6 +145,28 @@ const posts = (await getCollection('blog')).sort(
           </div>
         )
       }
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-4 pt-8">
+        {
+          page.url.prev && (
+            <ModernButton variant="secondary" href={page.url.prev} leftIcon="←">
+              Previous
+            </ModernButton>
+          )
+        }
+        {
+          page.url.next && (
+            <ModernButton
+              variant="secondary"
+              href={page.url.next}
+              rightIcon="→"
+            >
+              Next
+            </ModernButton>
+          )
+        }
+      </div>
     </div>
   </main>
 </MarketingLayout>

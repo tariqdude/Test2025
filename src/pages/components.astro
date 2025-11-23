@@ -3,9 +3,7 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 import Card from '../components/ui/Card.astro';
 import ModernCard from '../components/ui/ModernCard.astro';
 import AdvancedCard from '../components/ui/AdvancedCard.astro';
-import Button from '../components/ui/Button.astro';
 import ModernButton from '../components/ui/ModernButton.astro';
-import HyperButton from '../components/ui/HyperButton.astro';
 import Animate from '../components/ui/Animate.astro';
 import ModernAnimate from '../components/ui/ModernAnimate.astro';
 import Grid from '../components/ui/Grid.astro';
@@ -280,47 +278,7 @@ const description =
         </div>
 
         <div class="space-y-12">
-          <!-- Basic Button -->
-          <div class="border border-slate-800 bg-slate-900/50 p-1">
-            <div class="border border-slate-800/50 p-8">
-              <h3
-                class="text-2xl font-semibold text-white mb-4 flex items-center gap-3"
-              >
-                <span class="w-1 h-6 bg-accent-500"></span>
-                Button <span class="text-sm font-mono text-slate-500 ml-2"
-                  >&lt;Button /&gt;</span
-                >
-              </h3>
-              <p
-                class="text-slate-400 mb-6 font-mono text-sm border-l-2 border-slate-800 pl-4"
-              >
-                Standard button component with multiple variants and sizes
-              </p>
-              <div class="flex flex-wrap gap-4 mb-6">
-                <Button variant="primary">Primary</Button>
-                <Button variant="secondary">Secondary</Button>
-                <Button variant="outline">Outline</Button>
-                <Button variant="ghost">Ghost</Button>
-              </div>
-              <details class="text-sm group">
-                <summary
-                  class="cursor-pointer text-accent-400 hover:text-accent-300 mb-2 font-mono uppercase text-xs tracking-wider flex items-center gap-2"
-                >
-                  <span class="group-open:rotate-90 transition-transform"
-                    >▶</span
-                  >
-                  View Props
-                </summary>
-                <pre
-                  class="bg-slate-950 border border-slate-800 p-4 overflow-x-auto text-slate-300 font-mono text-xs"><code>{`interface Props {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
-  href?: string;
-  class?: string;
-}`}</code></pre>
-              </details>
-            </div>
-          </div>
+
 
           <!-- Modern Button -->
           <div class="border border-slate-800 bg-slate-900/50 p-1">
@@ -355,47 +313,6 @@ const description =
                 <pre
                   class="bg-slate-950 border border-slate-800 p-4 overflow-x-auto text-slate-300 font-mono text-xs"><code>{`interface Props {
   variant?: 'gradient' | 'glow' | 'shine' | 'pulse';
-  size?: 'sm' | 'md' | 'lg';
-  href?: string;
-  class?: string;
-}`}</code></pre>
-              </details>
-            </div>
-          </div>
-
-          <!-- Hyper Button -->
-          <div class="border border-slate-800 bg-slate-900/50 p-1">
-            <div class="border border-slate-800/50 p-8">
-              <h3
-                class="text-2xl font-semibold text-white mb-4 flex items-center gap-3"
-              >
-                <span class="w-1 h-6 bg-accent-500"></span>
-                HyperButton <span class="text-sm font-mono text-slate-500 ml-2"
-                  >&lt;HyperButton /&gt;</span
-                >
-              </h3>
-              <p
-                class="text-slate-400 mb-6 font-mono text-sm border-l-2 border-slate-800 pl-4"
-              >
-                Ultra-modern button with particle effects and advanced
-                animations
-              </p>
-              <div class="flex flex-wrap gap-4 mb-6">
-                <HyperButton>Hyper Effect</HyperButton>
-                <HyperButton variant="neon">Neon Style</HyperButton>
-              </div>
-              <details class="text-sm group">
-                <summary
-                  class="cursor-pointer text-accent-400 hover:text-accent-300 mb-2 font-mono uppercase text-xs tracking-wider flex items-center gap-2"
-                >
-                  <span class="group-open:rotate-90 transition-transform"
-                    >▶</span
-                  >
-                  View Props
-                </summary>
-                <pre
-                  class="bg-slate-950 border border-slate-800 p-4 overflow-x-auto text-slate-300 font-mono text-xs"><code>{`interface Props {
-  variant?: 'default' | 'neon' | 'cyber';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   class?: string;

@@ -1,6 +1,7 @@
 ---
 import { heroSignals } from '../../data/marketing';
 import { withBasePath } from '../../utils/helpers';
+import ModernButton from '../ui/ModernButton.astro';
 
 interface Props {
   headline: string;
@@ -37,14 +38,18 @@ const { headline, subheading } = Astro.props;
     }
   </ul>
   <div class="flex flex-wrap gap-4">
-    <a class="btn btn-primary" href={withBasePath('demo/')}>
+    <ModernButton variant="primary" href={withBasePath('demo/')} size="lg">
       🚀 Try Interactive Demo
-    </a>
-    <a class="btn btn-secondary" href={withBasePath('contact/')}>
+    </ModernButton>
+    <ModernButton variant="secondary" href={withBasePath('contact/')} size="lg">
       Schedule a walkthrough
-    </a>
-    <a class="btn btn-secondary" href={withBasePath('showcase/')}>
+    </ModernButton>
+    <ModernButton
+      variant="secondary"
+      href={withBasePath('showcase/')}
+      size="lg"
+    >
       Explore the templates
-    </a>
+    </ModernButton>
   </div>
 </div>
