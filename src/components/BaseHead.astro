@@ -48,6 +48,26 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Theme Initialization Script (Prevents FOUC) -->
+<script is:inline>
+  (function () {
+    try {
+      const root = document.documentElement;
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+      root.dataset.theme = theme;
+      root.classList.toggle('dark', theme === 'dark');
+      window.__theme = theme;
+    } catch (error) {
+      console.error('Theme initialization failed:', error);
+    }
+  })();
+</script>
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 

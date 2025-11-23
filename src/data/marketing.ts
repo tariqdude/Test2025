@@ -1,64 +1,27 @@
-export interface Metric {
-  value: string;
-  label: string;
-}
+import { z } from 'zod';
+import {
+  MetricSchema,
+  PillarSchema,
+  HighlightItemSchema,
+  SecurityPrincipleSchema,
+  SecuritySummarySchema,
+  PlaybookStepSchema,
+  TestimonialSchema,
+  EngagementTrackSchema,
+  ControlStackItemSchema,
+  InsightReportSchema,
+} from '../config/schema';
 
-export interface Pillar {
-  title: string;
-  description: string;
-}
-
-export interface HighlightItem {
-  label: string;
-  title: string;
-  description: string;
-}
-
-export interface SecurityPrinciple {
-  indicator: string;
-  title: string;
-  description: string;
-}
-
-export interface SecuritySummary {
-  intro: string;
-  principles: SecurityPrinciple[];
-}
-
-export interface PlaybookStep {
-  step: string;
-  title: string;
-  detail: string;
-}
-
-export interface Testimonial {
-  quote: string;
-  name: string;
-  role: string;
-}
-
-export interface EngagementTrack {
-  name: string;
-  timeline: string;
-  summary: string;
-  deliverables: string[];
-}
-
-export interface ControlStackItem {
-  name: string;
-  metric: string;
-  metricLabel: string;
-  summary: string;
-  bullets: string[];
-}
-
-export interface InsightReport {
-  category: string;
-  title: string;
-  description: string;
-  linkLabel: string;
-  href: string;
-}
+export type Metric = z.infer<typeof MetricSchema>;
+export type Pillar = z.infer<typeof PillarSchema>;
+export type HighlightItem = z.infer<typeof HighlightItemSchema>;
+export type SecurityPrinciple = z.infer<typeof SecurityPrincipleSchema>;
+export type SecuritySummary = z.infer<typeof SecuritySummarySchema>;
+export type PlaybookStep = z.infer<typeof PlaybookStepSchema>;
+export type Testimonial = z.infer<typeof TestimonialSchema>;
+export type EngagementTrack = z.infer<typeof EngagementTrackSchema>;
+export type ControlStackItem = z.infer<typeof ControlStackItemSchema>;
+export type InsightReport = z.infer<typeof InsightReportSchema>;
 
 export const heroSignals: string[] = [
   'Executive-ready readouts without live dashboards',

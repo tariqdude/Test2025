@@ -1,0 +1,50 @@
+---
+import { heroSignals } from '../../data/marketing';
+import { withBasePath } from '../../utils/helpers';
+
+interface Props {
+  headline: string;
+  subheading: string;
+}
+
+const { headline, subheading } = Astro.props;
+---
+
+<div class="space-y-9">
+  <span
+    class="chip bg-zinc-800/50 border border-zinc-700 text-[0.65rem] uppercase tracking-[0.32em] text-accent-400 font-mono"
+  >
+    High-trust static ops
+  </span>
+  <h1
+    class="text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl"
+  >
+    {headline}
+  </h1>
+  <p class="max-w-xl text-base text-slate-300 sm:text-lg">
+    {subheading}
+  </p>
+  <ul class="grid gap-3 sm:grid-cols-2">
+    {
+      heroSignals.map(signal => (
+        <li class="flex items-start gap-3 text-sm text-slate-300 font-mono">
+          <span class="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center border border-accent-500/50 text-[0.7rem] text-accent-400 bg-accent-500/10">
+            +
+          </span>
+          <span>{signal}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="flex flex-wrap gap-4">
+    <a class="btn btn-primary" href={withBasePath('demo/')}>
+      🚀 Try Interactive Demo
+    </a>
+    <a class="btn btn-secondary" href={withBasePath('contact/')}>
+      Schedule a walkthrough
+    </a>
+    <a class="btn btn-secondary" href={withBasePath('showcase/')}>
+      Explore the templates
+    </a>
+  </div>
+</div>

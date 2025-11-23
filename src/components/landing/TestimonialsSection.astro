@@ -1,0 +1,39 @@
+---
+import { testimonials } from '../../data/marketing';
+---
+
+<section class="relative">
+  <div class="absolute inset-0 -z-10 bg-[rgba(7,12,22,0.85)]"></div>
+  <div class="relative mx-auto max-w-[1220px] px-6 py-24">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div class="space-y-4">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+        >
+          Customer perspective
+        </p>
+        <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+          Stories from teams running mission-critical updates
+        </h2>
+        <p class="text-sm text-slate-300">
+          Every quote below comes from a production rollout of the Elite Project
+          starter. Each team now delivers consistent updates without owning
+          runtime infrastructure.
+        </p>
+      </div>
+      <div class="grid gap-6">
+        {
+          testimonials.map(item => (
+            <blockquote class="glass-panel border border-white/10 p-8 shadow-md">
+              <p class="text-lg text-slate-100">“{item.quote}”</p>
+              <footer class="mt-4 text-sm text-slate-400">
+                <span class="font-semibold text-slate-100">{item.name}</span>
+                <span class="ml-2 text-slate-400">{item.role}</span>
+              </footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

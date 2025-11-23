@@ -1,0 +1,32 @@
+---
+import { keyMetrics } from '../../data/marketing';
+---
+
+<div class="glass-panel p-8 shadow-lg lg:p-10">
+  <h2 class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400">
+    Confidence indicators
+  </h2>
+  <dl class="mt-6 grid gap-6 sm:grid-cols-3">
+    {
+      keyMetrics.map(metric => (
+        <div class="border border-zinc-800 bg-zinc-900/50 p-5 text-center relative group hover:border-accent-500/50 transition-colors">
+          <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-600 group-hover:border-accent-500 transition-colors" />
+          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-600 group-hover:border-accent-500 transition-colors" />
+          <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-600 group-hover:border-accent-500 transition-colors" />
+          <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-600 group-hover:border-accent-500 transition-colors" />
+
+          <dt class="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-zinc-500 font-mono">
+            {metric.label}
+          </dt>
+          <dd class="mt-3 text-2xl font-semibold text-white font-display">
+            {metric.value}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+  <p class="mt-8 text-xs text-slate-400">
+    Results from live engagements using the Elite Project starter and GitHub
+    Pages pipelines.
+  </p>
+</div>

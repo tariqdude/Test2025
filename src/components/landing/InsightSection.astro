@@ -1,0 +1,47 @@
+---
+import { insightReports } from '../../data/marketing';
+import { withBasePath } from '../../utils/helpers';
+---
+
+<section class="relative">
+  <div class="absolute inset-0 -z-10 bg-[rgba(6,11,22,0.85)]"></div>
+  <div class="relative mx-auto max-w-[1220px] px-6 py-24">
+    <div class="max-w-3xl space-y-4">
+      <p
+        class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+      >
+        Ops intelligence
+      </p>
+      <h2 class="text-3xl font-semibold text-white sm:text-4xl">
+        Toolkits that accelerate the way you brief, audit, and recover
+      </h2>
+      <p class="text-sm text-slate-300">
+        Pair the starter with focused resources that walk your teams through
+        messaging, risk posture, and customer narratives without adding
+        overhead.
+      </p>
+    </div>
+    <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {
+        insightReports.map(report => (
+          <article class="glass-panel flex h-full flex-col justify-between gap-5 border border-white/10 p-6">
+            <div class="space-y-4">
+              <span class="inline-flex w-max items-center rounded-full border border-white/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-slate-300">
+                {report.category}
+              </span>
+              <h3 class="text-xl font-semibold text-white">{report.title}</h3>
+              <p class="text-sm text-slate-300">{report.description}</p>
+            </div>
+            <a
+              class="inline-flex w-max items-center gap-2 text-sm font-semibold text-slate-200 transition hover:text-white"
+              href={withBasePath(report.href)}
+            >
+              {report.linkLabel}
+              <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

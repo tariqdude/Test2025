@@ -1,59 +1,141 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import { withBasePath } from '../utils/helpers';
+import ModernButton from '../components/ui/ModernButton.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
+import Card from '../components/ui/Card.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import Grid from '../components/ui/Grid.astro';
+import Stats from '../components/ui/Stats.astro';
 
-const categories = [
+const buttonVariants = [
   {
-    name: 'Section templates',
-    summary:
-      'Pre-built hero, feature, and CTA layouts composed with semantic HTML and Tailwind.',
-    items: [
-      'Hero sections with metric blocks',
-      'Two-column storytelling layouts',
-      'Newsletter and contact callouts',
-    ],
+    variant: 'primary',
+    label: 'Primary CTA',
+    description:
+      'Gradient-backed hero button for the single most important flow.',
   },
   {
-    name: 'Utility patterns',
-    summary: 'Reusable class combinations for cards, badges, and grid spacing.',
-    items: [
-      'Neutral surfaces with subtle shadows',
-      'Responsive grid helpers',
-      'Accessible link and button states',
-    ],
+    variant: 'secondary',
+    label: 'Secondary CTA',
+    description: 'Low-lift action used next to primaries and inside cards.',
   },
   {
-    name: 'Content components',
-    summary: 'MDX-friendly blocks for blog posts and knowledge base entries.',
-    items: [
-      'Rich typography defaults using @tailwindcss/typography',
-      'Quote and highlight callouts',
-      'Table and code block styling',
-    ],
+    variant: 'outline',
+    label: 'Ghost Surface',
+    description: 'High contrast outline for toolbars and content actions.',
+  },
+  {
+    variant: 'gradient',
+    label: 'Marketing Spark',
+    description: 'Animated gradient for launch moments and promo blocks.',
+  },
+  {
+    variant: 'neon',
+    label: 'Attention Pulse',
+    description: 'Use sparingly for labs, beta features, or system alerts.',
   },
 ];
 
-const caseStudies = [
+const cardShowcase = [
   {
-    client: 'Northwind Ops',
-    result:
-      'Consolidated three dashboard tools into a single static status page.',
-    highlight:
-      'Reduced deployment time from hours to minutes with GitHub Pages.',
+    title: 'Glass metrics',
+    variant: 'glass',
+    badge: 'Realtime ready',
+    description: 'Layer subtle gradients with telemetry pills for quant proof.',
+    points: ['Latency stabilized at 92ms', 'Sync health holding at 99.8%'],
   },
   {
-    client: 'Globex Support',
-    result: 'Replaced bespoke marketing site with reusable Astro templates.',
-    highlight:
-      'All content edits now handled by the support team via Markdown.',
+    title: 'Neon insights',
+    variant: 'neon',
+    badge: 'Narrative led',
+    description:
+      'Pair iconography with short blurbs to call attention to wins.',
+    points: ['Playbooks ship weekly', 'Security posture auto audited'],
   },
   {
-    client: 'Contoso Labs',
-    result: 'Launched a documentation portal without introducing a new CMS.',
-    highlight:
-      'Migrated 120 articles using the same BlogPost layout shipping here.',
+    title: 'Bordered content',
+    variant: 'bordered',
+    badge: 'Editorial safe',
+    description: 'Structured cards for blog digests or release note snippets.',
+    points: ['MDX compatible', 'Frictionless copy/paste tokens'],
   },
 ];
+
+const typographyScale = [
+  {
+    label: 'Display',
+    sample: 'Ship delightful UI systems',
+    className: 'text-4xl md:text-5xl font-semibold tracking-tight',
+    token: '--font-size-4xl | --line-height-relaxed',
+  },
+  {
+    label: 'Headline',
+    sample: 'Opinionated defaults reduce meetings',
+    className: 'text-2xl md:text-3xl font-semibold tracking-tight',
+    token: '--font-size-3xl | --line-height-normal',
+  },
+  {
+    label: 'Eyebrow',
+    sample: 'SYSTEM_STATUS_OK',
+    className: 'text-sm font-mono uppercase tracking-[0.35em]',
+    token: '--font-size-sm | letter-spacing: 0.35em',
+  },
+  {
+    label: 'Body',
+    sample: 'Purpose-built for static deployments + high-trust teams.',
+    className: 'text-base text-neutral-600',
+    token: '--font-size-base | --line-height-relaxed',
+  },
+];
+
+const utilityTokens = [
+  {
+    label: 'Spacing scale',
+    value: '0.25rem → 3rem',
+    token: '--spacing-xs…--spacing-4xl',
+    description: 'Used by Grid + Section pads to maintain breathing room.',
+  },
+  {
+    label: 'Radius presets',
+    value: '8px / 16px / 24px',
+    token: '--radius-sm…--radius-xl',
+    description: 'Applies to cards, inputs, and avatar shells for cohesion.',
+  },
+  {
+    label: 'Elevation steps',
+    value: 'Shadows 100 → 900',
+    token: '--shadow-sm…--shadow-strong',
+    description: 'Pre-tuned to look soft in light mode and crisp in dark.',
+  },
+];
+
+const statShowcase = {
+  title: 'Production-ready primitives',
+  subtitle: 'Numbers pulled directly from the starter configuration.',
+  stats: [
+    {
+      label: 'Patterns shipped',
+      value: '32',
+      description: 'Hero, pricing, dashboard, blog',
+    },
+    {
+      label: 'Design tokens',
+      value: '64',
+      description: 'Color, type, motion, spacing',
+    },
+    {
+      label: 'Runtime JS',
+      value: '6kb',
+      description: 'Theme toggle + analytics hook',
+    },
+    {
+      label: 'Test suites',
+      value: '45',
+      description: 'Vitest + Playwright coverage',
+    },
+  ],
+};
 ---
 
 <MarketingLayout
@@ -94,48 +176,88 @@ const caseStudies = [
   </section>
 
   <section class="bg-zinc-900">
-    <div class="mx-auto max-w-5xl space-y-10 px-6 py-20">
-      {
-        categories.map(category => (
-          <article class="border border-zinc-800 bg-zinc-950 p-8 relative group hover:border-accent-500 transition-colors">
-            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
-            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-700 group-hover:border-accent-500 transition-colors" />
-
-            <h2 class="text-2xl font-display font-bold text-white uppercase tracking-wide">
-              {category.name}
-            </h2>
-            <p class="mt-3 text-sm text-zinc-400 font-mono border-b border-zinc-800 pb-4 mb-4">
-              {category.summary}
-            </p>
-            <ul class="mt-6 grid gap-3 text-sm text-zinc-300 font-mono">
-              {category.items.map(item => (
-                <li class="flex items-start gap-2">
-                  <span class="mt-1 text-accent-500">&gt;</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
+    <div
+      class="mx-auto max-w-6xl px-6 py-20 grid gap-16 lg:grid-cols-[1.1fr_1fr]"
+    >
+      <div class="space-y-6">
+        <p class="text-xs font-mono uppercase tracking-[0.3em] text-zinc-500">
+          COMPONENT PLAYGROUND
+        </p>
+        <h2 class="text-3xl font-semibold text-white">
+          Buttons ship with sensible defaults, motion, and tokens baked in.
+        </h2>
+        <p class="text-zinc-400 text-base leading-relaxed">
+          Every variant below is powered by the same component. Theme-aware
+          colors, focus states, and keyboard bindings are already wired so you
+          only drop in copy.
+        </p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          buttonVariants.map(button => (
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
+              <ModernButton
+                variant={button.variant}
+                size="lg"
+                className="w-full justify-center gap-2"
+              >
+                {button.label}
+              </ModernButton>
+              <p class="mt-3 text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-500">
+                {button.variant}
+              </p>
+              <p class="text-sm text-zinc-400">{button.description}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 
-  <section class="bg-neutral-900 text-neutral-50">
-    <div class="mx-auto max-w-5xl px-6 py-20">
-      <h2 class="text-3xl font-semibold">Teams using these patterns</h2>
-      <div class="mt-10 grid gap-8 md:grid-cols-3">
+  <section class="bg-neutral-950 text-white border-y border-neutral-900/50">
+    <div class="mx-auto max-w-6xl px-6 py-20 space-y-12">
+      <div
+        class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+      >
+        <div>
+          <p
+            class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500"
+          >
+            CARD SYSTEMS
+          </p>
+          <h2 class="text-3xl font-semibold">
+            Showcase data, stories, and references without rewriting markup.
+          </h2>
+        </div>
+        <p class="text-sm text-neutral-400 max-w-xl">
+          The <code class="px-2 py-1 bg-neutral-900 rounded">ModernCard</code> component
+          understands hover physics, glow states, and motion delays. Pass in variant
+          names to get drastically different moods without touching CSS.
+        </p>
+      </div>
+      <div class="grid gap-8 md:grid-cols-3">
         {
-          caseStudies.map(study => (
-            <article class="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-6">
-              <p class="text-sm uppercase tracking-[0.3em] text-neutral-400">
-                {study.client}
+          cardShowcase.map((card, index) => (
+            <ModernCard
+              variant={card.variant}
+              glow={card.variant === 'neon'}
+              animated
+              direction={index === 0 ? 'up' : index === 1 ? 'right' : 'left'}
+            >
+              <p class="text-xs font-mono uppercase tracking-[0.35em] text-neutral-400">
+                {card.badge}
               </p>
-              <h3 class="mt-4 text-xl font-semibold text-white">
-                {study.result}
-              </h3>
-              <p class="mt-3 text-sm text-neutral-300">{study.highlight}</p>
-            </article>
+              <h3 class="mt-4 text-2xl font-semibold">{card.title}</h3>
+              <p class="mt-2 text-sm text-neutral-300">{card.description}</p>
+              <ul class="mt-6 space-y-2 text-sm text-neutral-200">
+                {card.points.map(point => (
+                  <li class="flex items-start gap-2">
+                    <span class="mt-1 h-1.5 w-1.5 rounded-full bg-accent-400" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </ModernCard>
           ))
         }
       </div>
@@ -143,14 +265,120 @@ const caseStudies = [
   </section>
 
   <section class="bg-white">
+    <div class="mx-auto max-w-6xl px-6 py-20 grid gap-12 md:grid-cols-2">
+      <div>
+        <p
+          class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-400"
+        >
+          TYPOGRAPHY + THEMES
+        </p>
+        <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+          Type scale, motion, and theme toggles live together.
+        </h2>
+        <p class="mt-4 text-base text-neutral-600 leading-relaxed">
+          Tokens map straight into CSS variables, so marketing, docs, and
+          product views stay synchronized. Theme toggles hydrate instantly
+          thanks to the inline head script.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <ThemeToggle variant="icon" showLabel />
+          <ThemeToggle variant="button" showLabel />
+          <ThemeToggle variant="dropdown" showLabel />
+        </div>
+      </div>
+      <div class="space-y-6">
+        {
+          typographyScale.map(scale => (
+            <article class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6">
+              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                {scale.label}
+              </p>
+              <p class={`mt-3 ${scale.className}`}>{scale.sample}</p>
+              <p class="mt-4 text-xs font-mono text-neutral-500">
+                {scale.token}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-900 text-neutral-50">
+    <div class="mx-auto max-w-6xl px-6 py-20 space-y-12">
+      <div
+        class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+      >
+        <div>
+          <p
+            class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500"
+          >
+            LAYOUT TOKENS
+          </p>
+          <h2 class="text-3xl font-semibold">
+            Drop these utility layers anywhere and stay on the rails.
+          </h2>
+        </div>
+        <p class="text-sm text-neutral-400 max-w-xl">
+          The Grid component pipes directly into Tailwind classes while staying
+          serializable. Use it inside CMS-powered content, MDX, or Astro pages
+          without extra wrappers.
+        </p>
+      </div>
+      <Grid
+        cols={3}
+        gap="lg"
+        responsive={{ sm: 1, md: 2, lg: 3 }}
+        className="text-left"
+      >
+        {
+          utilityTokens.map(token => (
+            <Card
+              variant="gradient"
+              className="h-full text-neutral-900 dark:text-white bg-white/95 dark:bg-neutral-900/80"
+            >
+              <p class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500">
+                {token.label}
+              </p>
+              <h3 class="mt-3 text-2xl font-semibold text-neutral-900 dark:text-white">
+                {token.value}
+              </h3>
+              <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+                {token.description}
+              </p>
+              <p class="mt-4 text-xs font-mono text-neutral-500">
+                {token.token}
+              </p>
+            </Card>
+          ))
+        }
+      </Grid>
+    </div>
+  </section>
+
+  <section
+    class="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-white"
+  >
+    <div class="mx-auto max-w-5xl px-6 py-20">
+      <Stats
+        title={statShowcase.title}
+        subtitle={statShowcase.subtitle}
+        stats={statShowcase.stats}
+        variant="gradient"
+        className="bg-transparent"
+      />
+    </div>
+  </section>
+
+  <section class="bg-white">
     <div class="mx-auto max-w-4xl px-6 py-16 text-center">
       <h2 class="text-2xl font-semibold text-neutral-900">
-        Want a tailored walkthrough?
+        Want a guided audit of your own system?
       </h2>
       <p class="mt-4 text-sm text-neutral-600">
-        We can pair-program through adapting these sections to your product
-        narrative. Every update stays in Astro so the final deploy remains
-        static and dependable.
+        Bring a component you rely on today. We will translate it into these
+        primitives, wire up tokens, and ship Playwright + Axe coverage in the
+        same session.
       </p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a
