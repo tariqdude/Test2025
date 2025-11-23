@@ -133,6 +133,108 @@ const integrationCombos = [
     },
   },
 ];
+const pipelineTracks = [
+  {
+    title: 'Spatial narratives',
+    subtitle: 'Hero > Story > CTA',
+    description:
+      'Blend CSS3D scenes with MarketingLayout sections to hand off living narratives without touching WebGL.',
+    link: {
+      label: 'Map to /about',
+      href: withBasePath('about'),
+    },
+    chip: 'Story',
+  },
+  {
+    title: 'Incident playback',
+    subtitle: 'Deck > Timeline > Dashboard',
+    description:
+      'Chain Advanced3DShowcase, LayeredCards, and dashboard KPIs to replay mitigation steps in one frame.',
+    link: {
+      label: 'Open /dashboard',
+      href: withBasePath('dashboard'),
+    },
+    chip: 'Reliability',
+  },
+  {
+    title: 'Client immersion',
+    subtitle: 'Portal > Case studies',
+    description:
+      'Use HolographicCards with testimonial callouts so every client update feels tactile yet static-hosted.',
+    link: {
+      label: 'Preview /services',
+      href: withBasePath('services'),
+    },
+    chip: 'GTM',
+  },
+  {
+    title: 'Research labs',
+    subtitle: 'Blog > Experiments',
+    description:
+      'MatrixRain + ParticleVortex keep deep-dive posts cinematic while staying Markdown-first.',
+    link: {
+      label: 'View /blog',
+      href: withBasePath('blog'),
+    },
+    chip: 'Analysis',
+  },
+];
+const immersionTimeline = [
+  {
+    id: '00',
+    title: 'Signal ingestion',
+    description:
+      'Collect KPI snapshots, transcripts, and mood boards inside Markdown. The showcase reads those inputs statically.',
+    state: 'Now',
+  },
+  {
+    id: '01',
+    title: 'Spatial scoring',
+    description:
+      'CubicMatrix + DNAHelix rank each brief for dimensional storytelling, lighting, and texture needs.',
+    state: 'Processing',
+  },
+  {
+    id: '02',
+    title: 'Immersion rehearsal',
+    description:
+      'FloatingIslands, InfinityTunnel, and LayeredCards render variants without hydration, ready for stakeholder review.',
+    state: 'In review',
+  },
+  {
+    id: '03',
+    title: 'Launch + telemetry',
+    description:
+      'Advanced3DShowcase publishes, WebVitals tracks, and the same canvases travel to /demo and /services routes.',
+    state: 'Ship',
+  },
+];
+const materialSwatches = [
+  {
+    name: 'Iridescent mesh',
+    tones: ['#d946ef', '#8b5cf6', '#38bdf8'],
+    usage: 'Hero gradients & holographic cards',
+    texture: 'mesh',
+  },
+  {
+    name: 'Signal noir',
+    tones: ['#09090b', '#18181b', '#3f3f46'],
+    usage: 'Backgrounds & typography contrast',
+    texture: 'grain',
+  },
+  {
+    name: 'Lumen glass',
+    tones: ['#f8fafc', '#d1d5db', '#a5b4fc'],
+    usage: 'Glassmorphism cards & inputs',
+    texture: 'glass',
+  },
+  {
+    name: 'Vortex pulse',
+    tones: ['#f97316', '#fb7185', '#fde047'],
+    usage: 'Accent trails & loading states',
+    texture: 'pulse',
+  },
+];
 ---
 
 <MarketingLayout
@@ -320,6 +422,173 @@ const integrationCombos = [
                   <span aria-hidden="true">↗</span>
                 </a>
               </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-24">
+    <div class="mx-auto max-w-[1220px] px-6 space-y-12">
+      <div
+        class="grid gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1.45fr)] lg:items-start"
+      >
+        <div class="space-y-4">
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+          >
+            Studio pipelines
+          </p>
+          <h2 class="text-3xl font-semibold text-white">
+            Move from kickoff to cinematic delivery with reusable tracks
+          </h2>
+          <p class="text-base text-slate-300">
+            Each pipeline maps to a live page so ops, GTM, and research teams
+            can preview the full journey before the first deck export.
+          </p>
+          <div
+            class="flex flex-wrap gap-3 text-[0.65rem] uppercase tracking-[0.32em] text-slate-400"
+          >
+            <span class="rounded-full border border-white/10 px-4 py-1"
+              >Storytelling</span
+            >
+            <span class="rounded-full border border-white/10 px-4 py-1"
+              >Ops orchestration</span
+            >
+            <span class="rounded-full border border-white/10 px-4 py-1"
+              >Launch readiness</span
+            >
+          </div>
+        </div>
+        <div class="grid gap-6 lg:grid-cols-2">
+          {
+            pipelineTracks.map(track => (
+              <article class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+                <div
+                  class="absolute inset-px rounded-[26px] bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"
+                  aria-hidden="true"
+                />
+                <div class="relative space-y-4">
+                  <div class="flex items-center justify-between text-xs uppercase tracking-[0.32em] text-slate-400">
+                    <span>{track.subtitle}</span>
+                    <span class="rounded-full border border-white/10 px-3 py-1 text-[0.58rem] tracking-[0.32em]">
+                      {track.chip}
+                    </span>
+                  </div>
+                  <h3 class="text-2xl font-semibold text-white">
+                    {track.title}
+                  </h3>
+                  <p class="text-sm text-slate-300">{track.description}</p>
+                  <a
+                    href={track.link.href}
+                    class="inline-flex items-center gap-2 text-sm font-semibold text-purple-300 transition group-hover:text-white"
+                  >
+                    {track.link.label}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative border-y border-white/5 bg-neutral-950/60 py-24">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_farther_at_top,_rgba(14,116,144,0.18),_transparent_70%)]"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="relative mx-auto max-w-[1220px] px-6">
+      <div
+        class="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center"
+      >
+        <div class="space-y-4">
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+          >
+            Immersion timeline
+          </p>
+          <h2 class="text-3xl font-semibold text-white">
+            From first signal to launch telemetry
+          </h2>
+          <p class="text-base text-slate-300">
+            The same CSS canvases progress through ingestion, rehearsal, and
+            launch so every stakeholder shares a single storyboard.
+          </p>
+        </div>
+        <div class="space-y-4">
+          {
+            immersionTimeline.map((phase, idx) => (
+              <article
+                class={`flex flex-col gap-3 rounded-3xl border border-white/10 ${idx % 2 ? 'bg-white/[0.04]' : 'bg-white/[0.08]'} p-5 lg:flex-row lg:items-center`}
+              >
+                <div class="flex items-center gap-4">
+                  <span class="text-3xl font-semibold text-white/80">
+                    {phase.id}
+                  </span>
+                  <div class="h-10 w-px bg-white/10" aria-hidden="true" />
+                </div>
+                <div class="flex-1 space-y-1">
+                  <p class="text-sm uppercase tracking-[0.32em] text-slate-400">
+                    {phase.state}
+                  </p>
+                  <h3 class="text-xl font-semibold text-white">
+                    {phase.title}
+                  </h3>
+                  <p class="text-sm text-slate-300">{phase.description}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-24">
+    <div
+      class="absolute inset-0 bg-[linear-gradient(120deg,rgba(168,85,247,0.15),rgba(56,189,248,0.12),transparent_70%)]"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="relative mx-auto max-w-[1220px] px-6 space-y-10">
+      <div class="space-y-4 text-center">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
+        >
+          Material swatchboard
+        </p>
+        <h2 class="text-3xl font-semibold text-white">
+          Palettes that keep holographic UI grounded
+        </h2>
+        <p class="text-base text-slate-300 max-w-3xl mx-auto">
+          Mix iridescent gradients, noir foundations, and luminous glass accents
+          to match every showcase route without touching theme.ts.
+        </p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {
+          materialSwatches.map(swatch => (
+            <article class="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+              <div class="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.32em] text-slate-400">
+                <span>{swatch.texture}</span>
+                <span>{swatch.usage}</span>
+              </div>
+              <h3 class="text-xl font-semibold text-white">{swatch.name}</h3>
+              <div class="mt-4 flex gap-3">
+                {swatch.tones.map(tone => (
+                  <span
+                    class="h-12 w-12 rounded-2xl border border-white/10"
+                    style={`background:${tone}`}
+                    aria-label={`Color swatch ${tone}`}
+                  ></span>
+                ))}
+              </div>
+              <p class="mt-4 text-xs text-slate-400">{swatch.usage}</p>
             </article>
           ))
         }
