@@ -98,4 +98,5 @@ export interface AnalyzerConfig {
   deploymentChecks: boolean;
   autoFix: boolean;
   watchMode: boolean;
+  enableCache: boolean;
 }

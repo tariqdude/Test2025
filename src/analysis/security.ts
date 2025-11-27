@@ -9,6 +9,7 @@ import { glob } from 'glob';
 import { FileSystemError, AnalysisError } from '../errors';
 import { logger } from '../utils/logger';
 import { generateChecksum } from '../utils/common';
+import { executeCommand } from '../utils/command-executor';
 
 export class SecurityAnalyzer implements AnalysisModule {
   name = 'SecurityAnalyzer';
@@ -53,14 +54,18 @@ export class SecurityAnalyzer implements AnalysisModule {
     issues: CodeIssue[]
   ): Promise<void> {
     try {
-      const { execSync } = await import('child_process');
-      const auditResult = execSync('npm audit --json', {
+      const { stdout } = await executeCommand('npm audit --json', {
         cwd: config.projectRoot,
-        encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe'],
+        ignoreExitCode: true,
+        timeout: 15000,
       });
 
-      const audit = JSON.parse(auditResult);
+      if (!stdout) {
+        logger.debug('npm audit did not return data; skipping dependency vulnerability check');
+        return;
+      }
+
+      const audit = JSON.parse(stdout);
 
       if (audit.metadata?.vulnerabilities) {
         const { critical, high, moderate } = audit.metadata.vulnerabilities;
@@ -120,11 +125,9 @@ export class SecurityAnalyzer implements AnalysisModule {
           });
         }
       }
-    } catch {
+    } catch (error) {
       // npm audit may fail or return non-zero on vulnerabilities, which is expected
-      logger.debug(
-        'npm audit check completed (may have found vulnerabilities)'
-      );
+      logger.debug('npm audit check skipped or failed', { error });
     }
   }
 

@@ -22,6 +22,12 @@ export class PerformanceAnalyzer implements AnalysisModule {
     const issues: CodeIssue[] = [];
 
     try {
+      // Skip heavy checks in CI/build contexts
+      if (process.env.CI === 'true' || process.env.npm_lifecycle_event === 'build') {
+        logger.info('Skipping performance checks in CI/build context');
+        return issues;
+      }
+
       await Promise.allSettled([
         this.checkBundleSize(config, issues),
         this.checkImageOptimization(config, issues),
@@ -53,7 +59,7 @@ export class PerformanceAnalyzer implements AnalysisModule {
       // Find all image files
       const imageFiles = await glob('**/*.{png,jpg,jpeg,gif,bmp}', {
         cwd: config.projectRoot,
-        ignore: ['node_modules/**', 'dist/**', '.astro/**'],
+        ignore: ['node_modules/**', 'dist/**', '.astro/**', ...config.ignore],
         absolute: true,
       });
 
@@ -102,7 +108,7 @@ export class PerformanceAnalyzer implements AnalysisModule {
     try {
       const htmlFiles = await glob('**/*.{astro,html,tsx,jsx}', {
         cwd: config.projectRoot,
-        ignore: ['node_modules/**', 'dist/**', '.astro/**'],
+        ignore: ['node_modules/**', 'dist/**', '.astro/**', ...config.ignore],
         absolute: true,
       });
 
@@ -159,6 +165,11 @@ export class PerformanceAnalyzer implements AnalysisModule {
     issues: CodeIssue[]
   ): Promise<void> {
     try {
+      if (process.env.CI === 'true' || process.env.npm_lifecycle_event === 'test') {
+        logger.debug('Skipping bundle size check in CI/test context');
+        return;
+      }
+
       const { stdout } = await executeCommand('npx astro build --dry-run', {
         cwd: config.projectRoot,
         ignoreExitCode: true,

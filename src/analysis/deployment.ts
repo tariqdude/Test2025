@@ -12,6 +12,9 @@ export class DeploymentAnalyzer implements AnalysisModule {
   name = 'DeploymentAnalyzer';
 
   canAnalyze(config: AnalyzerConfig): boolean {
+    if (!config.deploymentChecks) {
+      return false;
+    }
     // Skip deployment analysis during build process to prevent issues
     if (
       process.env.NODE_ENV === 'production' ||
@@ -23,6 +26,11 @@ export class DeploymentAnalyzer implements AnalysisModule {
   }
 
   async analyze(config: AnalyzerConfig): Promise<CodeIssue[]> {
+    if (!config.deploymentChecks) {
+      logger.info('Deployment checks disabled; skipping deployment analyzer');
+      return [];
+    }
+
     logger.info('Checking deployment readiness...');
     const issues: CodeIssue[] = [];
 

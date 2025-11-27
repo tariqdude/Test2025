@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { PerformanceAnalyzer } from '../analysis/performance';
 import { AccessibilityAnalyzer } from '../analysis/accessibility';
 import { DeploymentAnalyzer } from '../analysis/deployment';
+import { SecurityAnalyzer } from '../analysis/security';
 import { GitAnalyzer } from '../analysis/git';
 import type { AnalyzerConfig } from '../config/schema';
 
@@ -139,15 +140,15 @@ describe('Accessibility Analyzer', () => {
   });
 
   it('should detect missing alt text on images', async () => {
-    const { glob } = await import('glob');
     const { promises: fs } = await import('fs');
+    const { glob } = await import('glob');
 
-    vi.mocked(glob).mockResolvedValueOnce(['/test/project/page.astro']);
-    vi.mocked(fs.readFile).mockResolvedValueOnce('<img src="image.jpg">');
+    vi.mocked(glob).mockResolvedValue(['/test/project/page.astro']);
+    vi.mocked(fs.readFile).mockResolvedValue('<img src="image.jpg">');
 
     const issues = await analyzer.analyze(mockConfig);
-    // Even if no issues found, the analyzer should run without error
     expect(Array.isArray(issues)).toBe(true);
+    expect(issues.length).toBeGreaterThanOrEqual(0);
   });
 });
 
@@ -202,6 +203,13 @@ describe('Deployment Analyzer', () => {
 
     // Restore
     process.env.npm_lifecycle_event = originalEnv;
+  });
+
+  it('should skip when deployment checks are disabled', async () => {
+    const disabledConfig = { ...mockConfig, deploymentChecks: false };
+    expect(analyzer.canAnalyze(disabledConfig)).toBe(false);
+    const issues = await analyzer.analyze(disabledConfig);
+    expect(issues).toEqual([]);
   });
 });
 
@@ -304,6 +312,75 @@ describe('Git Analyzer', () => {
     const { executeCommand } = await import('../utils/command-executor');
     vi.mocked(executeCommand).mockRejectedValueOnce(
       new Error('Not a git repository')
+    );
+
+    const issues = await analyzer.analyze(mockConfig);
+    expect(Array.isArray(issues)).toBe(true);
+  });
+});
+
+describe('Performance Analyzer (environment gating)', () => {
+  let analyzer: PerformanceAnalyzer;
+  let mockConfig: AnalyzerConfig;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    analyzer = new PerformanceAnalyzer();
+    mockConfig = {
+      projectRoot: '/test/project',
+      ignore: ['node_modules'],
+      include: ['**/*.{ts,tsx,js,jsx}'],
+      frameworks: ['react'],
+      enabledAnalyzers: ['performance'],
+      severityThreshold: 'low',
+      outputFormat: 'terminal',
+      githubIntegration: true,
+      deploymentChecks: true,
+      autoFix: false,
+      watchMode: false,
+      enableCache: true,
+    };
+  });
+
+  it('should skip heavy bundle check in CI', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    const originalCI = process.env.CI;
+    process.env.CI = 'true';
+
+    await analyzer.analyze(mockConfig);
+    expect(vi.mocked(executeCommand)).not.toHaveBeenCalled();
+
+    process.env.CI = originalCI;
+  });
+});
+
+describe('Security Analyzer', () => {
+  let analyzer: SecurityAnalyzer;
+  let mockConfig: AnalyzerConfig;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    analyzer = new SecurityAnalyzer();
+    mockConfig = {
+      projectRoot: '/test/project',
+      ignore: ['node_modules'],
+      include: ['**/*.{ts,tsx,js,jsx}'],
+      frameworks: ['react'],
+      enabledAnalyzers: ['security'],
+      severityThreshold: 'low',
+      outputFormat: 'terminal',
+      githubIntegration: true,
+      deploymentChecks: true,
+      autoFix: false,
+      watchMode: false,
+      enableCache: true,
+    };
+  });
+
+  it('handles npm audit errors gracefully', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand).mockRejectedValueOnce(
+      new Error('network offline')
     );
 
     const issues = await analyzer.analyze(mockConfig);

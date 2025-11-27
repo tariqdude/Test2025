@@ -19,6 +19,7 @@ import { AccessibilityAnalyzer } from '../analysis/accessibility';
 import { GitAnalyzer } from '../analysis/git';
 import { DeploymentAnalyzer } from '../analysis/deployment';
 import { AnalysisCache } from '../utils/analysis-cache';
+import path from 'path';
 
 export class ProjectAnalyzer {
   private config: AnalyzerConfig;
@@ -155,25 +156,27 @@ export class ProjectAnalyzer {
       );
     }
 
+    // Resolve project-relative paths to avoid ENOENT on apply
+    const targetPath = path.isAbsolute(issue.file)
+      ? issue.file
+      : path.join(this.config.projectRoot, issue.file);
+
     try {
       // Verify file exists before attempting to read
       try {
-        await fs.access(issue.file);
+        await fs.access(targetPath);
       } catch {
-        throw new Error(`File not found: ${issue.file}`);
+        throw new Error(`File not found: ${targetPath}`);
       }
 
       // Read the file
-      const content = await fs.readFile(issue.file, 'utf-8');
+      const content = await fs.readFile(targetPath, 'utf-8');
       const lines = content.split('\n');
 
       // Apply the fix based on suggestion
       let fixedContent = content;
 
-      if (
-        issue.category === 'accessibility' &&
-        issue.suggestion.includes('aria-label')
-      ) {
+      if (issue.category === 'accessibility') {
         // Add aria-label to elements
         fixedContent = this.fixAccessibilityIssue(content, issue);
       } else if (
@@ -198,8 +201,8 @@ export class ProjectAnalyzer {
       if (fixedContent !== content) {
         // Create backup before modifying
         try {
-          await fs.writeFile(`${issue.file}.backup`, content, 'utf-8');
-          logger.debug(`Created backup: ${issue.file}.backup`);
+          await fs.writeFile(`${targetPath}.backup`, content, 'utf-8');
+          logger.debug(`Created backup: ${targetPath}.backup`);
         } catch (backupError) {
           const err =
             backupError instanceof Error
@@ -211,29 +214,33 @@ export class ProjectAnalyzer {
         }
 
         // Write the fixed content back
-        await fs.writeFile(issue.file, fixedContent, 'utf-8');
+        await fs.writeFile(targetPath, fixedContent, 'utf-8');
       } else {
-        logger.debug(`No changes needed for ${issue.file}`);
+        logger.debug(`No changes needed for ${targetPath}`);
       }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to apply fix to ${issue.file}: ${errorMessage}`);
+      throw new Error(`Failed to apply fix to ${targetPath}: ${errorMessage}`);
     }
   }
 
   private fixAccessibilityIssue(content: string, issue: CodeIssue): string {
-    // Add aria-label to buttons and inputs
-    if (issue.suggestion && issue.suggestion.includes('aria-label')) {
-      content = content.replace(
-        /<button([^>]*)>/g,
-        '<button$1 aria-label="Button">'
-      );
-      content = content.replace(
-        /<input([^>]*type="text"[^>]*)>/g,
-        '<input$1 aria-label="Input field">'
-      );
-    }
+    // Add missing alt text and aria-labels without clobbering existing attributes
+    content = content.replace(
+      /<img\b((?:(?!\balt\s*=)[^>])*)>/gi,
+      '<img$1 alt="Descriptive alt text">'
+    );
+
+    content = content.replace(
+      /<input\b((?:(?!\baria-label\b)[^>])*)>/gi,
+      '<input$1 aria-label="Input field">'
+    );
+
+    content = content.replace(
+      /<button\b((?:(?!\baria-label\b)[^>])*)>(\s*)<\/button>/gi,
+      '<button$1 aria-label="Button">$2</button>'
+    );
     return content;
   }
 
@@ -251,9 +258,10 @@ export class ProjectAnalyzer {
 
   private fixPerformanceIssue(content: string, issue: CodeIssue): string {
     // Add lazy loading to images
-    if (issue.suggestion && issue.suggestion.includes('lazy')) {
-      content = content.replace(/<img([^>]*)>/g, '<img$1 loading="lazy">');
-    }
+    content = content.replace(
+      /<img\b((?:(?!\bloading\s*=)[^>])*)>/gi,
+      '<img$1 loading="lazy">'
+    );
     return content;
   }
 
