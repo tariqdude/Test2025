@@ -11,11 +11,35 @@
     Interactive 3D spiral • Move mouse to attract particles
   </p>
 
-  <div class="vortex-controls">
-    <button class="vortex-btn active" data-mode="spiral">Spiral</button>
-    <button class="vortex-btn" data-mode="sphere">Sphere</button>
-    <button class="vortex-btn" data-mode="explosion">Explosion</button>
-    <button class="vortex-btn" data-mode="chaos">Chaos</button>
+  <div
+    class="vortex-controls"
+    role="group"
+    aria-label="Particle vortex pattern controls"
+  >
+    <button
+      class="vortex-btn active"
+      data-mode="spiral"
+      aria-pressed="true"
+      aria-label="Spiral pattern">Spiral</button
+    >
+    <button
+      class="vortex-btn"
+      data-mode="sphere"
+      aria-pressed="false"
+      aria-label="Sphere pattern">Sphere</button
+    >
+    <button
+      class="vortex-btn"
+      data-mode="explosion"
+      aria-pressed="false"
+      aria-label="Explosion pattern">Explosion</button
+    >
+    <button
+      class="vortex-btn"
+      data-mode="chaos"
+      aria-pressed="false"
+      aria-label="Chaos pattern">Chaos</button
+    >
   </div>
 
   <div class="vortex-container" data-vortex-interactive>

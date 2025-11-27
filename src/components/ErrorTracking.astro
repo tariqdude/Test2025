@@ -93,13 +93,18 @@
     sendErrorReport(error);
   };
 
-  // Extend window type for custom error reporting
-  interface CustomWindow extends Window {
-    reportError?: (message: string, details?: { stack?: string }) => void;
+  // Type declaration for custom window property (using module augmentation)
+  declare global {
+    interface Window {
+      customReportError?: (
+        message: string,
+        details?: { stack?: string }
+      ) => void;
+    }
   }
 
   // Expose method to manually report errors
-  (window as CustomWindow).reportError = (
+  window.customReportError = (
     message: string,
     details?: { stack?: string }
   ) => {

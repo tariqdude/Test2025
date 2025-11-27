@@ -16,6 +16,19 @@ import {
   isValidObject,
   isNonEmptyString,
   isNonEmptyArray,
+  // Extended schemas
+  uuidSchema,
+  semverSchema,
+  creditCardSchema,
+  passwordSchema,
+  usernameSchema,
+  ipAddressSchema,
+  macAddressSchema,
+  durationSchema,
+  cssColorSchema,
+  parseDuration,
+  commonSchemas,
+  extendedSchemas,
 } from '../utils/validation';
 
 describe('Validation Utilities', () => {
@@ -173,10 +186,13 @@ describe('Validation Utilities', () => {
 
   describe('ValidationError', () => {
     it('should create validation error with correct properties', () => {
-      const error = new ValidationError('email', 'Invalid format', 'bad-email');
+      const error = new ValidationError('email', [
+        'Invalid format',
+        'Must be valid email',
+      ]);
       expect(error.name).toBe('ValidationError');
       expect(error.field).toBe('email');
-      expect(error.value).toBe('bad-email');
+      expect(error.constraints).toContain('Invalid format');
       expect(error.message).toContain('email');
       expect(error.message).toContain('Invalid format');
     });
@@ -242,6 +258,191 @@ describe('Validation Utilities', () => {
 
     it('should handle files without extensions', () => {
       expect(validateFileExtension('README', ['md', 'txt'])).toBe(false);
+    });
+  });
+
+  /* ==================== EXTENDED SCHEMA TESTS ==================== */
+
+  describe('Extended Schemas', () => {
+    describe('uuidSchema', () => {
+      it('should accept valid UUIDs', () => {
+        expect(() =>
+          uuidSchema.parse('123e4567-e89b-42d3-a456-426614174000')
+        ).not.toThrow();
+        expect(() =>
+          uuidSchema.parse('550e8400-e29b-41d4-a716-446655440000')
+        ).not.toThrow();
+      });
+
+      it('should reject invalid UUIDs', () => {
+        expect(() => uuidSchema.parse('not-a-uuid')).toThrow();
+        expect(() =>
+          uuidSchema.parse('123e4567e89b42d3a456426614174000')
+        ).toThrow();
+      });
+    });
+
+    describe('semverSchema', () => {
+      it('should accept valid semantic versions', () => {
+        expect(() => semverSchema.parse('1.0.0')).not.toThrow();
+        expect(() => semverSchema.parse('2.1.3')).not.toThrow();
+        expect(() => semverSchema.parse('1.0.0-alpha')).not.toThrow();
+        expect(() => semverSchema.parse('1.0.0-beta.1')).not.toThrow();
+        expect(() => semverSchema.parse('1.0.0+build.123')).not.toThrow();
+      });
+
+      it('should reject invalid semantic versions', () => {
+        expect(() => semverSchema.parse('1.0')).toThrow();
+        expect(() => semverSchema.parse('v1.0.0')).toThrow();
+      });
+    });
+
+    describe('passwordSchema', () => {
+      it('should accept strong passwords', () => {
+        expect(() => passwordSchema.parse('Password123')).not.toThrow();
+        expect(() => passwordSchema.parse('MySecurePass1')).not.toThrow();
+      });
+
+      it('should reject weak passwords', () => {
+        expect(() => passwordSchema.parse('short')).toThrow();
+        expect(() => passwordSchema.parse('nouppercase1')).toThrow();
+        expect(() => passwordSchema.parse('NOLOWERCASE1')).toThrow();
+        expect(() => passwordSchema.parse('NoNumbers')).toThrow();
+      });
+    });
+
+    describe('usernameSchema', () => {
+      it('should accept valid usernames', () => {
+        expect(() => usernameSchema.parse('john_doe')).not.toThrow();
+        expect(() => usernameSchema.parse('user-123')).not.toThrow();
+        expect(() => usernameSchema.parse('cooluser')).not.toThrow();
+      });
+
+      it('should reject invalid usernames', () => {
+        expect(() => usernameSchema.parse('ab')).toThrow();
+        expect(() => usernameSchema.parse('user@name')).toThrow();
+        expect(() => usernameSchema.parse('admin')).toThrow();
+        expect(() => usernameSchema.parse('root')).toThrow();
+      });
+    });
+
+    describe('ipAddressSchema', () => {
+      it('should accept valid IPv4 addresses', () => {
+        expect(() => ipAddressSchema.parse('192.168.1.1')).not.toThrow();
+        expect(() => ipAddressSchema.parse('127.0.0.1')).not.toThrow();
+        expect(() => ipAddressSchema.parse('255.255.255.255')).not.toThrow();
+      });
+
+      it('should reject invalid IP addresses', () => {
+        expect(() => ipAddressSchema.parse('256.1.1.1')).toThrow();
+        expect(() => ipAddressSchema.parse('192.168.1')).toThrow();
+        expect(() => ipAddressSchema.parse('not.an.ip.address')).toThrow();
+      });
+    });
+
+    describe('macAddressSchema', () => {
+      it('should accept valid MAC addresses', () => {
+        expect(() => macAddressSchema.parse('00:1A:2B:3C:4D:5E')).not.toThrow();
+        expect(() => macAddressSchema.parse('00-1A-2B-3C-4D-5E')).not.toThrow();
+        expect(() => macAddressSchema.parse('aa:bb:cc:dd:ee:ff')).not.toThrow();
+      });
+
+      it('should reject invalid MAC addresses', () => {
+        expect(() => macAddressSchema.parse('00:1A:2B:3C:4D')).toThrow();
+        expect(() => macAddressSchema.parse('GG:HH:II:JJ:KK:LL')).toThrow();
+      });
+    });
+
+    describe('durationSchema', () => {
+      it('should accept valid duration strings', () => {
+        expect(() => durationSchema.parse('100ms')).not.toThrow();
+        expect(() => durationSchema.parse('30s')).not.toThrow();
+        expect(() => durationSchema.parse('5m')).not.toThrow();
+        expect(() => durationSchema.parse('2h')).not.toThrow();
+        expect(() => durationSchema.parse('1d')).not.toThrow();
+        expect(() => durationSchema.parse('1w')).not.toThrow();
+      });
+
+      it('should reject invalid duration strings', () => {
+        expect(() => durationSchema.parse('5')).toThrow();
+        expect(() => durationSchema.parse('5x')).toThrow();
+        expect(() => durationSchema.parse('hours')).toThrow();
+      });
+    });
+
+    describe('cssColorSchema', () => {
+      it('should accept valid CSS colors', () => {
+        expect(() => cssColorSchema.parse('#fff')).not.toThrow();
+        expect(() => cssColorSchema.parse('#ffffff')).not.toThrow();
+        expect(() => cssColorSchema.parse('#ffffffff')).not.toThrow();
+        expect(() => cssColorSchema.parse('rgb(255, 0, 0)')).not.toThrow();
+        expect(() =>
+          cssColorSchema.parse('rgba(255, 0, 0, 0.5)')
+        ).not.toThrow();
+        expect(() => cssColorSchema.parse('red')).not.toThrow();
+        expect(() => cssColorSchema.parse('transparent')).not.toThrow();
+      });
+
+      it('should reject invalid CSS colors', () => {
+        expect(() => cssColorSchema.parse('notacolor')).toThrow();
+        expect(() => cssColorSchema.parse('#gg0000')).toThrow();
+      });
+    });
+
+    describe('creditCardSchema', () => {
+      it('should accept valid credit card numbers (Luhn check)', () => {
+        expect(() => creditCardSchema.parse('4111111111111111')).not.toThrow();
+        expect(() => creditCardSchema.parse('5500000000000004')).not.toThrow();
+      });
+
+      it('should reject invalid credit card numbers', () => {
+        expect(() => creditCardSchema.parse('1234567890123456')).toThrow();
+        expect(() => creditCardSchema.parse('4111111111111112')).toThrow();
+      });
+    });
+
+    describe('parseDuration', () => {
+      it('should parse duration strings to milliseconds', () => {
+        expect(parseDuration('100ms')).toBe(100);
+        expect(parseDuration('1s')).toBe(1000);
+        expect(parseDuration('1m')).toBe(60000);
+        expect(parseDuration('1h')).toBe(3600000);
+        expect(parseDuration('1d')).toBe(86400000);
+      });
+
+      it('should return null for invalid durations', () => {
+        expect(parseDuration('invalid')).toBeNull();
+        expect(parseDuration('')).toBeNull();
+        expect(parseDuration('5x')).toBeNull();
+      });
+    });
+  });
+
+  /* ==================== SCHEMA EXPORT TESTS ==================== */
+
+  describe('Schema Exports', () => {
+    it('should export commonSchemas with all expected schemas', () => {
+      expect(commonSchemas).toHaveProperty('email');
+      expect(commonSchemas).toHaveProperty('url');
+      expect(commonSchemas).toHaveProperty('phone');
+      expect(commonSchemas).toHaveProperty('slug');
+      expect(commonSchemas).toHaveProperty('hexColor');
+      expect(commonSchemas).toHaveProperty('port');
+      expect(commonSchemas).toHaveProperty('severity');
+    });
+
+    it('should export extendedSchemas with all expected schemas', () => {
+      expect(extendedSchemas).toHaveProperty('uuid');
+      expect(extendedSchemas).toHaveProperty('semver');
+      expect(extendedSchemas).toHaveProperty('password');
+      expect(extendedSchemas).toHaveProperty('username');
+      expect(extendedSchemas).toHaveProperty('ipAddress');
+      expect(extendedSchemas).toHaveProperty('macAddress');
+      expect(extendedSchemas).toHaveProperty('duration');
+      expect(extendedSchemas).toHaveProperty('cssColor');
+      expect(extendedSchemas).toHaveProperty('creditCard');
+      // Should also include all common schemas
+      expect(extendedSchemas).toHaveProperty('email');
     });
   });
 });

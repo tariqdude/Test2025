@@ -10,11 +10,30 @@
     Stacked depth with parallax • Click to expand • Hold to separate layers
   </p>
 
-  <div class="layered-controls">
-    <button class="layer-btn active" data-depth="normal">Normal Depth</button>
-    <button class="layer-btn" data-depth="extreme">Extreme Depth</button>
-    <button class="layer-btn" data-depth="flat">Flatten Layers</button>
-    <button class="layer-btn" data-action="explode">💥 Explode All</button>
+  <div class="layered-controls" role="group" aria-label="Card depth controls">
+    <button
+      class="layer-btn active"
+      data-depth="normal"
+      aria-pressed="true"
+      aria-label="Normal depth effect">Normal Depth</button
+    >
+    <button
+      class="layer-btn"
+      data-depth="extreme"
+      aria-pressed="false"
+      aria-label="Extreme depth effect">Extreme Depth</button
+    >
+    <button
+      class="layer-btn"
+      data-depth="flat"
+      aria-pressed="false"
+      aria-label="Flatten all layers">Flatten Layers</button
+    >
+    <button
+      class="layer-btn"
+      data-action="explode"
+      aria-label="Explode all cards">💥 Explode All</button
+    >
   </div>
 
   <div class="layered-grid" data-layer-system>

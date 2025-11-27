@@ -13,13 +13,30 @@ selection */ ---
     Interactive 3D worlds • Click islands to select • Drag to rotate camera
   </p>
 
-  <div class="islands-controls">
-    <button class="island-btn active" data-view="isometric"
-      >Isometric View</button
+  <div class="islands-controls" role="group" aria-label="Camera view controls">
+    <button
+      class="island-btn active"
+      data-view="isometric"
+      aria-pressed="true"
+      aria-label="Isometric camera view">Isometric View</button
     >
-    <button class="island-btn" data-view="top">Top View</button>
-    <button class="island-btn" data-view="side">Side View</button>
-    <button class="island-btn" data-action="reset">Reset Camera</button>
+    <button
+      class="island-btn"
+      data-view="top"
+      aria-pressed="false"
+      aria-label="Top-down camera view">Top View</button
+    >
+    <button
+      class="island-btn"
+      data-view="side"
+      aria-pressed="false"
+      aria-label="Side camera view">Side View</button
+    >
+    <button
+      class="island-btn"
+      data-action="reset"
+      aria-label="Reset camera to default position">Reset Camera</button
+    >
   </div>
 
   <div class="islands-info">

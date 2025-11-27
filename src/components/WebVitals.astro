@@ -52,7 +52,10 @@
       });
       longTaskObserver.observe({ entryTypes: ['longtask'] });
     } catch (e) {
-      // Long tasks not supported
+      // Long tasks API not supported in this browser
+      if (import.meta.env.DEV) {
+        console.debug('[WebVitals] Long tasks observer not supported');
+      }
     }
 
     // Layout shifts
@@ -71,7 +74,10 @@
       });
       layoutShiftObserver.observe({ entryTypes: ['layout-shift'] });
     } catch (e) {
-      // Layout shift observer not supported
+      // Layout shift API not supported in this browser
+      if (import.meta.env.DEV) {
+        console.debug('[WebVitals] Layout shift observer not supported');
+      }
     }
   }
 

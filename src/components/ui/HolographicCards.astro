@@ -10,13 +10,40 @@
     Interactive prismatic cards • Click to flip • Hold to cycle spectrums
   </p>
 
-  <div class="holo-controls">
-    <button class="holo-btn active" data-mode="default">Default Hologram</button
+  <div
+    class="holo-controls"
+    role="group"
+    aria-label="Holographic effect controls"
+  >
+    <button
+      class="holo-btn active"
+      data-mode="default"
+      aria-pressed="true"
+      aria-label="Default hologram effect">Default Hologram</button
     >
-    <button class="holo-btn" data-mode="rainbow">Rainbow Cycle</button>
-    <button class="holo-btn" data-mode="chrome">Chrome Shimmer</button>
-    <button class="holo-btn" data-mode="neon">Neon Pulse</button>
-    <button class="holo-btn" data-action="shuffle">🔀 Shuffle Cards</button>
+    <button
+      class="holo-btn"
+      data-mode="rainbow"
+      aria-pressed="false"
+      aria-label="Rainbow cycle effect">Rainbow Cycle</button
+    >
+    <button
+      class="holo-btn"
+      data-mode="chrome"
+      aria-pressed="false"
+      aria-label="Chrome shimmer effect">Chrome Shimmer</button
+    >
+    <button
+      class="holo-btn"
+      data-mode="neon"
+      aria-pressed="false"
+      aria-label="Neon pulse effect">Neon Pulse</button
+    >
+    <button
+      class="holo-btn"
+      data-action="shuffle"
+      aria-label="Shuffle cards randomly">🔀 Shuffle Cards</button
+    >
   </div>
 
   <div class="holo-grid" data-holo-system>

@@ -370,4 +370,322 @@ export class ReportGenerator {
       {} as Record<string, CodeIssue[]>
     );
   }
+
+  /**
+   * Generate a SARIF (Static Analysis Results Interchange Format) report
+   * This format is compatible with GitHub Code Scanning and other CI/CD tools
+   * @see https://sarifweb.azurewebsites.net/
+   */
+  static generateSarifReport(
+    analysis: AnalysisResult,
+    toolName = 'Code Health Analyzer',
+    toolVersion = '1.0.0'
+  ): string {
+    const { issues } = analysis;
+
+    const sarifReport = {
+      $schema:
+        'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+      version: '2.1.0',
+      runs: [
+        {
+          tool: {
+            driver: {
+              name: toolName,
+              version: toolVersion,
+              informationUri: 'https://github.com/your-repo/code-analyzer',
+              rules: this.generateSarifRules(issues),
+            },
+          },
+          results: issues.map((issue, index) =>
+            this.issueToSarifResult(issue, index)
+          ),
+          invocations: [
+            {
+              executionSuccessful: true,
+              endTimeUtc: new Date().toISOString(),
+            },
+          ],
+        },
+      ],
+    };
+
+    return JSON.stringify(sarifReport, null, 2);
+  }
+
+  /**
+   * Generate SARIF rule definitions from issues
+   */
+  private static generateSarifRules(issues: CodeIssue[]): Array<{
+    id: string;
+    name: string;
+    shortDescription: { text: string };
+    fullDescription: { text: string };
+    defaultConfiguration: { level: string };
+    helpUri?: string;
+  }> {
+    const uniqueRules = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        description: string;
+        severity: string;
+        documentation?: string;
+      }
+    >();
+
+    for (const issue of issues) {
+      if (!uniqueRules.has(issue.rule)) {
+        uniqueRules.set(issue.rule, {
+          id: issue.rule,
+          name: issue.title,
+          description: issue.description,
+          severity: issue.severity.level,
+          documentation: issue.documentation,
+        });
+      }
+    }
+
+    return Array.from(uniqueRules.values()).map(rule => ({
+      id: rule.id,
+      name: rule.name,
+      shortDescription: { text: rule.name },
+      fullDescription: { text: rule.description },
+      defaultConfiguration: {
+        level: this.severityToSarifLevel(rule.severity),
+      },
+      ...(rule.documentation && { helpUri: rule.documentation }),
+    }));
+  }
+
+  /**
+   * Convert an issue to SARIF result format
+   */
+  private static issueToSarifResult(
+    issue: CodeIssue,
+    index: number
+  ): {
+    ruleId: string;
+    ruleIndex: number;
+    level: string;
+    message: { text: string };
+    locations: Array<{
+      physicalLocation: {
+        artifactLocation: { uri: string };
+        region?: {
+          startLine: number;
+          startColumn?: number;
+          endLine?: number;
+          endColumn?: number;
+        };
+      };
+    }>;
+    fixes?: Array<{
+      description: { text: string };
+      artifactChanges: Array<{
+        artifactLocation: { uri: string };
+        replacements: Array<{
+          deletedRegion: {
+            startLine: number;
+            startColumn?: number;
+          };
+          insertedContent?: { text: string };
+        }>;
+      }>;
+    }>;
+  } {
+    const result: ReturnType<typeof this.issueToSarifResult> = {
+      ruleId: issue.rule,
+      ruleIndex: index,
+      level: this.severityToSarifLevel(issue.severity.level),
+      message: {
+        text: `${issue.title}: ${issue.description}`,
+      },
+      locations: [
+        {
+          physicalLocation: {
+            artifactLocation: {
+              uri: issue.file,
+            },
+            ...(issue.line && {
+              region: {
+                startLine: issue.line,
+                ...(issue.column && { startColumn: issue.column }),
+              },
+            }),
+          },
+        },
+      ],
+    };
+
+    // Add fix suggestion if available and autoFixable
+    if (issue.suggestion && issue.autoFixable && issue.line) {
+      result.fixes = [
+        {
+          description: { text: issue.suggestion },
+          artifactChanges: [
+            {
+              artifactLocation: { uri: issue.file },
+              replacements: [
+                {
+                  deletedRegion: {
+                    startLine: issue.line,
+                    ...(issue.column && { startColumn: issue.column }),
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ];
+    }
+
+    return result;
+  }
+
+  /**
+   * Map severity levels to SARIF levels
+   */
+  private static severityToSarifLevel(severity: string): string {
+    switch (severity) {
+      case 'critical':
+      case 'high':
+        return 'error';
+      case 'medium':
+        return 'warning';
+      case 'low':
+      case 'info':
+        return 'note';
+      default:
+        return 'none';
+    }
+  }
+
+  /**
+   * Generate a CSV report for spreadsheet analysis
+   */
+  static generateCsvReport(analysis: AnalysisResult): string {
+    const { issues, health } = analysis;
+    const headers = [
+      'ID',
+      'Severity',
+      'Impact',
+      'Urgency',
+      'Title',
+      'Description',
+      'File',
+      'Line',
+      'Column',
+      'Category',
+      'Rule',
+      'AutoFixable',
+      'Suggestion',
+    ];
+
+    const rows = issues.map(issue => [
+      this.escapeCsvField(issue.id),
+      this.escapeCsvField(issue.severity.level),
+      this.escapeCsvField(issue.severity.impact),
+      this.escapeCsvField(issue.severity.urgency),
+      this.escapeCsvField(issue.title),
+      this.escapeCsvField(issue.description),
+      this.escapeCsvField(issue.file),
+      issue.line?.toString() || '',
+      issue.column?.toString() || '',
+      this.escapeCsvField(issue.category),
+      this.escapeCsvField(issue.rule),
+      issue.autoFixable ? 'Yes' : 'No',
+      this.escapeCsvField(issue.suggestion || ''),
+    ]);
+
+    // Add summary row
+    const summaryRows = [
+      [],
+      ['Summary'],
+      ['Health Score', health.score.toString()],
+      ['Total Issues', health.totalIssues.toString()],
+      ['Critical', health.criticalIssues.toString()],
+      ['High', health.highIssues.toString()],
+      ['Medium', health.mediumIssues.toString()],
+      ['Low', health.lowIssues.toString()],
+    ];
+
+    const allRows = [headers, ...rows, ...summaryRows];
+    return allRows.map(row => row.join(',')).join('\n');
+  }
+
+  /**
+   * Escape a field for CSV format
+   */
+  private static escapeCsvField(field: string): string {
+    if (!field) return '';
+    // Escape quotes and wrap in quotes if contains comma, newline, or quote
+    if (field.includes(',') || field.includes('\n') || field.includes('"')) {
+      return `"${field.replace(/"/g, '""')}"`;
+    }
+    return field;
+  }
+
+  /**
+   * Generate a JUnit XML report for CI/CD integration
+   */
+  static generateJunitReport(
+    analysis: AnalysisResult,
+    suiteName = 'Code Health Analysis'
+  ): string {
+    const { issues, health } = analysis;
+    const timestamp = new Date().toISOString();
+    const failureCount = health.criticalIssues + health.highIssues;
+    const warningCount = health.mediumIssues;
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="${this.escapeXml(suiteName)}" tests="${issues.length}" failures="${failureCount}" warnings="${warningCount}" timestamp="${timestamp}">
+  <testsuite name="Code Analysis" tests="${issues.length}" failures="${failureCount}" timestamp="${timestamp}">`;
+
+    // Group by category for test cases
+    const byCategory = this.groupIssuesByCategory(issues);
+
+    for (const [category, categoryIssues] of Object.entries(byCategory)) {
+      for (const issue of categoryIssues) {
+        const isFailure =
+          issue.severity.level === 'critical' ||
+          issue.severity.level === 'high';
+        xml += `
+    <testcase name="${this.escapeXml(issue.title)}" classname="${this.escapeXml(category)}" file="${this.escapeXml(issue.file)}"${issue.line ? ` line="${issue.line}"` : ''}>`;
+
+        if (isFailure) {
+          xml += `
+      <failure message="${this.escapeXml(issue.description)}" type="${issue.severity.level}">
+${this.escapeXml(issue.description)}
+File: ${this.escapeXml(issue.file)}${issue.line ? `:${issue.line}` : ''}${issue.suggestion ? `\nSuggestion: ${this.escapeXml(issue.suggestion)}` : ''}
+      </failure>`;
+        } else if (issue.severity.level === 'medium') {
+          xml += `
+      <warning message="${this.escapeXml(issue.description)}" type="${issue.severity.level}" />`;
+        }
+
+        xml += `
+    </testcase>`;
+      }
+    }
+
+    xml += `
+  </testsuite>
+</testsuites>`;
+
+    return xml;
+  }
+
+  /**
+   * Escape a string for XML
+   */
+  private static escapeXml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
 }

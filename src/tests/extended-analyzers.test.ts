@@ -249,18 +249,21 @@ describe('Git Analyzer', () => {
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       })
       .mockResolvedValueOnce({
         stdout: '',
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       })
       .mockResolvedValueOnce({
         stdout: 'abc123 Latest commit',
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       });
 
     const issues = await analyzer.analyze(mockConfig);
@@ -275,18 +278,21 @@ describe('Git Analyzer', () => {
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       })
       .mockResolvedValueOnce({
         stdout: 'M src/file.ts\nA src/new.ts',
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       })
       .mockResolvedValueOnce({
         stdout: 'abc123 Latest commit',
         stderr: '',
         exitCode: 0,
         signal: null,
+        duration: 10,
       });
 
     const issues = await analyzer.analyze(mockConfig);

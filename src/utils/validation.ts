@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import { ValidationError } from '../errors';
+
+// Re-export ValidationError for backward compatibility
+export { ValidationError };
 
 /**
  * Validation utilities for input sanitization and validation
@@ -200,20 +204,6 @@ export function isNonEmptyArray<T>(value: unknown): value is [T, ...T[]] {
 }
 
 /**
- * Create a custom validation error with helpful message
- */
-export class ValidationError extends Error {
-  constructor(
-    public field: string,
-    message: string,
-    public value?: unknown
-  ) {
-    super(`Validation error in field '${field}': ${message}`);
-    this.name = 'ValidationError';
-  }
-}
-
-/**
  * Validate required fields in an object
  */
 export function validateRequiredFields<T extends Record<string, unknown>>(
@@ -222,11 +212,7 @@ export function validateRequiredFields<T extends Record<string, unknown>>(
 ): void {
   for (const field of requiredFields) {
     if (obj[field] === undefined || obj[field] === null || obj[field] === '') {
-      throw new ValidationError(
-        String(field),
-        'This field is required',
-        obj[field]
-      );
+      throw new ValidationError(String(field), ['This field is required']);
     }
   }
 }
@@ -267,4 +253,274 @@ export const commonSchemas = {
   sort: sortSchema,
   dateRange: dateRangeSchema,
   searchQuery: searchQuerySchema,
+};
+
+/* ==================== ADDITIONAL VALIDATORS ==================== */
+
+/**
+ * UUID validation (v4 format)
+ */
+export const uuidSchema = z
+  .string()
+  .regex(
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    'Invalid UUID format'
+  );
+
+/**
+ * Semantic version validation
+ */
+export const semverSchema = z
+  .string()
+  .regex(
+    /^\d+\.\d+\.\d+(?:-[\da-zA-Z-]+(?:\.[\da-zA-Z-]+)*)?(?:\+[\da-zA-Z-]+(?:\.[\da-zA-Z-]+)*)?$/,
+    'Invalid semantic version format'
+  );
+
+/**
+ * ISO 8601 date string validation
+ */
+export const isoDateSchema = z.string().refine(value => {
+  const date = new Date(value);
+  return !isNaN(date.getTime()) && value === date.toISOString();
+}, 'Invalid ISO 8601 date format');
+
+/**
+ * Credit card number validation (Luhn algorithm)
+ */
+export const creditCardSchema = z.string().refine(cardNumber => {
+  const cleaned = cardNumber.replace(/\D/g, '');
+  if (cleaned.length < 13 || cleaned.length > 19) return false;
+
+  let sum = 0;
+  let isEven = false;
+
+  for (let i = cleaned.length - 1; i >= 0; i--) {
+    let digit = parseInt(cleaned[i], 10);
+    if (isEven) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+    isEven = !isEven;
+  }
+
+  return sum % 10 === 0;
+}, 'Invalid credit card number');
+
+/**
+ * Password strength validation
+ */
+export const passwordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters')
+  .max(128, 'Password must be at most 128 characters')
+  .refine(
+    password => /[A-Z]/.test(password),
+    'Password must contain at least one uppercase letter'
+  )
+  .refine(
+    password => /[a-z]/.test(password),
+    'Password must contain at least one lowercase letter'
+  )
+  .refine(
+    password => /\d/.test(password),
+    'Password must contain at least one number'
+  );
+
+/**
+ * Username validation
+ */
+export const usernameSchema = z
+  .string()
+  .min(3, 'Username must be at least 3 characters')
+  .max(30, 'Username must be at most 30 characters')
+  .regex(
+    /^[a-zA-Z0-9_-]+$/,
+    'Username can only contain letters, numbers, underscores, and hyphens'
+  )
+  .refine(
+    username =>
+      !['admin', 'root', 'system', 'null', 'undefined'].includes(
+        username.toLowerCase()
+      ),
+    'This username is reserved'
+  );
+
+/**
+ * IP address validation (IPv4 and IPv6)
+ */
+export const ipAddressSchema = z.string().refine(value => {
+  // IPv4
+  const ipv4Regex =
+    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  // IPv6
+  const ipv6Regex = /^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/;
+  return ipv4Regex.test(value) || ipv6Regex.test(value);
+}, 'Invalid IP address format');
+
+/**
+ * MAC address validation
+ */
+export const macAddressSchema = z
+  .string()
+  .regex(
+    /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
+    'Invalid MAC address format'
+  );
+
+/**
+ * CORS origin validation
+ */
+export const corsOriginSchema = z.union([
+  z.literal('*'),
+  z
+    .string()
+    .url()
+    .refine(
+      url => url.startsWith('http://') || url.startsWith('https://'),
+      'Origin must use HTTP or HTTPS protocol'
+    ),
+  z.array(z.string().url()),
+]);
+
+/**
+ * JWT token validation (basic structure)
+ */
+export const jwtSchema = z.string().refine(token => {
+  const parts = token.split('.');
+  if (parts.length !== 3) return false;
+
+  try {
+    parts.slice(0, 2).forEach(part => {
+      // Check if parts are valid base64url
+      const base64 = part.replace(/-/g, '+').replace(/_/g, '/');
+      atob(base64);
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}, 'Invalid JWT token format');
+
+/**
+ * Cron expression validation (basic)
+ */
+export const cronSchema = z.string().refine(expression => {
+  const parts = expression.trim().split(/\s+/);
+  return parts.length >= 5 && parts.length <= 6;
+}, 'Invalid cron expression format');
+
+/**
+ * HTML color validation (hex, rgb, rgba, hsl, hsla, named colors)
+ */
+export const cssColorSchema = z.string().refine(value => {
+  // Hex colors
+  if (
+    /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{4})$/.test(
+      value
+    )
+  ) {
+    return true;
+  }
+  // RGB/RGBA
+  if (/^rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(,\s*[\d.]+\s*)?\)$/.test(value)) {
+    return true;
+  }
+  // HSL/HSLA
+  if (
+    /^hsla?\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*(,\s*[\d.]+\s*)?\)$/.test(
+      value
+    )
+  ) {
+    return true;
+  }
+  // Named colors (common ones)
+  const namedColors = [
+    'transparent',
+    'black',
+    'white',
+    'red',
+    'green',
+    'blue',
+    'yellow',
+    'orange',
+    'purple',
+    'pink',
+    'gray',
+    'grey',
+  ];
+  return namedColors.includes(value.toLowerCase());
+}, 'Invalid CSS color format');
+
+/**
+ * Time duration validation (e.g., "1h", "30m", "2d")
+ */
+export const durationSchema = z.string().refine(value => {
+  const regex = /^(\d+)(ms|s|m|h|d|w|M|y)$/;
+  return regex.test(value);
+}, 'Invalid duration format. Use format like "1h", "30m", "2d"');
+
+/**
+ * Parse duration string to milliseconds
+ */
+export function parseDuration(duration: string): number | null {
+  const match = duration.match(/^(\d+)(ms|s|m|h|d|w|M|y)$/);
+  if (!match) return null;
+
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+
+  const multipliers: Record<string, number> = {
+    ms: 1,
+    s: 1000,
+    m: 60 * 1000,
+    h: 60 * 60 * 1000,
+    d: 24 * 60 * 60 * 1000,
+    w: 7 * 24 * 60 * 60 * 1000,
+    M: 30 * 24 * 60 * 60 * 1000,
+    y: 365 * 24 * 60 * 60 * 1000,
+  };
+
+  return value * multipliers[unit];
+}
+
+/**
+ * Validate object matches a specific shape
+ */
+export function validateShape<T extends z.ZodRawShape>(
+  data: unknown,
+  shape: T
+): z.infer<z.ZodObject<T>> | null {
+  const schema = z.object(shape);
+  const result = schema.safeParse(data);
+  return result.success ? result.data : null;
+}
+
+/**
+ * Create a rate limit key validator
+ */
+export const rateLimitKeySchema = z
+  .string()
+  .min(1)
+  .max(256)
+  .regex(/^[\w:.-]+$/, 'Invalid rate limit key format');
+
+// Extended common schemas export
+export const extendedSchemas = {
+  ...commonSchemas,
+  uuid: uuidSchema,
+  semver: semverSchema,
+  isoDate: isoDateSchema,
+  creditCard: creditCardSchema,
+  password: passwordSchema,
+  username: usernameSchema,
+  ipAddress: ipAddressSchema,
+  macAddress: macAddressSchema,
+  corsOrigin: corsOriginSchema,
+  jwt: jwtSchema,
+  cron: cronSchema,
+  cssColor: cssColorSchema,
+  duration: durationSchema,
+  rateLimitKey: rateLimitKeySchema,
 };
