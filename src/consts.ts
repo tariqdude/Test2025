@@ -9,6 +9,10 @@
 export const SITE_TITLE = 'Github Pages Project v1';
 export const SITE_DESCRIPTION =
   'Static intelligence for decisive operators. Build executive-ready status hubs with Astro.';
+export const SITE_URL =
+  import.meta.env.SITE_URL ||
+  'https://tariqdude.github.io/Github-Pages-Project-v1/';
+export const BASE_PATH = import.meta.env.BASE_URL || '/';
 
 export const SITE_CONFIG = {
   title: SITE_TITLE,

@@ -1,10 +1,18 @@
-const CACHE_NAME = 'elite-project-v1';
+const CACHE_NAME = 'github-pages-project-v1';
+const DEFAULT_BASE_PATH = '/Github-Pages-Project-v1';
 
 const resolveBasePath = () => {
   try {
     const scopeUrl = new URL(self.registration?.scope ?? self.location.href);
     const pathname = scopeUrl.pathname.replace(/\/$/, '');
-    return pathname === '/' ? '' : pathname;
+    const normalized = pathname === '/' ? '' : pathname;
+    const isGitHubPagesHost = self.location.hostname.endsWith('github.io');
+
+    if (!normalized && isGitHubPagesHost) {
+      return DEFAULT_BASE_PATH;
+    }
+
+    return normalized;
   } catch (error) {
     console.error('[Service Worker] Failed to derive base path:', error);
     return '';

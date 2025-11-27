@@ -4,6 +4,8 @@
  * Adds schema.org markup for better SEO and rich results
  */
 
+import { SITE_URL } from '../consts';
+
 export interface Props {
   type?: 'website' | 'article' | 'blog' | 'organization' | 'breadcrumbs';
   data?: Record<string, any>;
@@ -11,9 +13,7 @@ export interface Props {
 
 const { type = 'website', data = {} } = Astro.props;
 
-const baseUrl =
-  Astro.site?.toString() ||
-  'https://tariqdude.github.io/Github-Pages-Project-v1';
+const baseUrl = Astro.site?.toString() || SITE_URL;
 const currentUrl = new URL(Astro.url.pathname, baseUrl).toString();
 
 // Website schema

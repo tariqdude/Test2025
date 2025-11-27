@@ -1,47 +1,86 @@
 # Github Pages Project v1
 
-Static Astro + Tailwind starter tuned for GitHub Pages. Builds to a fully static `dist/` bundle with sitemap, RSS, and SEO helpers baked in.
+Astro + Tailwind static site built for GitHub Pages. Includes sitemap, RSS, structured data, PWA manifest, and a quality gate script so deploys stay clean.
 
-- Live site: https://tariqdude.github.io/Github-Pages-Project-v1/
-- Default repo: https://github.com/tariqdude/Github-Pages-Project-v1
-- Production base path: `/Github-Pages-Project-v1/` (set in `astro.config.mjs`)
+- Live: https://tariqdude.github.io/Github-Pages-Project-v1/
+- Repo: https://github.com/tariqdude/Github-Pages-Project-v1
+- Base path (production): `/Github-Pages-Project-v1/` (set in `astro.config.mjs`)
 
-## Getting Started
+## Tech Stack
 
-1) Install Node 22+ (`.nvmrc` is present).  
-2) Install dependencies: `npm install`  
-3) Run the dev server: `npm run dev` (defaults to http://localhost:4321)  
-4) Type-check, lint, and test as needed:
+- Astro 5, TypeScript, TailwindCSS
+- Content: Markdown/MDX, RSS, sitemap
+- Testing: Vitest (unit), Playwright (e2e)
+- Tooling: ESLint, Prettier, Husky + lint-staged
 
+## Prerequisites
+
+- Node 22+ (`.nvmrc` present)
+- npm (lockfile v3)
+
+## Setup
+
+```sh
+npm install
+npm run dev          # http://localhost:4321
 ```
+
+Recommended checks while developing:
+
+```sh
 npm run typecheck
 npm run lint
-npm run test          # unit
-npm run test:e2e      # Playwright
+npm run test         # unit
+npm run test:e2e     # Playwright
 ```
 
-## Build & Preview
+## Scripts
 
-- Production build: `npm run build`
-- Preview the built site: `npm run preview`
-- Pre-deploy quality gate: `npm run pre-deploy` (critical error review + typecheck + lint + tests + build)
+- `npm run dev` — Start local dev server
+- `npm run build` — Production build to `dist/`
+- `npm run preview` — Preview the built site
+- `npm run typecheck` — TS type check
+- `npm run lint` — ESLint
+- `npm run test` — Vitest unit tests
+- `npm run test:e2e` — Playwright e2e
+- `npm run pre-deploy` — Critical error review + typecheck + lint + tests + build
 
-## Deployment Notes
+## Environment Variables
 
-- `astro.config.mjs` sets `base` to `/Github-Pages-Project-v1/` when `import.meta.env.PROD` is true so assets resolve correctly on GitHub Pages.
-- `site` defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`; set `SITE_URL` if you deploy elsewhere.
-- `public/manifest.json` and `public/robots.txt` use the same base path for start URLs, icons, and the sitemap.
-- GitHub Actions workflow `.github/workflows/deploy.yml` runs `npm run build` and publishes `dist/` to Pages.
+Copy `.env.example` to `.env` as needed.
+
+- `SITE_URL` — Canonical site URL (defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`).
+
+## Deployment (GitHub Pages)
+
+- `astro.config.mjs` sets `base` to `/Github-Pages-Project-v1/` in production so assets resolve under the repo path.
+- `site` defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`; override with `SITE_URL` if deploying elsewhere.
+- Workflow: `.github/workflows/deploy.yml` builds and publishes `dist/` to Pages.
+- PWA files (`public/manifest.json`, `public/sw.js`, `public/robots.txt`) use the same base path for icons, sitemap, and start URLs.
+
+If you fork/rename:
+
+1) Update `base` and `site` in `astro.config.mjs` to the new repo name.  
+2) Update `SITE_URL` in `.env.example` (and your `.env`).  
+3) Refresh URLs in `public/manifest.json`, `public/robots.txt`, and any CTA links in `src/consts.ts` or UI copy.
 
 ## Project Structure
 
-Key folders:
+- `src/` — Pages, components, layouts, content, utilities.
+- `public/` — Static assets (favicons, manifest, robots.txt, service worker).
+- `dist/` — Build output (generated).
+- `e2e/` — Playwright tests.
+- `test-results/` and `playwright-report/` — Test artifacts (generated).
 
-- `src/` — pages, layouts, components, utilities, and content.
-- `public/` — static assets (favicons, manifest, robots, service worker).
-- `dist/` — generated at build time.
+## Quality Checklist
+
+- `npm run pre-deploy` passes (critical error review, typecheck, lint, tests, build).
+- Links and assets work under `/Github-Pages-Project-v1/` (verify with `npm run preview`).
+- Manifest and service worker resolve icons under the repo base path.
+- Sitemap points to the correct Pages URL.
 
 ## Troubleshooting
 
-- If links appear broken on production, confirm the base path matches your repository name and rebuild.
-- When forking, update GitHub links in UI copy and `src/consts.ts` to point to your repo.
+- Missing icons: ensure `public/favicon-192.png` and `public/favicon-512.png` exist (manifest references them).  
+- Broken links on Pages: confirm `base` matches the repo path and rerun `npm run build && npm run preview`.  
+- Caching issues: the service worker cache name is `github-pages-project-v1`; bump it when changing asset paths to force refresh.  
