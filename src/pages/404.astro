@@ -1,86 +1,164 @@
 ---
+/**
+ * 404 Page Not Found
+ * Enhanced error page with accessibility and helpful navigation
+ */
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import { withBasePath } from '../utils/helpers';
 
 const quickLinks = [
-  { label: 'Home', href: withBasePath('/') },
-  { label: 'About', href: withBasePath('about/') },
-  { label: 'Services', href: withBasePath('services/') },
-  { label: 'Pricing', href: withBasePath('pricing/') },
-  { label: 'Blog', href: withBasePath('blog/') },
-  { label: 'Contact', href: withBasePath('contact/') },
+  {
+    label: 'Home',
+    href: withBasePath('/'),
+    description: 'Return to the main page',
+  },
+  {
+    label: 'About',
+    href: withBasePath('about/'),
+    description: 'Learn about us',
+  },
+  {
+    label: 'Services',
+    href: withBasePath('services/'),
+    description: 'View our services',
+  },
+  {
+    label: 'Pricing',
+    href: withBasePath('pricing/'),
+    description: 'Check pricing plans',
+  },
+  {
+    label: 'Blog',
+    href: withBasePath('blog/'),
+    description: 'Read our articles',
+  },
+  {
+    label: 'Contact',
+    href: withBasePath('contact/'),
+    description: 'Get in touch',
+  },
 ];
 ---
 
 <MarketingLayout
   title="Page Not Found | Elite Project"
-  description="The page you're looking for doesn't exist."
+  description="The page you're looking for doesn't exist. Use the links below to navigate."
 >
   <section
     class="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-zinc-950"
+    aria-labelledby="error-title"
   >
+    {/* Background grid pattern */}
     <div
       class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+      aria-hidden="true"
     >
     </div>
-    <div class="relative mx-auto max-w-[800px] px-6 py-20 text-center">
+
+    <main class="relative mx-auto max-w-[800px] px-6 py-20 text-center">
       <div
         class="border border-zinc-800 bg-zinc-900/80 px-10 py-16 sm:px-14 sm:py-20 backdrop-blur-sm relative"
+        role="alert"
+        aria-live="polite"
       >
+        {/* Decorative corners */}
         <div
           class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700"
+          aria-hidden="true"
         >
         </div>
         <div
           class="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-700"
+          aria-hidden="true"
         >
         </div>
         <div
           class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-700"
+          aria-hidden="true"
         >
         </div>
         <div
           class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-700"
+          aria-hidden="true"
         >
         </div>
 
+        {/* Error code badge */}
         <div class="mb-8 flex justify-center">
           <span
             class="inline-flex h-24 w-24 items-center justify-center border border-zinc-800 bg-zinc-950 text-4xl font-mono font-bold text-accent-500"
+            aria-hidden="true"
           >
             404
           </span>
         </div>
 
         <h1
+          id="error-title"
           class="text-4xl font-display font-bold text-white sm:text-5xl uppercase tracking-tight"
         >
-          Page_Not_Found
+          Page Not Found
         </h1>
 
-        <p class="mt-6 text-lg text-zinc-400 font-mono">
-          // The page you're looking for doesn't exist or has been moved. Try
-          one of the links below to get back on track.
+        <p class="mt-6 text-lg text-zinc-400 font-mono max-w-md mx-auto">
+          The page you're looking for doesn't exist or has been moved. Try one
+          of the links below to get back on track.
         </p>
 
+        {/* Current URL display */}
         <p class="mt-4 text-sm text-zinc-500 font-mono">
-          Current URL: <code
-            class="bg-zinc-950 border border-zinc-800 px-2 py-1 text-accent-500"
-            id="current-url"></code>
+          <span class="sr-only">Requested URL:</span>
+          Requested: <code
+            class="bg-zinc-950 border border-zinc-800 px-2 py-1 text-accent-500 break-all"
+            id="current-url"
+            aria-label="Current URL path"></code>
         </p>
 
-        <div class="mt-10 flex flex-wrap justify-center gap-4">
+        {/* Action buttons */}
+        <div
+          class="mt-10 flex flex-wrap justify-center gap-4"
+          role="group"
+          aria-label="Error page actions"
+        >
           <a
-            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-900 bg-zinc-100 border border-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all uppercase tracking-wider font-mono"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-900 bg-zinc-100 border border-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all uppercase tracking-wider font-mono focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
             href={withBasePath('/')}
           >
-            Return_Home
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+            </svg>
+            Return Home
           </a>
           <a
-            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-100 border border-zinc-700 hover:bg-zinc-900 hover:border-accent-500 hover:text-accent-500 transition-all uppercase tracking-wider font-mono"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-zinc-100 border border-zinc-700 hover:bg-zinc-900 hover:border-accent-500 hover:text-accent-500 transition-all uppercase tracking-wider font-mono focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
             href={withBasePath('contact/')}
           >
-            Contact_Support
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+            Contact Support
           </a>
         </div>
 
@@ -93,18 +171,24 @@ const quickLinks = [
           });
         </script>
 
+        {/* Quick links navigation */}
         <div class="mt-12 border-t border-zinc-800 pt-10">
           <p
             class="text-xs font-mono font-bold uppercase tracking-widest text-zinc-500"
+            id="quick-links-title"
           >
-            QUICK_LINKS
+            Quick Links
           </p>
-          <nav class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3">
+          <nav
+            class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3"
+            aria-labelledby="quick-links-title"
+          >
             {
               quickLinks.map(link => (
                 <a
-                  class="text-sm font-mono text-zinc-400 transition hover:text-accent-500 uppercase tracking-wider"
+                  class="text-sm font-mono text-zinc-400 transition hover:text-accent-500 uppercase tracking-wider focus:outline-none focus:text-accent-500 focus:underline"
                   href={link.href}
+                  title={link.description}
                 >
                   {link.label}
                 </a>
@@ -113,6 +197,6 @@ const quickLinks = [
           </nav>
         </div>
       </div>
-    </div>
+    </main>
   </section>
 </MarketingLayout>

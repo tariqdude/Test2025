@@ -6,6 +6,7 @@ export interface Props {
   subheading?: string;
   variant?: 'newsletter' | 'contact' | 'demo' | 'demo-center';
   className?: string;
+  backgroundGradient?: 'primary' | 'secondary' | 'accent' | 'dark';
 }
 
 const {
@@ -13,14 +14,44 @@ const {
   subheading = 'Join thousands of businesses already using our platform.',
   variant = 'newsletter',
   className = '',
+  backgroundGradient = 'primary',
 } = Astro.props;
+
+const gradients = {
+  primary: 'from-primary-600 to-secondary-600',
+  secondary: 'from-blue-600 to-purple-600',
+  accent: 'from-accent-500 to-accent-700',
+  dark: 'from-gray-800 to-gray-900',
+};
+
+const ctaId = `cta-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<div
-  class={`cta-section bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-8 lg:p-12 text-center ${className}`}
+<section
+  class={`cta-section bg-gradient-to-r ${gradients[backgroundGradient]} rounded-2xl p-8 lg:p-12 text-center relative overflow-hidden ${className}`}
+  aria-labelledby={`${ctaId}-heading`}
+  role="region"
 >
-  <div class="max-w-3xl mx-auto">
-    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+  <!-- Decorative background elements -->
+  <div
+    class="absolute inset-0 overflow-hidden pointer-events-none"
+    aria-hidden="true"
+  >
+    <div
+      class="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute -bottom-24 -left-24 w-48 h-48 bg-white/10 rounded-full blur-3xl"
+    >
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto relative z-10">
+    <h2
+      id={`${ctaId}-heading`}
+      class="text-3xl lg:text-4xl font-bold text-white mb-4"
+    >
       {heading}
     </h2>
     <p class="text-xl text-primary-100 mb-8">
@@ -29,17 +60,25 @@ const {
 
     {
       variant === 'newsletter' && (
-        <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <form
+          class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+          aria-label="Newsletter subscription form"
+        >
+          <label for={`${ctaId}-email`} class="sr-only">
+            Email address
+          </label>
           <input
             type="email"
+            id={`${ctaId}-email`}
+            name="email"
             placeholder="Enter your email"
             required
-            aria-label="Email address"
-            class="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+            autocomplete="email"
+            class="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-200"
           />
           <button
             type="submit"
-            class="px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+            class="px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600"
           >
             Subscribe
           </button>
@@ -49,16 +88,20 @@ const {
 
     {
       variant === 'contact' && (
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center"
+          role="group"
+          aria-label="Contact options"
+        >
           <a
             href={withBasePath('contact/')}
-            class="inline-flex items-center justify-center px-8 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+            class="inline-flex items-center justify-center px-8 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600"
           >
             Contact Sales
           </a>
           <a
             href={withBasePath('demo/')}
-            class="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-primary-600 transition-colors"
+            class="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-primary-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
           >
             Book a Demo
           </a>
@@ -70,14 +113,15 @@ const {
       variant === 'demo' && (
         <a
           href={withBasePath('demo/')}
-          class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-colors text-lg"
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 text-lg hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 group"
         >
           Start Free Trial
           <svg
-            class="w-5 h-5 ml-2"
+            class="w-5 h-5 ml-2 transition-transform duration-200 group-hover:translate-x-1"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -92,24 +136,32 @@ const {
 
     {
       variant === 'demo-center' && (
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center"
+          role="group"
+          aria-label="Demo options"
+        >
           <a
             href={withBasePath('demo/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg hover:scale-105 transition-transform text-lg shadow-lg shadow-indigo-500/50"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg hover:scale-105 transition-all duration-200 text-lg shadow-lg shadow-indigo-500/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
           >
-            <span class="text-xl">🚀</span>
+            <span class="text-xl" aria-hidden="true">
+              🚀
+            </span>
             <span>Interactive Demo Center</span>
           </a>
           <a
             href={withBasePath('visual-showcase/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-lg"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-all duration-200 text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
           >
-            <span class="text-xl">🎨</span>
+            <span class="text-xl" aria-hidden="true">
+              🎨
+            </span>
             <span>Visual Showcase</span>
           </a>
           <a
             href={withBasePath('contact/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-lg hover:bg-white/20 transition-colors"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-lg hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
           >
             <span>Get Personalized Demo</span>
           </a>
@@ -117,4 +169,10 @@ const {
       )
     }
   </div>
-</div>
+</section>
+
+<style>
+  .cta-section {
+    isolation: isolate;
+  }
+</style>

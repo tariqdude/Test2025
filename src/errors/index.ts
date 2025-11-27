@@ -187,3 +187,117 @@ export class TimeoutError extends AppError {
     Object.setPrototypeOf(this, TimeoutError.prototype);
   }
 }
+
+/* ==================== ERROR UTILITIES ==================== */
+
+/**
+ * Type guard to check if a value is an AppError
+ */
+export function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}
+
+/**
+ * Type guard to check if a value is an Error
+ */
+export function isError(error: unknown): error is Error {
+  return error instanceof Error;
+}
+
+/**
+ * Safely extract error message from any value
+ */
+export function getErrorMessage(error: unknown): string {
+  if (isError(error)) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message: unknown }).message);
+  }
+  return 'An unknown error occurred';
+}
+
+/**
+ * Wrap an unknown error in an AppError
+ */
+export function wrapError(error: unknown, context?: string): AppError {
+  if (isAppError(error)) {
+    return error;
+  }
+
+  const message = context
+    ? `${context}: ${getErrorMessage(error)}`
+    : getErrorMessage(error);
+
+  return new AppError(message, 'WRAPPED_ERROR', {
+    originalError: isError(error) ? error : undefined,
+    originalValue: !isError(error) ? error : undefined,
+  });
+}
+
+/**
+ * Create a formatted error for logging
+ */
+export function formatErrorForLogging(error: unknown): Record<string, unknown> {
+  if (isAppError(error)) {
+    return error.toJSON();
+  }
+
+  if (isError(error)) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
+  }
+
+  return {
+    type: typeof error,
+    value: String(error),
+  };
+}
+
+/**
+ * Retry an async operation with exponential backoff
+ */
+export async function retryWithBackoff<T>(
+  operation: () => Promise<T>,
+  options: {
+    maxRetries?: number;
+    initialDelay?: number;
+    maxDelay?: number;
+    backoffFactor?: number;
+    shouldRetry?: (error: unknown, attempt: number) => boolean;
+  } = {}
+): Promise<T> {
+  const {
+    maxRetries = 3,
+    initialDelay = 1000,
+    maxDelay = 30000,
+    backoffFactor = 2,
+    shouldRetry = () => true,
+  } = options;
+
+  let lastError: unknown;
+  let delay = initialDelay;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+
+      if (attempt >= maxRetries || !shouldRetry(error, attempt)) {
+        throw error;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+      delay = Math.min(delay * backoffFactor, maxDelay);
+    }
+  }
+
+  throw lastError;
+}

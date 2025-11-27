@@ -1,45 +1,92 @@
 ---
+/**
+ * Hero Section Component
+ * Main landing page hero with headline, subheading, and CTAs
+ * Full accessibility support with proper heading hierarchy
+ */
 import { heroSignals } from '../../data/marketing';
 import { withBasePath } from '../../utils/helpers';
 import ModernButton from '../ui/ModernButton.astro';
 
 interface Props {
+  /** Main headline text */
   headline: string;
+  /** Supporting subheading text */
   subheading: string;
+  /** Optional badge/chip text */
+  badge?: string;
+  /** Enable animated entrance */
+  animated?: boolean;
 }
 
-const { headline, subheading } = Astro.props;
+const {
+  headline,
+  subheading,
+  badge = 'High-trust static ops',
+  animated = true,
+} = Astro.props;
+
+const animationClasses = animated ? 'animate-fade-in' : '';
 ---
 
-<div class="space-y-9">
+<div class={`space-y-9 ${animationClasses}`}>
+  {/* Badge/Chip */}
   <span
-    class="chip bg-zinc-800/50 border border-zinc-700 text-[0.65rem] uppercase tracking-[0.32em] text-accent-400 font-mono"
+    class="chip inline-flex items-center gap-2 bg-zinc-800/50 border border-zinc-700 text-[0.65rem] uppercase tracking-[0.32em] text-accent-400 font-mono px-3 py-1.5 rounded-full"
+    role="status"
+    aria-label="Product status"
   >
-    High-trust static ops
+    <span
+      class="h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse"
+      aria-hidden="true"></span>
+    {badge}
   </span>
+
+  {/* Main Headline */}
   <h1
-    class="text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl"
+    class="text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl max-w-4xl"
   >
-    {headline}
+    <span
+      class="bg-gradient-to-r from-white via-white to-slate-300 bg-clip-text text-transparent"
+    >
+      {headline}
+    </span>
   </h1>
-  <p class="max-w-xl text-base text-slate-300 sm:text-lg">
+
+  {/* Subheading */}
+  <p class="max-w-xl text-base text-slate-300 sm:text-lg leading-relaxed">
     {subheading}
   </p>
-  <ul class="grid gap-3 sm:grid-cols-2">
+
+  {/* Feature Signals */}
+  <ul class="grid gap-3 sm:grid-cols-2" aria-label="Key features">
     {
-      heroSignals.map(signal => (
-        <li class="flex items-start gap-3 text-sm text-slate-300 font-mono">
-          <span class="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center border border-accent-500/50 text-[0.7rem] text-accent-400 bg-accent-500/10">
+      heroSignals.map((signal, index) => (
+        <li
+          class="flex items-start gap-3 text-sm text-slate-300 font-mono group"
+          style={animated ? `animation-delay: ${index * 0.1}s` : ''}
+        >
+          <span
+            class="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center border border-accent-500/50 text-[0.7rem] text-accent-400 bg-accent-500/10 group-hover:bg-accent-500/20 transition-colors"
+            aria-hidden="true"
+          >
             +
           </span>
-          <span>{signal}</span>
+          <span class="group-hover:text-white transition-colors">{signal}</span>
         </li>
       ))
     }
   </ul>
-  <div class="flex flex-wrap gap-4">
+
+  {/* CTA Buttons */}
+  <div
+    class="flex flex-wrap gap-4"
+    role="group"
+    aria-label="Call to action buttons"
+  >
     <ModernButton variant="primary" href={withBasePath('demo/')} size="lg">
-      🚀 Try Interactive Demo
+      <span aria-hidden="true">🚀</span>
+      <span class="ml-2">Try Interactive Demo</span>
     </ModernButton>
     <ModernButton variant="secondary" href={withBasePath('contact/')} size="lg">
       Schedule a walkthrough

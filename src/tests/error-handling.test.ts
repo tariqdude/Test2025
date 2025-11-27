@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   AppError,
   AnalysisError,
@@ -6,6 +6,12 @@ import {
   FileSystemError,
   ConfigurationError,
   NetworkError,
+  isAppError,
+  isError,
+  getErrorMessage,
+  wrapError,
+  formatErrorForLogging,
+  retryWithBackoff,
 } from '../errors';
 
 const expectDetails = <T>(details: unknown): T => {
@@ -279,6 +285,185 @@ describe('Error Handling System', () => {
       );
 
       expect(serializedDetails.checkerName).toBe('TestAnalyzer');
+    });
+  });
+
+  describe('Error Utility Functions', () => {
+    describe('isAppError', () => {
+      it('should return true for AppError instances', () => {
+        const error = new AppError('Test');
+        expect(isAppError(error)).toBe(true);
+      });
+
+      it('should return true for AppError subclasses', () => {
+        const error = new AnalysisError('Checker', new Error('Test'));
+        expect(isAppError(error)).toBe(true);
+      });
+
+      it('should return false for regular Error', () => {
+        const error = new Error('Test');
+        expect(isAppError(error)).toBe(false);
+      });
+
+      it('should return false for non-error values', () => {
+        expect(isAppError('string')).toBe(false);
+        expect(isAppError(null)).toBe(false);
+        expect(isAppError(undefined)).toBe(false);
+        expect(isAppError({})).toBe(false);
+      });
+    });
+
+    describe('isError', () => {
+      it('should return true for Error instances', () => {
+        expect(isError(new Error('Test'))).toBe(true);
+      });
+
+      it('should return true for AppError instances', () => {
+        expect(isError(new AppError('Test'))).toBe(true);
+      });
+
+      it('should return false for non-error values', () => {
+        expect(isError('string')).toBe(false);
+        expect(isError(null)).toBe(false);
+        expect(isError({ message: 'Not an error' })).toBe(false);
+      });
+    });
+
+    describe('getErrorMessage', () => {
+      it('should extract message from Error', () => {
+        const error = new Error('Error message');
+        expect(getErrorMessage(error)).toBe('Error message');
+      });
+
+      it('should extract message from AppError', () => {
+        const error = new AppError('App error message');
+        expect(getErrorMessage(error)).toBe('App error message');
+      });
+
+      it('should return string as-is', () => {
+        expect(getErrorMessage('string message')).toBe('string message');
+      });
+
+      it('should extract message from object with message property', () => {
+        expect(getErrorMessage({ message: 'object message' })).toBe(
+          'object message'
+        );
+      });
+
+      it('should return default message for unknown values', () => {
+        expect(getErrorMessage(null)).toBe('An unknown error occurred');
+        expect(getErrorMessage(undefined)).toBe('An unknown error occurred');
+        expect(getErrorMessage(123)).toBe('An unknown error occurred');
+      });
+    });
+
+    describe('wrapError', () => {
+      it('should return AppError as-is', () => {
+        const appError = new AppError('Test');
+        const wrapped = wrapError(appError);
+        expect(wrapped).toBe(appError);
+      });
+
+      it('should wrap regular Error in AppError', () => {
+        const error = new Error('Original error');
+        const wrapped = wrapError(error);
+
+        expect(wrapped).toBeInstanceOf(AppError);
+        expect(wrapped.message).toBe('Original error');
+        expect(wrapped.code).toBe('WRAPPED_ERROR');
+      });
+
+      it('should add context to wrapped error', () => {
+        const error = new Error('Original error');
+        const wrapped = wrapError(error, 'During operation');
+
+        expect(wrapped.message).toBe('During operation: Original error');
+      });
+
+      it('should wrap non-error values', () => {
+        const wrapped = wrapError('string error');
+
+        expect(wrapped).toBeInstanceOf(AppError);
+        expect(wrapped.message).toBe('string error');
+      });
+    });
+
+    describe('formatErrorForLogging', () => {
+      it('should format AppError using toJSON', () => {
+        const error = new AppError('Test', 'TEST_CODE');
+        const formatted = formatErrorForLogging(error);
+
+        expect(formatted.name).toBe('AppError');
+        expect(formatted.message).toBe('Test');
+        expect(formatted.code).toBe('TEST_CODE');
+      });
+
+      it('should format regular Error', () => {
+        const error = new Error('Test error');
+        const formatted = formatErrorForLogging(error);
+
+        expect(formatted.name).toBe('Error');
+        expect(formatted.message).toBe('Test error');
+        expect(formatted.stack).toBeDefined();
+      });
+
+      it('should format non-error values', () => {
+        const formatted = formatErrorForLogging('string value');
+
+        expect(formatted.type).toBe('string');
+        expect(formatted.value).toBe('string value');
+      });
+    });
+
+    describe('retryWithBackoff', () => {
+      it('should return result on success', async () => {
+        const operation = vi.fn().mockResolvedValue('success');
+
+        const result = await retryWithBackoff(operation, { maxRetries: 3 });
+
+        expect(result).toBe('success');
+        expect(operation).toHaveBeenCalledTimes(1);
+      });
+
+      it('should retry on failure', async () => {
+        const operation = vi
+          .fn()
+          .mockRejectedValueOnce(new Error('Fail 1'))
+          .mockRejectedValueOnce(new Error('Fail 2'))
+          .mockResolvedValue('success');
+
+        const result = await retryWithBackoff(operation, {
+          maxRetries: 3,
+          initialDelay: 10,
+        });
+
+        expect(result).toBe('success');
+        expect(operation).toHaveBeenCalledTimes(3);
+      });
+
+      it('should throw after max retries', async () => {
+        const operation = vi.fn().mockRejectedValue(new Error('Always fails'));
+
+        await expect(
+          retryWithBackoff(operation, { maxRetries: 2, initialDelay: 10 })
+        ).rejects.toThrow('Always fails');
+
+        expect(operation).toHaveBeenCalledTimes(3); // initial + 2 retries
+      });
+
+      it('should respect shouldRetry option', async () => {
+        const operation = vi.fn().mockRejectedValue(new Error('Non-retryable'));
+
+        await expect(
+          retryWithBackoff(operation, {
+            maxRetries: 3,
+            initialDelay: 10,
+            shouldRetry: () => false,
+          })
+        ).rejects.toThrow('Non-retryable');
+
+        expect(operation).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });

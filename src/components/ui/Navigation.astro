@@ -15,11 +15,11 @@ export interface Props {
   activeItem?: string;
 }
 
-const { 
-  items, 
-  className = '', 
+const {
+  items,
+  className = '',
   variant = 'horizontal',
-  activeItem 
+  activeItem
 } = Astro.props;
 
 const isActive = (href: string) => {
@@ -40,23 +40,36 @@ const getVariantClasses = (variant: string) => {
       return 'flex items-center space-x-8';
   }
 };
+
+const navId = `nav-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<nav class={`${getVariantClasses(variant)} ${className}`}>
-  {items.map((item) => (
+<nav
+  class={`${getVariantClasses(variant)} ${className}`}
+  aria-label="Main navigation"
+  role="navigation"
+>
+  {items.map((item, index) => (
     <div class="relative group">
       <a
         href={item.href}
         class={`
           flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200
-          ${isActive(item.href) 
-            ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' 
+          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+          ${isActive(item.href)
+            ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
             : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
           }
         `}
-        {...(item.external && { 
-          target: '_blank', 
-          rel: 'noopener noreferrer' 
+        aria-current={isActive(item.href) ? 'page' : undefined}
+        {...(item.external && {
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        })}
+        {...(item.children && {
+          'aria-expanded': 'false',
+          'aria-haspopup': 'true',
+          'aria-controls': `${navId}-dropdown-${index}`
         })}
       >
         {item.icon && (
@@ -148,20 +161,28 @@ const getVariantClasses = (variant: string) => {
           </svg>
         )}
       </a>
-      
+
       {item.children && (
-        <div class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-          <div class="py-1">
+        <div
+          id={`${navId}-dropdown-${index}`}
+          class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby={`${navId}-item-${index}`}
+        >
+          <div class="py-1" role="none">
             {item.children.map((child) => (
               <a
                 href={child.href}
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400"
-                {...(child.external && { 
-                  target: '_blank', 
-                  rel: 'noopener noreferrer' 
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 focus:text-primary-600"
+                role="menuitem"
+                {...(child.external && {
+                  target: '_blank',
+                  rel: 'noopener noreferrer'
                 })}
               >
                 {child.label}
+                {child.external && <span class="sr-only"> (opens in new tab)</span>}
               </a>
             ))}
           </div>
