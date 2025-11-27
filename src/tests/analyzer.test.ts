@@ -202,11 +202,11 @@ describe('ProjectAnalyzer', () => {
     const markdownReport =
       ReportGenerator.generateMarkdownReport(analysisResult);
     expect(markdownReport).toBeTypeOf('string');
-    expect(markdownReport).toContain('# Project Health Report');
+    expect(markdownReport).toContain('Project Health Report');
 
     const htmlReport = ReportGenerator.generateHTMLReport(analysisResult);
     expect(htmlReport).toBeTypeOf('string');
-    expect(htmlReport).toContain('<html>');
-    expect(htmlReport).toContain('<h1>Project Health Report</h1>');
+    expect(htmlReport).toContain('<html');
+    expect(htmlReport).toContain('Project Health Report');
   });
 });

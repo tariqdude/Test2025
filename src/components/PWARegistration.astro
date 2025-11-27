@@ -5,13 +5,24 @@
  */
 import { withBasePath } from '../utils/helpers';
 
-const serviceWorkerPath = withBasePath('sw.js');
-const serviceWorkerScope = withBasePath('');
+const swPath = withBasePath('sw.js');
+const swScope = withBasePath('');
 ---
 
+<!-- Data container for service worker configuration -->
+<div
+  id="pwa-config"
+  data-sw-path={swPath}
+  data-sw-scope={swScope}
+  class="hidden"
+>
+</div>
+
 <script>
-  const SW_PATH = '${serviceWorkerPath}';
-  const SW_SCOPE = '${serviceWorkerScope}';
+  // Get SW configuration from data attributes
+  const configEl = document.getElementById('pwa-config');
+  const SW_PATH = configEl?.dataset.swPath || '/sw.js';
+  const SW_SCOPE = configEl?.dataset.swScope || '/';
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -54,7 +65,7 @@ const serviceWorkerScope = withBasePath('');
     });
   }
 
-  function showUpdateNotification() {
+  function showUpdateNotification(): void {
     const notification = document.createElement('div');
     notification.className =
       'fixed bottom-4 right-4 z-50 max-w-sm p-4 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl';
@@ -100,21 +111,27 @@ const serviceWorkerScope = withBasePath('');
   }
 
   // PWA install prompt
-  let deferredPrompt: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let deferredPrompt: BeforeInstallPromptEvent | null = null;
 
-  window.addEventListener('beforeinstallprompt', e => {
+  interface BeforeInstallPromptEvent extends Event {
+    prompt(): Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  }
+
+  window.addEventListener('beforeinstallprompt', (e: Event) => {
     e.preventDefault();
-    deferredPrompt = e;
+    deferredPrompt = e as BeforeInstallPromptEvent;
     showInstallButton();
   });
 
-  function showInstallButton() {
+  function showInstallButton(): void {
     const installBtn = document.getElementById('pwa-install-btn');
     if (installBtn) {
       installBtn.classList.remove('hidden');
       installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
-          deferredPrompt.prompt();
+          await deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           console.log(`[PWA] Install prompt outcome: ${outcome}`);
           deferredPrompt = null;

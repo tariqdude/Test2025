@@ -83,7 +83,7 @@ class Cli {
         reportContent = ReportGenerator.generateHTMLReport(analysisResult);
         break;
       case 'terminal':
-        reportContent = ReportGenerator.generateJsonReport(analysisResult); // For terminal, we'll just output JSON for now
+        reportContent = ReportGenerator.generateTerminalReport(analysisResult);
         break;
       default:
         reportContent = ReportGenerator.generateJsonReport(analysisResult); // Fallback
