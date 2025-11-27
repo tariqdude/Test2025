@@ -1,5 +1,19 @@
 const CACHE_NAME = 'github-pages-project-v1';
 const DEFAULT_BASE_PATH = '/Github-Pages-Project-v1';
+const STATIC_ASSET_PATHS = [
+  '/',
+  '/about/',
+  '/blog/',
+  '/services/',
+  '/pricing/',
+  '/demo/',
+  '/components/',
+  '/offline/',
+  '/manifest.json',
+  '/favicon.svg',
+  '/favicon-192.png',
+  '/favicon-512.png',
+];
 
 const resolveBasePath = () => {
   try {
@@ -36,18 +50,7 @@ const withBase = path => {
 };
 
 // Assets to cache on install
-const STATIC_ASSETS = [
-  withBase('/'),
-  withBase('/about/'),
-  withBase('/blog/'),
-  withBase('/services/'),
-  withBase('/pricing/'),
-  withBase('/demo/'),
-  withBase('/components/'),
-  withBase('/offline/'),
-  withBase('/manifest.json'),
-  withBase('/favicon.svg'),
-];
+const STATIC_ASSETS = STATIC_ASSET_PATHS.map(withBase);
 
 // Install event - cache static assets
 self.addEventListener('install', event => {

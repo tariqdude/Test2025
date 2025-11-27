@@ -8,7 +8,7 @@ const demos = [
     id: 'visual',
     title: 'Visual Showcase',
     description: 'Explore cutting-edge 3D graphics, animations, and interactive effects',
-    icon: '🎨',
+    icon: '\u{1F3A8}',
     features: ['3D CSS Transforms', 'Particle Systems', 'Advanced Animations', 'WebGL Effects'],
     difficulty: 'Advanced',
     duration: '15-20 min',
@@ -19,7 +19,7 @@ const demos = [
     id: 'interactive',
     title: 'Interactive Components',
     description: 'Test forms, validation, real-time feedback, and user interactions',
-    icon: '⚡',
+    icon: '\u26A1',
     features: ['Form Validation', 'Live Updates', 'Keyboard Navigation', 'Accessibility'],
     difficulty: 'Intermediate',
     duration: '10-15 min',
@@ -30,7 +30,7 @@ const demos = [
     id: 'performance',
     title: 'Performance Monitor',
     description: 'See real-time metrics, load times, and optimization techniques',
-    icon: '📊',
+    icon: '\u{1F4CA}',
     features: ['Core Web Vitals', 'Load Analytics', 'Resource Timing', 'Optimization Tips'],
     difficulty: 'Beginner',
     duration: '5-10 min',
@@ -41,7 +41,7 @@ const demos = [
     id: 'code',
     title: 'Code Examples',
     description: 'Browse syntax-highlighted code samples and implementation patterns',
-    icon: '💻',
+    icon: '\u{1F4BB}',
     features: ['TypeScript', 'Astro Components', 'Tailwind CSS', 'Best Practices'],
     difficulty: 'All Levels',
     duration: '10-15 min',
@@ -52,7 +52,7 @@ const demos = [
     id: 'architecture',
     title: 'System Architecture',
     description: 'Understand the build pipeline, static generation, and deployment',
-    icon: '🏗️',
+    icon: '\u{1F3D7}\uFE0F',
     features: ['Build Process', 'Static Generation', 'GitHub Pages', 'CI/CD Pipeline'],
     difficulty: 'Advanced',
     duration: '15-20 min',
@@ -63,7 +63,7 @@ const demos = [
     id: 'accessibility',
     title: 'Accessibility Tour',
     description: 'Experience WCAG-compliant design and assistive technology support',
-    icon: '♿',
+    icon: '\u267F',
     features: ['Screen Reader Support', 'Keyboard Navigation', 'ARIA Labels', 'Color Contrast'],
     difficulty: 'Intermediate',
     duration: '10-15 min',
@@ -76,34 +76,34 @@ const advancedOptions = [
   {
     title: 'Guided Walkthrough',
     description: 'Step-by-step interactive tour with tooltips and highlights',
-    icon: '🧭',
+    icon: '\u{1F9ED}',
     action: 'start-tour',
   },
   {
     title: 'Sandbox Mode',
     description: 'Experiment with components in an isolated environment',
-    icon: '🔬',
+    icon: '\u{1F52C}',
     action: 'open-sandbox',
   },
   {
     title: 'API Playground',
     description: 'Test API endpoints and explore response data structures',
-    icon: '🎮',
+    icon: '\u{1F3AE}',
     action: 'api-playground',
   },
   {
     title: 'Custom Demo Builder',
     description: 'Create your own demo by selecting specific components',
-    icon: '🛠️',
+    icon: '\u{1F6E0}\uFE0F',
     action: 'demo-builder',
   },
 ];
 
 const quickActions = [
-  { label: 'View Source Code', icon: '📂', href: 'https://github.com/tariqdude/Github-Pages-Project-v1' },
-  { label: 'Download Starter', icon: '⬇️', href: 'https://github.com/tariqdude/Github-Pages-Project-v1/archive/refs/heads/main.zip' },
-  { label: 'Read Documentation', icon: '📚', href: withBasePath('blog/') },
-  { label: 'Contact Support', icon: '💬', href: withBasePath('contact/') },
+  { label: 'View Source Code', icon: '\u{1F4C2}', href: 'https://github.com/tariqdude/Github-Pages-Project-v1' },
+  { label: 'Download Starter', icon: '\u2B07\uFE0F', href: 'https://github.com/tariqdude/Github-Pages-Project-v1/archive/refs/heads/main.zip' },
+  { label: 'Read Documentation', icon: '\u{1F4DA}', href: withBasePath('blog/') },
+  { label: 'Contact Support', icon: '\u{1F4AC}', href: withBasePath('contact/') },
 ];
 ---
 
@@ -309,14 +309,14 @@ const quickActions = [
 
           <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {[
-              { name: '3D Graphics', icon: '🎨', value: '3d' },
-              { name: 'Animations', icon: '✨', value: 'animations' },
-              { name: 'Forms', icon: '📝', value: 'forms' },
-              { name: 'Performance', icon: '⚡', value: 'performance' },
-              { name: 'Accessibility', icon: '♿', value: 'a11y' },
-              { name: 'Dark Mode', icon: '🌙', value: 'theme' },
-              { name: 'Responsive', icon: '📱', value: 'responsive' },
-              { name: 'Code Samples', icon: '💻', value: 'code' },
+              { name: '3D Graphics', icon: '\\u{1F3A8}', value: '3d' },
+              { name: 'Animations', icon: '\\u2728', value: 'animations' },
+              { name: 'Forms', icon: '\\u{1F4DD}', value: 'forms' },
+              { name: 'Performance', icon: '\\u26A1', value: 'performance' },
+              { name: 'Accessibility', icon: '\\u267F', value: 'a11y' },
+              { name: 'Dark Mode', icon: '\\u{1F319}', value: 'theme' },
+              { name: 'Responsive', icon: '\\u{1F4F1}', value: 'responsive' },
+              { name: 'Code Samples', icon: '\\u{1F4BB}', value: 'code' },
             ].map((feature) => (
               <label class="flex items-center gap-3 p-4 bg-zinc-900 border border-zinc-800 hover:border-accent-500 cursor-pointer transition-all group">
                 <input type="checkbox" class="w-5 h-5 rounded-none border-zinc-700 bg-zinc-950 text-accent-500 focus:ring-1 focus:ring-accent-500 focus:ring-offset-0" value={feature.value} />
@@ -384,13 +384,13 @@ const quickActions = [
 
       switch(action) {
         case 'start-tour':
-          alert('🧭 Guided tour feature coming soon! This will provide step-by-step walkthroughs of key features.');
+          alert('\\u{1F9ED} Guided tour feature coming soon! This will provide step-by-step walkthroughs of key features.');
           break;
         case 'open-sandbox':
-          alert('🔬 Sandbox mode coming soon! Experiment with components in an isolated environment.');
+          alert('\\u{1F52C} Sandbox mode coming soon! Experiment with components in an isolated environment.');
           break;
         case 'api-playground':
-          alert('🎮 API Playground coming soon! Test endpoints and explore data structures interactively.');
+          alert('\\u{1F3AE} API Playground coming soon! Test endpoints and explore data structures interactively.');
           break;
         case 'demo-builder':
           document.getElementById('build-custom-demo')?.scrollIntoView({ behavior: 'smooth' });
@@ -405,19 +405,19 @@ const quickActions = [
     const selected = Array.from(checkboxes).map(cb => (cb as HTMLInputElement).value);
 
     if (selected.length === 0) {
-      alert('⚠️ Please select at least one feature to build your custom demo!');
+      alert('\\u26A0\\uFE0F Please select at least one feature to build your custom demo!');
       return;
     }
 
     const features = selected.join(', ');
-    const message = `✨ Custom demo created with: ${features}\n\nThis feature will generate a personalized demo page based on your selections. Coming soon!`;
+    const message = `\\u2728 Custom demo created with: ${features}\\n\\nThis feature will generate a personalized demo page based on your selections. Coming soon!`;
     alert(message);
   });
 
   // Keyboard navigation enhancement
   document.addEventListener('keydown', (e) => {
     if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
-      alert('⌨️ Keyboard Shortcuts:\n\n• ? - Show this help\n• 1-6 - Jump to demo\n• Esc - Close modals\n• Tab - Navigate elements');
+      alert('\\u2328\\uFE0F Keyboard Shortcuts:\\n\\n\\u2022 ? - Show this help\\n\\u2022 1-6 - Jump to demo\\n\\u2022 Esc - Close modals\\n\\u2022 Tab - Navigate elements');
       e.preventDefault();
     }
   });

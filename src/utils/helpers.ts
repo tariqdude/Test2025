@@ -1,3 +1,4 @@
+import { BASE_PATH } from '../consts';
 import { logger } from './logger';
 
 /**
@@ -104,7 +105,7 @@ const EXTERNAL_LINK_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 const BASE_SKIP_PREFIXES = ['mailto:', 'tel:', '#', '?'] as const;
 
 export function withBasePath(path: string): string {
-  const base = import.meta.env.BASE_URL ?? '/';
+  const base = BASE_PATH || '/';
   const normalizedBase = base.endsWith('/') ? base : `${base}/`;
 
   if (!path) {
