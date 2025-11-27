@@ -6,14 +6,14 @@
  * Central location for all site-wide configuration values
  */
 
-export const SITE_TITLE = 'Elite Project';
+export const SITE_TITLE = 'Github Pages Project v1';
 export const SITE_DESCRIPTION =
   'Static intelligence for decisive operators. Build executive-ready status hubs with Astro.';
 
 export const SITE_CONFIG = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  author: 'Elite Project Team',
+  author: 'Github Pages Project Team',
   defaultLanguage: 'en-US',
   // Social links
   social: {

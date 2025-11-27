@@ -1,4 +1,4 @@
-# Project Review Report - Test2025
+# Project Review Report - Github Pages Project v1
 
 **Date:** October 14, 2025
 **Reviewer:** GitHub Copilot
