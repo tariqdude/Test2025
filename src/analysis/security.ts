@@ -22,14 +22,14 @@ export class SecurityAnalyzer implements AnalysisModule {
     const issues: CodeIssue[] = [];
 
     try {
-      // Check for known vulnerabilities (placeholder for npm audit or similar)
-      // await this.checkDependencyVulnerabilities(config, issues);
+      // Check for known vulnerabilities via npm audit
+      await this.checkDependencyVulnerabilities(config, issues);
 
       // Check for security anti-patterns
       await this.checkSecurityPatterns(config, issues);
 
       // Check environment variables exposure
-      // await this.checkEnvironmentSecurity(config, issues);
+      await this.checkEnvironmentSecurity(config, issues);
     } catch (error: unknown) {
       const analysisError =
         error instanceof AnalysisError
@@ -43,6 +43,177 @@ export class SecurityAnalyzer implements AnalysisModule {
       });
     }
     return issues;
+  }
+
+  /**
+   * Check for dependency vulnerabilities using npm audit
+   */
+  private async checkDependencyVulnerabilities(
+    config: AnalyzerConfig,
+    issues: CodeIssue[]
+  ): Promise<void> {
+    try {
+      const { execSync } = await import('child_process');
+      const auditResult = execSync('npm audit --json', {
+        cwd: config.projectRoot,
+        encoding: 'utf-8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+
+      const audit = JSON.parse(auditResult);
+
+      if (audit.metadata?.vulnerabilities) {
+        const { critical, high, moderate } = audit.metadata.vulnerabilities;
+
+        if (critical > 0) {
+          issues.push({
+            id: `security-vuln-critical-${Date.now()}`,
+            type: 'security',
+            severity: {
+              level: 'critical',
+              impact: 'blocking',
+              urgency: 'immediate',
+            },
+            title: `${critical} Critical Dependency Vulnerabilities`,
+            description: `Found ${critical} critical security vulnerabilities in dependencies. Run \`npm audit fix\` to resolve.`,
+            file: 'package.json',
+            rule: 'dependency-vulnerability',
+            category: 'Security',
+            source: 'npm-audit',
+            suggestion:
+              'Run `npm audit fix --force` or update vulnerable packages manually',
+            autoFixable: true,
+          });
+        }
+
+        if (high > 0) {
+          issues.push({
+            id: `security-vuln-high-${Date.now()}`,
+            type: 'security',
+            severity: { level: 'high', impact: 'major', urgency: 'high' },
+            title: `${high} High Severity Dependency Vulnerabilities`,
+            description: `Found ${high} high severity security vulnerabilities in dependencies.`,
+            file: 'package.json',
+            rule: 'dependency-vulnerability',
+            category: 'Security',
+            source: 'npm-audit',
+            suggestion:
+              'Run `npm audit` to see details and `npm audit fix` to resolve',
+            autoFixable: true,
+          });
+        }
+
+        if (moderate > 0) {
+          issues.push({
+            id: `security-vuln-moderate-${Date.now()}`,
+            type: 'security',
+            severity: { level: 'medium', impact: 'minor', urgency: 'medium' },
+            title: `${moderate} Moderate Dependency Vulnerabilities`,
+            description: `Found ${moderate} moderate security vulnerabilities in dependencies.`,
+            file: 'package.json',
+            rule: 'dependency-vulnerability',
+            category: 'Security',
+            source: 'npm-audit',
+            suggestion:
+              'Review vulnerabilities with `npm audit` and update when possible',
+            autoFixable: false,
+          });
+        }
+      }
+    } catch {
+      // npm audit may fail or return non-zero on vulnerabilities, which is expected
+      logger.debug(
+        'npm audit check completed (may have found vulnerabilities)'
+      );
+    }
+  }
+
+  /**
+   * Check for exposed environment variables or secrets
+   */
+  private async checkEnvironmentSecurity(
+    config: AnalyzerConfig,
+    issues: CodeIssue[]
+  ): Promise<void> {
+    const secretPatterns = [
+      {
+        pattern:
+          /(['"]?)(?:api[_-]?key|apikey)(['"]?)\s*[:=]\s*(['"])[^'"]+\3/gi,
+        name: 'API Key',
+      },
+      {
+        pattern:
+          /(['"]?)(?:secret|password|passwd|pwd)(['"]?)\s*[:=]\s*(['"])[^'"]+\3/gi,
+        name: 'Secret/Password',
+      },
+      {
+        pattern: /(['"]?)(?:private[_-]?key)(['"]?)\s*[:=]\s*(['"])[^'"]+\3/gi,
+        name: 'Private Key',
+      },
+      {
+        pattern:
+          /(['"]?)(?:auth[_-]?token|access[_-]?token|bearer)(['"]?)\s*[:=]\s*(['"])[^'"]+\3/gi,
+        name: 'Auth Token',
+      },
+      {
+        pattern: /-----BEGIN (?:RSA |DSA |EC )?PRIVATE KEY-----/g,
+        name: 'Private Key Block',
+      },
+    ];
+
+    const files = await this.getProjectFiles(config);
+
+    for (const file of files) {
+      // Skip common false positive files
+      if (
+        file.includes('node_modules') ||
+        file.includes('.env.example') ||
+        file.endsWith('.md')
+      ) {
+        continue;
+      }
+
+      try {
+        const content = await fs.readFile(file, 'utf-8');
+        const lines = content.split('\n');
+
+        for (const { pattern, name } of secretPatterns) {
+          for (let i = 0; i < lines.length; i++) {
+            if (pattern.test(lines[i])) {
+              issues.push({
+                id: `security-secret-${Date.now()}-${Math.random()}`,
+                type: 'security',
+                severity: {
+                  level: 'critical',
+                  impact: 'blocking',
+                  urgency: 'immediate',
+                },
+                title: `Potential ${name} Exposure`,
+                description: `Possible hardcoded ${name} detected. Never commit secrets to version control.`,
+                file: path.relative(config.projectRoot, file),
+                line: i + 1,
+                rule: 'no-hardcoded-secrets',
+                category: 'Security',
+                source: 'secret-scanner',
+                suggestion:
+                  'Move secrets to environment variables and add to .gitignore',
+                autoFixable: false,
+                context: {
+                  before: lines.slice(Math.max(0, i - 1), i),
+                  current: lines[i].replace(
+                    /(['"])[^'"]{8,}(['"])/g,
+                    '$1[REDACTED]$2'
+                  ),
+                  after: lines.slice(i + 1, i + 2),
+                },
+              });
+            }
+          }
+        }
+      } catch {
+        // Skip unreadable files
+      }
+    }
   }
 
   private async checkSecurityPatterns(

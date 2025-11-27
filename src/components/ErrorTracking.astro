@@ -93,8 +93,16 @@
     sendErrorReport(error);
   };
 
+  // Extend window type for custom error reporting
+  interface CustomWindow extends Window {
+    reportError?: (message: string, details?: { stack?: string }) => void;
+  }
+
   // Expose method to manually report errors
-  (window as any).reportError = (message: string, details?: any) => {
+  (window as CustomWindow).reportError = (
+    message: string,
+    details?: { stack?: string }
+  ) => {
     const error: ErrorReport = {
       message,
       stack: details?.stack,

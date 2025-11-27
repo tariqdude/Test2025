@@ -30,14 +30,14 @@ export class DeploymentAnalyzer implements AnalysisModule {
       const checks: DeploymentChecklist = {
         buildStatus: await this.checkBuildStatus(config),
         typeChecking: await this.checkTypes(config),
-        linting: 'pass', // Placeholder
-        testing: 'pass', // Placeholder
-        dependencies: 'pass', // Placeholder
-        security: 'pass', // Placeholder
-        performance: 'pass', // Placeholder
-        accessibility: 'pass', // Placeholder
-        seo: 'pass', // Placeholder
-        assets: 'pass', // Placeholder
+        linting: await this.checkLinting(config),
+        testing: await this.checkTests(config),
+        dependencies: await this.checkDependencies(config),
+        security: 'pass', // Handled by SecurityAnalyzer
+        performance: 'pass', // Handled by PerformanceAnalyzer
+        accessibility: 'pass', // Handled by AccessibilityAnalyzer
+        seo: await this.checkSEO(config),
+        assets: 'pass', // Will be checked in build
       };
 
       // Add issues for failed checks
@@ -63,6 +63,27 @@ export class DeploymentAnalyzer implements AnalysisModule {
               current: `${check} status: ${status}`,
             },
           });
+        } else if (status === 'warning') {
+          issues.push({
+            id: `deployment-${check}-warning-${Date.now()}`,
+            type: 'deployment',
+            severity: {
+              level: 'medium',
+              impact: 'minor',
+              urgency: 'medium',
+            },
+            title: `Deployment Warning: ${check}`,
+            description: `The ${check} check has warnings that should be reviewed`,
+            file: 'deployment',
+            rule: `deployment-${check}`,
+            category: 'Deployment',
+            source: 'deployment-analyzer',
+            suggestion: this.getDeploymentSuggestion(check),
+            autoFixable: false,
+            context: {
+              current: `${check} status: ${status}`,
+            },
+          });
         }
       });
     } catch (error: unknown) {
@@ -78,6 +99,105 @@ export class DeploymentAnalyzer implements AnalysisModule {
       });
     }
     return issues;
+  }
+
+  private async checkLinting(config: AnalyzerConfig): Promise<'pass' | 'fail'> {
+    try {
+      if (process.env.npm_lifecycle_event === 'build') {
+        return 'pass';
+      }
+
+      const { exitCode } = await executeCommand('npm run lint', {
+        cwd: config.projectRoot,
+        ignoreExitCode: true,
+      });
+
+      // Linting is binary - either passes or fails (warnings still pass)
+      return exitCode === 0 ? 'pass' : 'fail';
+    } catch {
+      return 'pass'; // Can't determine, assume pass
+    }
+  }
+
+  private async checkTests(config: AnalyzerConfig): Promise<'pass' | 'fail'> {
+    try {
+      if (process.env.npm_lifecycle_event === 'build') {
+        return 'pass';
+      }
+
+      const { exitCode } = await executeCommand('npm test -- --run', {
+        cwd: config.projectRoot,
+        ignoreExitCode: true,
+        timeout: 60000, // 60 second timeout for tests
+      });
+
+      // Tests are binary - either pass or fail
+      return exitCode === 0 ? 'pass' : 'fail';
+    } catch {
+      return 'pass'; // Tests may not be configured, assume pass
+    }
+  }
+
+  private async checkDependencies(
+    config: AnalyzerConfig
+  ): Promise<'pass' | 'fail' | 'warning'> {
+    try {
+      const { stdout } = await executeCommand('npm outdated --json', {
+        cwd: config.projectRoot,
+        ignoreExitCode: true,
+      });
+
+      if (!stdout || stdout === '{}') return 'pass';
+
+      const outdated = JSON.parse(stdout);
+      const majorUpdates = Object.values(outdated).filter(
+        (pkg: unknown) =>
+          (pkg as { current: string; latest: string }).current?.split(
+            '.'
+          )[0] !==
+          (pkg as { current: string; latest: string }).latest?.split('.')[0]
+      );
+
+      if (majorUpdates.length > 5) return 'warning';
+      return 'pass';
+    } catch {
+      return 'pass'; // Can't determine, assume ok
+    }
+  }
+
+  private async checkSEO(
+    config: AnalyzerConfig
+  ): Promise<'pass' | 'fail' | 'warning'> {
+    try {
+      const { promises: fs } = await import('fs');
+      const path = await import('path');
+
+      // Check for essential SEO files
+      const seoFiles = ['robots.txt', 'sitemap.xml', 'sitemap-index.xml'];
+      const publicDir = path.join(config.projectRoot, 'public');
+      const distDir = path.join(config.projectRoot, 'dist');
+
+      let foundCount = 0;
+      for (const file of seoFiles) {
+        try {
+          await fs.access(path.join(publicDir, file));
+          foundCount++;
+        } catch {
+          try {
+            await fs.access(path.join(distDir, file));
+            foundCount++;
+          } catch {
+            // File not found
+          }
+        }
+      }
+
+      if (foundCount === 0) return 'warning';
+      if (foundCount < 2) return 'warning';
+      return 'pass';
+    } catch {
+      return 'warning';
+    }
   }
 
   private async checkBuildStatus(

@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ProjectAnalyzer } from '../core/analyzer';
 import { SyntaxAnalyzer } from '../analysis/syntax';
+import { SecurityAnalyzer } from '../analysis/security';
+import { PerformanceAnalyzer } from '../analysis/performance';
+import { AccessibilityAnalyzer } from '../analysis/accessibility';
+import { DeploymentAnalyzer } from '../analysis/deployment';
+import { GitAnalyzer } from '../analysis/git';
 import { AnalysisError, ConfigurationError } from '../errors';
 import { logger } from '../utils/logger';
 import type { AnalyzerConfig } from '../config/schema';
@@ -123,7 +128,18 @@ describe('ProjectAnalyzer', () => {
   });
 
   it('should calculate project health correctly', async () => {
-    // Simulate some issues
+    // Mock all analyzers to return empty arrays except SyntaxAnalyzer
+    vi.spyOn(SecurityAnalyzer.prototype, 'analyze').mockResolvedValueOnce([]);
+    vi.spyOn(PerformanceAnalyzer.prototype, 'analyze').mockResolvedValueOnce(
+      []
+    );
+    vi.spyOn(AccessibilityAnalyzer.prototype, 'analyze').mockResolvedValueOnce(
+      []
+    );
+    vi.spyOn(DeploymentAnalyzer.prototype, 'analyze').mockResolvedValueOnce([]);
+    vi.spyOn(GitAnalyzer.prototype, 'analyze').mockResolvedValueOnce([]);
+
+    // Simulate some specific issues from SyntaxAnalyzer
     vi.spyOn(SyntaxAnalyzer.prototype, 'analyze').mockResolvedValueOnce([
       {
         id: '1',
@@ -158,7 +174,7 @@ describe('ProjectAnalyzer', () => {
     const result = await analyzer.analyze();
     expect(result.health.criticalIssues).toBe(1);
     expect(result.health.highIssues).toBe(1);
-    expect(result.health.totalIssues).toBe(3);
+    expect(result.health.totalIssues).toBe(2); // 2 issues: 1 critical + 1 high
     // Score calculation depends on weights, so just check it's less than 100
     expect(result.health.score).toBeLessThan(100);
   });

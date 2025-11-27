@@ -10,14 +10,14 @@ import Animate from '../../components/ui/Animate.astro';
 import Search from '../../components/ui/Search.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { withBasePath } from '../../utils/helpers';
-import type { Page } from 'astro';
+import type { Page, GetStaticPathsOptions } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>;
 }
 
-export async function getStaticPaths({ paginate }: { paginate: any }) {
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = (await getCollection('blog')).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );

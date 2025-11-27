@@ -7,8 +7,9 @@
 
 <script>
   import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
+  import type { Metric } from 'web-vitals';
 
-  function sendToAnalytics(metric: any) {
+  function sendToAnalytics(metric: Metric): void {
     const body = JSON.stringify(metric);
 
     // Send to analytics endpoint (customize this)
@@ -56,9 +57,14 @@
 
     // Layout shifts
     try {
+      interface LayoutShiftEntry extends PerformanceEntry {
+        hadRecentInput: boolean;
+        value: number;
+      }
       const layoutShiftObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
-          if (!entry.hadRecentInput && (entry as any).value > 0.1) {
+          const layoutEntry = entry as LayoutShiftEntry;
+          if (!layoutEntry.hadRecentInput && layoutEntry.value > 0.1) {
             console.warn('[Performance] Large layout shift:', entry);
           }
         }
@@ -71,11 +77,14 @@
 
   // Monitor resource loading
   window.addEventListener('load', () => {
+    interface ResourceEntry extends PerformanceEntry {
+      transferSize: number;
+    }
     if (performance && performance.getEntriesByType) {
-      const resources = performance.getEntriesByType('resource');
-      const largeResources = resources.filter(
-        (r: any) => r.transferSize > 500000
-      );
+      const resources = performance.getEntriesByType(
+        'resource'
+      ) as ResourceEntry[];
+      const largeResources = resources.filter(r => r.transferSize > 500000);
 
       if (largeResources.length > 0 && import.meta.env.DEV) {
         console.warn('[Performance] Large resources detected:', largeResources);
@@ -86,7 +95,9 @@
   // Track navigation timing
   window.addEventListener('load', () => {
     setTimeout(() => {
-      const perfData = performance.getEntriesByType('navigation')[0] as any;
+      const perfData = performance.getEntriesByType('navigation')[0] as
+        | PerformanceNavigationTiming
+        | undefined;
       if (perfData) {
         const metrics = {
           dns: perfData.domainLookupEnd - perfData.domainLookupStart,
