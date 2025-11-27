@@ -3,9 +3,11 @@
  * PWA Registration Component
  * Registers service worker and handles PWA installation
  */
+import pkg from '../../package.json' assert { type: 'json' };
 import { withBasePath } from '../utils/helpers';
 
-const swPath = withBasePath('sw.js');
+const SW_VERSION = pkg.version || '0.0.0';
+const swPath = withBasePath(`sw.js?v=${SW_VERSION}`);
 const swScope = withBasePath('');
 ---
 

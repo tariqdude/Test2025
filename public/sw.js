@@ -1,52 +1,45 @@
-const CACHE_NAME = 'github-pages-project-v1';
-const DEFAULT_BASE_PATH = '/Github-Pages-Project-v1';
 const STATIC_ASSET_PATHS = [
-  '/',
-  '/about/',
-  '/blog/',
-  '/services/',
-  '/pricing/',
-  '/demo/',
-  '/components/',
-  '/offline/',
-  '/manifest.json',
-  '/favicon.svg',
-  '/favicon-192.png',
-  '/favicon-512.png',
+  '',
+  'about/',
+  'blog/',
+  'services/',
+  'pricing/',
+  'demo/',
+  'components/',
+  'offline/',
+  'manifest.webmanifest',
+  'favicon.svg',
+  'favicon-192.png',
+  'favicon-512.png',
 ];
+
+const trimSlashes = value => value.replace(/^\/+|\/+$/g, '');
 
 const resolveBasePath = () => {
   try {
     const scopeUrl = new URL(self.registration?.scope ?? self.location.href);
-    const pathname = scopeUrl.pathname.replace(/\/$/, '');
-    const normalized = pathname === '/' ? '' : pathname;
-    const isGitHubPagesHost = self.location.hostname.endsWith('github.io');
-
-    if (!normalized && isGitHubPagesHost) {
-      return DEFAULT_BASE_PATH;
-    }
-
-    return normalized;
+    const pathname = scopeUrl.pathname.replace(/\/+$/, '');
+    return pathname || '/';
   } catch (error) {
     console.error('[Service Worker] Failed to derive base path:', error);
-    return '';
+    return '/';
   }
 };
 
 const BASE_PATH = resolveBasePath();
+const BASE_PREFIX = BASE_PATH === '/' ? '' : `/${trimSlashes(BASE_PATH)}`;
+const CACHE_VERSION =
+  new URL(self.location.href).searchParams.get('v') || '1';
+const CACHE_NAME = `github-pages-project-${CACHE_VERSION}-${(trimSlashes(BASE_PATH) || 'root').replace(/[^a-z0-9-]/gi, '-')}`;
 
 const withBase = path => {
-  if (!path) {
-    return BASE_PATH ? `${BASE_PATH}/` : '/';
+  const cleanedPath = (path || '').replace(/^\/+/, '');
+
+  if (!cleanedPath) {
+    return BASE_PREFIX ? `${BASE_PREFIX}/` : '/';
   }
 
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-
-  if (!BASE_PATH) {
-    return normalizedPath;
-  }
-
-  return `${BASE_PATH}${normalizedPath}`;
+  return `${BASE_PREFIX}/${cleanedPath}`;
 };
 
 // Assets to cache on install
@@ -58,11 +51,30 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then(cache => {
+      .then(async cache => {
         console.log('[Service Worker] Caching static assets');
-        return cache.addAll(STATIC_ASSETS).catch(err => {
-          console.error('[Service Worker] Failed to cache assets:', err);
-        });
+        const results = await Promise.all(
+          STATIC_ASSETS.map(async asset => {
+            try {
+              await cache.add(asset);
+              return { asset, ok: true };
+            } catch (error) {
+              console.warn(
+                '[Service Worker] Skipping asset (cache error):',
+                asset,
+                error
+              );
+              return { asset, ok: false };
+            }
+          })
+        );
+        const failed = results.filter(entry => !entry.ok);
+        if (failed.length) {
+          console.warn(
+            `[Service Worker] Cached with ${failed.length} skipped asset(s):`,
+            failed.map(f => f.asset)
+          );
+        }
       })
       .then(() => self.skipWaiting())
   );

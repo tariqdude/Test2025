@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   formatDate,
   getRelativeTime,
@@ -110,6 +110,11 @@ describe('Helpers Utility', () => {
       expect(result).toBeTruthy();
     });
 
+    it('should collapse leading slashes and keep base once', () => {
+      expect(withBasePath('/blog')).toBe('/blog');
+      expect(withBasePath('//blog')).toBe('//blog'); // protocol-relative URLs remain untouched
+    });
+
     it('should not modify external URLs', () => {
       expect(withBasePath('https://google.com')).toBe('https://google.com');
       expect(withBasePath('http://example.com')).toBe('http://example.com');
@@ -129,9 +134,30 @@ describe('Helpers Utility', () => {
       expect(withBasePath('#section')).toBe('#section');
     });
 
+    it('should leave query-only paths alone', () => {
+      expect(withBasePath('?q=test')).toBe('?q=test');
+    });
+
     it('should handle relative paths', () => {
       const result = withBasePath('about');
       expect(result).toContain('about');
+    });
+
+    it('should use custom BASE_PATH when provided', async () => {
+      const originalBase = process.env.BASE_PATH;
+      process.env.BASE_PATH = '/docs/';
+      vi.resetModules();
+      const { withBasePath: withDocsBase } = await import('../utils/helpers');
+
+      expect(withDocsBase('blog/')).toBe('/docs/blog/');
+      expect(withDocsBase('')).toBe('/docs/');
+
+      if (originalBase === undefined) {
+        delete process.env.BASE_PATH;
+      } else {
+        process.env.BASE_PATH = originalBase;
+      }
+      vi.resetModules();
     });
   });
 

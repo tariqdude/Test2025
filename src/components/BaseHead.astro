@@ -28,7 +28,10 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 
 <!-- PWA Manifest -->
-<link rel="manifest" href={`${import.meta.env.BASE_URL}manifest.json`} />
+<link
+  rel="manifest"
+  href={`${import.meta.env.BASE_URL}manifest.webmanifest`}
+/>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta
   name="apple-mobile-web-app-status-bar-style"

@@ -1,10 +1,10 @@
-# Github Pages Project v1
+# GitHub Pages Project v1
 
 Astro + Tailwind static site built for GitHub Pages with sitemap, RSS, structured data, a PWA manifest, and a quality gate script to keep deploys clean.
 
 - Live: https://tariqdude.github.io/Github-Pages-Project-v1/
 - Repo: https://github.com/tariqdude/Github-Pages-Project-v1
-- Base path (production): `/Github-Pages-Project-v1/` (configurable in `astro.config.mjs`)
+- Deployment config: `config/deployment.js` auto-derives `site` + `base` for GitHub Pages or any host (override with env).
 
 ## Tech Stack
 
@@ -49,27 +49,38 @@ npm run test:e2e     # Playwright
 
 Copy `.env.example` to `.env` as needed.
 
-- `SITE_URL` — Canonical site URL (defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`).
-- `BASE_PATH` — Optional override for the repo base path (defaults to Astro’s `BASE_URL`).
+- `SITE_URL` - Optional canonical URL; otherwise derived automatically from the repo slug/host (GitHub Pages-friendly).
+- `BASE_PATH` - Optional subpath override; otherwise derived from `SITE_URL` or the repo name.
+- `PUBLIC_ENABLE_ANALYTICS` - Set to `true` to opt into analytics scripts; defaults off for privacy-friendly forks.
+
+Examples:
+- User pages (`username.github.io`): set `SITE_URL=https://username.github.io`; leave `BASE_PATH` empty (base will be `/`).
+- Project pages (`username.github.io/repo`): set `SITE_URL=https://username.github.io/repo`; base becomes `/repo/`.
+- Custom domain with subpath: set `SITE_URL=https://example.com/docs`; optional `BASE_PATH=/docs/` if you want to force it.
 
 ## Deployment (GitHub Pages)
 
-- `astro.config.mjs` sets `base` to `/Github-Pages-Project-v1/` in production so assets resolve under the repo path.
-- `site` defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`; override with `SITE_URL` if deploying elsewhere.
+- `config/deployment.js` derives `base` + `site` from the repo slug/env so forks and renames deploy without edits (user-pages repos resolve to `/` automatically).
 - Workflow: `.github/workflows/deploy.yml` builds and publishes `dist/` to Pages.
-- PWA files (`public/manifest.json`, `public/sw.js`, `public/robots.txt`) use the same base path for icons, sitemap, and start URLs.
-- Base-path sanity check: run `npm run build && npm run preview`, then load `http://localhost:4321/Github-Pages-Project-v1/` to ensure links and assets work under the repo path.
+- PWA files are generated at build time (`src/pages/manifest.webmanifest.ts`, `src/pages/robots.txt.ts`), and the service worker resolves its scope from the registered path so assets stay on the right base.
+- Base-path sanity check: run `npm run build && npm run preview`, then open the preview URL using the derived base path (default `/` or `/<repo>/` for project pages).
 
 If you fork/rename:
 
-1) Update `BASE_PATH`/`base` and `site` in `astro.config.mjs` to the new repo name.  
-2) Update `SITE_URL` (and optionally `BASE_PATH`) in `.env.example` and your `.env`.  
-3) Refresh URLs in `public/manifest.json`, `public/robots.txt`, and any CTA links in `src/consts.ts` or UI copy.
+1) Optionally set `SITE_URL` in `.env` if you use a custom domain; otherwise the repo slug + owner are used.  
+2) Set `BASE_PATH` only if you intentionally deploy under a different subpath than the repo name.
+
+## Deploy Anywhere Checklist
+
+- [ ] `npm run build && npm run preview` renders correctly at the derived base URL.
+- [ ] `manifest.webmanifest` and `robots.txt` load and point to the right base/canonical site.
+- [ ] Service worker registers at `sw.js?v=<version>` and caches assets under the expected scope.
+- [ ] `SITE_URL`/`BASE_PATH` are set (if needed) for your host (GitHub Pages, custom domain, or another static host).
 
 ## Project Structure
 
 - `src/` — Pages, components, layouts, content, utilities.
-- `public/` — Static assets (favicons, manifest, robots.txt, service worker).
+- `public/` — Static assets (favicons, service worker, fonts).
 - `dist/` — Build output (generated).
 - `e2e/` — Playwright tests.
 - `test-results/` and `playwright-report/` — Test artifacts (generated).
@@ -77,13 +88,13 @@ If you fork/rename:
 ## Quality Checklist
 
 - `npm run pre-deploy` passes (critical error review, typecheck, lint, tests, build).
-- Links and assets work under `/Github-Pages-Project-v1/` (verify with `npm run preview`).
-- Manifest and service worker resolve icons under the repo base path.
-- Sitemap points to the correct Pages URL.
+- Links and assets work under the derived base path (verify with `npm run preview`; default is `/` or `/<repo>/` for project pages).
+- Manifest, robots, and the service worker resolve icons/routes under the same base path.
+- Sitemap points to the correct canonical URL.
 - Playwright e2e can run headed with `npm run test:e2e:headed` when debugging interactions.
 
 ## Troubleshooting
 
 - Missing icons: ensure `public/favicon-192.png` and `public/favicon-512.png` exist (generated from `public/favicon.svg`).
-- Broken links on Pages: confirm `BASE_PATH`/`base` matches the repo path and rerun `npm run build && npm run preview`.
-- Caching issues: the service worker cache name is `github-pages-project-v1`; bump it when changing asset paths to force refresh. 
+- Broken links on Pages: confirm the derived `BASE_PATH` from `config/deployment.js` matches the host (or set `BASE_PATH` explicitly) and rerun `npm run build && npm run preview`.
+- Caching issues: the service worker cache name suffixes the base path (e.g., `github-pages-project-v1-root`); bump it when changing asset paths or scope to force refresh. 

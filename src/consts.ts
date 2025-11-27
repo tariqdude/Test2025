@@ -1,27 +1,34 @@
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
+import { createDeploymentConfig } from '../config/deployment.js';
+
 /**
  * Site Configuration Constants
  * Central location for all site-wide configuration values
  */
+const DEPLOYMENT = createDeploymentConfig(import.meta.env);
+const analyticsFlag = import.meta.env.PUBLIC_ENABLE_ANALYTICS;
+const analyticsEnabled =
+  analyticsFlag === 'true' ||
+  analyticsFlag === '1' ||
+  analyticsFlag === true;
 
-export const SITE_TITLE = 'Github Pages Project v1';
+export const SITE_TITLE = 'GitHub Pages Project v1';
 export const SITE_DESCRIPTION =
   'Static intelligence for decisive operators. Build executive-ready status hubs with Astro.';
-export const SITE_URL =
-  import.meta.env.SITE_URL ||
-  'https://tariqdude.github.io/Github-Pages-Project-v1/';
-export const BASE_PATH = import.meta.env.BASE_URL || '/';
+export const SITE_URL = DEPLOYMENT.siteUrl;
+export const BASE_PATH = DEPLOYMENT.basePath;
+export const DEPLOYMENT_CONFIG = DEPLOYMENT;
 
 export const SITE_CONFIG = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  author: 'Github Pages Project Team',
+  author: 'GitHub Pages Project Team',
   defaultLanguage: 'en-US',
   // Social links
   social: {
-    github: 'https://github.com/tariqdude/Github-Pages-Project-v1',
+    github: DEPLOYMENT.repoUrl || 'https://github.com',
   },
   // SEO
   seo: {
@@ -66,7 +73,7 @@ export const PERFORMANCE_BUDGETS = {
  * Feature flags
  */
 export const FEATURES = {
-  enableAnalytics: import.meta.env.PROD,
+  enableAnalytics: analyticsEnabled,
   enablePWA: true,
   enableDarkMode: true,
   enableSearch: true,

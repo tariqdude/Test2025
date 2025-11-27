@@ -104,12 +104,15 @@ export function buildUrl(
 const EXTERNAL_LINK_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 const BASE_SKIP_PREFIXES = ['mailto:', 'tel:', '#', '?'] as const;
 
+const trimSlashes = (value: string): string =>
+  value.replace(/^\/+|\/+$/g, '');
+
 export function withBasePath(path: string): string {
-  const base = BASE_PATH || '/';
-  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  const trimmedBase = BASE_PATH === '/' ? '' : trimSlashes(BASE_PATH);
+  const basePrefix = trimmedBase ? `/${trimmedBase}` : '';
 
   if (!path) {
-    return normalizedBase;
+    return basePrefix ? `${basePrefix}/` : '/';
   }
 
   const trimmedPath = path.trim();
@@ -124,10 +127,10 @@ export function withBasePath(path: string): string {
   const cleanedPath = trimmedPath.replace(/^\/+/, '');
 
   if (!cleanedPath) {
-    return normalizedBase;
+    return basePrefix ? `${basePrefix}/` : '/';
   }
 
-  return `${normalizedBase}${cleanedPath}`;
+  return `${basePrefix}/${cleanedPath}`;
 }
 
 export function resolveHref(href: string): string {

@@ -1,8 +1,0 @@
-Contact: https://github.com/tariqdude/Test2025/security/advisories/new
-Expires: 2026-12-31T23:59:59.000Z
-Preferred-Languages: en
-Canonical: https://tariqdude.github.io/Test2025/.well-known/security.txt
-
-# Security Policy
-# If you discover a security vulnerability, please report it through GitHub Security Advisories.
-# We appreciate responsible disclosure and will work with you to address the issue.
