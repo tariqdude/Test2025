@@ -8,8 +8,10 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   // Base path only for production builds (GitHub Pages)
-  base: import.meta.env.PROD ? '/Test2025/' : '/',
-  site: process.env.SITE_URL || 'https://tariqdude.github.io/Test2025/',
+  base: import.meta.env.PROD ? '/Github-Pages-Project-v1/' : '/',
+  site:
+    process.env.SITE_URL ||
+    'https://tariqdude.github.io/Github-Pages-Project-v1/',
   output: 'static',
   integrations: [
     mdx(),

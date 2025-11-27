@@ -1,63 +1,47 @@
 # Github Pages Project v1
 
-```sh
-npm create astro@latest -- --template blog
+Static Astro + Tailwind starter tuned for GitHub Pages. Builds to a fully static `dist/` bundle with sitemap, RSS, and SEO helpers baked in.
+
+- Live site: https://tariqdude.github.io/Github-Pages-Project-v1/
+- Default repo: https://github.com/tariqdude/Github-Pages-Project-v1
+- Production base path: `/Github-Pages-Project-v1/` (set in `astro.config.mjs`)
+
+## Getting Started
+
+1) Install Node 22+ (`.nvmrc` is present).  
+2) Install dependencies: `npm install`  
+3) Run the dev server: `npm run dev` (defaults to http://localhost:4321)  
+4) Type-check, lint, and test as needed:
+
+```
+npm run typecheck
+npm run lint
+npm run test          # unit
+npm run test:e2e      # Playwright
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Build & Preview
 
-Features:
+- Production build: `npm run build`
+- Preview the built site: `npm run preview`
+- Pre-deploy quality gate: `npm run pre-deploy` (critical error review + typecheck + lint + tests + build)
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Pure static output ready for GitHub Pages (Astro + Tailwind only)
+## Deployment Notes
 
-## 🚀 Project Structure
+- `astro.config.mjs` sets `base` to `/Github-Pages-Project-v1/` when `import.meta.env.PROD` is true so assets resolve correctly on GitHub Pages.
+- `site` defaults to `https://tariqdude.github.io/Github-Pages-Project-v1/`; set `SITE_URL` if you deploy elsewhere.
+- `public/manifest.json` and `public/robots.txt` use the same base path for start URLs, icons, and the sitemap.
+- GitHub Actions workflow `.github/workflows/deploy.yml` runs `npm run build` and publishes `dist/` to Pages.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
+Key folders:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- `src/` — pages, layouts, components, utilities, and content.
+- `public/` — static assets (favicons, manifest, robots, service worker).
+- `dist/` — generated at build time.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro components that render at build time.
+## Troubleshooting
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+- If links appear broken on production, confirm the base path matches your repository name and rebuild.
+- When forking, update GitHub links in UI copy and `src/consts.ts` to point to your repo.

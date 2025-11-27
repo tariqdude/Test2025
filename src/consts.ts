@@ -17,7 +17,7 @@ export const SITE_CONFIG = {
   defaultLanguage: 'en-US',
   // Social links
   social: {
-    github: 'https://github.com/tariqdude/Test2025',
+    github: 'https://github.com/tariqdude/Github-Pages-Project-v1',
   },
   // SEO
   seo: {

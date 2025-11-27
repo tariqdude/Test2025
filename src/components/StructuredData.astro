@@ -12,7 +12,8 @@ export interface Props {
 const { type = 'website', data = {} } = Astro.props;
 
 const baseUrl =
-  Astro.site?.toString() || 'https://tariqdude.github.io/Test2025';
+  Astro.site?.toString() ||
+  'https://tariqdude.github.io/Github-Pages-Project-v1';
 const currentUrl = new URL(Astro.url.pathname, baseUrl).toString();
 
 // Website schema
