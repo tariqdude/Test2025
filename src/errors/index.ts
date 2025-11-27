@@ -58,7 +58,13 @@ export class FileSystemError extends AppError {
   }
 }
 
+/**
+ * Error thrown when analysis fails for a specific checker
+ */
 export class AnalysisError extends AppError {
+  /** Name of the analyzer that failed */
+  public readonly checkerName: string;
+
   constructor(
     checkerName: string,
     originalError: Error,
@@ -70,20 +76,41 @@ export class AnalysisError extends AppError {
       { checkerName, originalError }
     );
     this.name = 'AnalysisError';
+    this.checkerName = checkerName;
     Object.setPrototypeOf(this, AnalysisError.prototype);
+  }
+
+  /**
+   * Check if error is recoverable (non-fatal)
+   */
+  isRecoverable(): boolean {
+    return true; // Analysis errors are generally recoverable
   }
 }
 
+/**
+ * Error thrown for invalid configuration
+ */
 export class ConfigurationError extends AppError {
+  /** Configuration key that caused the error */
+  public readonly configKey: string;
+
   constructor(configKey: string, message = 'Invalid configuration') {
     super(`${message}: ${configKey}`, 'CONFIGURATION_ERROR', { configKey });
     this.name = 'ConfigurationError';
+    this.configKey = configKey;
     Object.setPrototypeOf(this, ConfigurationError.prototype);
   }
 }
 
+/**
+ * Error thrown for network/HTTP request failures
+ */
 export class NetworkError extends AppError {
-  public status: number;
+  /** HTTP status code */
+  public readonly status: number;
+  /** Request URL */
+  public readonly url: string;
 
   constructor(
     url: string,
@@ -98,6 +125,65 @@ export class NetworkError extends AppError {
     );
     this.name = 'NetworkError';
     this.status = status;
+    this.url = url;
     Object.setPrototypeOf(this, NetworkError.prototype);
+  }
+
+  /**
+   * Check if the error is retryable based on status code
+   */
+  isRetryable(): boolean {
+    return this.status >= 500 || this.status === 429;
+  }
+}
+
+/**
+ * Error thrown for validation failures
+ */
+export class ValidationError extends AppError {
+  /** Field that failed validation */
+  public readonly field: string;
+  /** Validation constraints that were violated */
+  public readonly constraints: string[];
+
+  constructor(
+    field: string,
+    constraints: string[],
+    message = 'Validation failed'
+  ) {
+    super(
+      `${message}: ${field} - ${constraints.join(', ')}`,
+      'VALIDATION_ERROR',
+      {
+        field,
+        constraints,
+      }
+    );
+    this.name = 'ValidationError';
+    this.field = field;
+    this.constraints = constraints;
+    Object.setPrototypeOf(this, ValidationError.prototype);
+  }
+}
+
+/**
+ * Error thrown when a timeout occurs
+ */
+export class TimeoutError extends AppError {
+  /** Timeout duration in milliseconds */
+  public readonly timeoutMs: number;
+  /** Operation that timed out */
+  public readonly operation: string;
+
+  constructor(operation: string, timeoutMs: number) {
+    super(
+      `Operation '${operation}' timed out after ${timeoutMs}ms`,
+      'TIMEOUT_ERROR',
+      { operation, timeoutMs }
+    );
+    this.name = 'TimeoutError';
+    this.timeoutMs = timeoutMs;
+    this.operation = operation;
+    Object.setPrototypeOf(this, TimeoutError.prototype);
   }
 }
