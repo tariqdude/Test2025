@@ -282,29 +282,50 @@ const viewBox = icon?.viewBox || '0 0 24 24';
 const useFill = icon?.fill ?? false;
 
 const baseClasses = `inline-block flex-shrink-0 ${sizes[size]} ${colors[color]} ${className}`;
-const ariaProps = decorative
-  ? { 'aria-hidden': 'true' }
-  : { role: 'img', 'aria-label': label };
 ---
 
 {
   icon ? (
-    <svg
-      class={baseClasses}
-      fill={useFill ? 'currentColor' : 'none'}
-      stroke={useFill ? 'none' : 'currentColor'}
-      stroke-width={useFill ? undefined : strokeWidth}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      viewBox={viewBox}
-      {...ariaProps}
+    decorative ? (
+      <svg
+        class={baseClasses}
+        fill={useFill ? 'currentColor' : 'none'}
+        stroke={useFill ? 'none' : 'currentColor'}
+        stroke-width={useFill ? undefined : strokeWidth}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox={viewBox}
+        aria-hidden="true"
+      >
+        <path d={icon.path} />
+      </svg>
+    ) : (
+      <svg
+        class={baseClasses}
+        fill={useFill ? 'currentColor' : 'none'}
+        stroke={useFill ? 'none' : 'currentColor'}
+        stroke-width={useFill ? undefined : strokeWidth}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox={viewBox}
+        role="img"
+        aria-label={label}
+      >
+        <path d={icon.path} />
+      </svg>
+    )
+  ) : decorative ? (
+    <span
+      class={`${baseClasses} bg-gray-300 dark:bg-gray-700 rounded`}
+      aria-hidden="true"
     >
-      <path d={icon.path} />
-    </svg>
+      {/* Fallback for unknown icons */}
+    </span>
   ) : (
     <span
       class={`${baseClasses} bg-gray-300 dark:bg-gray-700 rounded`}
-      {...ariaProps}
+      role="img"
+      aria-label={label}
     >
       {/* Fallback for unknown icons */}
     </span>

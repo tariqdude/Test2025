@@ -193,17 +193,22 @@ describe('Array Utilities', () => {
 describe('Object Utilities', () => {
   describe('deepMerge', () => {
     it('should merge flat objects', () => {
-      const result = deepMerge({ a: 1 }, { b: 2 });
+      const result = deepMerge({ a: 1 }, { b: 2 } as Record<string, number>);
       expect(result).toEqual({ a: 1, b: 2 });
     });
 
     it('should merge nested objects', () => {
-      const result = deepMerge({ a: { x: 1 } }, { a: { y: 2 } });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = deepMerge({ a: { x: 1 } }, { a: { y: 2 } } as any);
       expect(result).toEqual({ a: { x: 1, y: 2 } });
     });
 
     it('should handle multiple sources', () => {
-      const result = deepMerge({ a: 1 }, { b: 2 }, { c: 3 });
+      const result = deepMerge(
+        { a: 1 },
+        { b: 2 } as Record<string, number>,
+        { c: 3 } as Record<string, number>
+      );
       expect(result).toEqual({ a: 1, b: 2, c: 3 });
     });
   });
