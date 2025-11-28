@@ -173,6 +173,8 @@ export class PerformanceAnalyzer implements AnalysisModule {
       const { stdout } = await executeCommand('npx astro build --dry-run', {
         cwd: config.projectRoot,
         ignoreExitCode: true,
+        retries: 1,
+        retryDelay: 500,
       });
 
       if (stdout.includes('Large bundle detected') || stdout.length > 10000) {

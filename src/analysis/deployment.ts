@@ -10,6 +10,7 @@ import { logger } from '../utils/logger';
 
 export class DeploymentAnalyzer implements AnalysisModule {
   name = 'DeploymentAnalyzer';
+  private lastChecklist: DeploymentChecklist | null = null;
 
   canAnalyze(config: AnalyzerConfig): boolean {
     if (!config.deploymentChecks) {
@@ -94,6 +95,8 @@ export class DeploymentAnalyzer implements AnalysisModule {
           });
         }
       });
+
+      this.lastChecklist = checks;
     } catch (error: unknown) {
       const analysisError =
         error instanceof AnalysisError
@@ -291,5 +294,9 @@ export class DeploymentAnalyzer implements AnalysisModule {
     };
 
     return suggestions[check] || `Review and fix ${check} issues`;
+  }
+
+  getLastChecklist(): DeploymentChecklist | null {
+    return this.lastChecklist;
   }
 }

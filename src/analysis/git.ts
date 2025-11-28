@@ -10,6 +10,7 @@ import { logger } from '../utils/logger';
 
 export class GitAnalyzer implements AnalysisModule {
   name = 'GitAnalyzer';
+  private lastAnalysis: GitAnalysis | null = null;
 
   canAnalyze(config: AnalyzerConfig): boolean {
     return config.enabledAnalyzers.includes('git');
@@ -48,6 +49,7 @@ export class GitAnalyzer implements AnalysisModule {
             .map(line => line.substring(3)),
         },
       };
+      this.lastAnalysis = gitAnalysis;
 
       // Check for common Git issues
       if (gitAnalysis.uncommittedChanges) {
@@ -104,5 +106,9 @@ export class GitAnalyzer implements AnalysisModule {
       cwd: config.projectRoot,
       ignoreExitCode: true,
     });
+  }
+
+  getLastAnalysis(): GitAnalysis | null {
+    return this.lastAnalysis;
   }
 }

@@ -268,8 +268,8 @@ export class ProjectAnalyzer {
   async analyze(): Promise<AnalysisResult> {
     logger.info('Starting comprehensive project analysis...');
     const issues: CodeIssue[] = [];
-    const gitAnalysis: GitAnalysis | null = null;
-    const deploymentChecklist: DeploymentChecklist | null = null;
+    let gitAnalysis: GitAnalysis | null = null;
+    let deploymentChecklist: DeploymentChecklist | null = null;
 
     try {
       // Load and validate configuration using ConfigLoader
@@ -286,12 +286,15 @@ export class ProjectAnalyzer {
       }
 
       // Run all enabled analysis modules in parallel
-      const analysisPromises = this.analysisModules
-        .filter(module => module.canAnalyze(this.config))
-        .map(async module => {
+      const runnableModules = this.analysisModules.filter(module =>
+        module.canAnalyze(this.config)
+      );
+
+      const results = await Promise.allSettled(
+        runnableModules.map(async module => {
           try {
             const moduleIssues = await module.analyze(this.config);
-            return { module: module.name, issues: moduleIssues };
+            return { module, issues: moduleIssues };
           } catch (error: unknown) {
             const analysisError =
               error instanceof AnalysisError
@@ -304,18 +307,28 @@ export class ProjectAnalyzer {
               `Analysis module '${module.name}' failed`,
               analysisError
             );
-            // Return an empty array of issues for this module to allow others to continue
-            return { module: module.name, issues: [] };
+            return { module, issues: [] };
           }
-        });
-
-      const results = await Promise.allSettled(analysisPromises);
+        })
+      );
 
       results.forEach(result => {
         if (result.status === 'fulfilled') {
           issues.push(...result.value.issues);
+
+          if (
+            result.value.module instanceof GitAnalyzer &&
+            typeof result.value.module.getLastAnalysis === 'function'
+          ) {
+            gitAnalysis = result.value.module.getLastAnalysis();
+          }
+          if (
+            result.value.module instanceof DeploymentAnalyzer &&
+            typeof result.value.module.getLastChecklist === 'function'
+          ) {
+            deploymentChecklist = result.value.module.getLastChecklist();
+          }
         } else {
-          // Log rejected promises, which should ideally be caught by individual modules
           logger.error(
             'An analysis module promise was rejected',
             result.reason

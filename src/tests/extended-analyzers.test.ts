@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { mkdtempSync, writeFileSync, rmSync } from 'fs';
+import path from 'path';
 import { PerformanceAnalyzer } from '../analysis/performance';
 import { AccessibilityAnalyzer } from '../analysis/accessibility';
 import { DeploymentAnalyzer } from '../analysis/deployment';
@@ -140,18 +142,28 @@ describe('Accessibility Analyzer', () => {
   });
 
   it('should detect missing alt text on images', async () => {
-    const { promises: fs } = await import('fs');
-    const { glob } = await import('glob');
+    const tmpRoot = mkdtempSync(path.join(process.cwd(), 'a11y-fixture-'));
+    const filePath = path.join(tmpRoot, 'page.astro');
+    writeFileSync(filePath, '<img src="image.jpg">', 'utf-8');
 
-    const getFilesSpy = vi
-      .spyOn(analyzer as unknown as { getProjectFiles: () => Promise<string[]> }, 'getProjectFiles')
-      .mockResolvedValue(['/test/project/page.astro']);
-    vi.spyOn(fs, 'readFile').mockResolvedValue('<img src="image.jpg">');
-    vi.mocked(glob).mockResolvedValue(['/test/project/page.astro']);
+    const config = {
+      ...mockConfig,
+      projectRoot: tmpRoot,
+      ignore: [],
+      include: ['**/*.astro'],
+    };
 
-    const issues = await analyzer.analyze(mockConfig);
+    const issues = await analyzer.analyze(config);
     expect(Array.isArray(issues)).toBe(true);
-    expect(getFilesSpy).toHaveBeenCalled();
+    expect(
+      issues.some(
+        issue =>
+          issue.rule === 'accessibility-pattern' &&
+          issue.description.includes('alt attributes')
+      )
+    ).toBe(true);
+
+    rmSync(tmpRoot, { recursive: true, force: true });
   });
 
   it('should handle pattern scanning errors gracefully', async () => {
@@ -260,6 +272,22 @@ describe('Deployment Analyzer', () => {
     const issues = await analyzer.analyze(disabledConfig);
     expect(issues).toEqual([]);
   });
+
+  it('should expose last checklist metadata', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand).mockResolvedValue({
+      stdout: '',
+      stderr: '',
+      exitCode: 0,
+      signal: null,
+      duration: 10,
+    });
+
+    await analyzer.analyze(mockConfig);
+    const meta = analyzer.getLastChecklist();
+    expect(meta).toBeDefined();
+    expect(meta?.buildStatus).toBeDefined();
+  });
 });
 
 describe('Git Analyzer', () => {
@@ -365,6 +393,38 @@ describe('Git Analyzer', () => {
 
     const issues = await analyzer.analyze(mockConfig);
     expect(Array.isArray(issues)).toBe(true);
+  });
+
+  it('should expose last analysis metadata', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand)
+      .mockResolvedValueOnce({
+        stdout: 'main',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: 'abc123 Latest commit',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      });
+
+    await analyzer.analyze(mockConfig);
+    const meta = analyzer.getLastAnalysis();
+    expect(meta).toBeDefined();
+    expect(meta?.branch).toBe('main');
+    expect(meta?.commit).toBe('abc123');
   });
 });
 

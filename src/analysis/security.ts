@@ -58,6 +58,8 @@ export class SecurityAnalyzer implements AnalysisModule {
         cwd: config.projectRoot,
         ignoreExitCode: true,
         timeout: 15000,
+        retries: 1,
+        retryDelay: 500,
       });
 
       if (!stdout) {
