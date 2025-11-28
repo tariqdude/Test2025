@@ -142,9 +142,17 @@ describe('Accessibility Analyzer', () => {
   });
 
   it('should detect missing alt text on images', async () => {
+    const actualFs = await vi.importActual<typeof import('fs')>('fs');
     const tmpRoot = mkdtempSync(path.join(process.cwd(), 'a11y-fixture-'));
     const filePath = path.join(tmpRoot, 'page.astro');
     writeFileSync(filePath, '<img src="image.jpg">', 'utf-8');
+
+    // Let analyzer read real fixture content instead of the global fs mock
+    vi.mocked((await import('fs')).promises.readFile).mockImplementation(
+      actualFs.promises.readFile
+    );
+    const { glob } = await import('glob');
+    vi.mocked(glob).mockResolvedValue([filePath]);
 
     const config = {
       ...mockConfig,
@@ -153,17 +161,19 @@ describe('Accessibility Analyzer', () => {
       include: ['**/*.astro'],
     };
 
-    const issues = await analyzer.analyze(config);
-    expect(Array.isArray(issues)).toBe(true);
-    expect(
-      issues.some(
-        issue =>
-          issue.rule === 'accessibility-pattern' &&
-          issue.description.includes('alt attributes')
-      )
-    ).toBe(true);
-
-    rmSync(tmpRoot, { recursive: true, force: true });
+    try {
+      const issues = await analyzer.analyze(config);
+      expect(Array.isArray(issues)).toBe(true);
+      expect(
+        issues.some(
+          issue =>
+            issue.rule === 'accessibility-pattern' &&
+            issue.description.includes('alt attributes')
+        )
+      ).toBe(true);
+    } finally {
+      rmSync(tmpRoot, { recursive: true, force: true });
+    }
   });
 
   it('should handle pattern scanning errors gracefully', async () => {
@@ -494,5 +504,23 @@ describe('Security Analyzer', () => {
 
     const issues = await analyzer.analyze(mockConfig);
     expect(Array.isArray(issues)).toBe(true);
+  });
+
+  it('parses npm audit output respecting severity threshold', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand).mockResolvedValueOnce({
+      stdout: JSON.stringify({
+        metadata: { vulnerabilities: { critical: 1, high: 1, moderate: 2 } },
+      }),
+      stderr: '',
+      exitCode: 0,
+      signal: null,
+    });
+
+    const strictConfig = { ...mockConfig, severityThreshold: 'high' };
+    const issues = await analyzer.analyze(strictConfig);
+    expect(issues.some(i => i.severity.level === 'high')).toBe(true);
+    expect(issues.some(i => i.severity.level === 'critical')).toBe(true);
+    expect(issues.some(i => i.severity.level === 'medium')).toBe(false);
   });
 });

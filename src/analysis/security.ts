@@ -54,6 +54,11 @@ export class SecurityAnalyzer implements AnalysisModule {
     issues: CodeIssue[]
   ): Promise<void> {
     try {
+      const severityOrder = ['info', 'low', 'moderate', 'high', 'critical'] as const;
+      const thresholdIndex = severityOrder.indexOf(
+        (config.severityThreshold as typeof severityOrder[number]) || 'low'
+      );
+
       const { stdout } = await executeCommand('npm audit --json', {
         cwd: config.projectRoot,
         ignoreExitCode: true,
@@ -72,7 +77,7 @@ export class SecurityAnalyzer implements AnalysisModule {
       if (audit.metadata?.vulnerabilities) {
         const { critical, high, moderate } = audit.metadata.vulnerabilities;
 
-        if (critical > 0) {
+        if (critical > 0 && severityOrder.indexOf('critical') >= thresholdIndex) {
           issues.push({
             id: `security-vuln-critical-${Date.now()}`,
             type: 'security',
@@ -93,7 +98,7 @@ export class SecurityAnalyzer implements AnalysisModule {
           });
         }
 
-        if (high > 0) {
+        if (high > 0 && severityOrder.indexOf('high') >= thresholdIndex) {
           issues.push({
             id: `security-vuln-high-${Date.now()}`,
             type: 'security',
@@ -110,7 +115,7 @@ export class SecurityAnalyzer implements AnalysisModule {
           });
         }
 
-        if (moderate > 0) {
+        if (moderate > 0 && severityOrder.indexOf('moderate') >= thresholdIndex) {
           issues.push({
             id: `security-vuln-moderate-${Date.now()}`,
             type: 'security',
