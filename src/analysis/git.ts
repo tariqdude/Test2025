@@ -30,13 +30,33 @@ export class GitAnalyzer implements AnalysisModule {
       const branch = branchInfo.stdout.trim();
       const commit = logInfo.stdout.trim().split(' ')[0];
       const statusLines = statusInfo.stdout.trim().split('\n').filter(Boolean);
+      const untracked = statusLines
+        .filter(line => line.startsWith('??'))
+        .map(line => line.substring(3));
+      const conflicts = statusLines.some(
+        line => line.startsWith('UU') || line.startsWith('AA') || line.startsWith('DD')
+      );
+      const aheadBehind = await this.getAheadBehind(config);
+      const aheadBy = aheadBehind?.ahead ?? 0;
+      const behindBy = aheadBehind?.behind ?? 0;
+      const branchStatus: GitAnalysis['branchStatus'] = !branch
+        ? 'detached'
+        : aheadBy > 0 && behindBy > 0
+          ? 'diverged'
+          : behindBy > 0
+            ? 'behind'
+            : aheadBy > 0
+              ? 'ahead'
+              : 'up-to-date';
 
       const gitAnalysis: GitAnalysis = {
         branch,
         commit,
         uncommittedChanges: statusLines.length > 0,
-        branchStatus: 'up-to-date', // Simplified for now
-        conflicts: false,
+        branchStatus,
+        conflicts,
+        aheadBy,
+        behindBy,
         fileChanges: {
           added: statusLines
             .filter(line => line.startsWith('A '))
@@ -48,6 +68,7 @@ export class GitAnalyzer implements AnalysisModule {
             .filter(line => line.startsWith('D '))
             .map(line => line.substring(3)),
         },
+        untracked,
       };
       this.lastAnalysis = gitAnalysis;
 
@@ -70,7 +91,85 @@ export class GitAnalyzer implements AnalysisModule {
           suggestion: 'Commit or stash changes before deployment',
           autoFixable: false,
           context: {
-            current: `${statusLines.length} uncommitted changes`,
+            current: `${statusLines.length} uncommitted changes (added: ${gitAnalysis.fileChanges.added.length}, modified: ${gitAnalysis.fileChanges.modified.length}, deleted: ${gitAnalysis.fileChanges.deleted.length}, untracked: ${gitAnalysis.untracked?.length ?? 0})`,
+          },
+        });
+      }
+
+      if (gitAnalysis.branchStatus !== 'up-to-date') {
+        const severityLevel =
+          gitAnalysis.branchStatus === 'detached' || gitAnalysis.branchStatus === 'diverged'
+            ? 'high'
+            : gitAnalysis.branchStatus === 'behind'
+              ? 'medium'
+              : 'low';
+
+        issues.push({
+          id: `git-branch-${Date.now()}`,
+          type: 'git',
+          severity: {
+            level: severityLevel,
+            impact: severityLevel === 'high' ? 'major' : 'minor',
+            urgency: severityLevel === 'high' ? 'high' : 'medium',
+          },
+          title:
+            gitAnalysis.branchStatus === 'detached'
+              ? 'Detached HEAD State'
+              : gitAnalysis.branchStatus === 'diverged'
+                ? 'Branch Has Diverged From Upstream'
+                : gitAnalysis.branchStatus === 'behind'
+                  ? 'Branch Is Behind Upstream'
+                  : 'Branch Ahead Of Upstream',
+          description:
+            gitAnalysis.branchStatus === 'detached'
+              ? 'Repository is in a detached HEAD state; create or switch to a branch to avoid losing work.'
+              : gitAnalysis.branchStatus === 'ahead'
+                ? 'Local branch has commits not pushed to upstream.'
+                : gitAnalysis.branchStatus === 'behind'
+                  ? 'Local branch is behind upstream; pull latest changes to avoid conflicts.'
+                  : 'Local branch has diverged; manual merge or rebase is required.',
+          file: '.git',
+          rule: 'git-branch-alignment',
+          category: 'Git',
+          source: 'git-analyzer',
+          suggestion:
+            gitAnalysis.branchStatus === 'ahead'
+              ? 'Push your local commits to the remote repository.'
+              : gitAnalysis.branchStatus === 'behind'
+                ? 'Run `git pull --rebase` to update your branch.'
+                : gitAnalysis.branchStatus === 'diverged'
+                  ? 'Resolve divergence with `git pull --rebase` or a manual merge.'
+                  : 'Create or checkout a branch before committing further changes.',
+          autoFixable: false,
+          context: {
+            current: `ahead: ${gitAnalysis.aheadBy ?? 0}, behind: ${gitAnalysis.behindBy ?? 0}, status: ${gitAnalysis.branchStatus}`,
+          },
+        });
+      }
+
+      if (gitAnalysis.conflicts) {
+        issues.push({
+          id: `git-conflicts-${Date.now()}`,
+          type: 'git',
+          severity: {
+            level: 'high',
+            impact: 'major',
+            urgency: 'high',
+          },
+          title: 'Merge Conflicts Present',
+          description:
+            'Merge conflicts detected in the working tree. Resolve them before continuing.',
+          file: '.git',
+          rule: 'git-conflicts',
+          category: 'Git',
+          source: 'git-analyzer',
+          suggestion: 'Run `git status` and resolve conflicts marked as UU/AA/DD files.',
+          autoFixable: false,
+          context: {
+            current: `Conflicted files: ${statusLines
+              .filter(line => line.startsWith('UU') || line.startsWith('AA') || line.startsWith('DD'))
+              .map(line => line.substring(3))
+              .join(', ')}`,
           },
         });
       }
@@ -106,6 +205,30 @@ export class GitAnalyzer implements AnalysisModule {
       cwd: config.projectRoot,
       ignoreExitCode: true,
     });
+  }
+
+  private async getAheadBehind(
+    config: AnalyzerConfig
+  ): Promise<{ ahead: number; behind: number } | null> {
+    try {
+      const result = await this.executeCommand(
+        'git rev-list --left-right --count HEAD...@{u}',
+        config
+      );
+
+      const counts = result.stdout.trim().split(/\s+/);
+      const ahead = Number.parseInt(counts[0] ?? '0', 10);
+      const behind = Number.parseInt(counts[1] ?? '0', 10);
+
+      if (Number.isNaN(ahead) || Number.isNaN(behind)) {
+        return null;
+      }
+
+      return { ahead, behind };
+    } catch (error) {
+      logger.debug('Unable to determine upstream status', { error });
+      return null;
+    }
   }
 
   getLastAnalysis(): GitAnalysis | null {

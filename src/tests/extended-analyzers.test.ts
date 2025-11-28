@@ -54,8 +54,10 @@ describe('Performance Analyzer', () => {
   let analyzer: PerformanceAnalyzer;
   let mockConfig: AnalyzerConfig;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    const { glob } = await import('glob');
+    vi.mocked(glob).mockResolvedValue([]);
     analyzer = new PerformanceAnalyzer();
     mockConfig = {
       projectRoot: '/test/project',
@@ -359,6 +361,13 @@ describe('Git Analyzer', () => {
         exitCode: 0,
         signal: null,
         duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '0\t0',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
       });
 
     const issues = await analyzer.analyze(mockConfig);
@@ -388,11 +397,58 @@ describe('Git Analyzer', () => {
         exitCode: 0,
         signal: null,
         duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '1\t0',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
       });
 
     const issues = await analyzer.analyze(mockConfig);
     const uncommittedIssue = issues.find(i => i.title.includes('Uncommitted'));
     expect(uncommittedIssue).toBeDefined();
+  });
+
+  it('should capture upstream branch misalignment', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand)
+      .mockResolvedValueOnce({
+        stdout: 'main',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: 'abc123 Latest commit',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '0\t2',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      });
+
+    const issues = await analyzer.analyze(mockConfig);
+    expect(
+      issues.some(issue => issue.rule === 'git-branch-alignment')
+    ).toBe(true);
+    expect(analyzer.getLastAnalysis()?.branchStatus).toBe('behind');
+    expect(analyzer.getLastAnalysis()?.behindBy).toBe(2);
   });
 
   it('should handle git command errors gracefully', async () => {
@@ -424,6 +480,13 @@ describe('Git Analyzer', () => {
       })
       .mockResolvedValueOnce({
         stdout: 'abc123 Latest commit',
+        stderr: '',
+        exitCode: 0,
+        signal: null,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        stdout: '0\t0',
         stderr: '',
         exitCode: 0,
         signal: null,
@@ -470,6 +533,14 @@ describe('Performance Analyzer (environment gating)', () => {
     expect(vi.mocked(executeCommand)).not.toHaveBeenCalled();
 
     process.env.CI = originalCI;
+  });
+
+  it('should avoid bundle analysis when watch mode is enabled', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    const watchConfig = { ...mockConfig, watchMode: true };
+
+    await analyzer.analyze(watchConfig);
+    expect(vi.mocked(executeCommand)).not.toHaveBeenCalled();
   });
 });
 
@@ -519,8 +590,58 @@ describe('Security Analyzer', () => {
 
     const strictConfig = { ...mockConfig, severityThreshold: 'high' };
     const issues = await analyzer.analyze(strictConfig);
+    // Debug output to verify parsed issues
+    // eslint-disable-next-line no-console
+    console.log('audit issues (high threshold):', issues);
     expect(issues.some(i => i.severity.level === 'high')).toBe(true);
     expect(issues.some(i => i.severity.level === 'critical')).toBe(true);
     expect(issues.some(i => i.severity.level === 'medium')).toBe(false);
+  });
+
+  it('honors medium threshold for npm audit output with low severity vulns', async () => {
+    const { executeCommand } = await import('../utils/command-executor');
+    vi.mocked(executeCommand).mockResolvedValueOnce({
+      stdout: JSON.stringify({
+        metadata: { vulnerabilities: { moderate: 1, low: 2 } },
+      }),
+      stderr: '',
+      exitCode: 0,
+      signal: null,
+    });
+
+    const issues = await analyzer.analyze({
+      ...mockConfig,
+      severityThreshold: 'medium',
+    });
+
+    expect(issues.some(i => i.severity.level === 'medium')).toBe(true);
+    expect(issues.some(i => i.severity.level === 'low')).toBe(false);
+  });
+
+  it('flags committed environment files', async () => {
+    const tmpRoot = mkdtempSync(path.join(process.cwd(), 'env-fixture-'));
+    const envPath = path.join(tmpRoot, '.env.local');
+    writeFileSync(envPath, 'SECRET_KEY=should-not-commit', 'utf-8');
+
+    const { glob } = await import('glob');
+    vi.mocked(glob)
+      .mockResolvedValueOnce([]) // security patterns
+      .mockResolvedValueOnce([]) // environment content scanning
+      .mockResolvedValueOnce([envPath]); // env file detection
+
+    try {
+      const issues = await analyzer.analyze({
+        ...mockConfig,
+        projectRoot: tmpRoot,
+        ignore: [],
+        include: ['**/*'],
+      });
+
+      expect(
+        issues.some(issue => issue.rule === 'env-files-in-repo')
+      ).toBe(true);
+    } finally {
+      rmSync(tmpRoot, { recursive: true, force: true });
+    }
   });
 });

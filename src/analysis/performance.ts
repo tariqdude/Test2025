@@ -22,17 +22,24 @@ export class PerformanceAnalyzer implements AnalysisModule {
     const issues: CodeIssue[] = [];
 
     try {
-      // Skip heavy checks in CI/build contexts
-      if (process.env.CI === 'true' || process.env.npm_lifecycle_event === 'build') {
-        logger.info('Skipping performance checks in CI/build context');
+      if (process.env.npm_lifecycle_event === 'build') {
+        logger.info('Skipping performance checks during build lifecycle');
         return issues;
       }
 
-      await Promise.allSettled([
-        this.checkBundleSize(config, issues),
+      const skipBundleCheck = this.shouldSkipBundleCheck(config);
+      const tasks: Array<Promise<void>> = [
         this.checkImageOptimization(config, issues),
         this.checkLazyLoading(config, issues),
-      ]);
+      ];
+
+      if (!skipBundleCheck) {
+        tasks.push(this.checkBundleSize(config, issues));
+      } else {
+        logger.debug('Skipping bundle size check due to environment/config');
+      }
+
+      await Promise.allSettled(tasks);
     } catch (error: unknown) {
       const analysisError =
         error instanceof AnalysisError
@@ -165,8 +172,8 @@ export class PerformanceAnalyzer implements AnalysisModule {
     issues: CodeIssue[]
   ): Promise<void> {
     try {
-      if (process.env.CI === 'true' || process.env.npm_lifecycle_event === 'test') {
-        logger.debug('Skipping bundle size check in CI/test context');
+      if (this.shouldSkipBundleCheck(config)) {
+        logger.debug('Skipping bundle size check in CI/test/watch context');
         return;
       }
 
@@ -212,10 +219,33 @@ export class PerformanceAnalyzer implements AnalysisModule {
           : new AnalysisError(
               this.name,
               error instanceof Error ? error : new Error(String(error))
-            );
+          );
       logger.warn(`Bundle size check failed: ${analysisError.message}`, {
         error: analysisError,
       });
     }
+  }
+
+  private shouldSkipBundleCheck(config: AnalyzerConfig): boolean {
+    if (process.env.CI === 'true') {
+      return true;
+    }
+
+    if (process.env.npm_lifecycle_event === 'test') {
+      return true;
+    }
+
+    if (config.watchMode) {
+      return true;
+    }
+
+    if (
+      process.env.PERF_LIGHT === 'true' ||
+      process.env.PERFORMANCE_LIGHT === 'true'
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }

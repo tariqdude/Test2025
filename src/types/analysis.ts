@@ -51,13 +51,16 @@ export interface GitAnalysis {
   branch: string;
   commit: string;
   uncommittedChanges: boolean;
-  branchStatus: 'ahead' | 'behind' | 'diverged' | 'up-to-date';
+  branchStatus: 'ahead' | 'behind' | 'diverged' | 'up-to-date' | 'detached';
   conflicts: boolean;
+  aheadBy?: number;
+  behindBy?: number;
   fileChanges: {
     added: string[];
     modified: string[];
     deleted: string[];
   };
+  untracked?: string[];
 }
 
 export interface DeploymentChecklist {

@@ -31,6 +31,9 @@ export class SecurityAnalyzer implements AnalysisModule {
 
       // Check environment variables exposure
       await this.checkEnvironmentSecurity(config, issues);
+
+      // Check for committed environment files
+      await this.checkEnvFiles(config, issues);
     } catch (error: unknown) {
       const analysisError =
         error instanceof AnalysisError
@@ -54,10 +57,13 @@ export class SecurityAnalyzer implements AnalysisModule {
     issues: CodeIssue[]
   ): Promise<void> {
     try {
-      const severityOrder = ['info', 'low', 'moderate', 'high', 'critical'] as const;
-      const thresholdIndex = severityOrder.indexOf(
-        (config.severityThreshold as typeof severityOrder[number]) || 'low'
-      );
+      const lockfilePath = path.join(config.projectRoot, 'package-lock.json');
+      try {
+        await fs.access(lockfilePath);
+      } catch {
+        logger.debug('No package-lock.json found; skipping npm audit check');
+        return;
+      }
 
       const { stdout } = await executeCommand('npm audit --json', {
         cwd: config.projectRoot,
@@ -72,64 +78,100 @@ export class SecurityAnalyzer implements AnalysisModule {
         return;
       }
 
-      const audit = JSON.parse(stdout);
+      let audit: {
+        metadata?: { vulnerabilities?: Record<string, number> };
+      };
+
+      try {
+        audit = JSON.parse(stdout);
+      } catch (parseError) {
+        logger.debug('Unable to parse npm audit output', { parseError });
+        return;
+      }
 
       if (audit.metadata?.vulnerabilities) {
-        const { critical, high, moderate } = audit.metadata.vulnerabilities;
+        const { critical = 0, high = 0, moderate = 0, low = 0 } =
+          audit.metadata.vulnerabilities;
 
-        if (critical > 0 && severityOrder.indexOf('critical') >= thresholdIndex) {
-          issues.push({
-            id: `security-vuln-critical-${Date.now()}`,
-            type: 'security',
-            severity: {
-              level: 'critical',
-              impact: 'blocking',
-              urgency: 'immediate',
-            },
-            title: `${critical} Critical Dependency Vulnerabilities`,
-            description: `Found ${critical} critical security vulnerabilities in dependencies. Run \`npm audit fix\` to resolve.`,
-            file: 'package.json',
+        const severityBuckets: Array<{
+          count: number;
+          label: 'critical' | 'high' | 'medium' | 'low';
+          rule: string;
+          suggestion: string;
+          description: string;
+          autoFixable: boolean;
+        }> = [
+          {
+            count: critical,
+            label: 'critical',
             rule: 'dependency-vulnerability',
-            category: 'Security',
-            source: 'npm-audit',
             suggestion:
               'Run `npm audit fix --force` or update vulnerable packages manually',
+            description: `Found ${critical} critical security vulnerabilities in dependencies. Run \`npm audit fix\` to resolve.`,
             autoFixable: true,
-          });
-        }
-
-        if (high > 0 && severityOrder.indexOf('high') >= thresholdIndex) {
-          issues.push({
-            id: `security-vuln-high-${Date.now()}`,
-            type: 'security',
-            severity: { level: 'high', impact: 'major', urgency: 'high' },
-            title: `${high} High Severity Dependency Vulnerabilities`,
-            description: `Found ${high} high severity security vulnerabilities in dependencies.`,
-            file: 'package.json',
+          },
+          {
+            count: high,
+            label: 'high',
             rule: 'dependency-vulnerability',
-            category: 'Security',
-            source: 'npm-audit',
             suggestion:
               'Run `npm audit` to see details and `npm audit fix` to resolve',
+            description: `Found ${high} high severity security vulnerabilities in dependencies.`,
             autoFixable: true,
-          });
-        }
-
-        if (moderate > 0 && severityOrder.indexOf('moderate') >= thresholdIndex) {
-          issues.push({
-            id: `security-vuln-moderate-${Date.now()}`,
-            type: 'security',
-            severity: { level: 'medium', impact: 'minor', urgency: 'medium' },
-            title: `${moderate} Moderate Dependency Vulnerabilities`,
-            description: `Found ${moderate} moderate security vulnerabilities in dependencies.`,
-            file: 'package.json',
+          },
+          {
+            count: moderate,
+            label: 'medium',
             rule: 'dependency-vulnerability',
-            category: 'Security',
-            source: 'npm-audit',
             suggestion:
               'Review vulnerabilities with `npm audit` and update when possible',
+            description: `Found ${moderate} moderate security vulnerabilities in dependencies.`,
             autoFixable: false,
-          });
+          },
+          {
+            count: low,
+            label: 'low',
+            rule: 'dependency-vulnerability',
+            suggestion:
+              'Document low severity issues and plan upgrades during maintenance windows',
+            description: `Found ${low} low severity security vulnerabilities in dependencies.`,
+            autoFixable: false,
+          },
+        ];
+
+        for (const bucket of severityBuckets) {
+          if (
+            bucket.count > 0 &&
+            this.shouldReport(bucket.label, config.severityThreshold)
+          ) {
+            issues.push({
+              id: `security-vuln-${bucket.label}-${Date.now()}`,
+              type: 'security',
+              severity: {
+                level: bucket.label,
+                impact:
+                  bucket.label === 'critical'
+                    ? 'blocking'
+                    : bucket.label === 'high'
+                      ? 'major'
+                      : 'minor',
+                urgency:
+                  bucket.label === 'critical'
+                    ? 'immediate'
+                    : bucket.label === 'high'
+                      ? 'high'
+                      : 'medium',
+              },
+              title: `${bucket.count} ${bucket.label === 'medium' ? 'Moderate' : bucket.label.charAt(0).toUpperCase() + bucket.label.slice(1)} Dependency Vulnerabilities`,
+              description: bucket.description,
+              file: 'package.json',
+              rule: bucket.rule,
+              category: 'Security',
+              source: 'npm-audit',
+              suggestion: bucket.suggestion,
+              autoFixable: bucket.autoFixable,
+            });
+          }
         }
       }
     } catch (error) {
@@ -223,6 +265,56 @@ export class SecurityAnalyzer implements AnalysisModule {
       } catch {
         // Skip unreadable files
       }
+    }
+  }
+
+  private async checkEnvFiles(
+    config: AnalyzerConfig,
+    issues: CodeIssue[]
+  ): Promise<void> {
+    try {
+      const envFiles = await glob('**/.env*', {
+        cwd: config.projectRoot,
+        ignore: [
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/.env.example',
+          '**/.env*.example',
+          ...config.ignore,
+        ],
+        absolute: true,
+        nodir: true,
+      });
+
+      envFiles
+        .filter(file => !file.endsWith('.example'))
+        .forEach(file => {
+          const relativePath = path.relative(config.projectRoot, file);
+          issues.push({
+            id: `security-env-${Date.now()}-${Math.random()}`,
+            type: 'security',
+            severity: {
+              level: 'high',
+              impact: 'major',
+              urgency: 'high',
+            },
+            title: 'Environment File Committed',
+            description:
+              'Environment files should not be committed to version control; they may contain secrets.',
+            file: relativePath,
+            rule: 'env-files-in-repo',
+            category: 'Security',
+            source: 'secret-scanner',
+            suggestion:
+              'Remove committed .env files, rotate any exposed secrets, and keep only a sanitized .env.example in the repo.',
+            autoFixable: false,
+            context: {
+              current: `Found environment file: ${relativePath}`,
+            },
+          });
+        });
+    } catch (error) {
+      logger.debug('Environment file scan failed', { error });
     }
   }
 
@@ -393,5 +485,26 @@ export class SecurityAnalyzer implements AnalysisModule {
       }
     }
     return 'Review security implications of this code pattern';
+  }
+
+  private getSeverityRank(value: string): number {
+    const normalized = value.toLowerCase();
+    const ranks: Record<string, number> = {
+      info: 0,
+      low: 1,
+      medium: 2,
+      moderate: 2,
+      high: 3,
+      critical: 4,
+    };
+
+    return ranks[normalized] ?? 0;
+  }
+
+  private shouldReport(
+    severity: CodeIssue['severity']['level'],
+    threshold: AnalyzerConfig['severityThreshold']
+  ): boolean {
+    return this.getSeverityRank(severity) >= this.getSeverityRank(threshold);
   }
 }
