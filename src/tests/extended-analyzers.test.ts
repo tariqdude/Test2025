@@ -143,12 +143,61 @@ describe('Accessibility Analyzer', () => {
     const { promises: fs } = await import('fs');
     const { glob } = await import('glob');
 
+    const getFilesSpy = vi
+      .spyOn(analyzer as unknown as { getProjectFiles: () => Promise<string[]> }, 'getProjectFiles')
+      .mockResolvedValue(['/test/project/page.astro']);
+    vi.spyOn(fs, 'readFile').mockResolvedValue('<img src="image.jpg">');
     vi.mocked(glob).mockResolvedValue(['/test/project/page.astro']);
-    vi.mocked(fs.readFile).mockResolvedValue('<img src="image.jpg">');
 
     const issues = await analyzer.analyze(mockConfig);
     expect(Array.isArray(issues)).toBe(true);
-    expect(issues.length).toBeGreaterThanOrEqual(0);
+    expect(getFilesSpy).toHaveBeenCalled();
+  });
+
+  it('should handle pattern scanning errors gracefully', async () => {
+    const { promises: fs } = await import('fs');
+    vi.mocked(fs.readFile).mockRejectedValue(new Error('read failure'));
+
+    const results = await (analyzer as unknown as {
+      _checkFileForPatterns: (
+        filePath: string,
+        patterns: Array<{
+          pattern: RegExp;
+          message: string;
+          severity: 'critical' | 'high' | 'medium' | 'low';
+          type: string;
+          category: string;
+          source: string;
+          rule: string;
+          suggestion?: string;
+          autoFixable: boolean;
+        }>,
+        projectRoot: string
+      ) => Promise<
+        Array<{
+          rule: string;
+          description: string;
+        }>
+      >;
+    })._checkFileForPatterns(
+      '/test/project/page.astro',
+      [
+        {
+          pattern: /token/,
+          message: 'Found token',
+          severity: 'medium',
+          type: 'accessibility',
+          category: 'Accessibility',
+          source: 'a11y-scanner',
+          rule: 'accessibility-pattern',
+          suggestion: 'Handle token',
+          autoFixable: false,
+        },
+      ],
+      mockConfig.projectRoot
+    );
+
+    expect(results).toEqual([]);
   });
 });
 
