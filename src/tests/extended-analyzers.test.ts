@@ -23,6 +23,63 @@ vi.mock('fs', async () => {
   };
 });
 
+vi.mock('node:fs', async () => {
+  const actual = await vi.importActual<typeof import('fs')>('fs');
+  return {
+    ...actual,
+    default: actual,
+    promises: {
+      readFile: vi.fn().mockResolvedValue(''),
+      access: vi.fn().mockResolvedValue(undefined),
+      stat: vi.fn().mockResolvedValue({ size: 1000 }),
+      readdir: vi.fn().mockResolvedValue([]),
+    },
+  };
+});
+
+vi.mock('fs/promises', async () => {
+  return {
+    readFile: vi.fn().mockResolvedValue(''),
+    access: vi.fn().mockResolvedValue(undefined),
+    stat: vi.fn().mockResolvedValue({ size: 1000 }),
+    readdir: vi.fn().mockResolvedValue([]),
+    default: {
+      readFile: vi.fn().mockResolvedValue(''),
+      access: vi.fn().mockResolvedValue(undefined),
+      stat: vi.fn().mockResolvedValue({ size: 1000 }),
+      readdir: vi.fn().mockResolvedValue([]),
+    },
+  };
+});
+
+vi.mock('node:fs/promises', async () => {
+  return {
+    readFile: vi.fn().mockResolvedValue(''),
+    access: vi.fn().mockResolvedValue(undefined),
+    stat: vi.fn().mockResolvedValue({ size: 1000 }),
+    readdir: vi.fn().mockResolvedValue([]),
+    default: {
+      readFile: vi.fn().mockResolvedValue(''),
+      access: vi.fn().mockResolvedValue(undefined),
+      stat: vi.fn().mockResolvedValue({ size: 1000 }),
+      readdir: vi.fn().mockResolvedValue([]),
+    },
+  };
+});
+
+vi.mock('fs/promises', () => ({
+  readFile: vi.fn().mockResolvedValue(''),
+  access: vi.fn().mockResolvedValue(undefined),
+  stat: vi.fn().mockResolvedValue({ size: 1000 }),
+  readdir: vi.fn().mockResolvedValue([]),
+  default: {
+    readFile: vi.fn().mockResolvedValue(''),
+    access: vi.fn().mockResolvedValue(undefined),
+    stat: vi.fn().mockResolvedValue({ size: 1000 }),
+    readdir: vi.fn().mockResolvedValue([]),
+  },
+}));
+
 // Mock glob
 vi.mock('glob', () => ({
   glob: vi.fn().mockResolvedValue([]),
@@ -35,6 +92,7 @@ vi.mock('../utils/command-executor', () => ({
     stderr: '',
     exitCode: 0,
     signal: null,
+    duration: 0,
   }),
 }));
 
@@ -182,28 +240,30 @@ describe('Accessibility Analyzer', () => {
     const { promises: fs } = await import('fs');
     vi.mocked(fs.readFile).mockRejectedValue(new Error('read failure'));
 
-    const results = await (analyzer as unknown as {
-      _checkFileForPatterns: (
-        filePath: string,
-        patterns: Array<{
-          pattern: RegExp;
-          message: string;
-          severity: 'critical' | 'high' | 'medium' | 'low';
-          type: string;
-          category: string;
-          source: string;
-          rule: string;
-          suggestion?: string;
-          autoFixable: boolean;
-        }>,
-        projectRoot: string
-      ) => Promise<
-        Array<{
-          rule: string;
-          description: string;
-        }>
-      >;
-    })._checkFileForPatterns(
+    const results = await (
+      analyzer as unknown as {
+        _checkFileForPatterns: (
+          filePath: string,
+          patterns: Array<{
+            pattern: RegExp;
+            message: string;
+            severity: 'critical' | 'high' | 'medium' | 'low';
+            type: string;
+            category: string;
+            source: string;
+            rule: string;
+            suggestion?: string;
+            autoFixable: boolean;
+          }>,
+          projectRoot: string
+        ) => Promise<
+          Array<{
+            rule: string;
+            description: string;
+          }>
+        >;
+      }
+    )._checkFileForPatterns(
       '/test/project/page.astro',
       [
         {
@@ -444,9 +504,9 @@ describe('Git Analyzer', () => {
       });
 
     const issues = await analyzer.analyze(mockConfig);
-    expect(
-      issues.some(issue => issue.rule === 'git-branch-alignment')
-    ).toBe(true);
+    expect(issues.some(issue => issue.rule === 'git-branch-alignment')).toBe(
+      true
+    );
     expect(analyzer.getLastAnalysis()?.branchStatus).toBe('behind');
     expect(analyzer.getLastAnalysis()?.behindBy).toBe(2);
   });
@@ -586,13 +646,12 @@ describe('Security Analyzer', () => {
       stderr: '',
       exitCode: 0,
       signal: null,
+      duration: 0,
     });
 
-    const strictConfig = { ...mockConfig, severityThreshold: 'high' };
+    const strictConfig = { ...mockConfig, severityThreshold: 'high' as const };
     const issues = await analyzer.analyze(strictConfig);
     // Debug output to verify parsed issues
-    // eslint-disable-next-line no-console
-    console.log('audit issues (high threshold):', issues);
     expect(issues.some(i => i.severity.level === 'high')).toBe(true);
     expect(issues.some(i => i.severity.level === 'critical')).toBe(true);
     expect(issues.some(i => i.severity.level === 'medium')).toBe(false);
@@ -607,6 +666,7 @@ describe('Security Analyzer', () => {
       stderr: '',
       exitCode: 0,
       signal: null,
+      duration: 0,
     });
 
     const issues = await analyzer.analyze({
@@ -637,9 +697,9 @@ describe('Security Analyzer', () => {
         include: ['**/*'],
       });
 
-      expect(
-        issues.some(issue => issue.rule === 'env-files-in-repo')
-      ).toBe(true);
+      expect(issues.some(issue => issue.rule === 'env-files-in-repo')).toBe(
+        true
+      );
     } finally {
       rmSync(tmpRoot, { recursive: true, force: true });
     }

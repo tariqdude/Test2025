@@ -104,8 +104,7 @@ export function buildUrl(
 const EXTERNAL_LINK_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 const BASE_SKIP_PREFIXES = ['mailto:', 'tel:', '#', '?'] as const;
 
-const trimSlashes = (value: string): string =>
-  value.replace(/^\/+|\/+$/g, '');
+const trimSlashes = (value: string): string => value.replace(/^\/+|\/+$/g, '');
 
 export function withBasePath(path: string): string {
   const trimmedBase = BASE_PATH === '/' ? '' : trimSlashes(BASE_PATH);
@@ -280,30 +279,7 @@ export function removeLocalStorage(key: string): void {
 }
 
 // Performance utilities
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
-
-export function throttle<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
-  };
-}
+export { debounce, throttle } from './function';
 
 // Color utilities
 export function hexToRgb(

@@ -225,7 +225,7 @@ export class ProjectAnalyzer {
     }
   }
 
-  private fixAccessibilityIssue(content: string, issue: CodeIssue): string {
+  private fixAccessibilityIssue(content: string, _issue: CodeIssue): string {
     // Add missing alt text and aria-labels without clobbering existing attributes
     content = content.replace(
       /<img\b((?:(?!\balt\s*=)[^>])*)>/gi,
@@ -256,7 +256,7 @@ export class ProjectAnalyzer {
     return content;
   }
 
-  private fixPerformanceIssue(content: string, issue: CodeIssue): string {
+  private fixPerformanceIssue(content: string, _issue: CodeIssue): string {
     // Add lazy loading to images
     content = content.replace(
       /<img\b((?:(?!\bloading\s*=)[^>])*)>/gi,

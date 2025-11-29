@@ -104,7 +104,7 @@ export class AccessibilityAnalyzer implements AnalysisModule {
     const issues: CodeIssue[] = [];
     try {
       const content = await fs.readFile(filePath, 'utf-8');
-      const lines = content.split('\n');
+      const allLines = content.split('\n');
 
       for (const {
         pattern,
@@ -118,40 +118,49 @@ export class AccessibilityAnalyzer implements AnalysisModule {
         autoFixable,
         documentation,
       } of patterns) {
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          const matches = line.match(pattern);
+        // Reset lastIndex for global regex
+        pattern.lastIndex = 0;
 
-          if (matches) {
-            issues.push({
-              id: `${type}-` + Date.now() + '-' + Math.random(),
-              type,
-              severity: {
-                level: severity,
-                impact: severity === 'critical' ? 'blocking' : 'major',
-                urgency: severity === 'critical' ? 'immediate' : 'high',
-              },
-              title: `${category} Issue Detected`,
-              description: message,
-              file: path.relative(projectRoot, filePath),
-              line: i + 1,
-              rule,
-              category,
-              source,
-              suggestion,
-              autoFixable,
-              documentation,
-              context: {
-                before: lines.slice(Math.max(0, i - 2), i),
-                current: line,
-                after: lines.slice(i + 1, i + 3),
-              },
-              metadata: {
-                checksum: generateChecksum(line),
-                timestamp: new Date(),
-              },
-            });
-          }
+        let match;
+        while ((match = pattern.exec(content)) !== null) {
+          const index = match.index;
+          const linesBefore = content.substring(0, index).split('\n');
+          const lineNumber = linesBefore.length;
+          const lineIndex = lineNumber - 1;
+
+          // Get context lines
+          const before = allLines.slice(Math.max(0, lineIndex - 2), lineIndex);
+          const current = allLines[lineIndex];
+          const after = allLines.slice(lineIndex + 1, lineIndex + 3);
+
+          issues.push({
+            id: `${type}-` + Date.now() + '-' + Math.random(),
+            type,
+            severity: {
+              level: severity,
+              impact: severity === 'critical' ? 'blocking' : 'major',
+              urgency: severity === 'critical' ? 'immediate' : 'high',
+            },
+            title: `${category} Issue Detected`,
+            description: message,
+            file: path.relative(projectRoot, filePath),
+            line: lineNumber,
+            rule,
+            category,
+            source,
+            suggestion,
+            autoFixable,
+            documentation,
+            context: {
+              before,
+              current,
+              after,
+            },
+            metadata: {
+              checksum: generateChecksum(current),
+              timestamp: new Date(),
+            },
+          });
         }
       }
     } catch (error: unknown) {

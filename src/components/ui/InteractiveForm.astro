@@ -26,6 +26,7 @@ export interface Props {
   variant?: 'default' | 'modern' | 'glass' | 'minimal';
   layout?: 'vertical' | 'horizontal' | 'grid';
   animated?: boolean;
+  formId?: string;
 }
 
 const {
@@ -36,10 +37,11 @@ const {
   className = '',
   variant = 'modern',
   layout = 'vertical',
-  animated = true
+  animated = true,
+  formId = 'interactive-form'
 } = Astro.props;
 
-const baseClasses = 'w-full max-w-2xl mx-auto transition-all duration-500';
+const baseClasses = 'w-full max-w-2xl mx-auto transition-all duration-500 interactive-form';
 
 const variants = {
   default: 'bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 shadow-lg rounded-xl p-8',
@@ -57,7 +59,7 @@ const layoutClasses = {
 const classes = `${baseClasses} ${variants[variant]} ${className}`;
 ---
 
-<form class={classes} id="enhanced-form">
+<form class={classes} id={formId}>
   <!-- Form Header -->
   {(title || description) && (
     <div class={`text-center mb-8 ${animated ? 'animate-slide-down' : ''}`}>
@@ -79,7 +81,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
     {fields.map((field, index) => (
       <div class={`form-field ${animated ? 'animate-slide-up' : ''}`} style={animated ? `animation-delay: ${index * 0.1}s` : ''}>
         <label
-          for={field.name}
+          for={`${formId}-${field.name}`}
           class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
         >
           <div class="flex items-center gap-2">
@@ -91,12 +93,11 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
 
         <div class="relative group">
           {field.type === 'text' || field.type === 'email' || field.type === 'password' ? (
-            <input
+            <input aria-label={field.label}
               type={field.type}
-              id={field.name}
+              id={`${formId}-${field.name}`}
               name={field.name}
               placeholder={field.placeholder}
-              aria-label={field.label}
               required={field.required}
               pattern={field.validation?.pattern}
               minlength={field.validation?.minLength}
@@ -105,7 +106,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
             />
           ) : field.type === 'textarea' ? (
             <textarea
-              id={field.name}
+              id={`${formId}-${field.name}`}
               name={field.name}
               placeholder={field.placeholder}
               aria-label={field.label}
@@ -117,7 +118,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
             ></textarea>
           ) : field.type === 'select' ? (
             <select
-              id={field.name}
+              id={`${formId}-${field.name}`}
               name={field.name}
               aria-label={field.label}
               required={field.required}
@@ -130,11 +131,10 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
             </select>
           ) : field.type === 'checkbox' ? (
             <div class="flex items-center gap-3">
-              <input
+              <input aria-label={field.label}
                 type="checkbox"
-                id={field.name}
+                id={`${formId}-${field.name}`}
                 name={field.name}
-                aria-label={field.label}
                 required={field.required}
                 class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200"
               />
@@ -144,27 +144,25 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
             <div class="space-y-3">
               {field.options?.map(option => (
                 <div class="flex items-center gap-3">
-                  <input
+                  <input aria-label={`${field.label}: ${option.label}`}
                     type="radio"
-                    id={`${field.name}-${option.value}`}
+                    id={`${formId}-${field.name}-${option.value}`}
                     name={field.name}
                     value={option.value}
-                    aria-label={`${field.label}: ${option.label}`}
                     required={field.required}
                     class="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500 focus:ring-2 transition-all duration-200"
                   />
-                  <label for={`${field.name}-${option.value}`} class="text-gray-700 dark:text-gray-300">
+                  <label for={`${formId}-${field.name}-${option.value}`} class="text-gray-700 dark:text-gray-300">
                     {option.label}
                   </label>
                 </div>
               ))}
             </div>
           ) : field.type === 'file' ? (
-            <input
+            <input aria-label={field.label}
               type="file"
-              id={field.name}
+              id={`${formId}-${field.name}`}
               name={field.name}
-              aria-label={field.label}
               required={field.required}
               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500 group-hover:shadow-md file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
@@ -221,7 +219,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
   </div>
 
   <!-- Success/Error Messages -->
-  <div id="form-message" class="mt-6 p-4 rounded-lg hidden transition-all duration-300" role="status" aria-live="polite">
+  <div class="form-message mt-6 p-4 rounded-lg hidden transition-all duration-300" role="status" aria-live="polite">
     <!-- Messages will be inserted here by JavaScript -->
   </div>
 </form>
@@ -231,161 +229,173 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
   document.addEventListener('DOMContentLoaded', function() {
     type FormElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-    const form = document.getElementById('enhanced-form') as HTMLFormElement;
-    const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
-    const submitText = submitButton?.querySelector('.submit-text') as HTMLElement;
-    const loadingSpinner = submitButton?.querySelector('.loading-spinner') as HTMLElement;
-    const submitIcon = submitButton?.querySelector('.submit-icon') as HTMLElement;
-    const messageContainer = document.getElementById('form-message') as HTMLElement;
+    const forms = document.querySelectorAll('form.interactive-form');
 
-    if (!form) return;
+    forms.forEach((formElement) => {
+      const form = formElement as HTMLFormElement;
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const submitText = submitButton?.querySelector('.submit-text') as HTMLElement;
+      const loadingSpinner = submitButton?.querySelector('.loading-spinner') as HTMLElement;
+      const submitIcon = submitButton?.querySelector('.submit-icon') as HTMLElement;
+      const messageContainer = form.querySelector('.form-message') as HTMLElement;
 
-    // Real-time validation
-    form.addEventListener('input', function(e) {
-      const target = e.target as HTMLInputElement;
-      validateField(target);
-    });
+      if (!form) return;
 
-    // Form submission
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
+      // Real-time validation
+      form.addEventListener('input', function(e) {
+        const target = e.target as HTMLInputElement;
+        validateField(target);
+      });
 
-      // Validate all fields
-      const isValid = validateForm();
-      if (!isValid) return;
+      // Form submission
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-      // Show loading state
-      setLoadingState(true);
+        // Validate all fields
+        const isValid = validateForm();
+        if (!isValid) return;
 
-      try {
-        // Simulate form submission
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Show loading state
+        setLoadingState(true);
 
-        // Show success message
-        showMessage('✅ Form submitted successfully!', 'success');
+        try {
+          // Simulate form submission
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Show success message
+          showMessage('✅ Form submitted successfully!', 'success');
+          form.reset();
+        } catch (error) {
+          // Show error message
+          showMessage('❌ There was an error submitting the form. Please try again.', 'error');
+        } finally {
+          setLoadingState(false);
+        }
+      });
+
+      // Reset button functionality
+      const resetButton = form.querySelector('button[type="button"]') as HTMLButtonElement;
+      resetButton?.addEventListener('click', function() {
         form.reset();
-      } catch (error) {
-        // Show error message
-        showMessage('❌ There was an error submitting the form. Please try again.', 'error');
-      } finally {
-        setLoadingState(false);
+        clearValidationMessages();
+        hideMessage();
+      });
+
+      function validateField(field: HTMLInputElement): boolean {
+        const validationMessage = form.querySelector(`[data-validation-message="${field.name}"]`) as HTMLElement;
+        let isValid = true;
+        let message = '';
+
+        // Required field validation
+        if (field.required && !field.value.trim()) {
+          isValid = false;
+          message = 'This field is required';
+        }
+
+        // Email validation
+        if (field.type === 'email' && field.value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(field.value)) {
+            isValid = false;
+            message = 'Please enter a valid email address';
+          }
+        }
+
+        // Pattern validation
+        if (field.pattern && field.value) {
+          const regex = new RegExp(field.pattern);
+          if (!regex.test(field.value)) {
+            isValid = false;
+            message = 'Please enter a valid format';
+          }
+        }
+
+        // Length validation
+        if (field.minLength && field.value.length < field.minLength) {
+          isValid = false;
+          message = `Minimum ${field.minLength} characters required`;
+        }
+
+        // Update field appearance and message
+        if (isValid) {
+          field.classList.remove('border-red-500');
+          field.classList.add('border-green-500');
+          if (validationMessage) {
+            validationMessage.textContent = '';
+            validationMessage.classList.remove('opacity-100');
+            validationMessage.classList.add('opacity-0');
+          }
+        } else {
+          field.classList.remove('border-green-500');
+          field.classList.add('border-red-500');
+          if (validationMessage) {
+            validationMessage.textContent = message;
+            validationMessage.classList.remove('opacity-0');
+            validationMessage.classList.add('opacity-100');
+          }
+        }
+
+        return isValid;
+      }
+
+      function validateForm(): boolean {
+        const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
+        let isValid = true;
+
+        fields.forEach(field => {
+          if (!validateField(field as HTMLInputElement)) {
+            isValid = false;
+          }
+        });
+
+        return isValid;
+      }
+
+      function setLoadingState(loading: boolean) {
+        if (!submitButton) return;
+
+        if (loading) {
+          submitButton.disabled = true;
+          if (submitText) submitText.textContent = 'Submitting...';
+          if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+          if (submitIcon) submitIcon.classList.add('hidden');
+          submitButton.classList.add('opacity-75');
+        } else {
+          submitButton.disabled = false;
+          if (submitText) submitText.textContent = 'Submit';
+          if (loadingSpinner) loadingSpinner.classList.add('hidden');
+          if (submitIcon) submitIcon.classList.remove('hidden');
+          submitButton.classList.remove('opacity-75');
+        }
+      }
+
+      function showMessage(text: string, type: 'success' | 'error') {
+        if (!messageContainer) return;
+
+        const bgClass = type === 'success' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200';
+
+        messageContainer.className = `form-message mt-6 p-4 rounded-lg border transition-all duration-300 ${bgClass}`;
+        messageContainer.textContent = text;
+        messageContainer.classList.remove('hidden');
+      }
+
+      function hideMessage() {
+        if (messageContainer) messageContainer.classList.add('hidden');
+      }
+
+      function clearValidationMessages() {
+        const validationMessages = form.querySelectorAll('[data-validation-message]') as NodeListOf<HTMLElement>;
+        validationMessages.forEach(message => {
+          message.textContent = '';
+          message.classList.add('opacity-0');
+        });
+
+        const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
+        fields.forEach(field => {
+          field.classList.remove('border-red-500', 'border-green-500');
+        });
       }
     });
-
-    // Reset button functionality
-    const resetButton = form.querySelector('button[type="button"]') as HTMLButtonElement;
-    resetButton?.addEventListener('click', function() {
-      form.reset();
-      clearValidationMessages();
-      hideMessage();
-    });
-
-    function validateField(field: HTMLInputElement): boolean {
-      const validationMessage = document.querySelector(`[data-validation-message="${field.name}"]`) as HTMLElement;
-      let isValid = true;
-      let message = '';
-
-      // Required field validation
-      if (field.required && !field.value.trim()) {
-        isValid = false;
-        message = 'This field is required';
-      }
-
-      // Email validation
-      if (field.type === 'email' && field.value) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(field.value)) {
-          isValid = false;
-          message = 'Please enter a valid email address';
-        }
-      }
-
-      // Pattern validation
-      if (field.pattern && field.value) {
-        const regex = new RegExp(field.pattern);
-        if (!regex.test(field.value)) {
-          isValid = false;
-          message = 'Please enter a valid format';
-        }
-      }
-
-      // Length validation
-      if (field.minLength && field.value.length < field.minLength) {
-        isValid = false;
-        message = `Minimum ${field.minLength} characters required`;
-      }
-
-      // Update field appearance and message
-      if (isValid) {
-        field.classList.remove('border-red-500');
-        field.classList.add('border-green-500');
-        validationMessage.textContent = '';
-        validationMessage.classList.remove('opacity-100');
-        validationMessage.classList.add('opacity-0');
-      } else {
-        field.classList.remove('border-green-500');
-        field.classList.add('border-red-500');
-        validationMessage.textContent = message;
-        validationMessage.classList.remove('opacity-0');
-        validationMessage.classList.add('opacity-100');
-      }
-
-      return isValid;
-    }
-
-    function validateForm(): boolean {
-      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
-      let isValid = true;
-
-      fields.forEach(field => {
-        if (!validateField(field as HTMLInputElement)) {
-          isValid = false;
-        }
-      });
-
-      return isValid;
-    }
-
-    function setLoadingState(loading: boolean) {
-      if (loading) {
-        submitButton.disabled = true;
-        submitText.textContent = 'Submitting...';
-        loadingSpinner.classList.remove('hidden');
-        submitIcon.classList.add('hidden');
-        submitButton.classList.add('opacity-75');
-      } else {
-        submitButton.disabled = false;
-        submitText.textContent = 'Submit';
-        loadingSpinner.classList.add('hidden');
-        submitIcon.classList.remove('hidden');
-        submitButton.classList.remove('opacity-75');
-      }
-    }
-
-    function showMessage(text: string, type: 'success' | 'error') {
-      const bgClass = type === 'success' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200';
-
-      messageContainer.className = `mt-6 p-4 rounded-lg border transition-all duration-300 ${bgClass}`;
-      messageContainer.textContent = text;
-      messageContainer.classList.remove('hidden');
-    }
-
-    function hideMessage() {
-      messageContainer.classList.add('hidden');
-    }
-
-    function clearValidationMessages() {
-      const validationMessages = form.querySelectorAll('[data-validation-message]') as NodeListOf<HTMLElement>;
-      validationMessages.forEach(message => {
-        message.textContent = '';
-        message.classList.add('opacity-0');
-      });
-
-      const fields = form.querySelectorAll('input, textarea, select') as NodeListOf<FormElement>;
-      fields.forEach(field => {
-        field.classList.remove('border-red-500', 'border-green-500');
-      });
-    }
   });
 </script>
 

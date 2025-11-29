@@ -319,7 +319,7 @@ const quickActions = [
               { name: 'Code Samples', icon: '\\u{1F4BB}', value: 'code' },
             ].map((feature) => (
               <label class="flex items-center gap-3 p-4 bg-zinc-900 border border-zinc-800 hover:border-accent-500 cursor-pointer transition-all group">
-                <input type="checkbox" class="w-5 h-5 rounded-none border-zinc-700 bg-zinc-950 text-accent-500 focus:ring-1 focus:ring-accent-500 focus:ring-offset-0" value={feature.value} />
+                <input aria-label={feature.name} type="checkbox" class="w-5 h-5 rounded-none border-zinc-700 bg-zinc-950 text-accent-500 focus:ring-1 focus:ring-accent-500 focus:ring-offset-0" value={feature.value} />
                 <span class="text-2xl">{feature.icon}</span>
                 <span class="text-sm text-zinc-300 group-hover:text-white transition-colors font-mono">{feature.name}</span>
               </label>

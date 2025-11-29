@@ -45,7 +45,7 @@ Similar string manipulation utilities with slightly different behaviors (e.g., `
 **Recommendation:**
 Keep both if behaviors differ meaningfully, otherwise consolidate and document the chosen behavior.
 
-### 4. Debounce/Throttle
+### 4. Debounce/Throttle (RESOLVED)
 
 **Files Affected:**
 
@@ -55,10 +55,7 @@ Keep both if behaviors differ meaningfully, otherwise consolidate and document t
 **Description:**
 Identical implementations in both files.
 
-**Priority:** HIGH - These are exact duplicates.
-
-**Recommendation:**
-Remove from one file and export from a single location.
+**Status:** Resolved. Moved to `src/utils/function.ts` and re-exported.
 
 ### 5. URL Utilities
 
@@ -116,7 +113,7 @@ Use `validation.ts` as the single source of truth. Update helpers to re-export o
 
 | Area              | Duplicate Count | Effort | Priority |
 | ----------------- | --------------- | ------ | -------- |
-| Debounce/Throttle | 2               | Low    | High     |
+| Debounce/Throttle | 0               | Done   | Resolved |
 | Date Functions    | 2               | Medium | Medium   |
 | Array Utilities   | 4               | Medium | Medium   |
 | String Utilities  | 3               | Low    | Low      |

@@ -47,3 +47,5 @@ README-ERRORS.md
 # Playwright
 playwright-report/
 test-results/
+
+a11y-fixture-*/

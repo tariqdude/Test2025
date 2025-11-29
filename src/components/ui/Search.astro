@@ -31,19 +31,20 @@ const searchData = posts.map(post => ({
 }));
 
 const blogBasePath = withBasePath('blog/');
+const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
 <div class={`search-wrapper ${className}`} data-search-wrapper>
   <div class="relative" role="search">
-    <label for="search-input" class="sr-only">Search posts</label>
+    <label for={searchId} class="sr-only">Search posts</label>
     <input
+      aria-label="Search posts"
       type="search"
-      id="search-input"
+      id={searchId}
       placeholder={placeholder}
       class="w-full px-4 py-3 pl-12 pr-16 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-      aria-label="Search posts"
-      aria-describedby="search-hint"
-      aria-controls="search-results"
+      aria-describedby={`${searchId}-hint`}
+      aria-controls={`${searchId}-results`}
       aria-expanded="false"
       autocomplete="off"
       spellcheck="false"
@@ -68,21 +69,21 @@ const blogBasePath = withBasePath('blog/');
       <span class="hidden sm:inline">⌘K</span>
       <span class="sm:hidden">Ctrl+K</span>
     </kbd>
-    <span id="search-hint" class="sr-only">
+    <span id={`${searchId}-hint`} class="sr-only">
       Type at least 2 characters to search. Use arrow keys to navigate results.
     </span>
   </div>
 
   <!-- Search Results -->
   <div
-    id="search-results"
+    id={`${searchId}-results`}
     class="hidden absolute z-50 w-full mt-2 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl max-h-96 overflow-y-auto"
     role="listbox"
     aria-label="Search results"
   >
-    <div id="results-list" class="py-2"></div>
+    <div id={`${searchId}-list`} class="py-2"></div>
     <div
-      id="search-status"
+      id={`${searchId}-status`}
       class="sr-only"
       aria-live="polite"
       aria-atomic="true"
@@ -91,7 +92,7 @@ const blogBasePath = withBasePath('blog/');
   </div>
 </div>
 
-<script define:vars={{ searchData, maxResults, blogBasePath }}>
+<script define:vars={{ searchData, maxResults, blogBasePath, searchId }}>
   // Dynamically import Fuse.js
   let Fuse;
 
@@ -113,10 +114,10 @@ const blogBasePath = withBasePath('blog/');
       minMatchCharLength: 2,
     });
 
-    const input = document.getElementById('search-input');
-    const results = document.getElementById('search-results');
-    const resultsList = document.getElementById('results-list');
-    const searchStatus = document.getElementById('search-status');
+    const input = document.getElementById(searchId);
+    const results = document.getElementById(`${searchId}-results`);
+    const resultsList = document.getElementById(`${searchId}-list`);
+    const searchStatus = document.getElementById(`${searchId}-status`);
 
     if (!input || !results || !resultsList) return;
 

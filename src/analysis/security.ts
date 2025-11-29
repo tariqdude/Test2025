@@ -3,7 +3,7 @@ import type {
   CodeIssue,
   AnalyzerConfig,
 } from '../types/analysis';
-import { promises as fs } from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { glob } from 'glob';
 import { FileSystemError, AnalysisError } from '../errors';
@@ -74,7 +74,9 @@ export class SecurityAnalyzer implements AnalysisModule {
       });
 
       if (!stdout) {
-        logger.debug('npm audit did not return data; skipping dependency vulnerability check');
+        logger.debug(
+          'npm audit did not return data; skipping dependency vulnerability check'
+        );
         return;
       }
 
@@ -90,8 +92,12 @@ export class SecurityAnalyzer implements AnalysisModule {
       }
 
       if (audit.metadata?.vulnerabilities) {
-        const { critical = 0, high = 0, moderate = 0, low = 0 } =
-          audit.metadata.vulnerabilities;
+        const {
+          critical = 0,
+          high = 0,
+          moderate = 0,
+          low = 0,
+        } = audit.metadata.vulnerabilities;
 
         const severityBuckets: Array<{
           count: number;
