@@ -6,6 +6,7 @@
  */
 
 import { withBasePath } from '../../utils/helpers';
+import { getCollection } from 'astro:content';
 
 export interface Props {
   placeholder?: string;
@@ -20,7 +21,6 @@ const {
 } = Astro.props;
 
 // Get all blog posts for search indexing
-import { getCollection } from 'astro:content';
 const posts = await getCollection('blog');
 
 const searchData = posts.map(post => ({
@@ -34,7 +34,13 @@ const blogBasePath = withBasePath('blog/');
 const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<div class={`search-wrapper ${className}`} data-search-wrapper>
+<div
+  class={`search-wrapper ${className}`}
+  data-search-wrapper
+  data-search-data={JSON.stringify(searchData)}
+  data-max-results={maxResults}
+  data-blog-base-path={blogBasePath}
+>
   <div class="relative" role="search">
     <label for={searchId} class="sr-only">Search posts</label>
     <input
@@ -92,17 +98,31 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
   </div>
 </div>
 
-<script define:vars={{ searchData, maxResults, blogBasePath, searchId }}>
-  // Dynamically import Fuse.js
-  let Fuse;
+<script>
+  import Fuse from 'fuse.js';
+  import { debounce } from '../../utils/function';
 
-  async function initSearch() {
-    if (!Fuse) {
-      const module = await import(
-        'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.mjs'
-      );
-      Fuse = module.default;
-    }
+  function initSearch(wrapper: Element) {
+    if (!(wrapper instanceof HTMLElement)) return;
+
+    const searchDataStr = wrapper.dataset.searchData;
+    if (!searchDataStr) return;
+
+    const searchData = JSON.parse(searchDataStr);
+    const maxResults = parseInt(wrapper.dataset.maxResults || '5', 10);
+    const blogBasePath = wrapper.dataset.blogBasePath || '/blog/';
+
+    const input = wrapper.querySelector(
+      'input[type="search"]'
+    ) as HTMLInputElement;
+    if (!input) return;
+
+    const searchId = input.id;
+    const results = document.getElementById(`${searchId}-results`);
+    const resultsList = document.getElementById(`${searchId}-list`);
+    const searchStatus = document.getElementById(`${searchId}-status`);
+
+    if (!results || !resultsList) return;
 
     const fuse = new Fuse(searchData, {
       keys: [
@@ -114,24 +134,10 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
       minMatchCharLength: 2,
     });
 
-    const input = document.getElementById(searchId);
-    const results = document.getElementById(`${searchId}-results`);
-    const resultsList = document.getElementById(`${searchId}-list`);
-    const searchStatus = document.getElementById(`${searchId}-status`);
-
-    if (!input || !results || !resultsList) return;
-
     let selectedIndex = -1;
 
-    // Helper function to escape HTML to prevent XSS
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
     // Announce results to screen readers
-    function announceResults(count, query) {
+    function announceResults(count: number, query: string) {
       if (searchStatus) {
         if (count === 0) {
           searchStatus.textContent = `No results found for "${query}"`;
@@ -141,61 +147,77 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
       }
     }
 
-    function performSearch(query) {
+    function performSearch(query: string) {
       if (!query || query.length < 2) {
-        results.classList.add('hidden');
+        results?.classList.add('hidden');
         input.setAttribute('aria-expanded', 'false');
         return;
       }
 
       const searchResults = fuse.search(query, { limit: maxResults });
 
+      // Clear previous results
+      if (resultsList) {
+        resultsList.textContent = '';
+      }
+
       if (searchResults.length === 0) {
-        resultsList.innerHTML = `
-          <div class="px-4 py-3 text-slate-400 text-sm" role="status">
-            No results found for "${escapeHtml(query)}"
-          </div>
-        `;
-        results.classList.remove('hidden');
+        if (resultsList) {
+          const noResultsDiv = document.createElement('div');
+          noResultsDiv.className = 'px-4 py-3 text-slate-400 text-sm';
+          noResultsDiv.setAttribute('role', 'status');
+          noResultsDiv.textContent = `No results found for "${query}"`;
+          resultsList.appendChild(noResultsDiv);
+        }
+        results?.classList.remove('hidden');
         input.setAttribute('aria-expanded', 'true');
         announceResults(0, query);
         return;
       }
 
-      resultsList.innerHTML = searchResults
-        .map(
-          (result, index) => `
-          <a
-            href="${blogBasePath}${encodeURIComponent(result.item.id)}"
-            class="block px-4 py-3 hover:bg-slate-700 focus:bg-slate-700 focus:outline-none transition-colors ${index === selectedIndex ? 'bg-slate-700' : ''}"
-            data-result-index="${index}"
-            role="option"
-            aria-selected="${index === selectedIndex}"
-          >
-            <div class="font-semibold text-slate-200">${escapeHtml(result.item.title)}</div>
-            <div class="text-sm text-slate-400 mt-1 line-clamp-2">${escapeHtml(result.item.description)}</div>
-          </a>
-        `
-        )
-        .join('');
+      if (resultsList) {
+        searchResults.forEach((result, index) => {
+          const link = document.createElement('a');
+          link.href = `${blogBasePath}${encodeURIComponent(result.item.id)}`;
+          link.className = `block px-4 py-3 hover:bg-slate-700 focus:bg-slate-700 focus:outline-none transition-colors ${index === selectedIndex ? 'bg-slate-700' : ''}`;
+          link.dataset.resultIndex = index.toString();
+          link.setAttribute('role', 'option');
+          link.setAttribute(
+            'aria-selected',
+            (index === selectedIndex).toString()
+          );
 
-      results.classList.remove('hidden');
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'font-semibold text-slate-200';
+          titleDiv.textContent = result.item.title;
+          link.appendChild(titleDiv);
+
+          const descDiv = document.createElement('div');
+          descDiv.className = 'text-sm text-slate-400 mt-1 line-clamp-2';
+          descDiv.textContent = result.item.description;
+          link.appendChild(descDiv);
+
+          resultsList.appendChild(link);
+        });
+      }
+
+      results?.classList.remove('hidden');
       input.setAttribute('aria-expanded', 'true');
       selectedIndex = -1;
       announceResults(searchResults.length, query);
     }
 
     // Input handler with debounce
-    let debounceTimer;
-    input.addEventListener('input', e => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        performSearch(e.target.value);
-      }, 200);
-    });
+    const handleInput = debounce((e: Event) => {
+      const target = e.target as HTMLInputElement;
+      performSearch(target.value);
+    }, 200);
+
+    input.addEventListener('input', handleInput);
 
     // Keyboard navigation
     input.addEventListener('keydown', e => {
+      if (!resultsList) return;
       const resultItems = resultsList.querySelectorAll('a');
 
       if (e.key === 'ArrowDown') {
@@ -208,15 +230,15 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
         updateSelectedResult(resultItems);
       } else if (e.key === 'Enter' && selectedIndex >= 0) {
         e.preventDefault();
-        resultItems[selectedIndex]?.click();
+        (resultItems[selectedIndex] as HTMLElement)?.click();
       } else if (e.key === 'Escape') {
-        results.classList.add('hidden');
+        results?.classList.add('hidden');
         input.setAttribute('aria-expanded', 'false');
         input.blur();
       }
     });
 
-    function updateSelectedResult(items) {
+    function updateSelectedResult(items: NodeListOf<Element>) {
       items.forEach((item, index) => {
         if (index === selectedIndex) {
           item.classList.add('bg-slate-700');
@@ -231,8 +253,8 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
 
     // Click outside to close
     document.addEventListener('click', e => {
-      if (!e.target.closest('[data-search-wrapper]')) {
-        results.classList.add('hidden');
+      if (!wrapper.contains(e.target as Node)) {
+        results?.classList.add('hidden');
         input.setAttribute('aria-expanded', 'false');
       }
     });
@@ -247,11 +269,12 @@ const searchId = `search-${Math.random().toString(36).slice(2, 9)}`;
   }
 
   // Initialize on load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSearch);
-  } else {
-    initSearch();
-  }
+  document.querySelectorAll('[data-search-wrapper]').forEach(initSearch);
+
+  // Re-initialize on view transitions (if used)
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('[data-search-wrapper]').forEach(initSearch);
+  });
 </script>
 
 <style>

@@ -524,3 +524,28 @@ export const extendedSchemas = {
   duration: durationSchema,
   rateLimitKey: rateLimitKeySchema,
 };
+
+/**
+ * Simple boolean validation helpers
+ */
+
+export const isValidEmail = (email: string): boolean => {
+  return emailSchema.safeParse(email).success;
+};
+
+export const isValidUrl = (url: string): boolean => {
+  return urlSchema.safeParse(url).success;
+};
+
+export const validatePhone = (phone: string): boolean => {
+  const cleaned = phone.replace(/[\s\-()]/g, '');
+  return phoneSchema.safeParse(cleaned).success;
+};
+
+export const isEmpty = (value: unknown): boolean => {
+  if (value === null || value === undefined) return true;
+  if (typeof value === 'string') return value.trim().length === 0;
+  if (Array.isArray(value)) return value.length === 0;
+  if (typeof value === 'object') return Object.keys(value).length === 0;
+  return false;
+};

@@ -193,7 +193,7 @@ describe('Helpers Utility', () => {
     });
 
     it('should truncate long text with default suffix', () => {
-      expect(truncateText('Hello World Everyone', 10)).toBe('Hello W...');
+      expect(truncateText('Hello World Everyone', 10)).toBe('Hello...');
     });
 
     it('should use custom suffix', () => {

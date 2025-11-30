@@ -68,38 +68,10 @@ const swScope = withBasePath('');
   }
 
   function showUpdateNotification(): void {
-    const notification = document.createElement('div');
-    notification.className =
-      'fixed bottom-4 right-4 z-50 max-w-sm p-4 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl';
-    notification.innerHTML = `
-      <div class="flex items-start gap-3">
-        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-blue-500/20 rounded-lg">
-          <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </div>
-        <div class="flex-1">
-          <h3 class="text-sm font-semibold text-white">Update Available</h3>
-          <p class="mt-1 text-sm text-slate-300">A new version of the app is ready.</p>
-          <div class="mt-3 flex gap-2">
-            <button
-              id="update-btn"
-              class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition"
-            >
-              Update Now
-            </button>
-            <button
-              id="dismiss-btn"
-              class="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition"
-            >
-              Later
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
+    const notification = document.getElementById('pwa-notification');
+    if (!notification) return;
 
-    document.body.appendChild(notification);
+    notification.classList.remove('hidden');
 
     document.getElementById('update-btn')?.addEventListener('click', () => {
       navigator.serviceWorker.getRegistration().then(reg => {
@@ -108,7 +80,7 @@ const swScope = withBasePath('');
     });
 
     document.getElementById('dismiss-btn')?.addEventListener('click', () => {
-      notification.remove();
+      notification.classList.add('hidden');
     });
   }
 
@@ -148,6 +120,53 @@ const swScope = withBasePath('');
     deferredPrompt = null;
   });
 </script>
+
+<!-- Update Notification -->
+<div
+  id="pwa-notification"
+  class="hidden fixed bottom-4 right-4 z-50 max-w-sm p-4 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl"
+  role="alert"
+>
+  <div class="flex items-start gap-3">
+    <div
+      class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-blue-500/20 rounded-lg"
+    >
+      <svg
+        class="w-6 h-6 text-blue-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+        ></path>
+      </svg>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-sm font-semibold text-white">Update Available</h3>
+      <p class="mt-1 text-sm text-slate-300">
+        A new version of the app is ready.
+      </p>
+      <div class="mt-3 flex gap-2">
+        <button
+          id="update-btn"
+          class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition"
+        >
+          Update Now
+        </button>
+        <button
+          id="dismiss-btn"
+          class="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition"
+        >
+          Later
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Optional install button (add to your header or footer) -->
 <button

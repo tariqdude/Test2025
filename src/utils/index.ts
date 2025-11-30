@@ -8,59 +8,8 @@ export { AnalysisCache } from './analysis-cache';
 
 /* ==================== FORMATTING UTILITIES ==================== */
 
-/**
- * Format a date with modern Intl.DateTimeFormat
- */
-export const formatDate = (
-  date: Date | string | number,
-  options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  },
-  locale = 'en-US'
-): string => {
-  const dateObj = new Date(date);
-  return new Intl.DateTimeFormat(locale, options).format(dateObj);
-};
-
-/**
- * Format relative time (e.g., "2 days ago", "in 3 hours")
- */
-export const formatRelativeTime = (
-  date: Date | string | number,
-  locale = 'en-US'
-): string => {
-  const dateObj = new Date(date);
-  const now = new Date();
-  const diffInSeconds = Math.floor((dateObj.getTime() - now.getTime()) / 1000);
-
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-
-  const intervals = [
-    { label: 'year', seconds: 31536000 },
-    { label: 'month', seconds: 2592000 },
-    { label: 'week', seconds: 604800 },
-    { label: 'day', seconds: 86400 },
-    { label: 'hour', seconds: 3600 },
-    { label: 'minute', seconds: 60 },
-    { label: 'second', seconds: 1 },
-  ] as const;
-
-  for (const interval of intervals) {
-    const intervalCount = Math.floor(
-      Math.abs(diffInSeconds) / interval.seconds
-    );
-    if (intervalCount >= 1) {
-      return rtf.format(
-        diffInSeconds < 0 ? -intervalCount : intervalCount,
-        interval.label
-      );
-    }
-  }
-
-  return rtf.format(0, 'second');
-};
+export { formatDate, formatRelativeTime } from './date';
+import { formatDate, formatRelativeTime } from './date';
 
 /**
  * Format numbers with proper localization
@@ -90,109 +39,27 @@ export const formatFileSize = (bytes: number, decimals = 2): string => {
 
 /* ==================== STRING UTILITIES ==================== */
 
-/**
- * Convert string to slug format
- */
-export const slugify = (text: string): string => {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[\s\W-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-};
-
-/**
- * Truncate text with proper word boundaries
- */
-export const truncate = (
-  text: string,
-  maxLength: number,
-  suffix = '...'
-): string => {
-  if (text.length <= maxLength) return text;
-
-  const truncated = text.substring(0, maxLength - suffix.length);
-  const lastSpace = truncated.lastIndexOf(' ');
-
-  if (lastSpace > 0) {
-    return truncated.substring(0, lastSpace) + suffix;
-  }
-
-  return truncated + suffix;
-};
-
-/**
- * Capitalize first letter of each word
- */
-export const titleCase = (text: string): string => {
-  return text.replace(
-    /\w\S*/g,
-    txt => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
-  );
-};
-
-/**
- * Extract initials from a name
- */
-export const getInitials = (name: string, maxInitials = 2): string => {
-  return name
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
-    .slice(0, maxInitials)
-    .join('');
-};
+export {
+  slugify,
+  truncate,
+  titleCase,
+  capitalizeFirst,
+  getInitials,
+  sanitizeInput,
+} from './string';
+import {
+  slugify,
+  truncate,
+  titleCase,
+  capitalizeFirst,
+  getInitials,
+  sanitizeInput,
+} from './string';
 
 /* ==================== ARRAY UTILITIES ==================== */
 
-/**
- * Remove duplicates from array using Set
- */
-export const unique = <T>(array: T[]): T[] => {
-  return [...new Set(array)];
-};
-
-/**
- * Group array items by a key function
- */
-export const groupBy = <T, K extends string | number | symbol>(
-  array: T[],
-  keyFn: (item: T) => K
-): Record<K, T[]> => {
-  return array.reduce(
-    (groups, item) => {
-      const key = keyFn(item);
-      (groups[key] = groups[key] || []).push(item);
-      return groups;
-    },
-    {} as Record<K, T[]>
-  );
-};
-
-/**
- * Chunk array into smaller arrays
- */
-export const chunk = <T>(array: T[], size: number): T[][] => {
-  if (size <= 0) throw new Error('Chunk size must be positive');
-
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
-};
-
-/**
- * Shuffle array using Fisher-Yates algorithm
- */
-export const shuffle = <T>(array: T[]): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
+export { unique, groupBy, chunk, shuffle } from './array';
+import { unique, groupBy, chunk, shuffle } from './array';
 
 /* ==================== OBJECT UTILITIES ==================== */
 
@@ -255,37 +122,8 @@ export const omit = <T extends Record<string, unknown>, K extends keyof T>(
 
 /* ==================== URL AND QUERY UTILITIES ==================== */
 
-/**
- * Build URL with query parameters
- */
-export const buildUrl = (
-  baseUrl: string,
-  params: Record<string, string | number | boolean | undefined>
-): string => {
-  const url = new URL(baseUrl);
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined) {
-      url.searchParams.set(key, String(value));
-    }
-  });
-
-  return url.toString();
-};
-
-/**
- * Parse query string into object
- */
-export const parseQuery = (queryString: string): Record<string, string> => {
-  const params = new URLSearchParams(queryString);
-  const result: Record<string, string> = {};
-
-  params.forEach((value, key) => {
-    result[key] = value;
-  });
-
-  return result;
-};
+export { buildUrl, parseQuery } from './url';
+import { buildUrl, parseQuery } from './url';
 
 /* ==================== CSS UTILITIES ==================== */
 
@@ -487,36 +325,8 @@ export const measureTime = async <T>(
 
 /* ==================== VALIDATION UTILITIES ==================== */
 
-/**
- * Validate email address
- */
-export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-/**
- * Validate URL
- */
-export const isValidUrl = (url: string): boolean => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-/**
- * Check if value is empty (null, undefined, empty string, empty array, empty object)
- */
-export const isEmpty = (value: unknown): boolean => {
-  if (value === null || value === undefined) return true;
-  if (typeof value === 'string') return value.trim().length === 0;
-  if (Array.isArray(value)) return value.length === 0;
-  if (typeof value === 'object') return Object.keys(value).length === 0;
-  return false;
-};
+export { isValidEmail, isValidUrl, isEmpty } from './validation';
+import { isValidEmail, isValidUrl, isEmpty } from './validation';
 
 /* ==================== HELPER FUNCTIONS ==================== */
 

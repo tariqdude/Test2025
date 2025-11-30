@@ -86,10 +86,15 @@ const showStatus = (message: string, type: StatusType = 'info'): void => {
 
   const statusEl = document.createElement('div');
   statusEl.className = `${STATUS_COLORS[type]} text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 transform transition-all duration-300 translate-y-4 opacity-0`;
-  statusEl.innerHTML = `
-    <span>${STATUS_ICONS[type]}</span>
-    <span>${message}</span>
-  `;
+
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = STATUS_ICONS[type];
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+
+  statusEl.appendChild(iconSpan);
+  statusEl.appendChild(messageSpan);
 
   container.appendChild(statusEl);
   emitDashboardEvent('status', { message, statusType: type });

@@ -6,7 +6,7 @@ This document tracks known technical debt related to duplicate utility functions
 
 ## Duplicate Utilities
 
-### 1. Date Formatting Functions
+### 1. Date Formatting Functions (RESOLVED)
 
 **Files Affected:**
 
@@ -14,12 +14,11 @@ This document tracks known technical debt related to duplicate utility functions
 - `src/utils/index.ts` - `formatDate`, `formatRelativeTime`
 
 **Description:**
-Both files contain similar date formatting implementations. The `index.ts` version uses `Intl.RelativeTimeFormat` while `helpers.ts` uses a manual approach.
+Both files contain similar date formatting implementations.
 
-**Recommendation:**
-Consolidate into a single `src/utils/date.ts` module and re-export from both locations for backward compatibility.
+**Status:** Resolved. Consolidated into `src/utils/date.ts`. `getRelativeTime` is now an alias for `formatRelativeTime`.
 
-### 2. Array Utilities
+### 2. Array Utilities (RESOLVED)
 
 **Files Affected:**
 
@@ -27,12 +26,11 @@ Consolidate into a single `src/utils/date.ts` module and re-export from both loc
 - `src/utils/index.ts` - `groupBy`, `unique`, `chunk`, `shuffle`
 
 **Description:**
-Duplicate implementations of common array utilities. The `index.ts` versions are slightly more type-safe.
+Duplicate implementations of common array utilities.
 
-**Recommendation:**
-Keep the more type-safe versions in `index.ts` and remove duplicates from `helpers.ts`.
+**Status:** Resolved. Consolidated into `src/utils/array.ts`. `groupBy` now supports both key string and key function.
 
-### 3. String Utilities
+### 3. String Utilities (RESOLVED)
 
 **Files Affected:**
 
@@ -40,10 +38,9 @@ Keep the more type-safe versions in `index.ts` and remove duplicates from `helpe
 - `src/utils/index.ts` - `truncate`, `titleCase`, `getInitials`
 
 **Description:**
-Similar string manipulation utilities with slightly different behaviors (e.g., `truncateText` vs `truncate` with word boundary respect).
+Similar string manipulation utilities with slightly different behaviors.
 
-**Recommendation:**
-Keep both if behaviors differ meaningfully, otherwise consolidate and document the chosen behavior.
+**Status:** Resolved. Consolidated into `src/utils/string.ts`. `truncate` now respects word boundaries and `truncateText` is an alias. `slugify` was improved.
 
 ### 4. Debounce/Throttle (RESOLVED)
 
@@ -57,7 +54,7 @@ Identical implementations in both files.
 
 **Status:** Resolved. Moved to `src/utils/function.ts` and re-exported.
 
-### 5. URL Utilities
+### 5. URL Utilities (RESOLVED)
 
 **Files Affected:**
 
@@ -67,10 +64,9 @@ Identical implementations in both files.
 **Description:**
 `buildUrl` exists in both files with slightly different signatures.
 
-**Recommendation:**
-Consolidate and use a single signature that covers all use cases.
+**Status:** Resolved. Consolidated into `src/utils/url.ts`. `buildUrl` now supports both signatures.
 
-### 6. Validation Functions
+### 6. Validation Functions (RESOLVED)
 
 **Files Affected:**
 
@@ -81,10 +77,7 @@ Consolidate and use a single signature that covers all use cases.
 **Description:**
 Multiple validation approaches exist. `validation.ts` is the most comprehensive.
 
-**Priority:** MEDIUM
-
-**Recommendation:**
-Use `validation.ts` as the single source of truth. Update helpers to re-export or use the Zod schemas.
+**Status:** Resolved. Consolidated into `src/utils/validation.ts`. Added simple boolean helpers that use the Zod schemas.
 
 ## Proposed Consolidation Plan
 
@@ -101,6 +94,8 @@ Use `validation.ts` as the single source of truth. Update helpers to re-export o
    - `src/utils/array.ts`
    - `src/utils/string.ts`
    - `src/utils/function.ts` (debounce, throttle, etc.)
+   - `src/utils/url.ts`
+   - `src/utils/validation.ts`
 2. Update `helpers.ts` and `index.ts` to re-export from these modules
 
 ### Phase 3: Cleanup
@@ -114,11 +109,11 @@ Use `validation.ts` as the single source of truth. Update helpers to re-export o
 | Area              | Duplicate Count | Effort | Priority |
 | ----------------- | --------------- | ------ | -------- |
 | Debounce/Throttle | 0               | Done   | Resolved |
-| Date Functions    | 2               | Medium | Medium   |
-| Array Utilities   | 4               | Medium | Medium   |
-| String Utilities  | 3               | Low    | Low      |
-| URL Utilities     | 2               | Low    | Medium   |
-| Validation        | 3               | High   | Medium   |
+| Date Functions    | 0               | Done   | Resolved |
+| Array Utilities   | 0               | Done   | Resolved |
+| String Utilities  | 0               | Done   | Resolved |
+| URL Utilities     | 0               | Done   | Resolved |
+| Validation        | 0               | Done   | Resolved |
 
 ## Notes
 

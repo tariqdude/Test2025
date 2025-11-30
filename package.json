@@ -53,6 +53,7 @@
     "astro": "^5.12.8",
     "clsx": "^2.1.1",
     "dotenv": "^16.1.4",
+    "fuse.js": "^7.1.0",
     "prismjs": "^1.30.0",
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.1",
