@@ -10,9 +10,13 @@ import { getMarkdownReadingTime } from '../utils/reading-time';
 import WebVitals from '../components/WebVitals.astro';
 import ErrorTracking from '../components/ErrorTracking.astro';
 import StructuredData from '../components/StructuredData.astro';
+import CommandPalette from '../components/CommandPalette';
+import TableOfContents from '../components/TableOfContents.astro';
+import type { MarkdownHeading } from 'astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   readingTime?: string;
+  headings?: MarkdownHeading[];
 };
 
 const {
@@ -23,6 +27,7 @@ const {
   heroImage,
   readingTime,
   author,
+  headings,
 } = Astro.props;
 
 // Define local interface to bypass potential stale type generation issues
@@ -86,9 +91,6 @@ if (!displayReadingTime && Astro.slots.has('default')) {
         box-shadow: var(--box-shadow);
       }
       .prose {
-        width: 720px;
-        max-width: calc(100% - 2em);
-        margin: auto;
         padding: 1em;
         color: rgb(var(--gray-dark));
       }
@@ -135,49 +137,59 @@ if (!displayReadingTime && Astro.slots.has('default')) {
             )
           }
         </div>
-        <div class="prose">
-          <header class="title">
-            <div class="date">
-              <time datetime={pubDate.toISOString()}>
-                <FormattedDate date={pubDate} />
-              </time>
+        <div class="relative mx-auto max-w-6xl px-4 lg:flex lg:gap-12 lg:px-8">
+          <div class="prose mx-auto w-full max-w-[720px] lg:mx-0">
+            <header class="title">
+              <div class="date">
+                <time datetime={pubDate.toISOString()}>
+                  <FormattedDate date={pubDate} />
+                </time>
+                {
+                  displayReadingTime && (
+                    <span class="reading-time" title="Estimated reading time">
+                      {' '}
+                      · {displayReadingTime}
+                    </span>
+                  )
+                }
+                {
+                  updatedDate && (
+                    <div class="last-updated-on">
+                      Last updated on{' '}
+                      <time datetime={updatedDate.toISOString()}>
+                        <FormattedDate date={updatedDate} />
+                      </time>
+                    </div>
+                  )
+                }
+              </div>
+              <h1>{title}</h1>
               {
-                displayReadingTime && (
-                  <span class="reading-time" title="Estimated reading time">
-                    {' '}
-                    · {displayReadingTime}
-                  </span>
-                )
-              }
-              {
-                updatedDate && (
-                  <div class="last-updated-on">
-                    Last updated on{' '}
-                    <time datetime={updatedDate.toISOString()}>
-                      <FormattedDate date={updatedDate} />
-                    </time>
+                authorData && (
+                  <div class="author-info">
+                    <span class="byline">By {authorData.data.name}</span>
+                    {authorData.data.role && (
+                      <span class="role"> · {authorData.data.role}</span>
+                    )}
                   </div>
                 )
               }
-            </div>
-            <h1>{title}</h1>
-            {
-              authorData && (
-                <div class="author-info">
-                  <span class="byline">By {authorData.data.name}</span>
-                  {authorData.data.role && (
-                    <span class="role"> · {authorData.data.role}</span>
-                  )}
-                </div>
-              )
-            }
-            <hr />
-          </header>
-          <slot />
+              <hr />
+            </header>
+            <slot />
+          </div>
+          {
+            headings && headings.length > 0 && (
+              <aside class="hidden w-[250px] shrink-0 lg:block">
+                <TableOfContents headings={headings} />
+              </aside>
+            )
+          }
         </div>
       </article>
     </main>
     <Footer />
+    <CommandPalette client:idle />
     <WebVitals />
     <ErrorTracking />
   </body>
