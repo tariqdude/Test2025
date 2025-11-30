@@ -10,7 +10,7 @@
   }
 
   :root,
-  html.dark {
+  [data-theme='ops-center'] {
     --color-background: #09090b;
     --color-surface: #18181b;
     --color-surface-subtle: rgba(24, 24, 27, 0.6);
@@ -38,22 +38,51 @@
     --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
   }
 
-  html.light {
+  [data-theme='corporate'] {
     --color-background: #ffffff;
     --color-surface: #f4f4f5;
     --color-surface-subtle: rgba(244, 244, 245, 0.8);
-    --color-border: #e4e4e7;
-    --color-primary: #475569; /* Slate 600 */
+    --color-border: #e2e8f0;
+    --color-primary: #334155; /* Slate 700 */
     --color-primary-strong: #0f172a; /* Slate 900 */
     --color-success: #059669;
     --color-warning: #d97706;
     --color-danger: #dc2626;
-    --color-text-primary: #18181b;
-    --color-text-secondary: #52525b;
-    --color-text-muted: #71717a;
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
     --color-text-inverse: #ffffff;
     --shadow-soft: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
-    --shadow-strong: 0 4px 20px -4px rgba(0, 0, 0, 0.15);
+    --shadow-strong: 0 10px 30px -4px rgba(0, 0, 0, 0.15);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --blur-soft: blur(12px);
+    --font-display: 'Inter', system-ui, sans-serif;
+  }
+
+  [data-theme='terminal'] {
+    --color-background: #000000;
+    --color-surface: #0c0c0c;
+    --color-surface-subtle: rgba(12, 12, 12, 0.8);
+    --color-border: #333333;
+    --color-primary: #22c55e; /* Green 500 */
+    --color-primary-strong: #4ade80; /* Green 400 */
+    --color-success: #22c55e;
+    --color-warning: #eab308;
+    --color-danger: #ef4444;
+    --color-text-primary: #4ade80;
+    --color-text-secondary: #22c55e;
+    --color-text-muted: #15803d;
+    --color-text-inverse: #000000;
+    --shadow-soft: none;
+    --shadow-strong: 0 0 0 1px #22c55e;
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --blur-soft: none;
+    --font-sans: 'JetBrains Mono', monospace;
+    --font-display: 'JetBrains Mono', monospace;
   }
 
   html {

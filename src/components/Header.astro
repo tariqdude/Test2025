@@ -1,7 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import { withBasePath } from '../utils/helpers';
-import ThemeToggle from './ui/ThemeToggle.astro';
+import ThemeSelector from './ThemeSelector.astro';
 import ModernButton from './ui/ModernButton.astro';
 
 const homeHref = withBasePath('/');
@@ -73,7 +73,7 @@ const links = [
     </div>
 
     <div class="hidden md:flex items-center gap-4 pl-6">
-      <ThemeToggle variant="icon" />
+      <ThemeSelector />
       <div class="h-6 w-px bg-zinc-800"></div>
       <ModernButton
         variant="secondary"

@@ -1,166 +1,181 @@
 ---
-import { themes, type ThemeName } from '../styles/theme.ts';
-import type { GlobalTheme } from '../styles/theme.ts';
 
-interface Props {
-  currentTheme?: ThemeName;
-}
-
-const { currentTheme = 'dark' } = Astro.props;
-
-type ThemeVariables = Record<string, string>;
-
-const flattenTheme = (theme: GlobalTheme): ThemeVariables => ({
-  '--color-primary': theme.colors.primary,
-  '--color-secondary': theme.colors.secondary,
-  '--color-accent': theme.colors.accent,
-  '--color-background': theme.colors.background,
-  '--color-surface': theme.colors.surface,
-  '--color-text-primary': theme.colors.text.primary,
-  '--color-text-secondary': theme.colors.text.secondary,
-  '--color-text-muted': theme.colors.text.muted,
-  '--color-text-inverse': theme.colors.text.inverse,
-  '--color-border': theme.colors.border,
-  '--color-success': theme.colors.success,
-  '--color-warning': theme.colors.warning,
-  '--color-error': theme.colors.error,
-  '--color-info': theme.colors.info,
-  '--card-bg': theme.colors.surface,
-  '--border-color': theme.colors.border,
-  '--text-primary': theme.colors.text.primary,
-  '--text-muted': theme.colors.text.muted,
-  '--primary-color': theme.colors.primary,
-  '--accent-color': theme.colors.accent,
-  '--gradient-primary': theme.gradients.primary,
-  '--gradient-secondary': theme.gradients.secondary,
-  '--gradient-accent': theme.gradients.accent,
-  '--font-family-sans': theme.typography.fontFamily.sans,
-  '--font-family-mono': theme.typography.fontFamily.mono,
-  '--font-size-xs': theme.typography.fontSize.xs,
-  '--font-size-sm': theme.typography.fontSize.sm,
-  '--font-size-base': theme.typography.fontSize.base,
-  '--font-size-lg': theme.typography.fontSize.lg,
-  '--font-size-xl': theme.typography.fontSize.xl,
-  '--font-size-2xl': theme.typography.fontSize['2xl'],
-  '--font-size-3xl': theme.typography.fontSize['3xl'],
-  '--font-size-4xl': theme.typography.fontSize['4xl'],
-  '--line-height-tight': theme.typography.lineHeight.tight.toString(),
-  '--line-height-normal': theme.typography.lineHeight.normal.toString(),
-  '--line-height-relaxed': theme.typography.lineHeight.relaxed.toString(),
-  '--spacing-xs': theme.spacing.xs,
-  '--spacing-sm': theme.spacing.sm,
-  '--spacing-md': theme.spacing.md,
-  '--spacing-lg': theme.spacing.lg,
-  '--spacing-xl': theme.spacing.xl,
-  '--spacing-2xl': theme.spacing['2xl'],
-  '--spacing-3xl': theme.spacing['3xl'],
-  '--spacing-4xl': theme.spacing['4xl'],
-  '--radius-sm': theme.borderRadius.sm,
-  '--radius-md': theme.borderRadius.md,
-  '--radius-lg': theme.borderRadius.lg,
-  '--radius-xl': theme.borderRadius.xl,
-  '--radius-2xl': theme.borderRadius['2xl'],
-  '--radius-full': theme.borderRadius.full,
-  '--shadow-sm': theme.effects.shadow.sm,
-  '--shadow-md': theme.effects.shadow.md,
-  '--shadow-lg': theme.effects.shadow.lg,
-  '--shadow-xl': theme.effects.shadow.xl,
-  '--shadow-2xl': theme.effects.shadow['2xl'],
-  '--blur-sm': theme.effects.blur.sm,
-  '--blur-md': theme.effects.blur.md,
-  '--blur-lg': theme.effects.blur.lg,
-  '--blur-xl': theme.effects.blur.xl,
-  '--duration-fast': theme.animation.duration.fast,
-  '--duration-normal': theme.animation.duration.normal,
-  '--duration-slow': theme.animation.duration.slow,
-  '--easing-ease-in': theme.animation.easing.easeIn,
-  '--easing-ease-out': theme.animation.easing.easeOut,
-  '--easing-ease-in-out': theme.animation.easing.easeInOut,
-  '--easing-bounce': theme.animation.easing.bounce,
-});
-
-const themeVariables = Object.fromEntries(
-  (Object.entries(themes) as [ThemeName, GlobalTheme][]).map(
-    ([name, theme]) => [name, flattenTheme(theme)]
-  )
-) as Record<ThemeName, ThemeVariables>;
-
-const availableThemes = Object.keys(themes) as ThemeName[];
 ---
 
-<div class="relative inline-flex">
-  <label for="theme-select" class="sr-only">Choose theme</label>
-  <select
-    id="theme-select"
-    class="peer inline-flex appearance-none rounded-xl border border-white/15 bg-white/10 px-4 py-2 pr-10 text-sm font-medium text-slate-100 shadow-[0_10px_40px_rgba(15,23,42,0.35)] backdrop-blur transition focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
-    data-current={currentTheme}
+<div class="theme-selector relative">
+  <button
+    id="theme-toggle"
+    class="theme-btn btn-secondary"
+    aria-label="Select theme"
   >
-    {
-      availableThemes.map(themeName => (
-        <option value={themeName} selected={themeName === currentTheme}>
-          {themeName === 'dark' ? '🌙 Dark' : '☀️ Light'}
-        </option>
-      ))
-    }
-  </select>
-  <span
-    aria-hidden="true"
-    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 transition peer-focus:text-indigo-300"
-  >
-    ▾
-  </span>
+    <span class="icon ops-center hidden">⚡ Ops Center</span>
+    <span class="icon corporate hidden">🏢 Corporate</span>
+    <span class="icon terminal hidden">💻 Terminal</span>
+    <svg
+      class="chevron"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.5 4.5L6 8L9.5 4.5"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </button>
+
+  <div id="theme-menu" class="theme-menu hidden">
+    <button data-theme="ops-center" class="theme-option">
+      <span class="emoji">⚡</span>
+      <span class="label">Ops Center</span>
+    </button>
+    <button data-theme="corporate" class="theme-option">
+      <span class="emoji">🏢</span>
+      <span class="label">Corporate</span>
+    </button>
+    <button data-theme="terminal" class="theme-option">
+      <span class="emoji">💻</span>
+      <span class="label">Terminal</span>
+    </button>
+  </div>
 </div>
 
-<script is:inline define:vars={{ themeVariables }}>
-  const THEME_VARS = themeVariables;
+<style>
+  .theme-selector {
+    position: relative;
+    display: inline-block;
+  }
 
-  const ensureProvider = () => {
-    return document.querySelector('.theme-provider');
-  };
+  .theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
 
-  const applyTheme = themeName => {
-    const provider = ensureProvider();
-    const resolvedTheme = THEME_VARS[themeName] ? themeName : 'dark';
-    const vars = THEME_VARS[resolvedTheme];
+  .theme-btn:hover {
+    border-color: var(--color-primary);
+  }
 
-    if (provider instanceof HTMLElement) {
-      Object.entries(vars).forEach(([token, value]) => {
-        provider.style.setProperty(token, value);
-      });
-      provider.setAttribute('data-theme', resolvedTheme);
+  .theme-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 160px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-strong);
+    padding: 0.25rem;
+    z-index: 50;
+    transform-origin: top right;
+    animation: scaleIn 0.1s ease-out;
+  }
+
+  .theme-menu.hidden {
+    display: none;
+  }
+
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+  }
+
+  .theme-option:hover {
+    background: var(--color-surface-subtle);
+    color: var(--color-text-primary);
+  }
+
+  .theme-option.active {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+  }
+
+  .icon.hidden {
+    display: none;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
     }
-
-    document.documentElement.setAttribute('data-theme', resolvedTheme);
-    localStorage.setItem('preferred-theme', resolvedTheme);
-  };
-
-  const getPreferredTheme = () => {
-    const saved = localStorage.getItem('preferred-theme');
-    if (saved && THEME_VARS[saved]) {
-      return saved;
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
+  }
+</style>
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-  };
+<script>
+  import { theme, setTheme } from '../store/theme';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const selector = document.getElementById('theme-select');
-    const preferredTheme = getPreferredTheme();
+  const toggle = document.getElementById('theme-toggle');
+  const menu = document.getElementById('theme-menu');
+  const options = document.querySelectorAll('.theme-option');
+  const icons = document.querySelectorAll('.icon');
 
-    applyTheme(preferredTheme);
+  // Update UI when store changes
+  theme.subscribe(currentTheme => {
+    // Update toggle text
+    icons.forEach(icon => {
+      if (icon.classList.contains(currentTheme)) {
+        icon.classList.remove('hidden');
+      } else {
+        icon.classList.add('hidden');
+      }
+    });
 
-    if (selector instanceof HTMLSelectElement) {
-      selector.value = preferredTheme;
+    // Update active state in menu
+    options.forEach(btn => {
+      if (btn.getAttribute('data-theme') === currentTheme) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  });
 
-      selector.addEventListener('change', event => {
-        const value =
-          event.target instanceof HTMLSelectElement
-            ? event.target.value
-            : preferredTheme;
-        applyTheme(value);
-      });
-    }
+  // Toggle menu
+  toggle?.addEventListener('click', e => {
+    e.stopPropagation();
+    menu?.classList.toggle('hidden');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', () => {
+    menu?.classList.add('hidden');
+  });
+
+  // Set theme on click
+  options.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newTheme = btn.getAttribute('data-theme');
+      if (newTheme) {
+        setTheme(newTheme as any);
+      }
+    });
   });
 </script>

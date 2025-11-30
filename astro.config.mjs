@@ -4,6 +4,7 @@ import 'dotenv/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
+import preact from '@astrojs/preact';
 import { defineConfig } from 'astro/config';
 
 import { createDeploymentConfig } from './config/deployment.js';
@@ -22,5 +23,6 @@ export default defineConfig({
       applyBaseStyles: false,
       configFile: './tailwind.config.ts',
     }),
+    preact(),
   ],
 });

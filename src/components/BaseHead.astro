@@ -21,17 +21,46 @@ interface Props {
   title: string;
   description: string;
   image?: ImageMetadata;
+  type?: 'website' | 'article';
+  author?: string;
+  publishDate?: Date;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const {
+  title,
+  description,
+  image = FallbackImage,
+  type = 'website',
+  author,
+  publishDate,
+} = Astro.props;
+
+import { generateMetaTags } from '../utils/seo';
+import { ClientRouter } from 'astro:transitions';
+
+const metaTags = generateMetaTags({
+  title,
+  description,
+  image: new URL(image.src, Astro.url).toString(),
+  url: canonicalURL,
+  type,
+  author,
+  publishDate,
+});
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#09090b" />
+<ClientRouter />
+<script>
+  import '../scripts/animations';
+  import '../scripts/magnetic-buttons';
+  import '../scripts/spotlight';
+</script>
 <link
   rel="icon"
   type="image/svg+xml"
@@ -62,13 +91,26 @@ const { title, description, image = FallbackImage } = Astro.props;
     try {
       const root = document.documentElement;
       const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      ).matches;
-      const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+      // Default to 'ops-center' if no preference, or map legacy 'dark'/'light'
+      let theme = savedTheme;
+      if (!theme) {
+        theme = 'ops-center'; // Default
+      } else if (theme === 'dark') {
+        theme = 'ops-center';
+      } else if (theme === 'light') {
+        theme = 'corporate';
+      }
 
       root.dataset.theme = theme;
-      root.classList.toggle('dark', theme === 'dark');
+
+      // Handle Tailwind dark mode class
+      if (theme === 'corporate') {
+        root.classList.remove('dark');
+      } else {
+        root.classList.add('dark');
+      }
+
       window.__theme = theme;
     } catch (error) {
       console.error('Theme initialization failed:', error);
@@ -79,21 +121,14 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
+<!-- Generated Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+{
+  metaTags.map(tag => {
+    if ('name' in tag) {
+      return <meta name={tag.name} content={tag.content} />;
+    } else {
+      return <meta property={tag.property} content={tag.content} />;
+    }
+  })
+}

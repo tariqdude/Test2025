@@ -14,6 +14,7 @@ export interface Props {
   href?: string;
   hover?: boolean;
   glow?: boolean;
+  spotlight?: boolean;
   animated?: boolean;
   direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
@@ -28,6 +29,7 @@ const {
   href,
   hover = true,
   glow = false,
+  spotlight = false,
   animated = false,
   direction = 'up',
   delay = 0,
@@ -70,17 +72,28 @@ const hoverEffects = hover
 const glowEffects = glow
   ? 'before:absolute before:inset-0 before:rounded-2xl before:p-[2px] before:bg-gradient-to-r before:from-primary-500 before:via-secondary-500 before:to-accent-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500 before:animate-gradient before:bg-[length:200%_200%]'
   : '';
+const spotlightEffects = spotlight ? 'card-spotlight' : '';
 
 const animationClasses = animated ? `animate-slide-${direction}` : '';
 const delayStyle = delay > 0 ? `animation-delay: ${delay}s` : '';
 const combinedStyle = [delayStyle, style].filter(Boolean).join('; ');
 
-const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${hoverEffects} ${glowEffects} ${animationClasses} ${className}`;
+const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${hoverEffects} ${glowEffects} ${spotlightEffects} ${animationClasses} ${className}`;
 
 const Tag = href ? 'a' : 'div';
 ---
 
 <Tag href={href} class={classes} style={combinedStyle} {...rest}>
+  {/* Spotlight effect */}
+  {
+    spotlight && (
+      <div
+        class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"
+        style="background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent 40%);"
+      />
+    )
+  }
+
   {/* Glow effect background */}
   {
     glow && (

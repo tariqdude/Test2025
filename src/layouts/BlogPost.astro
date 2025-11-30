@@ -15,10 +15,31 @@ type Props = CollectionEntry<'blog'>['data'] & {
   readingTime?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, readingTime, author } =
-  Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  readingTime,
+  author,
+} = Astro.props;
 
-const authorData = author ? await getEntry(author) : null;
+// Define local interface to bypass potential stale type generation issues
+interface AuthorEntry {
+  data: {
+    name: string;
+    role: string;
+    avatar?: string;
+    bio: string;
+    twitter?: string;
+    github?: string;
+  };
+}
+
+const authorData = (
+  author ? await getEntry(author) : null
+) as AuthorEntry | null;
 
 // Calculate reading time from slot content if not provided
 let displayReadingTime = readingTime;
@@ -31,7 +52,14 @@ if (!displayReadingTime && Astro.slots.has('default')) {
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={heroImage}
+      type="article"
+      author={authorData?.data.name}
+      publishDate={pubDate}
+    />
     <StructuredData
       type="article"
       data={{
