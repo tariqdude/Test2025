@@ -9,7 +9,8 @@ export interface Props {
     | 'success'
     | 'warning'
     | 'gradient'
-    | 'neon';
+    | 'neon'
+    | 'light';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   href?: string;
   target?: '_blank' | '_self' | '_parent' | '_top';
@@ -22,6 +23,7 @@ export interface Props {
   rightIcon?: string;
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'full';
   shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  [key: string]: any;
 }
 
 const {
@@ -62,6 +64,8 @@ const variants = {
   gradient:
     'glass text-gradient bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 focus:ring-purple-500 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 animate-gradient bg-[length:200%_200%]',
   neon: 'glass bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white hover:from-cyan-600 hover:via-blue-600 hover:to-purple-600 focus:ring-cyan-500 shadow-xl shadow-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/60 border border-cyan-400/50 glow-strong',
+  light:
+    'bg-zinc-100 text-zinc-900 hover:bg-white hover:text-black focus:ring-zinc-200 shadow-lg shadow-zinc-100/10 hover:shadow-xl hover:shadow-zinc-100/20 border border-zinc-100',
 };
 
 const sizes = {

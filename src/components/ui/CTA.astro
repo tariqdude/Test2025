@@ -1,5 +1,6 @@
 ---
 import { withBasePath } from '../../utils/helpers';
+import ModernButton from './ModernButton.astro';
 
 export interface Props {
   heading?: string;
@@ -77,12 +78,13 @@ const ctaId = `cta-${Math.random().toString(36).slice(2, 9)}`;
             autocomplete="email"
             class="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-200"
           />
-          <button
+          <ModernButton
             type="submit"
-            class="px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600"
+            variant="light"
+            className="text-primary-600 hover:bg-gray-100"
           >
             Subscribe
-          </button>
+          </ModernButton>
         </form>
       )
     }
@@ -94,27 +96,30 @@ const ctaId = `cta-${Math.random().toString(36).slice(2, 9)}`;
           role="group"
           aria-label="Contact options"
         >
-          <a
+          <ModernButton
             href={withBasePath('contact/')}
-            class="inline-flex items-center justify-center px-8 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600"
+            variant="light"
+            className="text-primary-600 hover:bg-gray-100"
           >
             Contact Sales
-          </a>
-          <a
+          </ModernButton>
+          <ModernButton
             href={withBasePath('demo/')}
-            class="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-primary-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+            variant="outline"
+            className="border-white text-white hover:bg-white hover:text-primary-600"
           >
             Book a Demo
-          </a>
+          </ModernButton>
         </div>
       )
     }
 
     {
       variant === 'demo' && (
-        <a
+        <ModernButton
           href={withBasePath('demo/')}
-          class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 text-lg hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 group"
+          variant="light"
+          className="text-primary-600 hover:bg-gray-100 text-lg group"
         >
           Start Free Trial
           <svg
@@ -131,7 +136,7 @@ const ctaId = `cta-${Math.random().toString(36).slice(2, 9)}`;
               d="M13 7l5 5m0 0l-5 5m5-5H6"
             />
           </svg>
-        </a>
+        </ModernButton>
       )
     }
 
@@ -142,30 +147,33 @@ const ctaId = `cta-${Math.random().toString(36).slice(2, 9)}`;
           role="group"
           aria-label="Demo options"
         >
-          <a
+          <ModernButton
             href={withBasePath('demo/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg hover:scale-105 transition-all duration-200 text-lg shadow-lg shadow-indigo-500/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
+            variant="gradient"
+            className="from-indigo-600 to-purple-600 shadow-indigo-500/50 text-lg hover:scale-105"
           >
-            <span class="text-xl" aria-hidden="true">
+            <span class="text-xl mr-2" aria-hidden="true">
               🚀
             </span>
             <span>Interactive Demo Center</span>
-          </a>
-          <a
+          </ModernButton>
+          <ModernButton
             href={withBasePath('visual-showcase/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-all duration-200 text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+            variant="outline"
+            className="border-white text-white hover:bg-white hover:text-primary-600 text-lg"
           >
-            <span class="text-xl" aria-hidden="true">
+            <span class="text-xl mr-2" aria-hidden="true">
               🎨
             </span>
             <span>Visual Showcase</span>
-          </a>
-          <a
+          </ModernButton>
+          <ModernButton
             href={withBasePath('contact/')}
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-lg hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
+            variant="ghost"
+            className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20"
           >
             <span>Get Personalized Demo</span>
-          </a>
+          </ModernButton>
         </div>
       )
     }

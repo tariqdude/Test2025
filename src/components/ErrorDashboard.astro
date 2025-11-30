@@ -3,6 +3,7 @@
 // Real-time visualization of error analysis and project health
 
 import type { CodeIssue, ProjectHealth } from '../types/analysis';
+import ModernButton from './ui/ModernButton.astro';
 
 interface Props {
   className?: string;
@@ -317,30 +318,30 @@ const maxCategoryCount =
   <div class="actions-panel">
     <h2>Quick Actions</h2>
     <div class="action-buttons">
-      <button
-        class="action-btn primary"
-        onclick="alert('🔍 Running comprehensive analysis...\nThis would trigger the error reviewer in a real implementation.');"
+      <ModernButton
+        variant="gradient"
+        onClick="alert('🔍 Running comprehensive analysis...\\nThis would trigger the error reviewer in a real implementation.');"
       >
         🔍 Run Analysis
-      </button>
-      <button
-        class="action-btn secondary"
-        onclick="alert('🔧 Auto-fixing issues...\nThis would apply automatic fixes to fixable issues.');"
+      </ModernButton>
+      <ModernButton
+        variant="light"
+        onClick="alert('🔧 Auto-fixing issues...\\nThis would apply automatic fixes to fixable issues.');"
       >
         🔧 Auto-fix Issues
-      </button>
-      <button
-        class="action-btn secondary"
-        onclick="alert('📊 Exporting report...\nThis would generate and download a detailed report.');"
+      </ModernButton>
+      <ModernButton
+        variant="light"
+        onClick="alert('📊 Exporting report...\\nThis would generate and download a detailed report.');"
       >
         📊 Export Report
-      </button>
-      <button
-        class="action-btn secondary"
-        onclick="alert('🚀 Checking deployment readiness...\nThis would run pre-deployment validation.');"
+      </ModernButton>
+      <ModernButton
+        variant="light"
+        onClick="alert('🚀 Checking deployment readiness...\\nThis would run pre-deployment validation.');"
       >
         🚀 Deployment Check
-      </button>
+      </ModernButton>
     </div>
   </div>
 </div>

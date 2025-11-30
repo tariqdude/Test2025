@@ -26,6 +26,21 @@
 - **Updated `src/utils/string.ts`**:
   - Added `escapeHtml` utility function for safe HTML string manipulation.
 
+#### 3. Utility Refactoring (Technical Debt)
+
+- **Modularized Utilities**:
+  - Split monolithic `helpers.ts` and `index.ts` into focused modules: `math.ts`, `storage.ts`, `color.ts`, `api.ts`, `date.ts`, `array.ts`, `string.ts`, `url.ts`, `validation.ts`, `function.ts`.
+  - Created `src/utils/math.ts` for animation helpers (`easeInOut`, `lerp`, `clamp`).
+  - Created `src/utils/storage.ts` for local storage operations with error handling.
+  - Created `src/utils/color.ts` for color conversion (`hexToRgb`, `rgbToHex`).
+  - Created `src/utils/api.ts` for `fetchWithTimeout` and API types.
+- **Updated `src/utils/index.ts`**:
+  - Refactored to re-export from the new modules instead of containing inline implementations.
+- **Updated `src/utils/helpers.ts`**:
+  - Converted to a deprecated barrel file that re-exports from the new modules, ensuring backward compatibility while resolving code duplication.
+- **Updated `src/utils/url.ts`**:
+  - Added `withBasePath` and `resolveHref` to centralize URL logic.
+
 ## November 23, 2025
 
 ### Summary of Changes

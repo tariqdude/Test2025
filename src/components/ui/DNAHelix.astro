@@ -3,6 +3,7 @@
  * DNA Helix - 3D rotating double helix structure
  * Enhanced with gene sequencing, color coding, and interactive controls
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="dna-wrapper">
@@ -12,10 +13,18 @@
   </p>
 
   <div class="dna-controls">
-    <button class="dna-btn active" data-speed="normal">Normal Speed</button>
-    <button class="dna-btn" data-speed="fast">Fast Replication</button>
-    <button class="dna-btn" data-speed="slow">Study Mode</button>
-    <button class="dna-btn" data-color="rainbow">Rainbow Mode</button>
+    <ModernButton variant="neon" className="dna-btn active" data-speed="normal"
+      >Normal Speed</ModernButton
+    >
+    <ModernButton variant="neon" className="dna-btn" data-speed="fast"
+      >Fast Replication</ModernButton
+    >
+    <ModernButton variant="neon" className="dna-btn" data-speed="slow"
+      >Study Mode</ModernButton
+    >
+    <ModernButton variant="neon" className="dna-btn" data-color="rainbow"
+      >Rainbow Mode</ModernButton
+    >
   </div>
 
   <div class="dna-stats">
@@ -157,29 +166,12 @@
     justify-content: center;
   }
 
-  .dna-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(0, 255, 255, 0.3);
-    border-radius: 8px;
-    color: #00ffff;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .dna-btn:hover {
-    background: rgba(0, 255, 255, 0.1);
-    border-color: rgba(0, 255, 255, 0.6);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
+  /* .dna-btn styles replaced by ModernButton variant="neon" */
 
   .dna-btn.active {
-    background: rgba(0, 255, 255, 0.2);
-    border-color: #00ffff;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+    background: rgba(0, 255, 255, 0.2) !important;
+    border-color: #00ffff !important;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5) !important;
   }
 
   .dna-stats {

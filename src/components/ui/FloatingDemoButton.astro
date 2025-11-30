@@ -5,6 +5,7 @@
  */
 
 import { withBasePath } from '../../utils/helpers';
+import ModernButton from './ModernButton.astro';
 
 export interface Props {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
@@ -33,39 +34,43 @@ const positionClasses = {
   {
     variant === 'expanded' ? (
       <div class="flex flex-col gap-3">
-        <a
+        <ModernButton
           href={withBasePath('demo/')}
-          class="group flex items-center gap-3 px-6 py-4 bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-sm shadow-lg hover:border-accent-500 transition-all"
+          variant="outline"
+          className="group flex items-center gap-3 px-6 py-4 bg-zinc-900 border-zinc-800 text-zinc-100 shadow-lg hover:border-accent-500 hover:bg-zinc-900"
         >
           <span class="text-2xl">🚀</span>
-          <div class="flex flex-col">
+          <div class="flex flex-col items-start">
             <span class="font-mono font-bold text-sm text-accent-500">
               TRY DEMO
             </span>
             <span class="font-mono text-xs opacity-70">INTERACTIVE_MODE</span>
           </div>
-        </a>
-        <a
+        </ModernButton>
+        <ModernButton
           href={withBasePath('visual-showcase/')}
-          class="flex items-center gap-3 px-6 py-3 bg-zinc-950/90 backdrop-blur-sm border border-zinc-800 text-zinc-400 rounded-sm hover:text-accent-500 hover:border-accent-500/50 transition-all"
+          variant="ghost"
+          className="flex items-center gap-3 px-6 py-3 bg-zinc-950/90 backdrop-blur-sm border border-zinc-800 text-zinc-400 hover:text-accent-500 hover:border-accent-500/50 hover:bg-zinc-900"
         >
           <span class="text-xl">🎨</span>
           <span class="font-mono font-semibold text-sm">VISUAL_TOUR</span>
-        </a>
+        </ModernButton>
       </div>
     ) : variant === 'minimal' ? (
-      <a
+      <ModernButton
         href={withBasePath('demo/')}
-        class="flex items-center justify-center w-14 h-14 bg-zinc-900 border border-zinc-800 text-accent-500 rounded-sm shadow-lg hover:border-accent-500 hover:bg-zinc-800 transition-all"
+        variant="outline"
+        className="w-14 h-14 p-0 flex items-center justify-center bg-zinc-900 border-zinc-800 text-accent-500 shadow-lg hover:border-accent-500 hover:bg-zinc-800"
         title="Try Interactive Demo"
         aria-label="Try Interactive Demo"
       >
         <span class="text-2xl">🚀</span>
-      </a>
+      </ModernButton>
     ) : (
-      <a
+      <ModernButton
         href={withBasePath('demo/')}
-        class="group flex items-center gap-3 px-5 py-3 bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-sm shadow-lg hover:border-accent-500 transition-all font-mono font-semibold"
+        variant="outline"
+        className="group flex items-center gap-3 px-5 py-3 bg-zinc-900 border-zinc-800 text-zinc-100 shadow-lg hover:border-accent-500 hover:bg-zinc-900 font-mono font-semibold"
       >
         <span class="text-xl text-accent-500">🚀</span>
         <span>TRY_DEMO</span>
@@ -82,7 +87,7 @@ const positionClasses = {
             d="M13 7l5 5m0 0l-5 5m5-5H6"
           />
         </svg>
-      </a>
+      </ModernButton>
     )
   }
 </div>

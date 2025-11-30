@@ -2,6 +2,7 @@
 import { SITE_TITLE } from '../consts';
 import { withBasePath } from '../utils/helpers';
 import ThemeToggle from './ui/ThemeToggle.astro';
+import ModernButton from './ui/ModernButton.astro';
 
 const homeHref = withBasePath('/');
 
@@ -74,27 +75,33 @@ const links = [
     <div class="hidden md:flex items-center gap-4 pl-6">
       <ThemeToggle variant="icon" />
       <div class="h-6 w-px bg-zinc-800"></div>
-      <a
-        class="btn btn-secondary text-xs uppercase tracking-wider font-mono rounded-sm"
+      <ModernButton
+        variant="secondary"
+        className="text-xs uppercase tracking-wider font-mono"
+        rounded="sm"
         href={withBasePath('showcase/')}
       >
         Showcase
-      </a>
-      <a
-        class="btn btn-primary text-xs uppercase tracking-wider font-mono rounded-sm"
+      </ModernButton>
+      <ModernButton
+        variant="primary"
+        className="text-xs uppercase tracking-wider font-mono"
+        rounded="sm"
         href={withBasePath('contact/')}
       >
         Briefing
-      </a>
+      </ModernButton>
     </div>
 
     <div class="md:hidden">
-      <button
-        class="inline-flex h-10 w-10 items-center justify-center border border-zinc-800 text-zinc-400 transition hover:border-zinc-600 hover:text-white bg-zinc-900"
+      <ModernButton
+        variant="outline"
+        className="h-10 w-10 p-0 flex items-center justify-center border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900"
         id="mobile-menu-button"
         type="button"
         aria-controls="mobile-menu"
         aria-expanded="false"
+        rounded="none"
       >
         <span class="sr-only">Toggle navigation</span>
         <svg
@@ -109,7 +116,7 @@ const links = [
             stroke-linejoin="miter"
             stroke-width="1.5"></path>
         </svg>
-      </button>
+      </ModernButton>
     </div>
   </nav>
 

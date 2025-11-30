@@ -2,6 +2,49 @@
  * URL and Query String Utilities
  */
 
+import { BASE_PATH } from '../consts';
+
+const EXTERNAL_LINK_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+const BASE_SKIP_PREFIXES = ['mailto:', 'tel:', '#', '?'] as const;
+
+const trimSlashes = (value: string): string => value.replace(/^\/+|\/+$/g, '');
+
+/**
+ * Prepend base path to a URL path
+ */
+export function withBasePath(path: string): string {
+  const trimmedBase = BASE_PATH === '/' ? '' : trimSlashes(BASE_PATH);
+  const basePrefix = trimmedBase ? `/${trimmedBase}` : '';
+
+  if (!path) {
+    return basePrefix ? `${basePrefix}/` : '/';
+  }
+
+  const trimmedPath = path.trim();
+
+  if (
+    EXTERNAL_LINK_PATTERN.test(trimmedPath) ||
+    BASE_SKIP_PREFIXES.some(prefix => trimmedPath.startsWith(prefix))
+  ) {
+    return trimmedPath;
+  }
+
+  const cleanedPath = trimmedPath.replace(/^\/+/, '');
+
+  if (!cleanedPath) {
+    return basePrefix ? `${basePrefix}/` : '/';
+  }
+
+  return `${basePrefix}/${cleanedPath}`;
+}
+
+/**
+ * Resolve href with base path
+ */
+export function resolveHref(href: string): string {
+  return withBasePath(href);
+}
+
 /**
  * Build URL with query parameters
  * Supports two signatures:

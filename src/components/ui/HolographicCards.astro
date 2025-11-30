@@ -2,6 +2,7 @@
 /**
  * Holographic Cards - Cards with prismatic rainbow effects
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="holographic-section">
@@ -15,34 +16,39 @@
     role="group"
     aria-label="Holographic effect controls"
   >
-    <button
-      class="holo-btn active"
+    <ModernButton
+      variant="neon"
+      className="holo-btn active"
       data-mode="default"
       aria-pressed="true"
-      aria-label="Default hologram effect">Default Hologram</button
+      aria-label="Default hologram effect">Default Hologram</ModernButton
     >
-    <button
-      class="holo-btn"
+    <ModernButton
+      variant="neon"
+      className="holo-btn"
       data-mode="rainbow"
       aria-pressed="false"
-      aria-label="Rainbow cycle effect">Rainbow Cycle</button
+      aria-label="Rainbow cycle effect">Rainbow Cycle</ModernButton
     >
-    <button
-      class="holo-btn"
+    <ModernButton
+      variant="neon"
+      className="holo-btn"
       data-mode="chrome"
       aria-pressed="false"
-      aria-label="Chrome shimmer effect">Chrome Shimmer</button
+      aria-label="Chrome shimmer effect">Chrome Shimmer</ModernButton
     >
-    <button
-      class="holo-btn"
+    <ModernButton
+      variant="neon"
+      className="holo-btn"
       data-mode="neon"
       aria-pressed="false"
-      aria-label="Neon pulse effect">Neon Pulse</button
+      aria-label="Neon pulse effect">Neon Pulse</ModernButton
     >
-    <button
-      class="holo-btn"
+    <ModernButton
+      variant="neon"
+      className="holo-btn"
       data-action="shuffle"
-      aria-label="Shuffle cards randomly">🔀 Shuffle Cards</button
+      aria-label="Shuffle cards randomly">🔀 Shuffle Cards</ModernButton
     >
   </div>
 
@@ -171,29 +177,12 @@
     max-width: 900px;
   }
 
-  .holo-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(168, 85, 247, 0.3);
-    border-radius: 8px;
-    color: #a78bfa;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .holo-btn:hover {
-    background: rgba(168, 85, 247, 0.1);
-    border-color: rgba(168, 85, 247, 0.6);
-    box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
-    transform: translateY(-2px);
-  }
+  /* .holo-btn styles replaced by ModernButton variant="neon" */
 
   .holo-btn.active {
-    background: rgba(168, 85, 247, 0.2);
-    border-color: #a78bfa;
-    box-shadow: 0 0 35px rgba(168, 85, 247, 0.6);
+    background: rgba(168, 85, 247, 0.2) !important;
+    border-color: #a78bfa !important;
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.6) !important;
   }
 
   .holo-grid {

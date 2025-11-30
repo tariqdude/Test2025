@@ -2,10 +2,8 @@
 /**
  * Floating Islands - 3D isometric floating platforms with depth
  */
+import ModernButton from './ModernButton.astro';
 ---
-
---- /** * Floating Islands - Isometric 3D islands with interactive camera and
-selection */ ---
 
 <div class="islands-wrapper">
   <h2 class="islands-title">Floating Islands</h2>
@@ -14,28 +12,32 @@ selection */ ---
   </p>
 
   <div class="islands-controls" role="group" aria-label="Camera view controls">
-    <button
-      class="island-btn active"
+    <ModernButton
+      variant="neon"
+      className="island-btn active"
       data-view="isometric"
       aria-pressed="true"
-      aria-label="Isometric camera view">Isometric View</button
+      aria-label="Isometric camera view">Isometric View</ModernButton
     >
-    <button
-      class="island-btn"
+    <ModernButton
+      variant="neon"
+      className="island-btn"
       data-view="top"
       aria-pressed="false"
-      aria-label="Top-down camera view">Top View</button
+      aria-label="Top-down camera view">Top View</ModernButton
     >
-    <button
-      class="island-btn"
+    <ModernButton
+      variant="neon"
+      className="island-btn"
       data-view="side"
       aria-pressed="false"
-      aria-label="Side camera view">Side View</button
+      aria-label="Side camera view">Side View</ModernButton
     >
-    <button
-      class="island-btn"
+    <ModernButton
+      variant="neon"
+      className="island-btn"
       data-action="reset"
-      aria-label="Reset camera to default position">Reset Camera</button
+      aria-label="Reset camera to default position">Reset Camera</ModernButton
     >
   </div>
 
@@ -214,29 +216,12 @@ selection */ ---
     max-width: 700px;
   }
 
-  .island-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(6, 182, 212, 0.3);
-    border-radius: 8px;
-    color: #06b6d4;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .island-btn:hover {
-    background: rgba(6, 182, 212, 0.1);
-    border-color: rgba(6, 182, 212, 0.6);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
-    transform: translateY(-2px);
-  }
+  /* .island-btn styles replaced by ModernButton variant="neon" */
 
   .island-btn.active {
-    background: rgba(6, 182, 212, 0.2);
-    border-color: #06b6d4;
-    box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+    background: rgba(6, 182, 212, 0.2) !important;
+    border-color: #06b6d4 !important;
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.5) !important;
   }
 
   .islands-info {

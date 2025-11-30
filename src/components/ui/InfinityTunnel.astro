@@ -3,6 +3,7 @@
  * Infinity Tunnel - 3D recursive tunnel with perspective depth
  * Enhanced with mouse interaction and dynamic speed control
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="tunnel-wrapper">
@@ -12,10 +13,20 @@
   </p>
 
   <div class="tunnel-controls">
-    <button class="tunnel-btn" data-speed="slow">Slow</button>
-    <button class="tunnel-btn active" data-speed="normal">Normal</button>
-    <button class="tunnel-btn" data-speed="fast">Fast</button>
-    <button class="tunnel-btn" data-speed="reverse">Reverse</button>
+    <ModernButton variant="neon" className="tunnel-btn" data-speed="slow"
+      >Slow</ModernButton
+    >
+    <ModernButton
+      variant="neon"
+      className="tunnel-btn active"
+      data-speed="normal">Normal</ModernButton
+    >
+    <ModernButton variant="neon" className="tunnel-btn" data-speed="fast"
+      >Fast</ModernButton
+    >
+    <ModernButton variant="neon" className="tunnel-btn" data-speed="reverse"
+      >Reverse</ModernButton
+    >
   </div>
 
   <div class="tunnel-container" data-tunnel-interactive>
@@ -95,32 +106,13 @@
     flex-wrap: wrap;
   }
 
-  .tunnel-btn {
-    px: 1.5rem;
-    padding: 0.75rem 1.5rem;
-    background: rgba(59, 130, 246, 0.1);
-    border: 2px solid rgba(59, 130, 246, 0.3);
-    border-radius: 9999px;
-    color: rgba(203, 213, 225, 0.9);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .tunnel-btn:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: rgba(59, 130, 246, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-  }
+  /* .tunnel-btn styles replaced by ModernButton variant="neon" */
 
   .tunnel-btn.active {
-    background: rgba(59, 130, 246, 0.3);
-    border-color: rgba(59, 130, 246, 0.8);
-    color: #fff;
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+    background: rgba(59, 130, 246, 0.3) !important;
+    border-color: rgba(59, 130, 246, 0.8) !important;
+    color: #fff !important;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6) !important;
   }
 
   .tunnel-container {
@@ -323,11 +315,6 @@
 
     .tunnel-controls {
       gap: 0.5rem;
-    }
-
-    .tunnel-btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
     }
   }
 </style>

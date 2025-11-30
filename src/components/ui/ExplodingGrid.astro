@@ -2,6 +2,7 @@
 /**
  * Exploding Grid - 3D grid that explodes and reforms
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="explode-wrapper">
@@ -11,12 +12,22 @@
   </p>
 
   <div class="explode-controls">
-    <button class="explode-btn active" data-pattern="wave">Wave Pattern</button>
-    <button class="explode-btn" data-pattern="radial">Radial Burst</button>
-    <button class="explode-btn" data-pattern="spiral">Spiral Explosion</button>
-    <button class="explode-btn" data-pattern="chaos">Chaos Mode</button>
-    <button class="explode-btn" data-action="trigger"
-      >🎆 Trigger Explosion</button
+    <ModernButton
+      variant="neon"
+      className="explode-btn active"
+      data-pattern="wave">Wave Pattern</ModernButton
+    >
+    <ModernButton variant="neon" className="explode-btn" data-pattern="radial"
+      >Radial Burst</ModernButton
+    >
+    <ModernButton variant="neon" className="explode-btn" data-pattern="spiral"
+      >Spiral Explosion</ModernButton
+    >
+    <ModernButton variant="neon" className="explode-btn" data-pattern="chaos"
+      >Chaos Mode</ModernButton
+    >
+    <ModernButton variant="neon" className="explode-btn" data-action="trigger"
+      >🎆 Trigger Explosion</ModernButton
     >
   </div>
 
@@ -108,29 +119,12 @@
     max-width: 900px;
   }
 
-  .explode-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(236, 72, 153, 0.3);
-    border-radius: 8px;
-    color: #ec4899;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .explode-btn:hover {
-    background: rgba(236, 72, 153, 0.1);
-    border-color: rgba(236, 72, 153, 0.6);
-    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
-    transform: translateY(-2px);
-  }
+  /* .explode-btn styles replaced by ModernButton variant="neon" */
 
   .explode-btn.active {
-    background: rgba(236, 72, 153, 0.2);
-    border-color: #ec4899;
-    box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+    background: rgba(236, 72, 153, 0.2) !important;
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.5) !important;
   }
 
   .explode-stats {

@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
 import { withBasePath } from '../utils/helpers';
 
 const demos = [
@@ -155,15 +156,16 @@ const quickActions = [
         <!-- Quick Actions Bar -->
         <div class="flex flex-wrap gap-3 justify-center mb-8">
           {quickActions.map((action) => (
-            <a
+            <ModernButton
               href={action.href}
-              class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-accent-500 text-sm text-zinc-300 hover:text-accent-500 transition-all font-mono uppercase tracking-wider"
+              variant="outline"
+              className="!bg-zinc-900 hover:!bg-zinc-800 !border-zinc-800 hover:!border-accent-500 !text-zinc-300 hover:!text-accent-500 font-mono uppercase tracking-wider"
               target={action.href.startsWith('http') ? '_blank' : undefined}
               rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             >
               <span>{action.icon}</span>
               <span>{action.label}</span>
-            </a>
+            </ModernButton>
           ))}
         </div>
       </div>
@@ -228,12 +230,13 @@ const quickActions = [
                 </div>
 
                 <!-- CTA -->
-                <a
+                <ModernButton
                   href={demo.link}
-                  class="block w-full py-3 px-6 text-center font-bold text-sm uppercase tracking-wider border border-zinc-700 text-zinc-100 hover:bg-accent-500 hover:border-accent-500 hover:text-white transition-all font-mono"
+                  variant="outline"
+                  className="w-full !border-zinc-700 !text-zinc-100 hover:!bg-accent-500 hover:!border-accent-500 hover:!text-white font-mono uppercase tracking-wider"
                 >
                   Launch_Demo {'>'}
-                </a>
+                </ModernButton>
               </div>
             </div>
           </RevealOnScroll>
@@ -274,15 +277,16 @@ const quickActions = [
                   {option.title}
                 </h3>
                 <p class="text-zinc-400 mb-4 font-mono text-sm">{option.description}</p>
-                <button
-                  class="inline-flex items-center gap-2 text-accent-500 font-mono font-bold text-sm uppercase tracking-wider hover:gap-3 transition-all"
+                <ModernButton
+                  variant="ghost"
+                  className="inline-flex items-center gap-2 text-accent-500 font-mono font-bold text-sm uppercase tracking-wider hover:gap-3 transition-all hover:bg-transparent p-0"
                   data-action={option.action}
                 >
                   Get_Started
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </button>
+                </ModernButton>
               </div>
             </div>
           </div>
@@ -327,12 +331,14 @@ const quickActions = [
           </div>
 
           <div class="text-center">
-            <button
+            <ModernButton
               id="build-custom-demo"
-              class="px-8 py-4 bg-zinc-100 text-zinc-900 font-bold text-lg hover:bg-accent-500 hover:text-white transition-colors font-mono uppercase tracking-wider"
+              variant="light"
+              size="lg"
+              className="font-mono uppercase tracking-wider hover:!bg-accent-500 hover:!text-white"
             >
               Generate_Custom_Demo
-            </button>
+            </ModernButton>
           </div>
         </div>
       </div>
@@ -350,26 +356,32 @@ const quickActions = [
           // Our team is here to guide you through any demo or answer your questions
         </p>
         <div class="flex flex-wrap gap-4 justify-center">
-          <a
+          <ModernButton
             href={withBasePath('contact/')}
-            class="px-8 py-4 bg-zinc-100 hover:bg-accent-500 hover:text-white text-zinc-900 font-bold transition-colors font-mono uppercase tracking-wider"
+            variant="light"
+            size="lg"
+            className="font-mono uppercase tracking-wider hover:!bg-accent-500 hover:!text-white"
           >
             Contact_Support
-          </a>
-          <a
+          </ModernButton>
+          <ModernButton
             href={withBasePath('blog/')}
-            class="px-8 py-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-accent-500 text-zinc-300 hover:text-accent-500 font-bold transition-all font-mono uppercase tracking-wider"
+            variant="outline"
+            size="lg"
+            className="!bg-zinc-900 hover:!bg-zinc-800 !border-zinc-800 hover:!border-accent-500 !text-zinc-300 hover:!text-accent-500 font-mono uppercase tracking-wider"
           >
             Read_Documentation
-          </a>
-          <a
+          </ModernButton>
+          <ModernButton
             href="https://github.com/tariqdude/Github-Pages-Project-v1"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-8 py-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-accent-500 text-zinc-300 hover:text-accent-500 font-bold transition-all font-mono uppercase tracking-wider"
+            variant="outline"
+            size="lg"
+            className="!bg-zinc-900 hover:!bg-zinc-800 !border-zinc-800 hover:!border-accent-500 !text-zinc-300 hover:!text-accent-500 font-mono uppercase tracking-wider"
           >
             View_on_GitHub
-          </a>
+          </ModernButton>
         </div>
       </div>
     </div>

@@ -29,6 +29,8 @@ export interface Props {
   formId?: string;
 }
 
+import ModernButton from './ModernButton.astro';
+
 const {
   title = 'Contact Form',
   description = 'Get in touch with us',
@@ -191,16 +193,18 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
 
   <!-- Form Actions -->
   <div class={`flex flex-col sm:flex-row gap-4 justify-end mt-8 ${animated ? 'animate-slide-up' : ''}`} style={animated ? `animation-delay: ${fields.length * 0.1}s` : ''}>
-    <button
+    <ModernButton
       type="button"
-      class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 font-semibold"
+      variant="outline"
+      className="px-6 py-3 font-semibold"
     >
       Reset
-    </button>
+    </ModernButton>
 
-    <button
+    <ModernButton
       type="submit"
-      class="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 relative overflow-hidden group"
+      variant="primary"
+      className="px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 relative overflow-hidden group"
     >
       <span class="relative z-10 flex items-center gap-2">
         <span class="submit-text">{submitLabel}</span>
@@ -212,10 +216,7 @@ const classes = `${baseClasses} ${variants[variant]} ${className}`;
         </span>
         <span class="submit-icon">✨</span>
       </span>
-
-      <!-- Button shimmer effect -->
-      <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000"></div>
-    </button>
+    </ModernButton>
   </div>
 
   <!-- Success/Error Messages -->

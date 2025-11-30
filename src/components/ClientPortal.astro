@@ -1,6 +1,7 @@
 ---
 // Client Portal Component
 // Provides client dashboard with project status, documents, and communication
+import ModernButton from './ui/ModernButton.astro';
 
 interface Props {
   className?: string;
@@ -170,7 +171,7 @@ const formatDate = (dateString: string) => {
       </div>
     </div>
     <div class="portal-actions">
-      <button class="btn btn-outline">
+      <ModernButton variant="outline" className="gap-2">
         <svg
           width="16"
           height="16"
@@ -188,8 +189,8 @@ const formatDate = (dateString: string) => {
             stroke-width="2"></polyline>
         </svg>
         Contact Team
-      </button>
-      <button class="btn btn-primary">
+      </ModernButton>
+      <ModernButton variant="primary" className="gap-2">
         <svg
           width="16"
           height="16"
@@ -205,7 +206,7 @@ const formatDate = (dateString: string) => {
             stroke-width="2"></polygon>
         </svg>
         Schedule Meeting
-      </button>
+      </ModernButton>
     </div>
   </div>
 
@@ -215,7 +216,9 @@ const formatDate = (dateString: string) => {
       <section class="portal-section projects-section">
         <div class="section-header">
           <h2>Active Projects</h2>
-          <button class="btn btn-ghost btn-sm">View All</button>
+          <ModernButton variant="ghost" className="text-sm py-1 px-3"
+            >View All</ModernButton
+          >
         </div>
 
         <div class="projects-list">
@@ -270,7 +273,9 @@ const formatDate = (dateString: string) => {
       <section class="portal-section messages-section">
         <div class="section-header">
           <h2>Recent Messages</h2>
-          <button class="btn btn-ghost btn-sm">View All</button>
+          <ModernButton variant="ghost" className="text-sm py-1 px-3"
+            >View All</ModernButton
+          >
         </div>
 
         <div class="messages-list">
@@ -294,7 +299,9 @@ const formatDate = (dateString: string) => {
       <section class="portal-section documents-section">
         <div class="section-header">
           <h2>Documents & Files</h2>
-          <button class="btn btn-ghost btn-sm">Upload File</button>
+          <ModernButton variant="ghost" className="text-sm py-1 px-3"
+            >Upload File</ModernButton
+          >
         </div>
 
         <div class="documents-list">
@@ -459,7 +466,10 @@ const formatDate = (dateString: string) => {
                     <span>{formatDate(document.date)}</span>
                   </div>
                 </div>
-                <button class="document-download">
+                <ModernButton
+                  variant="ghost"
+                  className="document-download p-0 w-8 h-8 min-w-0"
+                >
                   <svg
                     width="16"
                     height="16"
@@ -486,7 +496,7 @@ const formatDate = (dateString: string) => {
                       stroke-width="2"
                     />
                   </svg>
-                </button>
+                </ModernButton>
               </div>
             ))
           }

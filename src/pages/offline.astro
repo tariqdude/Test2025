@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
 import { withBasePath } from '../utils/helpers';
 
 const title = 'You are offline';
@@ -142,10 +143,12 @@ const description = 'This page is available offline thanks to service workers';
         </div>
 
         <div class="flex flex-wrap gap-4 justify-center">
-          <button id="retry-button" class="btn btn-primary"> Try Again </button>
-          <a href={withBasePath('/')} class="btn btn-secondary">
+          <ModernButton id="retry-button" variant="primary">
+            Try Again
+          </ModernButton>
+          <ModernButton href={withBasePath('/')} variant="secondary">
             Go to Homepage
-          </a>
+          </ModernButton>
         </div>
       </div>
     </main>

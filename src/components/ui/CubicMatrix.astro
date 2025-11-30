@@ -3,6 +3,7 @@
  * Cubic Matrix - 3D Grid of animated cubes with wave effects
  * Enhanced with multiple wave patterns and color cycling
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="cubic-matrix-wrapper">
@@ -12,11 +13,23 @@
   </p>
 
   <div class="matrix-controls">
-    <button class="matrix-btn active" data-pattern="wave">Wave</button>
-    <button class="matrix-btn" data-pattern="ripple">Ripple</button>
-    <button class="matrix-btn" data-pattern="spiral">Spiral</button>
-    <button class="matrix-btn" data-pattern="random">Random</button>
-    <button class="matrix-btn" data-pattern="rainbow">Rainbow</button>
+    <ModernButton
+      variant="neon"
+      className="matrix-btn active"
+      data-pattern="wave">Wave</ModernButton
+    >
+    <ModernButton variant="neon" className="matrix-btn" data-pattern="ripple"
+      >Ripple</ModernButton
+    >
+    <ModernButton variant="neon" className="matrix-btn" data-pattern="spiral"
+      >Spiral</ModernButton
+    >
+    <ModernButton variant="neon" className="matrix-btn" data-pattern="random"
+      >Random</ModernButton
+    >
+    <ModernButton variant="neon" className="matrix-btn" data-pattern="rainbow"
+      >Rainbow</ModernButton
+    >
   </div>
 
   <div class="cubic-matrix" data-matrix-grid>
@@ -131,31 +144,13 @@
     position: relative;
   }
 
-  .matrix-btn {
-    padding: 0.75rem 1.5rem;
-    background: rgba(99, 102, 241, 0.1);
-    border: 2px solid rgba(99, 102, 241, 0.3);
-    border-radius: 9999px;
-    color: rgba(203, 213, 225, 0.9);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .matrix-btn:hover {
-    background: rgba(99, 102, 241, 0.2);
-    border-color: rgba(99, 102, 241, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-  }
+  /* .matrix-btn styles replaced by ModernButton variant="neon" */
 
   .matrix-btn.active {
-    background: rgba(99, 102, 241, 0.3);
-    border-color: rgba(99, 102, 241, 0.8);
-    color: #fff;
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+    background: rgba(99, 102, 241, 0.3) !important;
+    border-color: rgba(99, 102, 241, 0.8) !important;
+    color: #fff !important;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6) !important;
   }
 
   .cubic-matrix {
@@ -329,11 +324,6 @@
 
     .matrix-controls {
       gap: 0.5rem;
-    }
-
-    .matrix-btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
     }
   }
 </style>

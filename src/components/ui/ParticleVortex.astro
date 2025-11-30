@@ -3,6 +3,7 @@
  * Particle Vortex - 3D spiral of particles with physics
  * Enhanced with gravity simulation and mouse attraction
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="vortex-wrapper">
@@ -16,29 +17,33 @@
     role="group"
     aria-label="Particle vortex pattern controls"
   >
-    <button
-      class="vortex-btn active"
+    <ModernButton
+      variant="neon"
+      className="vortex-btn active"
       data-mode="spiral"
       aria-pressed="true"
-      aria-label="Spiral pattern">Spiral</button
+      aria-label="Spiral pattern">Spiral</ModernButton
     >
-    <button
-      class="vortex-btn"
+    <ModernButton
+      variant="neon"
+      className="vortex-btn"
       data-mode="sphere"
       aria-pressed="false"
-      aria-label="Sphere pattern">Sphere</button
+      aria-label="Sphere pattern">Sphere</ModernButton
     >
-    <button
-      class="vortex-btn"
+    <ModernButton
+      variant="neon"
+      className="vortex-btn"
       data-mode="explosion"
       aria-pressed="false"
-      aria-label="Explosion pattern">Explosion</button
+      aria-label="Explosion pattern">Explosion</ModernButton
     >
-    <button
-      class="vortex-btn"
+    <ModernButton
+      variant="neon"
+      className="vortex-btn"
       data-mode="chaos"
       aria-pressed="false"
-      aria-label="Chaos pattern">Chaos</button
+      aria-label="Chaos pattern">Chaos</ModernButton
     >
   </div>
 
@@ -267,31 +272,13 @@
     flex-wrap: wrap;
   }
 
-  .vortex-btn {
-    padding: 0.75rem 1.5rem;
-    background: rgba(139, 92, 246, 0.1);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    border-radius: 9999px;
-    color: rgba(203, 213, 225, 0.9);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .vortex-btn:hover {
-    background: rgba(139, 92, 246, 0.2);
-    border-color: rgba(139, 92, 246, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
-  }
+  /* .vortex-btn styles replaced by ModernButton variant="neon" */
 
   .vortex-btn.active {
-    background: rgba(139, 92, 246, 0.3);
-    border-color: rgba(139, 92, 246, 0.8);
-    color: #fff;
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+    background: rgba(139, 92, 246, 0.3) !important;
+    border-color: rgba(139, 92, 246, 0.8) !important;
+    color: #fff !important;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6) !important;
   }
 
   .particle-glow {
@@ -387,11 +374,6 @@
 
     .vortex-controls {
       gap: 0.5rem;
-    }
-
-    .vortex-btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
     }
   }
 </style>

@@ -2,6 +2,7 @@
 /**
  * Layered Cards - Stacked 3D cards with parallax depth
  */
+import ModernButton from './ModernButton.astro';
 ---
 
 <div class="layered-wrapper">
@@ -11,28 +12,32 @@
   </p>
 
   <div class="layered-controls" role="group" aria-label="Card depth controls">
-    <button
-      class="layer-btn active"
+    <ModernButton
+      variant="neon"
+      className="layer-btn active"
       data-depth="normal"
       aria-pressed="true"
-      aria-label="Normal depth effect">Normal Depth</button
+      aria-label="Normal depth effect">Normal Depth</ModernButton
     >
-    <button
-      class="layer-btn"
+    <ModernButton
+      variant="neon"
+      className="layer-btn"
       data-depth="extreme"
       aria-pressed="false"
-      aria-label="Extreme depth effect">Extreme Depth</button
+      aria-label="Extreme depth effect">Extreme Depth</ModernButton
     >
-    <button
-      class="layer-btn"
+    <ModernButton
+      variant="neon"
+      className="layer-btn"
       data-depth="flat"
       aria-pressed="false"
-      aria-label="Flatten all layers">Flatten Layers</button
+      aria-label="Flatten all layers">Flatten Layers</ModernButton
     >
-    <button
-      class="layer-btn"
+    <ModernButton
+      variant="neon"
+      className="layer-btn"
       data-action="explode"
-      aria-label="Explode all cards">💥 Explode All</button
+      aria-label="Explode all cards">💥 Explode All</ModernButton
     >
   </div>
 
@@ -148,29 +153,12 @@
     max-width: 800px;
   }
 
-  .layer-btn {
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    border-radius: 8px;
-    color: #a855f7;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .layer-btn:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.6);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-    transform: translateY(-2px);
-  }
+  /* .layer-btn styles replaced by ModernButton variant="neon" */
 
   .layer-btn.active {
-    background: rgba(139, 92, 246, 0.2);
-    border-color: #a855f7;
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.2) !important;
+    border-color: #a855f7 !important;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5) !important;
   }
 
   .layered-grid {
@@ -461,11 +449,6 @@
 
     .layered-controls {
       gap: 8px;
-    }
-
-    .layer-btn {
-      padding: 8px 16px;
-      font-size: 0.9rem;
     }
   }
 </style>

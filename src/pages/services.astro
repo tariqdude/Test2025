@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import SystemHighlights from '../components/SystemHighlights.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
 import { withBasePath } from '../utils/helpers';
 
 const offerings = [
@@ -130,18 +131,22 @@ const process = [
             predictable.
           </p>
           <div class="mt-10 flex flex-wrap gap-4">
-            <a
+            <ModernButton
               href={withBasePath('pricing/')}
-              class="btn btn-primary rounded-sm font-mono uppercase tracking-wider text-xs"
+              variant="primary"
+              rounded="sm"
+              className="font-mono uppercase tracking-wider text-xs"
             >
               View pricing guide
-            </a>
-            <a
+            </ModernButton>
+            <ModernButton
               href={withBasePath('contact/')}
-              class="btn btn-secondary rounded-sm font-mono uppercase tracking-wider text-xs"
+              variant="secondary"
+              rounded="sm"
+              className="font-mono uppercase tracking-wider text-xs"
             >
               Schedule a scoping call
-            </a>
+            </ModernButton>
           </div>
         </div>
 
@@ -235,12 +240,13 @@ const process = [
                     ))}
                   </ul>
                 </div>
-                <a
-                  class="inline-flex items-center justify-center border border-zinc-700 bg-zinc-800 px-6 py-3 text-xs font-bold uppercase tracking-widest text-zinc-300 transition hover:border-accent-500 hover:text-white font-mono"
+                <ModernButton
                   href={withBasePath('contact/')}
+                  variant="outline"
+                  className="border-zinc-700 bg-zinc-800 text-zinc-300 hover:border-accent-500 hover:text-white font-mono text-xs font-bold uppercase tracking-widest"
                 >
                   Discuss Service
-                </a>
+                </ModernButton>
               </div>
             </article>
           ))
@@ -362,18 +368,22 @@ const process = [
           path to a static site your team can extend.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-4 relative z-10">
-          <a
-            class="btn btn-primary rounded-sm font-mono uppercase tracking-wider text-xs"
+          <ModernButton
             href={withBasePath('contact/')}
+            variant="primary"
+            rounded="sm"
+            className="font-mono uppercase tracking-wider text-xs"
           >
             Book a consultation
-          </a>
-          <a
-            class="btn btn-secondary rounded-sm font-mono uppercase tracking-wider text-xs"
+          </ModernButton>
+          <ModernButton
             href={withBasePath('pricing/')}
+            variant="secondary"
+            rounded="sm"
+            className="font-mono uppercase tracking-wider text-xs"
           >
             Review pricing tiers
-          </a>
+          </ModernButton>
         </div>
       </div>
     </div>
