@@ -189,7 +189,7 @@ if (!displayReadingTime && Astro.slots.has('default')) {
       </article>
     </main>
     <Footer />
-    <CommandPalette client:idle />
+    <CommandPalette client:only="preact" />
     <WebVitals />
     <ErrorTracking />
   </body>

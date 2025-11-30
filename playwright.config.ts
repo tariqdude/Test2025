@@ -14,7 +14,8 @@ export default defineConfig({
     ? [['html'], ['list'], ['github']]
     : [['html'], ['list']],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:4321/Test2025',
+    baseURL:
+      process.env.BASE_URL || 'http://localhost:4321/github-pages-project-v1',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -43,10 +44,10 @@ export default defineConfig({
   ],
 
   // Note: Run 'npm run preview' manually before running tests
-  // webServer: {
-  //   command: 'npm run build && npm run preview',
-  //   url: 'http://localhost:4321/Test2025',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120 * 1000,
-  // },
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:4321/github-pages-project-v1',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 });
