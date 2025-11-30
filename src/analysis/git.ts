@@ -34,7 +34,10 @@ export class GitAnalyzer implements AnalysisModule {
         .filter(line => line.startsWith('??'))
         .map(line => line.substring(3));
       const conflicts = statusLines.some(
-        line => line.startsWith('UU') || line.startsWith('AA') || line.startsWith('DD')
+        line =>
+          line.startsWith('UU') ||
+          line.startsWith('AA') ||
+          line.startsWith('DD')
       );
       const aheadBehind = await this.getAheadBehind(config);
       const aheadBy = aheadBehind?.ahead ?? 0;
@@ -98,7 +101,8 @@ export class GitAnalyzer implements AnalysisModule {
 
       if (gitAnalysis.branchStatus !== 'up-to-date') {
         const severityLevel =
-          gitAnalysis.branchStatus === 'detached' || gitAnalysis.branchStatus === 'diverged'
+          gitAnalysis.branchStatus === 'detached' ||
+          gitAnalysis.branchStatus === 'diverged'
             ? 'high'
             : gitAnalysis.branchStatus === 'behind'
               ? 'medium'
@@ -163,11 +167,17 @@ export class GitAnalyzer implements AnalysisModule {
           rule: 'git-conflicts',
           category: 'Git',
           source: 'git-analyzer',
-          suggestion: 'Run `git status` and resolve conflicts marked as UU/AA/DD files.',
+          suggestion:
+            'Run `git status` and resolve conflicts marked as UU/AA/DD files.',
           autoFixable: false,
           context: {
             current: `Conflicted files: ${statusLines
-              .filter(line => line.startsWith('UU') || line.startsWith('AA') || line.startsWith('DD'))
+              .filter(
+                line =>
+                  line.startsWith('UU') ||
+                  line.startsWith('AA') ||
+                  line.startsWith('DD')
+              )
               .map(line => line.substring(3))
               .join(', ')}`,
           },

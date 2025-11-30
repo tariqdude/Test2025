@@ -36,27 +36,21 @@ export const GET: APIRoute = () => {
         short_name: 'Blog',
         description: 'View blog posts',
         url: withBasePath('blog/'),
-        icons: [
-          { src: withBasePath('favicon-192.png'), sizes: '192x192' },
-        ],
+        icons: [{ src: withBasePath('favicon-192.png'), sizes: '192x192' }],
       },
       {
         name: 'Demo Center',
         short_name: 'Demos',
         description: 'Explore interactive demos',
         url: withBasePath('demo/'),
-        icons: [
-          { src: withBasePath('favicon-192.png'), sizes: '192x192' },
-        ],
+        icons: [{ src: withBasePath('favicon-192.png'), sizes: '192x192' }],
       },
       {
         name: 'Contact',
         short_name: 'Contact',
         description: 'Get in touch',
         url: withBasePath('contact/'),
-        icons: [
-          { src: withBasePath('favicon-192.png'), sizes: '192x192' },
-        ],
+        icons: [{ src: withBasePath('favicon-192.png'), sizes: '192x192' }],
       },
     ],
   };

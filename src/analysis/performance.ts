@@ -219,7 +219,7 @@ export class PerformanceAnalyzer implements AnalysisModule {
           : new AnalysisError(
               this.name,
               error instanceof Error ? error : new Error(String(error))
-          );
+            );
       logger.warn(`Bundle size check failed: ${analysisError.message}`, {
         error: analysisError,
       });

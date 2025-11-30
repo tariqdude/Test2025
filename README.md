@@ -54,6 +54,7 @@ Copy `.env.example` to `.env` as needed.
 - `PUBLIC_ENABLE_ANALYTICS` - Set to `true` to opt into analytics scripts; defaults off for privacy-friendly forks.
 
 Examples:
+
 - User pages (`username.github.io`): set `SITE_URL=https://username.github.io`; leave `BASE_PATH` empty (base will be `/`).
 - Project pages (`username.github.io/repo`): set `SITE_URL=https://username.github.io/repo`; base becomes `/repo/`.
 - Custom domain with subpath: set `SITE_URL=https://example.com/docs`; optional `BASE_PATH=/docs/` if you want to force it.
@@ -67,8 +68,8 @@ Examples:
 
 If you fork/rename:
 
-1) Optionally set `SITE_URL` in `.env` if you use a custom domain; otherwise the repo slug + owner are used.  
-2) Set `BASE_PATH` only if you intentionally deploy under a different subpath than the repo name.
+1. Optionally set `SITE_URL` in `.env` if you use a custom domain; otherwise the repo slug + owner are used.
+2. Set `BASE_PATH` only if you intentionally deploy under a different subpath than the repo name.
 
 ## Deploy Anywhere Checklist
 
@@ -97,4 +98,4 @@ If you fork/rename:
 
 - Missing icons: ensure `public/favicon-192.png` and `public/favicon-512.png` exist (generated from `public/favicon.svg`).
 - Broken links on Pages: confirm the derived `BASE_PATH` from `config/deployment.js` matches the host (or set `BASE_PATH` explicitly) and rerun `npm run build && npm run preview`.
-- Caching issues: the service worker cache name suffixes the base path (e.g., `github-pages-project-v1-root`); bump it when changing asset paths or scope to force refresh. 
+- Caching issues: the service worker cache name suffixes the base path (e.g., `github-pages-project-v1-root`); bump it when changing asset paths or scope to force refresh.

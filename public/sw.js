@@ -28,8 +28,7 @@ const resolveBasePath = () => {
 
 const BASE_PATH = resolveBasePath();
 const BASE_PREFIX = BASE_PATH === '/' ? '' : `/${trimSlashes(BASE_PATH)}`;
-const CACHE_VERSION =
-  new URL(self.location.href).searchParams.get('v') || '1';
+const CACHE_VERSION = new URL(self.location.href).searchParams.get('v') || '1';
 const CACHE_NAME = `github-pages-project-${CACHE_VERSION}-${(trimSlashes(BASE_PATH) || 'root').replace(/[^a-z0-9-]/gi, '-')}`;
 
 const withBase = path => {

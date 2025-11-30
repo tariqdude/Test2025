@@ -10,9 +10,7 @@ import { createDeploymentConfig } from '../config/deployment.js';
 const DEPLOYMENT = createDeploymentConfig(import.meta.env);
 const analyticsFlag = import.meta.env.PUBLIC_ENABLE_ANALYTICS;
 const analyticsEnabled =
-  analyticsFlag === 'true' ||
-  analyticsFlag === '1' ||
-  analyticsFlag === true;
+  analyticsFlag === 'true' || analyticsFlag === '1' || analyticsFlag === true;
 
 export const SITE_TITLE = 'GitHub Pages Project v1';
 export const SITE_DESCRIPTION =

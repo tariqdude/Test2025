@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -14,8 +15,10 @@ type Props = CollectionEntry<'blog'>['data'] & {
   readingTime?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, readingTime } =
+const { title, description, pubDate, updatedDate, heroImage, readingTime, author } =
   Astro.props;
+
+const authorData = author ? await getEntry(author) : null;
 
 // Calculate reading time from slot content if not provided
 let displayReadingTime = readingTime;
@@ -98,6 +101,8 @@ if (!displayReadingTime && Astro.slots.has('default')) {
                 height={510}
                 src={heroImage}
                 alt={`Cover image for ${title}`}
+                loading="eager"
+                fetchpriority="high"
               />
             )
           }
@@ -128,6 +133,16 @@ if (!displayReadingTime && Astro.slots.has('default')) {
               }
             </div>
             <h1>{title}</h1>
+            {
+              authorData && (
+                <div class="author-info">
+                  <span class="byline">By {authorData.data.name}</span>
+                  {authorData.data.role && (
+                    <span class="role"> · {authorData.data.role}</span>
+                  )}
+                </div>
+              )
+            }
             <hr />
           </header>
           <slot />
@@ -139,3 +154,12 @@ if (!displayReadingTime && Astro.slots.has('default')) {
     <ErrorTracking />
   </body>
 </html>
+
+<style>
+  .author-info {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    color: rgb(var(--gray));
+    text-align: center;
+  }
+</style>

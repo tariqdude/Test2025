@@ -4,7 +4,9 @@ import { DEPLOYMENT_CONFIG, SITE_URL } from '../../consts';
 export const prerender = true;
 
 export const GET: APIRoute = () => {
-  const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+  const expires = new Date(
+    Date.now() + 365 * 24 * 60 * 60 * 1000
+  ).toISOString();
   const repoAdvisoryUrl = DEPLOYMENT_CONFIG.repoSlug
     ? `https://github.com/${DEPLOYMENT_CONFIG.repoSlug}/security/advisories/new`
     : 'https://github.com/security/advisories';

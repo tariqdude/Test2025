@@ -101,13 +101,21 @@ export const deriveBasePath = (env = defaultEnv) => {
   return '/';
 };
 
-export const deriveSiteUrl = (env = defaultEnv, basePath = deriveBasePath(env)) => {
+export const deriveSiteUrl = (
+  env = defaultEnv,
+  basePath = deriveBasePath(env)
+) => {
   const explicitSite = getEnvValue(env, ['SITE_URL', 'PUBLIC_SITE_URL']);
   if (explicitSite) {
     return normalizeUrl(explicitSite);
   }
 
-  const deployUrl = getEnvValue(env, ['DEPLOY_URL', 'URL', 'VERCEL_URL', 'CF_PAGES_URL']);
+  const deployUrl = getEnvValue(env, [
+    'DEPLOY_URL',
+    'URL',
+    'VERCEL_URL',
+    'CF_PAGES_URL',
+  ]);
   if (deployUrl) {
     return normalizeUrl(deployUrl);
   }
@@ -121,7 +129,9 @@ export const deriveSiteUrl = (env = defaultEnv, basePath = deriveBasePath(env)) 
   }
 
   const normalizedBase = basePath === '/' ? '/' : basePath;
-  return normalizeUrl(`http://localhost:4321${normalizedBase === '/' ? '/' : normalizedBase}`);
+  return normalizeUrl(
+    `http://localhost:4321${normalizedBase === '/' ? '/' : normalizedBase}`
+  );
 };
 
 export const createDeploymentConfig = (env = defaultEnv) => {
@@ -131,8 +141,7 @@ export const createDeploymentConfig = (env = defaultEnv) => {
   const normalizedBasePath = basePath === '/' ? '/' : `/${trimmedBase}/`;
 
   const repo = getRepoInfo(env);
-  const repoSlug =
-    repo.owner && repo.repo ? `${repo.owner}/${repo.repo}` : '';
+  const repoSlug = repo.owner && repo.repo ? `${repo.owner}/${repo.repo}` : '';
   const repoUrl = repoSlug ? `https://github.com/${repoSlug}` : '';
 
   return {
