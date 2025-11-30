@@ -1,5 +1,6 @@
 ---
 import { withBasePath } from '../utils/helpers';
+import ModernCard from './ui/ModernCard.astro';
 
 const today = new Date();
 
@@ -121,7 +122,7 @@ const navSections = [
       <div class="grid gap-10 sm:grid-cols-2">
         {
           navSections.map(section => (
-            <div class="border border-zinc-800 bg-zinc-900/50 p-6">
+            <ModernCard variant="minimal" className="p-6 bg-zinc-900/50">
               <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 font-mono border-b border-zinc-800 pb-2 mb-4">
                 {section.title}
               </p>
@@ -138,10 +139,10 @@ const navSections = [
                   </li>
                 ))}
               </ul>
-            </div>
+            </ModernCard>
           ))
         }
-        <div class="glass-panel border border-white/10 p-6">
+        <ModernCard variant="glass" className="p-6 border-white/10">
           <p
             class="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400"
           >
@@ -153,7 +154,7 @@ const navSections = [
             <li>+1 (555) 123-4567</li>
             <li>hello@eliteproject.dev</li>
           </ul>
-        </div>
+        </ModernCard>
       </div>
     </div>
 

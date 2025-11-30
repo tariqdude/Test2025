@@ -17,6 +17,8 @@ export interface Props {
   animated?: boolean;
   direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
+  style?: string;
+  [key: string]: any;
 }
 
 const {
@@ -29,6 +31,8 @@ const {
   animated = false,
   direction = 'up',
   delay = 0,
+  style = '',
+  ...rest
 } = Astro.props;
 
 const baseClasses =
@@ -69,13 +73,14 @@ const glowEffects = glow
 
 const animationClasses = animated ? `animate-slide-${direction}` : '';
 const delayStyle = delay > 0 ? `animation-delay: ${delay}s` : '';
+const combinedStyle = [delayStyle, style].filter(Boolean).join('; ');
 
 const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${hoverEffects} ${glowEffects} ${animationClasses} ${className}`;
 
 const Tag = href ? 'a' : 'div';
 ---
 
-<Tag href={href} class={classes} style={delayStyle}>
+<Tag href={href} class={classes} style={combinedStyle} {...rest}>
   {/* Glow effect background */}
   {
     glow && (

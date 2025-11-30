@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
 import ModernButton from '../components/ui/ModernButton.astro';
 import { withBasePath } from '../utils/helpers';
 
@@ -23,8 +24,9 @@ const description = 'This page is available offline thanks to service workers';
       </div>
       <div class="max-w-2xl mx-auto text-center w-full relative z-10">
         <div class="mb-8">
-          <div
-            class="inline-flex items-center justify-center w-32 h-32 border border-zinc-800 bg-zinc-900/50 rounded-full relative"
+          <ModernCard
+            variant="minimal"
+            className="inline-flex items-center justify-center w-32 h-32 rounded-full relative"
           >
             <div
               class="absolute inset-0 border border-zinc-700 rounded-full animate-pulse opacity-50"
@@ -43,7 +45,7 @@ const description = 'This page is available offline thanks to service workers';
                 d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"
               ></path>
             </svg>
-          </div>
+          </ModernCard>
         </div>
 
         <h1
@@ -57,9 +59,7 @@ const description = 'This page is available offline thanks to service workers';
         </p>
 
         <div class="space-y-4 mb-12">
-          <div
-            class="p-6 bg-zinc-900/50 border border-zinc-800 text-left relative"
-          >
+          <ModernCard variant="minimal" className="p-6 text-left relative">
             <div
               class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700"
             >
@@ -129,7 +129,7 @@ const description = 'This page is available offline thanks to service workers';
                 <span>Check connection status below</span>
               </li>
             </ul>
-          </div>
+          </ModernCard>
 
           <div
             id="connection-status"

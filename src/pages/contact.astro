@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import ModernButton from '../components/ui/ModernButton.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
 
 const contactMethods = [
   {
@@ -71,9 +72,10 @@ const commitments = [
         <div class="grid gap-4 sm:grid-cols-2">
           {
             contactMethods.map(method => (
-              <a
-                class="group flex flex-col border border-zinc-800 bg-zinc-900/50 p-5 transition hover:border-accent-500 relative overflow-hidden"
+              <ModernCard
                 href={method.href}
+                variant="minimal"
+                className="group flex flex-col p-5 transition hover:border-accent-500 relative overflow-hidden"
               >
                 <div class="absolute top-0 right-0 w-3 h-3 border-t border-r border-zinc-700 group-hover:border-accent-500 transition-colors" />
                 <div class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
@@ -87,14 +89,15 @@ const commitments = [
                 <span class="mt-3 text-sm text-zinc-400 font-mono border-t border-zinc-800 pt-3">
                   {method.description}
                 </span>
-              </a>
+              </ModernCard>
             ))
           }
         </div>
       </div>
 
-      <div
-        class="w-full max-w-lg space-y-10 border border-zinc-800 bg-zinc-900/80 p-8 backdrop-blur-xl relative"
+      <ModernCard
+        variant="minimal"
+        className="w-full max-w-lg space-y-10 p-8 backdrop-blur-xl relative bg-zinc-900/80"
       >
         <div class="absolute -top-1 -left-1 w-3 h-3 bg-accent-500"></div>
         <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-zinc-700"></div>
@@ -308,7 +311,7 @@ const commitments = [
           });
         </script>
 
-        <div class="space-y-4 border border-zinc-800 bg-zinc-900/50 p-6">
+        <ModernCard variant="minimal" className="space-y-4 p-6 bg-zinc-900/50">
           <h2
             class="text-base font-mono font-bold text-white uppercase tracking-wider"
           >
@@ -352,9 +355,14 @@ const commitments = [
       <ul class="mt-10 grid gap-4 text-left md:grid-cols-3">
         {
           commitments.map(item => (
-            <li class="h-full border border-zinc-800 bg-zinc-950 p-5 text-sm text-zinc-300 font-mono hover:border-accent-500 transition-colors relative group">
-              <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
-              <span class="text-accent-500 mr-2">&gt;</span> {item}
+            <li class="h-full">
+              <ModernCard
+                variant="minimal"
+                className="h-full p-5 text-sm text-zinc-300 font-mono hover:border-accent-500 transition-colors relative group bg-zinc-950"
+              >
+                <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-700 group-hover:border-accent-500 transition-colors" />
+                <span class="text-accent-500 mr-2">&gt;</span> {item}
+              </ModernCard>
             </li>
           ))
         }

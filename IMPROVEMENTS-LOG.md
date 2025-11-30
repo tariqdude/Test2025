@@ -41,6 +41,28 @@
 - **Updated `src/utils/url.ts`**:
   - Added `withBasePath` and `resolveHref` to centralize URL logic.
 
+## December 01, 2025
+
+### Summary of Changes
+
+#### 1. Design System Migration (Cards)
+
+- **Updated `ModernCard.astro`**:
+  - Fixed `style` prop handling to correctly merge with internal styles (e.g., animation delays).
+- **Refactored `visual-showcase.astro`**:
+  - Replaced legacy HTML/CSS card implementations with `ModernCard` in multiple sections: "Functionality ideas", "Pairings & integrations", "Pipeline tracks", "Immersion timeline", "Material swatchboard", "Micro-Interactions", and "Interactive Demo".
+- **Refactored `PerformanceMonitor.astro`**:
+  - Replaced `vital-card`, `rum-card`, `server-metric`, and `optimization-item` divs with `ModernCard` (variant "minimal").
+  - Cleaned up redundant CSS styles.
+- **Refactored `SystemHighlights.astro`**:
+  - Replaced `<article>` with `ModernCard` and removed legacy "technical" corner accents to align with the modern design system.
+- **Verified `index.astro`**: Confirmed usage of `ModernCard` for Landing Pillars and Security Principles.
+
+### Next Steps
+
+- Continue migrating other legacy components to the new design system.
+- Review `Advanced3DShowcase.astro` and other specialized 3D components for potential modernization where applicable (though they are currently kept as specialized implementations).
+
 ## November 23, 2025
 
 ### Summary of Changes

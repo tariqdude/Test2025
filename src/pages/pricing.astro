@@ -1,5 +1,7 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import ModernCard from '../components/ui/ModernCard.astro';
+import ModernButton from '../components/ui/ModernButton.astro';
 import { resolveHref, withBasePath } from '../utils/helpers';
 
 const tiers = [
@@ -88,115 +90,97 @@ const faqs = [
         improvements, every tier keeps the Astro site simple, reliable, and well
         documented.
       </p>
-      <div
-        class="mt-10 inline-flex items-center gap-6 border border-zinc-800 bg-zinc-900/60 px-6 py-3 text-sm text-zinc-300 font-mono"
+      <ModernCard
+        variant="minimal"
+        className="mt-10 inline-flex items-center gap-6 bg-zinc-900/60 px-6 py-3 text-sm text-zinc-300 font-mono"
       >
         <span class="inline-flex h-2 w-2 bg-accent-500 animate-pulse"></span>
         <span
           >All paid tiers include documentation, training, and priority inbox
           access.</span
         >
-      </div>
+      </ModernCard>
     </div>
   </section>
 
-  <section class="bg-white">
+  <section class="bg-zinc-900">
     <div class="mx-auto grid max-w-6xl gap-8 px-6 py-20 lg:grid-cols-3">
       {
         tiers.map((tier, index) => (
-          <article
-            class={`card flex h-full flex-col gap-6 rounded-3xl border ${tier.highlight ? 'border-brand-500 bg-neutral-950 text-neutral-50 shadow-[0_45px_90px_-45px_rgba(17,17,17,0.55)]' : 'border-neutral-200 bg-neutral-50'} p-8 animate-fade-in-up`}
+          <ModernCard
+            variant="minimal"
+            className={`flex h-full flex-col gap-6 p-8 animate-fade-in-up ${tier.highlight ? 'border-accent-500 bg-zinc-950' : 'bg-zinc-950/50'}`}
             style={`animation-delay: ${index * 100}ms; opacity: 0;`}
           >
             <div class="space-y-3">
               <span
-                class={`chip inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${tier.highlight ? 'bg-brand-500/20 text-brand-200' : 'bg-neutral-200 text-neutral-600'}`}
+                class={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] ${tier.highlight ? 'bg-accent-500/20 text-accent-200' : 'bg-zinc-800 text-zinc-400'}`}
               >
                 {tier.highlight ? 'Recommended' : 'Package'}
               </span>
-              <h2
-                class={`text-3xl font-semibold ${tier.highlight ? 'text-white' : 'text-neutral-900'}`}
-              >
-                {tier.name}
-              </h2>
-              <p
-                class={`text-4xl font-semibold ${tier.highlight ? 'text-white' : 'text-neutral-900'}`}
-              >
-                {tier.price}
-              </p>
-              <p
-                class={`text-sm ${tier.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}
-              >
-                {tier.description}
-              </p>
+              <h2 class="text-3xl font-semibold text-white">{tier.name}</h2>
+              <p class="text-4xl font-semibold text-white">{tier.price}</p>
+              <p class="text-sm text-zinc-400">{tier.description}</p>
             </div>
-            <ul
-              class={`space-y-3 text-sm ${tier.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}
-            >
+            <ul class="space-y-3 text-sm text-zinc-400">
               {tier.perks.map(perk => (
                 <li class="flex items-start gap-2">
                   <span
-                    class={`mt-1 inline-flex h-2 w-2 rounded-full ${tier.highlight ? 'bg-brand-400' : 'bg-brand-500'}`}
+                    class={`mt-1 inline-flex h-2 w-2 rounded-full ${tier.highlight ? 'bg-accent-400' : 'bg-accent-500'}`}
                   />
                   <span>{perk}</span>
                 </li>
               ))}
             </ul>
             <div class="mt-auto">
-              <a
-                class={`btn inline-flex w-full items-center justify-center px-5 py-2 text-sm font-semibold ${tier.highlight ? 'btn-primary' : 'btn-secondary border border-neutral-200 text-neutral-800 hover:border-neutral-300'}`}
+              <ModernButton
+                className="w-full"
+                variant={tier.highlight ? 'primary' : 'secondary'}
                 href={resolveHref(tier.href)}
               >
                 {tier.cta}
-              </a>
+              </ModernButton>
             </div>
-          </article>
+          </ModernCard>
         ))
       }
     </div>
   </section>
 
-  <section class="border-y border-neutral-200 bg-neutral-50">
+  <section class="border-y border-zinc-800 bg-zinc-950">
     <div class="mx-auto max-w-5xl px-6 py-20">
       <div class="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div>
           <p
-            class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600"
+            class="text-xs font-semibold uppercase tracking-[0.3em] text-accent-500"
           >
             Not sure where to start?
           </p>
-          <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+          <h2 class="mt-4 text-3xl font-semibold text-white">
             We tailor every engagement scope before you commit.
           </h2>
-          <p class="mt-6 text-base text-neutral-600">
+          <p class="mt-6 text-base text-zinc-400">
             Send a short brief or link to your existing site. We will suggest
             the tier that best balances your requirements, infrastructure, and
             timeline.
           </p>
           <div class="mt-8 flex flex-wrap gap-4">
-            <a
-              class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-              href={withBasePath('contact/')}
-            >
+            <ModernButton variant="primary" href={withBasePath('contact/')}>
               Talk with the team
-            </a>
-            <a
-              class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-              href={withBasePath('services/')}
-            >
+            </ModernButton>
+            <ModernButton variant="secondary" href={withBasePath('services/')}>
               Review services
-            </a>
+            </ModernButton>
           </div>
         </div>
-        <div
-          class="rounded-3xl border border-neutral-200 bg-white p-6 shadow-[0_40px_80px_-60px_rgba(17,17,17,0.25)]"
+        <ModernCard
+          variant="minimal"
+          className="p-6 shadow-[0_40px_80px_-60px_rgba(17,17,17,0.25)]"
         >
-          <h3 class="text-lg font-semibold text-neutral-900">
-            Every plan includes
-          </h3>
-          <ul class="mt-5 space-y-3 text-sm text-neutral-600">
+          <h3 class="text-lg font-semibold text-white">Every plan includes</h3>
+          <ul class="mt-5 space-y-3 text-sm text-zinc-400">
             <li class="flex items-start gap-2">
-              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-accent-500"
               ></span>
               <span
                 >Documentation bundle covering setup, content publishing, and
@@ -204,18 +188,18 @@ const faqs = [
               >
             </li>
             <li class="flex items-start gap-2">
-              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-accent-500"
               ></span>
               <span>Recorded walkthrough and Q&A session with your team.</span>
             </li>
             <li class="flex items-start gap-2">
-              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-brand-500"
+              <span class="mt-1 inline-flex h-2 w-2 rounded-full bg-accent-500"
               ></span>
               <span>30 days of follow-up support for clarifying questions.</span
               >
             </li>
           </ul>
-        </div>
+        </ModernCard>
       </div>
     </div>
   </section>
@@ -230,18 +214,20 @@ const faqs = [
       <div class="grid gap-8">
         {
           faqs.map(faq => (
-            <div class="border border-zinc-800 bg-zinc-950 p-8 hover:border-zinc-700 transition-colors">
+            <ModernCard
+              variant="minimal"
+              className="bg-zinc-950 p-8 hover:border-zinc-700 transition-colors"
+            >
               <h3 class="text-lg font-bold text-white font-display uppercase tracking-wide mb-4">
                 {faq.question}
               </h3>
               <p class="text-zinc-400 font-mono leading-relaxed">
                 {faq.answer}
               </p>
-            </div>
+            </ModernCard>
           ))
         }
       </div>
     </div>
   </section>
 </MarketingLayout>
-

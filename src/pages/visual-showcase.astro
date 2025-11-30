@@ -284,7 +284,10 @@ const materialSwatches = [
           <dl class="mt-10 grid gap-4 sm:grid-cols-3">
             {
               heroStats.map(stat => (
-                <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <ModernCard
+                  variant="glass"
+                  className="bg-white/[0.03] p-5 border-white/10"
+                >
                   <dt class="text-[0.65rem] uppercase tracking-[0.32em] text-slate-400">
                     {stat.label}
                   </dt>
@@ -292,7 +295,7 @@ const materialSwatches = [
                     {stat.value}
                   </dd>
                   <p class="mt-1 text-sm text-slate-400">{stat.detail}</p>
-                </div>
+                </ModernCard>
               ))
             }
           </dl>
@@ -361,7 +364,10 @@ const materialSwatches = [
       <div class="mt-12 grid gap-6 md:grid-cols-2 lg:mt-0">
         {
           functionalityIdeas.map(idea => (
-            <article class="glass-panel space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <ModernCard
+              variant="glass"
+              className="space-y-3 bg-white/[0.03] p-6 border-white/10"
+            >
               <div class="flex items-center justify-between gap-3">
                 <span class="text-2xl" aria-hidden="true">
                   {idea.icon}
@@ -373,7 +379,7 @@ const materialSwatches = [
               <h3 class="text-xl font-semibold text-white">{idea.title}</h3>
               <p class="text-sm text-slate-300">{idea.summary}</p>
               <p class="text-xs text-slate-500">{idea.detail}</p>
-            </article>
+            </ModernCard>
           ))
         }
       </div>
@@ -402,7 +408,10 @@ const materialSwatches = [
       <div class="grid gap-6 md:grid-cols-2">
         {
           integrationCombos.map(combo => (
-            <article class="rounded-2xl border border-white/10 bg-black/30 p-6 shadow-[0_15px_45px_rgba(0,0,0,0.35)]">
+            <ModernCard
+              variant="glass"
+              className="bg-black/30 p-6 shadow-[0_15px_45px_rgba(0,0,0,0.35)] border-white/10"
+            >
               <div class="mb-4 flex flex-wrap gap-2">
                 {combo.tags.map(tag => (
                   <span class="rounded-full border border-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.28em] text-slate-300">
@@ -422,7 +431,7 @@ const materialSwatches = [
                   <span aria-hidden="true">↗</span>
                 </a>
               </div>
-            </article>
+            </ModernCard>
           ))
         }
       </div>
@@ -464,7 +473,10 @@ const materialSwatches = [
         <div class="grid gap-6 lg:grid-cols-2">
           {
             pipelineTracks.map(track => (
-              <article class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+              <ModernCard
+                variant="glass"
+                className="group relative overflow-hidden rounded-3xl bg-white/[0.03] p-6 border-white/10"
+              >
                 <div
                   class="absolute inset-px rounded-[26px] bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"
                   aria-hidden="true"
@@ -488,7 +500,7 @@ const materialSwatches = [
                     <span aria-hidden="true">↗</span>
                   </a>
                 </div>
-              </article>
+              </ModernCard>
             ))
           }
         </div>
@@ -523,8 +535,9 @@ const materialSwatches = [
         <div class="space-y-4">
           {
             immersionTimeline.map((phase, idx) => (
-              <article
-                class={`flex flex-col gap-3 rounded-3xl border border-white/10 ${idx % 2 ? 'bg-white/[0.04]' : 'bg-white/[0.08]'} p-5 lg:flex-row lg:items-center`}
+              <ModernCard
+                variant="glass"
+                className={`flex flex-col gap-3 rounded-3xl border-white/10 ${idx % 2 ? 'bg-white/[0.04]' : 'bg-white/[0.08]'} p-5 lg:flex-row lg:items-center`}
               >
                 <div class="flex items-center gap-4">
                   <span class="text-3xl font-semibold text-white/80">
@@ -541,7 +554,7 @@ const materialSwatches = [
                   </h3>
                   <p class="text-sm text-slate-300">{phase.description}</p>
                 </div>
-              </article>
+              </ModernCard>
             ))
           }
         </div>
@@ -573,7 +586,10 @@ const materialSwatches = [
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {
           materialSwatches.map(swatch => (
-            <article class="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+            <ModernCard
+              variant="glass"
+              className="rounded-[28px] bg-white/[0.04] p-5 border-white/10"
+            >
               <div class="mb-4 flex items-center justify-between text-xs uppercase tracking-[0.32em] text-slate-400">
                 <span>{swatch.texture}</span>
                 <span>{swatch.usage}</span>
@@ -585,11 +601,11 @@ const materialSwatches = [
                     class="h-12 w-12 rounded-2xl border border-white/10"
                     style={`background:${tone}`}
                     aria-label={`Color swatch ${tone}`}
-                  ></span>
+                  />
                 ))}
               </div>
               <p class="mt-4 text-xs text-slate-400">{swatch.usage}</p>
-            </article>
+            </ModernCard>
           ))
         }
       </div>
@@ -828,7 +844,7 @@ const materialSwatches = [
       <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
         <!-- Morphing Card Demo -->
         <RevealOnScroll animation="slide-right" delay={100}>
-          <div class="interactive-demo-card glass-panel p-8 rounded-2xl">
+          <ModernCard variant="glass" className="interactive-demo-card p-8">
             <h3 class="text-3xl font-bold mb-4 text-gradient-blue">
               Morphing Shapes
             </h3>
@@ -842,12 +858,12 @@ const materialSwatches = [
               <div class="morphing-blob-2"></div>
               <div class="morphing-blob-3"></div>
             </div>
-          </div>
+          </ModernCard>
         </RevealOnScroll>
 
         <!-- Particle System Demo -->
         <RevealOnScroll animation="slide-left" delay={200}>
-          <div class="interactive-demo-card glass-panel p-8 rounded-2xl">
+          <ModernCard variant="glass" className="interactive-demo-card p-8">
             <h3 class="text-3xl font-bold mb-4 text-gradient-purple">
               Particle System
             </h3>
@@ -859,12 +875,12 @@ const materialSwatches = [
             >
               <!-- Particles added via JavaScript -->
             </div>
-          </div>
+          </ModernCard>
         </RevealOnScroll>
 
         <!-- Wave Animation Demo -->
         <RevealOnScroll animation="slide-right" delay={300}>
-          <div class="interactive-demo-card glass-panel p-8 rounded-2xl">
+          <ModernCard variant="glass" className="interactive-demo-card p-8">
             <h3 class="text-3xl font-bold mb-4 text-shine">Wave Distortion</h3>
             <p class="text-neutral-400 mb-6">
               Sin wave patterns with fluid motion
@@ -885,12 +901,12 @@ const materialSwatches = [
                 }
               </svg>
             </div>
-          </div>
+          </ModernCard>
         </RevealOnScroll>
 
         <!-- Gradient Mesh Demo -->
         <RevealOnScroll animation="slide-left" delay={400}>
-          <div class="interactive-demo-card glass-panel p-8 rounded-2xl">
+          <ModernCard variant="glass" className="interactive-demo-card p-8">
             <h3 class="text-3xl font-bold mb-4 text-gradient">Color Mesh</h3>
             <p class="text-neutral-400 mb-6">
               Dynamic gradient mesh animations
@@ -903,7 +919,7 @@ const materialSwatches = [
               <div class="gradient-orb orb-3"></div>
               <div class="gradient-orb orb-4"></div>
             </div>
-          </div>
+          </ModernCard>
         </RevealOnScroll>
       </div>
     </div>
@@ -967,7 +983,10 @@ const materialSwatches = [
         {
           Array.from({ length: 8 }).map((_, i) => (
             <RevealOnScroll animation="scale" delay={i * 50}>
-              <div class="interactive-tile glass-card rounded-2xl aspect-square cursor-pointer group hover:scale-110 transition-all duration-500 hover:rotate-3 hover:shadow-2xl relative overflow-hidden">
+              <ModernCard
+                variant="glass"
+                className="interactive-tile aspect-square cursor-pointer group hover:scale-110 transition-all duration-500 hover:rotate-3 hover:shadow-2xl relative overflow-hidden"
+              >
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div class="absolute inset-0 flex items-center justify-center">
                   <span class="text-6xl group-hover:scale-125 transition-transform duration-500 filter drop-shadow-glow">
@@ -975,7 +994,7 @@ const materialSwatches = [
                   </span>
                 </div>
                 <div class="absolute inset-0 pattern-dots opacity-5" />
-              </div>
+              </ModernCard>
             </RevealOnScroll>
           ))
         }

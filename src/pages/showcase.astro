@@ -150,14 +150,15 @@ const statShowcase = {
     >
     </div>
     <div class="mx-auto max-w-5xl px-6 py-24 text-center relative">
-      <div
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 mb-6"
+      <ModernCard
+        variant="minimal"
+        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 mb-6"
       >
         <span class="w-2 h-2 rounded-full bg-accent-500 animate-pulse"></span>
         <span class="text-xs font-mono text-zinc-400 tracking-wider"
           >PATTERN_LIBRARY_V1</span
         >
-      </div>
+      </ModernCard>
       <h1
         class="mt-6 text-4xl font-display font-bold sm:text-5xl uppercase tracking-tight"
       >
@@ -195,9 +196,12 @@ const statShowcase = {
       <div class="grid gap-4 sm:grid-cols-2">
         {
           buttonVariants.map(button => (
-            <div class="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
+            <ModernCard
+              variant="minimal"
+              className="rounded-2xl bg-zinc-950/70 p-4"
+            >
               <ModernButton
-                variant={button.variant}
+                variant={button.variant as any}
                 size="lg"
                 className="w-full justify-center gap-2"
               >
@@ -207,7 +211,7 @@ const statShowcase = {
                 {button.variant}
               </p>
               <p class="text-sm text-zinc-400">{button.description}</p>
-            </div>
+            </ModernCard>
           ))
         }
       </div>
@@ -264,18 +268,16 @@ const statShowcase = {
     </div>
   </section>
 
-  <section class="bg-white">
+  <section class="bg-zinc-900">
     <div class="mx-auto max-w-6xl px-6 py-20 grid gap-12 md:grid-cols-2">
       <div>
-        <p
-          class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-400"
-        >
+        <p class="text-xs font-mono uppercase tracking-[0.3em] text-zinc-400">
           TYPOGRAPHY + THEMES
         </p>
-        <h2 class="mt-4 text-3xl font-semibold text-neutral-900">
+        <h2 class="mt-4 text-3xl font-semibold text-white">
           Type scale, motion, and theme toggles live together.
         </h2>
-        <p class="mt-4 text-base text-neutral-600 leading-relaxed">
+        <p class="mt-4 text-base text-zinc-400 leading-relaxed">
           Tokens map straight into CSS variables, so marketing, docs, and
           product views stay synchronized. Theme toggles hydrate instantly
           thanks to the inline head script.
@@ -289,15 +291,20 @@ const statShowcase = {
       <div class="space-y-6">
         {
           typographyScale.map(scale => (
-            <article class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6">
-              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            <ModernCard
+              variant="minimal"
+              className="rounded-2xl bg-zinc-950/70 p-6"
+            >
+              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
                 {scale.label}
               </p>
-              <p class={`mt-3 ${scale.className}`}>{scale.sample}</p>
-              <p class="mt-4 text-xs font-mono text-neutral-500">
-                {scale.token}
+              <p
+                class={`mt-3 ${scale.className.replace('text-neutral-600', 'text-zinc-400')}`}
+              >
+                {scale.sample}
               </p>
-            </article>
+              <p class="mt-4 text-xs font-mono text-zinc-500">{scale.token}</p>
+            </ModernCard>
           ))
         }
       </div>
@@ -333,23 +340,19 @@ const statShowcase = {
       >
         {
           utilityTokens.map(token => (
-            <Card
+            <ModernCard
               variant="gradient"
-              className="h-full text-neutral-900 dark:text-white bg-white/95 dark:bg-neutral-900/80"
+              className="h-full text-white bg-zinc-900/80"
             >
-              <p class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500">
+              <p class="text-xs font-mono uppercase tracking-[0.3em] text-zinc-500">
                 {token.label}
               </p>
-              <h3 class="mt-3 text-2xl font-semibold text-neutral-900 dark:text-white">
+              <h3 class="mt-3 text-2xl font-semibold text-white">
                 {token.value}
               </h3>
-              <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-                {token.description}
-              </p>
-              <p class="mt-4 text-xs font-mono text-neutral-500">
-                {token.token}
-              </p>
-            </Card>
+              <p class="mt-2 text-sm text-zinc-300">{token.description}</p>
+              <p class="mt-4 text-xs font-mono text-zinc-500">{token.token}</p>
+            </ModernCard>
           ))
         }
       </Grid>
@@ -370,29 +373,23 @@ const statShowcase = {
     </div>
   </section>
 
-  <section class="bg-white">
+  <section class="bg-zinc-950">
     <div class="mx-auto max-w-4xl px-6 py-16 text-center">
-      <h2 class="text-2xl font-semibold text-neutral-900">
+      <h2 class="text-2xl font-semibold text-white">
         Want a guided audit of your own system?
       </h2>
-      <p class="mt-4 text-sm text-neutral-600">
+      <p class="mt-4 text-sm text-zinc-400">
         Bring a component you rely on today. We will translate it into these
         primitives, wire up tokens, and ship Playwright + Axe coverage in the
         same session.
       </p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <a
-          class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
-          href={withBasePath('contact/')}
-        >
+        <ModernButton variant="primary" href={withBasePath('contact/')}>
           Schedule a walkthrough
-        </a>
-        <a
-          class="inline-flex items-center justify-center rounded-full border border-neutral-200 px-5 py-2 text-sm font-semibold text-neutral-800 transition hover:border-neutral-300"
-          href={withBasePath('services/')}
-        >
+        </ModernButton>
+        <ModernButton variant="secondary" href={withBasePath('services/')}>
           View services
-        </a>
+        </ModernButton>
       </div>
     </div>
   </section>
