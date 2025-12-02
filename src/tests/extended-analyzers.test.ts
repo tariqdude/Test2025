@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mkdtempSync, writeFileSync, rmSync } from 'fs';
 import path from 'path';
 import { PerformanceAnalyzer } from '../analysis/performance';
 import { AccessibilityAnalyzer } from '../analysis/accessibility';
@@ -8,76 +7,32 @@ import { SecurityAnalyzer } from '../analysis/security';
 import { GitAnalyzer } from '../analysis/git';
 import type { AnalyzerConfig } from '../config/schema';
 
-// Mock file system with proper default export
-vi.mock('fs', async () => {
-  const actual = await vi.importActual<typeof import('fs')>('fs');
-  return {
-    ...actual,
-    default: actual,
-    promises: {
-      readFile: vi.fn().mockResolvedValue(''),
-      access: vi.fn().mockResolvedValue(undefined),
-      stat: vi.fn().mockResolvedValue({ size: 1000 }),
-      readdir: vi.fn().mockResolvedValue([]),
-    },
-  };
-});
-
-vi.mock('node:fs', async () => {
-  const actual = await vi.importActual<typeof import('fs')>('fs');
-  return {
-    ...actual,
-    default: actual,
-    promises: {
-      readFile: vi.fn().mockResolvedValue(''),
-      access: vi.fn().mockResolvedValue(undefined),
-      stat: vi.fn().mockResolvedValue({ size: 1000 }),
-      readdir: vi.fn().mockResolvedValue([]),
-    },
-  };
-});
-
-vi.mock('fs/promises', async () => {
-  return {
-    readFile: vi.fn().mockResolvedValue(''),
-    access: vi.fn().mockResolvedValue(undefined),
-    stat: vi.fn().mockResolvedValue({ size: 1000 }),
-    readdir: vi.fn().mockResolvedValue([]),
-    default: {
-      readFile: vi.fn().mockResolvedValue(''),
-      access: vi.fn().mockResolvedValue(undefined),
-      stat: vi.fn().mockResolvedValue({ size: 1000 }),
-      readdir: vi.fn().mockResolvedValue([]),
-    },
-  };
-});
-
-vi.mock('node:fs/promises', async () => {
-  return {
-    readFile: vi.fn().mockResolvedValue(''),
-    access: vi.fn().mockResolvedValue(undefined),
-    stat: vi.fn().mockResolvedValue({ size: 1000 }),
-    readdir: vi.fn().mockResolvedValue([]),
-    default: {
-      readFile: vi.fn().mockResolvedValue(''),
-      access: vi.fn().mockResolvedValue(undefined),
-      stat: vi.fn().mockResolvedValue({ size: 1000 }),
-      readdir: vi.fn().mockResolvedValue([]),
-    },
-  };
-});
-
-vi.mock('fs/promises', () => ({
+const fsMocks = vi.hoisted(() => ({
   readFile: vi.fn().mockResolvedValue(''),
   access: vi.fn().mockResolvedValue(undefined),
   stat: vi.fn().mockResolvedValue({ size: 1000 }),
   readdir: vi.fn().mockResolvedValue([]),
-  default: {
-    readFile: vi.fn().mockResolvedValue(''),
-    access: vi.fn().mockResolvedValue(undefined),
-    stat: vi.fn().mockResolvedValue({ size: 1000 }),
-    readdir: vi.fn().mockResolvedValue([]),
-  },
+}));
+
+// Mock file system with proper default export
+vi.mock('fs', () => ({
+  promises: fsMocks,
+  default: { promises: fsMocks }
+}));
+
+vi.mock('node:fs', () => ({
+  promises: fsMocks,
+  default: { promises: fsMocks }
+}));
+
+vi.mock('fs/promises', () => ({
+  ...fsMocks,
+  default: fsMocks,
+}));
+
+vi.mock('node:fs/promises', () => ({
+  ...fsMocks,
+  default: fsMocks,
 }));
 
 // Mock glob
@@ -202,38 +157,35 @@ describe('Accessibility Analyzer', () => {
   });
 
   it('should detect missing alt text on images', async () => {
-    const actualFs = await vi.importActual<typeof import('fs')>('fs');
-    const tmpRoot = mkdtempSync(path.join(process.cwd(), 'a11y-fixture-'));
-    const filePath = path.join(tmpRoot, 'page.astro');
-    writeFileSync(filePath, '<img src="image.jpg">', 'utf-8');
+    const filePath = '/fake/path/page.astro';
+    const fileContent = '<img src="image.jpg">';
 
-    // Let analyzer read real fixture content instead of the global fs mock
-    vi.mocked((await import('fs')).promises.readFile).mockImplementation(
-      actualFs.promises.readFile
-    );
+    // Mock glob to find our fake file
     const { glob } = await import('glob');
     vi.mocked(glob).mockResolvedValue([filePath]);
 
+    // Mock readFile to return our fake content
+    fsMocks.readFile.mockImplementation(async (path: any) => {
+      if (path === filePath) return fileContent;
+      return '';
+    });
+
     const config = {
       ...mockConfig,
-      projectRoot: tmpRoot,
+      projectRoot: '/fake/path',
       ignore: [],
       include: ['**/*.astro'],
     };
 
-    try {
-      const issues = await analyzer.analyze(config);
-      expect(Array.isArray(issues)).toBe(true);
-      expect(
-        issues.some(
-          issue =>
-            issue.rule === 'accessibility-pattern' &&
-            issue.description.includes('alt attributes')
-        )
-      ).toBe(true);
-    } finally {
-      rmSync(tmpRoot, { recursive: true, force: true });
-    }
+    const issues = await analyzer.analyze(config);
+    expect(Array.isArray(issues)).toBe(true);
+    expect(
+      issues.some(
+        issue =>
+          issue.rule === 'accessibility-pattern' &&
+          issue.description.includes('alt attributes')
+      )
+    ).toBe(true);
   });
 
   it('should handle pattern scanning errors gracefully', async () => {
@@ -679,9 +631,8 @@ describe('Security Analyzer', () => {
   });
 
   it('flags committed environment files', async () => {
-    const tmpRoot = mkdtempSync(path.join(process.cwd(), 'env-fixture-'));
-    const envPath = path.join(tmpRoot, '.env.local');
-    writeFileSync(envPath, 'SECRET_KEY=should-not-commit', 'utf-8');
+    const envPath = '/fake/path/.env.local';
+    const fileContent = 'SECRET_KEY=should-not-commit';
 
     const { glob } = await import('glob');
     vi.mocked(glob)
@@ -689,19 +640,22 @@ describe('Security Analyzer', () => {
       .mockResolvedValueOnce([]) // environment content scanning
       .mockResolvedValueOnce([envPath]); // env file detection
 
-    try {
-      const issues = await analyzer.analyze({
-        ...mockConfig,
-        projectRoot: tmpRoot,
-        ignore: [],
-        include: ['**/*'],
-      });
+    // Mock readFile for content scanning if needed (though env file detection might just check existence/name)
+    // But if it reads content, we provide it.
+    fsMocks.readFile.mockImplementation(async (path: any) => {
+      if (path === envPath) return fileContent;
+      return '';
+    });
 
-      expect(issues.some(issue => issue.rule === 'env-files-in-repo')).toBe(
-        true
-      );
-    } finally {
-      rmSync(tmpRoot, { recursive: true, force: true });
-    }
+    const issues = await analyzer.analyze({
+      ...mockConfig,
+      projectRoot: '/fake/path',
+      ignore: [],
+      include: ['**/*'],
+    });
+
+    expect(issues.some(issue => issue.rule === 'env-files-in-repo')).toBe(
+      true
+    );
   });
 });
