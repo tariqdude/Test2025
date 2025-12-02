@@ -10,6 +10,8 @@ import {
   Home,
   Box,
   X,
+  User,
+  Layout,
   type LucideIcon,
 } from 'lucide-preact';
 import Fuse from 'fuse.js';
@@ -20,14 +22,26 @@ interface CommandItem {
   label: string;
   icon: LucideIcon;
   action: () => void;
-  category: 'Navigation' | 'Theme' | 'Actions';
+  category: 'Navigation' | 'Theme' | 'Actions' | 'Blog' | 'Authors' | 'Page';
   keywords?: string[];
+  description?: string;
+}
+
+interface SearchIndexItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  url: string;
+  date: string;
+  tags: string[];
 }
 
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [searchItems, setSearchItems] = useState<CommandItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -58,7 +72,7 @@ export default function CommandPalette() {
     {
       id: 'nav-components',
       label: 'Go to Components',
-      icon: Box,
+      icon: Layout,
       action: () => navigate('/components'),
       category: 'Navigation',
     },
@@ -89,15 +103,49 @@ export default function CommandPalette() {
     },
   ];
 
+  useEffect(() => {
+    const fetchSearchIndex = async () => {
+      try {
+        const response = await fetch('/search-index.json');
+        if (!response.ok) return;
+        const data = await response.json();
+        const items = data.map((item: SearchIndexItem) => {
+          let icon = FileText;
+          if (item.category === 'Authors') icon = User;
+          if (item.category === 'Page') icon = Layout;
+          
+          return {
+            id: item.id,
+            label: item.title,
+            icon,
+            action: () => navigate(item.url),
+            category: item.category as CommandItem['category'],
+            keywords: item.tags,
+            description: item.description,
+          };
+        });
+        setSearchItems(items);
+      } catch (e) {
+        console.error('Failed to load search index', e);
+      }
+    };
+
+    if (isOpen && searchItems.length === 0) {
+      fetchSearchIndex();
+    }
+  }, [isOpen]);
+
+  const allCommands = [...commands, ...searchItems];
+
   // Fuzzy search setup
-  const fuse = new Fuse(commands, {
-    keys: ['label', 'category', 'keywords'],
+  const fuse = new Fuse(allCommands, {
+    keys: ['label', 'category', 'keywords', 'description'],
     threshold: 0.3,
   });
 
   const filteredCommands = query
     ? fuse.search(query).map(result => result.item)
-    : commands;
+    : allCommands;
 
   // Keyboard shortcuts
   useEffect(() => {
