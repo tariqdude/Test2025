@@ -17,12 +17,12 @@ const fsMocks = vi.hoisted(() => ({
 // Mock file system with proper default export
 vi.mock('fs', () => ({
   promises: fsMocks,
-  default: { promises: fsMocks }
+  default: { promises: fsMocks },
 }));
 
 vi.mock('node:fs', () => ({
   promises: fsMocks,
-  default: { promises: fsMocks }
+  default: { promises: fsMocks },
 }));
 
 vi.mock('fs/promises', () => ({
@@ -654,8 +654,6 @@ describe('Security Analyzer', () => {
       include: ['**/*'],
     });
 
-    expect(issues.some(issue => issue.rule === 'env-files-in-repo')).toBe(
-      true
-    );
+    expect(issues.some(issue => issue.rule === 'env-files-in-repo')).toBe(true);
   });
 });

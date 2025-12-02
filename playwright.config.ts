@@ -43,11 +43,11 @@ export default defineConfig({
     },
   ],
 
-  // Note: Run 'npm run preview' manually before running tests
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:4321/github-pages-project-v1',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
+  // webServer disabled - start manually with: npm run preview
+  // webServer: {
+  //   command: 'npx astro preview',
+  //   url: 'http://localhost:4321/github-pages-project-v1',
+  //   reuseExistingServer: true,
+  //   timeout: 30 * 1000,
+  // },
 });

@@ -113,7 +113,7 @@ export default function CommandPalette() {
           let icon = FileText;
           if (item.category === 'Authors') icon = User;
           if (item.category === 'Page') icon = Layout;
-          
+
           return {
             id: item.id,
             label: item.title,
