@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { navigate } from 'astro:transitions/client';
 import {
   Search,
@@ -15,7 +15,11 @@ import {
   type LucideIcon,
 } from 'lucide-preact';
 import Fuse from 'fuse.js';
-import { setTheme } from '../store/theme';
+// Using our new utilities
+import { setTheme } from '../store/index';
+import { onKeyboardShortcut, type KeyboardShortcut } from '../utils/events';
+import { createFocusTrap, announce } from '../utils/a11y';
+import { get as httpGet } from '../utils/http';
 
 interface CommandItem {
   id: string;
@@ -44,6 +48,8 @@ export default function CommandPalette() {
   const [searchItems, setSearchItems] = useState<CommandItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const focusTrapCleanup = useRef<(() => void) | null>(null);
 
   // Define commands
   const commands: CommandItem[] = [
@@ -103,37 +109,39 @@ export default function CommandPalette() {
     },
   ];
 
+  // Fetch search index using our http utility
+  const fetchSearchIndex = useCallback(async () => {
+    try {
+      const response = await httpGet<SearchIndexItem[]>('/search-index.json');
+      const items = response.data.map((item: SearchIndexItem) => {
+        let icon = FileText;
+        if (item.category === 'Authors') icon = User;
+        if (item.category === 'Page') icon = Layout;
+
+        return {
+          id: item.id,
+          label: item.title,
+          icon,
+          action: () => navigate(item.url),
+          category: item.category as CommandItem['category'],
+          keywords: item.tags,
+          description: item.description,
+        };
+      });
+      setSearchItems(items);
+      // Announce to screen readers using our a11y utility
+      announce(`Loaded ${items.length} searchable items`, 'polite');
+    } catch (e) {
+      console.error('Failed to load search index', e);
+      announce('Failed to load search index', 'assertive');
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchSearchIndex = async () => {
-      try {
-        const response = await fetch('/search-index.json');
-        if (!response.ok) return;
-        const data = await response.json();
-        const items = data.map((item: SearchIndexItem) => {
-          let icon = FileText;
-          if (item.category === 'Authors') icon = User;
-          if (item.category === 'Page') icon = Layout;
-
-          return {
-            id: item.id,
-            label: item.title,
-            icon,
-            action: () => navigate(item.url),
-            category: item.category as CommandItem['category'],
-            keywords: item.tags,
-            description: item.description,
-          };
-        });
-        setSearchItems(items);
-      } catch (e) {
-        console.error('Failed to load search index', e);
-      }
-    };
-
     if (isOpen && searchItems.length === 0) {
       fetchSearchIndex();
     }
-  }, [isOpen]);
+  }, [isOpen, searchItems.length, fetchSearchIndex]);
 
   const allCommands = [...commands, ...searchItems];
 
@@ -147,30 +155,72 @@ export default function CommandPalette() {
     ? fuse.search(query).map(result => result.item)
     : allCommands;
 
-  // Keyboard shortcuts
+  // Use our keyboard shortcut utility for global shortcuts
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsOpen(prev => !prev);
-      }
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
+    const toggleShortcut: KeyboardShortcut = {
+      key: 'k',
+      ctrl: true,
+      meta: true, // Support both Ctrl+K and Cmd+K
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    const cleanup = onKeyboardShortcut(toggleShortcut, () => {
+      setIsOpen(prev => {
+        const newState = !prev;
+        announce(
+          newState ? 'Command palette opened' : 'Command palette closed',
+          'polite'
+        );
+        return newState;
+      });
+    });
 
-  // Focus input when opened
+    // Also support Escape to close
+    const escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        announce('Command palette closed', 'polite');
+      }
+    };
+    window.addEventListener('keydown', escapeHandler);
+
+    return () => {
+      cleanup();
+      window.removeEventListener('keydown', escapeHandler);
+    };
+  }, [isOpen]);
+
+  // Focus trap and input focus when opened
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50);
+    if (isOpen && modalRef.current) {
+      // Create focus trap using our a11y utility
+      const trap = createFocusTrap(modalRef.current, {
+        initialFocus: inputRef.current || undefined,
+        escapeDeactivates: true,
+        onEscape: () => setIsOpen(false),
+      });
+      trap.activate();
+      focusTrapCleanup.current = () => trap.deactivate();
+
       setQuery('');
       setSelectedIndex(0);
+
+      // Announce opening for screen readers
+      announce(
+        `Command palette opened. ${allCommands.length} commands available. Type to search.`,
+        'polite'
+      );
+    } else if (!isOpen && focusTrapCleanup.current) {
+      focusTrapCleanup.current();
+      focusTrapCleanup.current = null;
     }
-  }, [isOpen]);
+
+    return () => {
+      if (focusTrapCleanup.current) {
+        focusTrapCleanup.current();
+        focusTrapCleanup.current = null;
+      }
+    };
+  }, [isOpen, allCommands.length]);
 
   // Navigation within list
   useEffect(() => {
@@ -222,7 +272,13 @@ export default function CommandPalette() {
       />
 
       {/* Modal */}
-      <div className="animate-in fade-in zoom-in-95 relative w-full max-w-2xl overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl duration-200">
+      <div
+        ref={modalRef}
+        className="animate-in fade-in zoom-in-95 relative w-full max-w-2xl overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl duration-200"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+      >
         {/* Search Input */}
         <div className="flex items-center border-b border-white/10 px-4 py-3">
           <Search className="mr-3 h-5 w-5 text-zinc-400" />

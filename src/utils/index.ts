@@ -5,6 +5,206 @@ import { logger } from './logger';
 // Export analysis cache utility
 export { AnalysisCache } from './analysis-cache';
 
+/* ==================== EVENTS UTILITIES ==================== */
+
+export {
+  EventEmitter,
+  eventBus,
+  createNamespacedEmitter,
+  customEvents,
+  Observable,
+  observable,
+  combineObservables,
+  delegateEvent,
+  onKeyboardShortcut,
+  parseShortcut,
+  registerShortcuts,
+  onMediaQueryChange,
+  onVisibilityChange,
+  onOnlineStatusChange,
+  onResize,
+  onScroll,
+  onIdle,
+} from './events';
+import {
+  EventEmitter,
+  eventBus,
+  observable,
+  onKeyboardShortcut,
+  onMediaQueryChange,
+  onVisibilityChange,
+} from './events';
+
+/* ==================== CRYPTO UTILITIES ==================== */
+
+export {
+  hasCrypto,
+  uuid,
+  shortId,
+  nanoId,
+  randomBytes,
+  bytesToHex,
+  hexToBytes,
+  stringToBytes,
+  bytesToString,
+  bytesToBase64,
+  base64ToBytes,
+  base64UrlEncode,
+  base64UrlDecode,
+  hash,
+  sha256,
+  sha512,
+  simpleHash,
+  djb2Hash,
+  fnv1aHash,
+  hmacSign,
+  hmacVerify,
+  timingSafeEqual,
+  encrypt,
+  decrypt,
+  generateKeyPair,
+  generatePassword,
+  checkPasswordStrength,
+  generateOTPSecret,
+  generateTOTP,
+  verifyTOTP,
+  checksum,
+  crc32,
+  obfuscate,
+  deobfuscate,
+  generateFingerprint,
+} from './crypto';
+import {
+  uuid,
+  shortId,
+  nanoId,
+  sha256,
+  simpleHash,
+  generatePassword,
+  checkPasswordStrength,
+} from './crypto';
+
+/* ==================== HTTP CLIENT UTILITIES ==================== */
+
+export {
+  HttpError,
+  TimeoutError,
+  buildUrl as buildHttpUrl,
+  request,
+  get,
+  post,
+  put,
+  patch,
+  del,
+  head,
+  options,
+  createClient,
+  createInterceptorClient,
+  createResource,
+  uploadFile,
+  downloadFile,
+  triggerDownload,
+  createGraphQLClient,
+  createSSEClient,
+  poll,
+} from './http';
+import {
+  request,
+  get,
+  post,
+  createClient,
+  createResource,
+  uploadFile,
+  downloadFile,
+} from './http';
+
+/* ==================== ACCESSIBILITY UTILITIES ==================== */
+
+export {
+  createAnnouncer,
+  announce,
+  announceAssertive,
+  getFocusableElements,
+  getFirstFocusable,
+  getLastFocusable,
+  createFocusTrap as createA11yFocusTrap,
+  createSkipLink,
+  isAccessiblyHidden,
+  getAccessibleName,
+  setAriaAttributes,
+  createTooltip,
+  createRovingTabIndex,
+  prefersReducedMotion,
+  onReducedMotionChange,
+  prefersHighContrast,
+  prefersColorScheme,
+  createAccessibleDialog,
+  createLiveRegion,
+  getContrastRatio,
+  checkWcagCompliance,
+} from './a11y';
+import {
+  announce,
+  getFocusableElements,
+  createSkipLink,
+  setAriaAttributes,
+  prefersReducedMotion,
+  prefersColorScheme,
+  getContrastRatio,
+  checkWcagCompliance,
+} from './a11y';
+
+/* ==================== MEDIA & DEVICE UTILITIES ==================== */
+
+export {
+  breakpoints,
+  getCurrentBreakpoint,
+  matchesBreakpoint,
+  isBetweenBreakpoints,
+  watchBreakpoint,
+  createMediaQuery,
+  mediaQueries,
+  getDeviceInfo,
+  isMobile,
+  isTablet,
+  isDesktop,
+  hasTouch,
+  getViewportSize,
+  watchViewportSize,
+  getDocumentSize,
+  isScrollable,
+  getNetworkInfo,
+  isSlowNetwork,
+  watchNetworkStatus,
+  getVisibilityState,
+  isDocumentVisible,
+  watchVisibility,
+  isFullscreenSupported,
+  isFullscreen,
+  requestFullscreen,
+  exitFullscreen,
+  toggleFullscreen,
+  watchFullscreen,
+  getOrientation,
+  lockOrientation,
+  unlockOrientation,
+  watchOrientation,
+  getPixelRatio,
+  isHighDPI,
+  getImageDPISuffix,
+} from './media';
+import {
+  getCurrentBreakpoint,
+  matchesBreakpoint,
+  mediaQueries,
+  getDeviceInfo,
+  isMobile,
+  getViewportSize,
+  getNetworkInfo,
+  isFullscreen,
+  toggleFullscreen,
+} from './media';
+
 /* ==================== FORMATTING UTILITIES ==================== */
 
 export {
@@ -472,6 +672,53 @@ import {
 
 // Export all utilities as a single object for convenience
 const utils = {
+  // Events
+  EventEmitter,
+  eventBus,
+  observable,
+  onKeyboardShortcut,
+  onMediaQueryChange,
+  onVisibilityChange,
+
+  // Crypto
+  uuid,
+  shortId,
+  nanoId,
+  sha256,
+  simpleHash,
+  generatePassword,
+  checkPasswordStrength,
+
+  // HTTP
+  request,
+  get,
+  post,
+  createClient,
+  createResource,
+  uploadFile,
+  downloadFile,
+
+  // Accessibility
+  announce,
+  getFocusableElements,
+  createSkipLink,
+  setAriaAttributes,
+  prefersReducedMotion,
+  prefersColorScheme,
+  getContrastRatio,
+  checkWcagCompliance,
+
+  // Media & Device
+  getCurrentBreakpoint,
+  matchesBreakpoint,
+  mediaQueries,
+  getDeviceInfo,
+  isMobile,
+  getViewportSize,
+  getNetworkInfo,
+  isFullscreen,
+  toggleFullscreen,
+
   // Formatting
   formatDate,
   formatRelativeTime,

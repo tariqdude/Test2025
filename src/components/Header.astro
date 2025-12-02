@@ -157,66 +157,6 @@ const links = [
 </header>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-
-    if (!toggle || !menu) {
-      return;
-    }
-
-    const closeMenu = () => {
-      menu.setAttribute('hidden', '');
-      toggle.setAttribute('aria-expanded', 'false');
-      // Return focus to toggle button when menu closes
-      toggle.focus();
-    };
-
-    const openMenu = () => {
-      menu.removeAttribute('hidden');
-      toggle.setAttribute('aria-expanded', 'true');
-      // Focus first link in menu for better keyboard navigation
-      const firstLink = menu.querySelector('a');
-      if (firstLink) {
-        setTimeout(() => firstLink.focus(), 50);
-      }
-    };
-
-    toggle.addEventListener('click', () => {
-      const isHidden = menu.hasAttribute('hidden');
-      if (isHidden) {
-        openMenu();
-      } else {
-        closeMenu();
-      }
-    });
-
-    // Close menu on Escape key
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && !menu.hasAttribute('hidden')) {
-        closeMenu();
-      }
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', event => {
-      const target = event.target;
-      if (
-        target instanceof Node &&
-        !menu.hasAttribute('hidden') &&
-        !menu.contains(target) &&
-        !toggle.contains(target)
-      ) {
-        closeMenu();
-      }
-    });
-
-    // Close menu when navigating to a page
-    menu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        // Small delay to allow navigation to proceed
-        setTimeout(closeMenu, 100);
-      });
-    });
-  });
+  // Import the enhanced header script that uses our utilities
+  import '../scripts/header';
 </script>

@@ -130,7 +130,8 @@
 </style>
 
 <script>
-  import { theme, setTheme } from '../store/theme';
+  // Use the consolidated store for theme management
+  import { theme, setTheme } from '../store/index';
 
   const toggle = document.getElementById('theme-toggle');
   const menu = document.getElementById('theme-menu');
