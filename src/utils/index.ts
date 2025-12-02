@@ -7,8 +7,53 @@ export { AnalysisCache } from './analysis-cache';
 
 /* ==================== FORMATTING UTILITIES ==================== */
 
-export { formatDate, formatRelativeTime } from './date';
-import { formatDate, formatRelativeTime } from './date';
+export {
+  formatDate,
+  formatRelativeTime,
+  parseDate,
+  isValidDate,
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  startOfYear,
+  endOfYear,
+  addTime,
+  subtractTime,
+  dateDiff,
+  isToday,
+  isYesterday,
+  isTomorrow,
+  isPast,
+  isFuture,
+  isWeekend,
+  isWeekday,
+  isLeapYear,
+  getDaysInMonth,
+  getDaysInYear,
+  getWeekNumber,
+  getQuarter,
+  isSameDay,
+  isSameMonth,
+  isSameYear,
+  isBetween,
+  getAge,
+  formatDuration,
+  getDateRange,
+  getClosestDate,
+  formatTime,
+  getTimezoneOffset,
+  toISODateString,
+  fromISODateString,
+} from './date';
+import {
+  formatDate,
+  formatRelativeTime,
+  isToday,
+  formatDuration,
+} from './date';
 
 export { formatNumber, formatFileSize } from './format';
 import { formatNumber, formatFileSize } from './format';
@@ -23,6 +68,31 @@ export {
   getInitials,
   sanitizeInput,
   escapeHtml,
+  camelCase,
+  snakeCase,
+  kebabCase,
+  pascalCase,
+  pluralize,
+  wordCount,
+  reverseString,
+  maskString,
+  normalizeWhitespace,
+  stripHtml,
+  extractNumbers,
+  extractEmails,
+  extractUrls,
+  isUpperCase,
+  isLowerCase,
+  padString,
+  countOccurrences,
+  isPalindrome,
+  randomString,
+  wrapText,
+  sentenceCase,
+  removeAccents,
+  isAlphanumeric,
+  levenshteinDistance,
+  stringSimilarity,
 } from './string';
 import {
   slugify,
@@ -32,21 +102,102 @@ import {
   getInitials,
   sanitizeInput,
   escapeHtml,
+  camelCase,
+  snakeCase,
+  kebabCase,
+  maskString,
+  stripHtml,
+  randomString,
 } from './string';
 
 /* ==================== ARRAY UTILITIES ==================== */
 
-export { unique, groupBy, chunk, shuffle } from './array';
-import { unique, groupBy, chunk, shuffle } from './array';
+export {
+  unique,
+  groupBy,
+  chunk,
+  shuffle,
+  flatten,
+  intersection,
+  difference,
+  union,
+  partition,
+  findWithIndex,
+  last,
+  first,
+  take,
+  drop,
+  range,
+  uniqueBy,
+  countBy,
+  sum,
+  average,
+  minBy,
+  maxBy,
+  zip,
+  keyBy,
+  sample,
+  compact,
+  sortBy,
+} from './array';
+import {
+  unique,
+  groupBy,
+  chunk,
+  shuffle,
+  flatten,
+  intersection,
+  difference,
+  union,
+  partition,
+  first,
+  last,
+  range,
+  sum,
+  average,
+  sample,
+  compact,
+} from './array';
 
 /* ==================== OBJECT UTILITIES ==================== */
 
-export { deepMerge, pick, omit } from './object';
-import { deepMerge, pick, omit } from './object';
+export {
+  deepMerge,
+  pick,
+  omit,
+  deepClone,
+  deepFreeze,
+  deepEqual,
+  flattenObject,
+  unflattenObject,
+  getByPath,
+  setByPath,
+  deleteByPath,
+  mapValues,
+  mapKeys,
+  filterObject,
+  invert,
+  hasPath,
+  fromEntries,
+  entries,
+  keys,
+  values,
+} from './object';
+import {
+  deepMerge,
+  pick,
+  omit,
+  deepClone,
+  deepEqual,
+  getByPath,
+  setByPath,
+  mapValues,
+  filterObject,
+} from './object';
 
 /* ==================== URL AND QUERY UTILITIES ==================== */
 
-export { buildUrl, parseQuery } from './url';
+export { buildUrl, parseQuery, withBasePath, resolveHref } from './url';
 import { buildUrl, parseQuery } from './url';
 
 /* ==================== CSS UTILITIES ==================== */
@@ -69,52 +220,308 @@ import { calculateReadingTime } from './reading-time';
 export { getPreferredColorScheme, applyColorScheme } from './theme';
 import { getPreferredColorScheme, applyColorScheme } from './theme';
 
-/* ==================== PERFORMANCE UTILITIES ==================== */
+/* ==================== PERFORMANCE/FUNCTION UTILITIES ==================== */
 
-export { debounce, throttle } from './function';
-import { debounce, throttle } from './function';
+export {
+  debounce,
+  throttle,
+  debounceLeading,
+  throttleTrailing,
+  memoize,
+  memoizeLRU,
+  once,
+  negate,
+  compose,
+  pipe,
+  curry,
+  partial,
+  after,
+  before,
+  rateLimit,
+  delay,
+  tryCatch,
+  noop,
+  identity,
+  constant,
+  times,
+} from './function';
+import {
+  debounce,
+  throttle,
+  memoize,
+  once,
+  compose,
+  pipe,
+  noop,
+  identity,
+} from './function';
 
 export { measureTime } from './performance-utils';
 import { measureTime } from './performance-utils';
 
+/* ==================== MATH UTILITIES ==================== */
+
+export {
+  clamp,
+  lerp,
+  easeInOut,
+  roundTo,
+  mapRange,
+  inRange,
+  randomBetween,
+  randomIntBetween,
+  percentage,
+  fromPercentage,
+  gcd,
+  lcm,
+  isPrime,
+  factorial,
+  fibonacci,
+  mean,
+  median,
+  mode,
+  standardDeviation,
+  variance,
+  normalize,
+  denormalize,
+  distance,
+  angle,
+  degreesToRadians,
+  radiansToDegrees,
+  easing,
+  smoothstep,
+  wrap,
+} from './math';
+import {
+  clamp,
+  lerp,
+  roundTo,
+  randomBetween,
+  randomIntBetween,
+  mean,
+  median,
+  distance,
+  easing,
+} from './math';
+
+/* ==================== COLOR UTILITIES ==================== */
+
+export {
+  hexToRgb,
+  rgbToHex,
+  rgbToHsl,
+  hslToRgb,
+  hexToHsl,
+  hslToHex,
+  lighten,
+  darken,
+  saturate,
+  desaturate,
+  setOpacity,
+  mixColors,
+  complementary,
+  triadic,
+  analogous,
+  splitComplementary,
+  relativeLuminance,
+  contrastRatio,
+  meetsWcagAA,
+  meetsWcagAAA,
+  isLight,
+  getContrastTextColor,
+  generatePalette,
+  parseColor,
+  randomColor,
+  randomColorInHueRange,
+} from './color';
+import {
+  hexToRgb,
+  rgbToHex,
+  lighten,
+  darken,
+  mixColors,
+  isLight,
+  getContrastTextColor,
+  randomColor,
+} from './color';
+
 /* ==================== VALIDATION UTILITIES ==================== */
 
-export { isValidEmail, isValidUrl, isEmpty } from './validation';
+export { isValidEmail, isValidUrl, isEmpty, validatePhone } from './validation';
 import { isValidEmail, isValidUrl, isEmpty } from './validation';
 
 /* ==================== ASYNC UTILITIES ==================== */
 
-export { sleep, retry } from './async';
-import { sleep, retry } from './async';
+export {
+  sleep,
+  retry,
+  withTimeout,
+  parallelLimit,
+  sequential,
+  waitUntil,
+  memoizeAsync,
+  PromisePool,
+  defer,
+  createDeferred,
+  raceSuccess,
+  backoffStrategies,
+  retryWithBackoff,
+} from './async';
+import {
+  sleep,
+  retry,
+  withTimeout,
+  parallelLimit,
+  sequential,
+  waitUntil,
+  PromisePool,
+} from './async';
+
+/* ==================== STORAGE UTILITIES ==================== */
+
+export {
+  isLocalStorageAvailable,
+  isSessionStorageAvailable,
+  setLocalStorage,
+  getLocalStorage,
+  removeLocalStorage,
+  clearLocalStorage,
+  getLocalStorageKeys,
+  getLocalStorageSize,
+  setSessionStorage,
+  getSessionStorage,
+  removeSessionStorage,
+  clearSessionStorage,
+  setWithExpiry,
+  getWithExpiry,
+  cookies,
+  createNamespacedStorage,
+  SimpleDB,
+} from './storage';
+import {
+  setLocalStorage,
+  getLocalStorage,
+  removeLocalStorage,
+  cookies,
+  createNamespacedStorage,
+} from './storage';
+
+/* ==================== DOM UTILITIES ==================== */
+
+export {
+  isBrowser,
+  $,
+  $$,
+  byId,
+  createElement,
+  on,
+  once as onceEvent,
+  delegate,
+  ready,
+  loaded,
+  toggleClass,
+  addClass,
+  removeClass,
+  hasClass,
+  setCssVar,
+  getCssVar,
+  getRect,
+  isInViewport,
+  isPartiallyVisible,
+  scrollIntoView,
+  scrollToTop,
+  getScrollPosition,
+  lockScroll,
+  getOffset,
+  getOuterDimensions,
+  insertAfter,
+  removeElement,
+  replaceElement,
+  getSiblings,
+  getNextSibling,
+  getPrevSibling,
+  getParents,
+  wrapElement,
+  unwrap,
+  empty,
+  clone,
+  data,
+  createFocusTrap,
+  copyToClipboard,
+  readFromClipboard,
+  observeResize,
+  observeIntersection,
+  observeMutations,
+  animate,
+  fadeIn,
+  fadeOut,
+  printElement,
+} from './dom';
+import {
+  isBrowser,
+  $,
+  $$,
+  on,
+  ready,
+  scrollToTop,
+  copyToClipboard,
+  observeIntersection,
+} from './dom';
 
 /* ==================== DEFAULT EXPORT ==================== */
 
-// Export all utilities as a single object
+// Export all utilities as a single object for convenience
 const utils = {
   // Formatting
   formatDate,
   formatRelativeTime,
   formatNumber,
   formatFileSize,
+  formatDuration,
 
   // Strings
   slugify,
   truncate,
   titleCase,
+  capitalizeFirst,
   getInitials,
   sanitizeInput,
   escapeHtml,
+  camelCase,
+  snakeCase,
+  kebabCase,
+  maskString,
+  stripHtml,
+  randomString,
 
   // Arrays
   unique,
   groupBy,
   chunk,
   shuffle,
+  flatten,
+  intersection,
+  difference,
+  union,
+  partition,
+  first,
+  last,
+  range,
+  sum,
+  average,
+  sample,
+  compact,
 
   // Objects
   deepMerge,
   pick,
   omit,
+  deepClone,
+  deepEqual,
+  getByPath,
+  setByPath,
+  mapValues,
+  filterObject,
 
   // URLs
   buildUrl,
@@ -133,19 +540,69 @@ const utils = {
   getPreferredColorScheme,
   applyColorScheme,
 
-  // Performance
+  // Performance/Functions
   debounce,
   throttle,
+  memoize,
+  once,
+  compose,
+  pipe,
   measureTime,
+  noop,
+  identity,
+
+  // Math
+  clamp,
+  lerp,
+  roundTo,
+  randomBetween,
+  randomIntBetween,
+  mean,
+  median,
+  distance,
+  easing,
+
+  // Colors
+  hexToRgb,
+  rgbToHex,
+  lighten,
+  darken,
+  mixColors,
+  isLight,
+  getContrastTextColor,
+  randomColor,
 
   // Validation
   isValidEmail,
   isValidUrl,
   isEmpty,
+  isToday,
 
   // Async
   sleep,
   retry,
+  withTimeout,
+  parallelLimit,
+  sequential,
+  waitUntil,
+  PromisePool,
+
+  // Storage
+  setLocalStorage,
+  getLocalStorage,
+  removeLocalStorage,
+  cookies,
+  createNamespacedStorage,
+
+  // DOM
+  isBrowser,
+  $,
+  $$,
+  on,
+  ready,
+  scrollToTop,
+  copyToClipboard,
+  observeIntersection,
 };
 
 export default utils;

@@ -491,7 +491,7 @@ export const getParents = (
 /**
  * Wrap element with another element
  */
-export const wrap = (element: Element, wrapper: Element): void => {
+export const wrapElement = (element: Element, wrapper: Element): void => {
   element.parentNode?.insertBefore(wrapper, element);
   wrapper.appendChild(element);
 };

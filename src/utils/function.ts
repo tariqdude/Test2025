@@ -137,8 +137,10 @@ export const memoizeLRU = <T extends (...args: unknown[]) => unknown>(
 
     // Remove oldest if over limit
     if (cache.size > maxSize) {
-      const firstKey = cache.keys().next().value;
-      cache.delete(firstKey);
+      const firstKey = cache.keys().next().value as string | undefined;
+      if (firstKey !== undefined) {
+        cache.delete(firstKey);
+      }
     }
 
     return result;
