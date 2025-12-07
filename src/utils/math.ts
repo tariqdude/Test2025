@@ -1,38 +1,72 @@
 /**
  * Math and Animation Utilities
+ * @module utils/math
+ * @description Mathematical functions for calculations, statistics,
+ * animations, and number manipulation.
  */
 
 /**
- * Ease in-out function
+ * Quadratic ease in-out function for smooth animations
+ * @param t - Progress value between 0 and 1
+ * @returns Eased value between 0 and 1
+ * @example easeInOut(0.5) // 0.5 (midpoint)
  */
 export function easeInOut(t: number): number {
-  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  const clamped = Math.max(0, Math.min(1, t));
+  return clamped < 0.5
+    ? 2 * clamped * clamped
+    : -1 + (4 - 2 * clamped) * clamped;
 }
 
 /**
- * Linear interpolation
+ * Linear interpolation between two values
+ * @param start - Starting value
+ * @param end - Ending value
+ * @param factor - Interpolation factor (0 = start, 1 = end)
+ * @returns Interpolated value
+ * @example lerp(0, 100, 0.5) // 50
  */
 export function lerp(start: number, end: number, factor: number): number {
   return start + (end - start) * factor;
 }
 
 /**
- * Clamp a value between min and max
+ * Clamp a value between min and max bounds
+ * @param value - Value to clamp
+ * @param min - Minimum bound
+ * @param max - Maximum bound
+ * @returns Clamped value
+ * @example clamp(15, 0, 10) // 10
+ * @example clamp(-5, 0, 10) // 0
  */
 export function clamp(value: number, min: number, max: number): number {
+  // Handle case where min > max by swapping
+  if (min > max) [min, max] = [max, min];
   return Math.min(Math.max(value, min), max);
 }
 
 /**
  * Round to specified decimal places
+ * @param value - Value to round
+ * @param decimals - Number of decimal places (default: 0)
+ * @returns Rounded value
+ * @example roundTo(3.14159, 2) // 3.14
  */
-export function roundTo(value: number, decimals: number): number {
-  const factor = Math.pow(10, decimals);
+export function roundTo(value: number, decimals = 0): number {
+  if (decimals < 0) decimals = 0;
+  const factor = Math.pow(10, Math.round(decimals));
   return Math.round(value * factor) / factor;
 }
 
 /**
- * Map a value from one range to another
+ * Map a value from one range to another (linear scaling)
+ * @param value - Input value to map
+ * @param inMin - Input range minimum
+ * @param inMax - Input range maximum
+ * @param outMin - Output range minimum
+ * @param outMax - Output range maximum
+ * @returns Mapped value in output range
+ * @example mapRange(50, 0, 100, 0, 1) // 0.5
  */
 export function mapRange(
   value: number,
@@ -41,6 +75,8 @@ export function mapRange(
   outMin: number,
   outMax: number
 ): number {
+  // Avoid division by zero
+  if (inMax === inMin) return outMin;
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 }
 

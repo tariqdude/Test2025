@@ -1,10 +1,20 @@
 /**
  * Function utilities for performance optimization and control flow
+ * @module utils/function
+ * @description Higher-order functions for debouncing, throttling,
+ * memoization, composition, and other functional programming patterns.
  */
 
 /**
  * Debounce function calls
- * Ensures a function is only called once after a specified delay
+ * Delays function execution until after wait milliseconds have elapsed
+ * since the last time it was invoked.
+ * @param func - Function to debounce
+ * @param wait - Wait time in milliseconds
+ * @returns Debounced function
+ * @example
+ * const debouncedSearch = debounce(search, 300);
+ * input.addEventListener('input', debouncedSearch);
  */
 export const debounce = <T extends (...args: unknown[]) => unknown>(
   func: T,
@@ -20,7 +30,14 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
 
 /**
  * Throttle function calls
- * Ensures a function is called at most once every specified limit
+ * Ensures function is called at most once every specified time period.
+ * First call executes immediately, subsequent calls within the period are ignored.
+ * @param func - Function to throttle
+ * @param limit - Minimum time between calls in milliseconds
+ * @returns Throttled function
+ * @example
+ * const throttledScroll = throttle(onScroll, 100);
+ * window.addEventListener('scroll', throttledScroll);
  */
 export const throttle = <T extends (...args: unknown[]) => unknown>(
   func: T,

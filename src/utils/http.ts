@@ -53,22 +53,36 @@ export interface RequestConfig {
 }
 
 /**
- * Response wrapper
+ * Response wrapper with typed data
+ * @template T - Type of the response data
  */
 export interface HttpResponse<T = unknown> {
+  /** Response data, parsed according to responseType */
   data: T;
+  /** HTTP status code */
   status: number;
+  /** HTTP status text */
   statusText: string;
+  /** Response headers */
   headers: Headers;
+  /** True if status is in 200-299 range */
   ok: boolean;
+  /** Final URL after redirects */
   url: string;
+  /** True if response was redirected */
   redirected: boolean;
 }
 
 /**
- * HTTP Error
+ * HTTP Error with detailed information about the failed request
+ * @extends Error
  */
 export class HttpError extends Error {
+  /** HTTP error name */
+  override readonly name = 'HttpError';
+  /** Whether this error is retryable based on status code */
+  readonly isRetryable: boolean;
+
   constructor(
     message: string,
     public status: number,
@@ -77,7 +91,41 @@ export class HttpError extends Error {
     public data?: unknown
   ) {
     super(message);
-    this.name = 'HttpError';
+    // 5xx errors and 429 (rate limit) are typically retryable
+    this.isRetryable = status >= 500 || status === 429;
+  }
+
+  /**
+   * Get a user-friendly error message based on status code
+   */
+  getUserMessage(): string {
+    const messages: Record<number, string> = {
+      400: 'The request was invalid. Please check your input.',
+      401: 'Authentication required. Please log in.',
+      403: "Access denied. You don't have permission to access this resource.",
+      404: 'The requested resource was not found.',
+      408: 'Request timed out. Please try again.',
+      429: 'Too many requests. Please wait and try again.',
+      500: 'Server error. Please try again later.',
+      502: 'Service temporarily unavailable.',
+      503: 'Service is currently unavailable. Please try again later.',
+      504: 'Gateway timeout. Please try again.',
+    };
+    return messages[this.status] || `Request failed with status ${this.status}`;
+  }
+
+  /**
+   * Check if error is a client error (4xx)
+   */
+  isClientError(): boolean {
+    return this.status >= 400 && this.status < 500;
+  }
+
+  /**
+   * Check if error is a server error (5xx)
+   */
+  isServerError(): boolean {
+    return this.status >= 500;
   }
 }
 

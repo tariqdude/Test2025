@@ -1,3 +1,11 @@
+/**
+ * Error handling utilities and custom error types
+ * @module errors
+ * @description Provides custom error classes for different failure scenarios,
+ * type guards for error checking, Result types for safer error handling,
+ * and utilities for error wrapping and formatting.
+ */
+
 export class AppError extends Error {
   constructor(
     message: string,

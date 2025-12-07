@@ -1,23 +1,40 @@
 /**
  * Formatting utilities
+ * @module utils/format
+ * @description Functions for formatting numbers, currencies, dates,
+ * phone numbers, and other data types for display.
  */
 
 /**
  * Format numbers with proper localization
+ * @param num - Number to format
+ * @param options - Intl.NumberFormatOptions for customization
+ * @param locale - Locale string (default: 'en-US')
+ * @returns Formatted number string
+ * @example formatNumber(1234567.89) // '1,234,567.89'
+ * @example formatNumber(0.5, { style: 'percent' }) // '50%'
  */
 export const formatNumber = (
   num: number,
   options: Intl.NumberFormatOptions = {},
   locale = 'en-US'
 ): string => {
+  if (!Number.isFinite(num)) return String(num);
   return new Intl.NumberFormat(locale, options).format(num);
 };
 
 /**
  * Format file sizes in human-readable format
+ * @param bytes - Size in bytes
+ * @param decimals - Decimal places (default: 2)
+ * @returns Human-readable size string
+ * @example formatFileSize(1024) // '1 KB'
+ * @example formatFileSize(1536, 1) // '1.5 KB'
  */
 export const formatFileSize = (bytes: number, decimals = 2): string => {
+  if (!Number.isFinite(bytes)) return '0 Bytes';
   if (bytes === 0) return '0 Bytes';
+  if (bytes < 0) return '-' + formatFileSize(-bytes, decimals);
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -30,12 +47,19 @@ export const formatFileSize = (bytes: number, decimals = 2): string => {
 
 /**
  * Format currency with localization
+ * @param amount - Amount to format
+ * @param currency - ISO 4217 currency code (default: 'USD')
+ * @param locale - Locale string (default: 'en-US')
+ * @returns Formatted currency string
+ * @example formatCurrency(1234.56) // '$1,234.56'
+ * @example formatCurrency(1234.56, 'EUR', 'de-DE') // '1.234,56 €'
  */
 export const formatCurrency = (
   amount: number,
   currency = 'USD',
   locale = 'en-US'
 ): string => {
+  if (!Number.isFinite(amount)) return String(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,

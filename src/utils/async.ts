@@ -1,22 +1,72 @@
 /**
  * Async utilities
+ * @module utils/async
+ * @description Utilities for handling asynchronous operations including
+ * retry logic, concurrency control, and promise management.
  */
 
 /**
  * Sleep utility for async operations
+ * @param ms - Duration in milliseconds
+ * @returns Promise that resolves after the specified duration
+ * @example await sleep(1000); // Wait 1 second
  */
 export const sleep = (ms: number): Promise<void> => {
+  if (ms < 0) ms = 0;
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 /**
+ * Retry options for configuring retry behavior
+ */
+export interface RetryOptions {
+  /** Maximum number of retry attempts (default: 3) */
+  maxAttempts?: number;
+  /** Base delay between retries in ms (default: 1000) */
+  delay?: number;
+  /** Whether to apply exponential backoff (default: true) */
+  exponentialBackoff?: boolean;
+  /** Optional callback invoked on each retry attempt */
+  onRetry?: (error: Error, attempt: number, nextDelayMs: number) => void;
+  /** Optional predicate to determine if error is retryable */
+  shouldRetry?: (error: Error) => boolean;
+}
+
+/**
  * Retry function with exponential backoff
+ * @param fn - Async function to retry
+ * @param optionsOrMaxAttempts - Retry options object or max attempts (legacy)
+ * @param legacyDelay - Delay in ms (legacy, only used if second param is number)
+ * @returns Result of the function or throws after all retries exhausted
+ * @example
+ * // Modern usage with options object:
+ * const result = await retry(
+ *   () => fetchData(),
+ *   { maxAttempts: 3, delay: 1000 }
+ * );
+ *
+ * // Legacy usage (still supported):
+ * const result = await retry(() => fetchData(), 3, 1000);
  */
 export const retry = async <T>(
   fn: () => Promise<T>,
-  maxAttempts = 3,
-  delay = 1000
+  optionsOrMaxAttempts: RetryOptions | number = {},
+  legacyDelay?: number
 ): Promise<T> => {
+  // Support legacy signature: retry(fn, maxAttempts, delay)
+  const opts: RetryOptions =
+    typeof optionsOrMaxAttempts === 'number'
+      ? { maxAttempts: optionsOrMaxAttempts, delay: legacyDelay ?? 1000 }
+      : optionsOrMaxAttempts;
+
+  const {
+    maxAttempts = 3,
+    delay = 1000,
+    exponentialBackoff = true,
+    onRetry,
+    shouldRetry = () => true,
+  } = opts;
+
   let lastError: Error | undefined;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -25,11 +75,16 @@ export const retry = async <T>(
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
-      if (attempt === maxAttempts) {
+      if (attempt === maxAttempts || !shouldRetry(lastError)) {
         throw lastError;
       }
 
-      await sleep(delay * Math.pow(2, attempt - 1));
+      const nextDelay = exponentialBackoff
+        ? delay * Math.pow(2, attempt - 1)
+        : delay;
+
+      onRetry?.(lastError, attempt, nextDelay);
+      await sleep(nextDelay);
     }
   }
 
@@ -39,12 +94,27 @@ export const retry = async <T>(
 
 /**
  * Timeout wrapper for async operations
+ * @param promise - The promise to wrap with a timeout
+ * @param ms - Timeout duration in milliseconds
+ * @param errorMessage - Custom error message (default: 'Operation timed out')
+ * @returns The original promise result if it resolves before the timeout
+ * @throws {Error} If the operation times out
+ * @example
+ * const result = await withTimeout(
+ *   fetch('/api/data'),
+ *   5000,
+ *   'API request timed out'
+ * );
  */
 export const withTimeout = <T>(
   promise: Promise<T>,
   ms: number,
   errorMessage = 'Operation timed out'
 ): Promise<T> => {
+  if (ms <= 0) {
+    return Promise.reject(new Error(errorMessage));
+  }
+
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error(errorMessage));

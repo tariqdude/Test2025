@@ -856,4 +856,162 @@ const utils = {
   observeIntersection,
 };
 
+/* ==================== COMPRESSION UTILITIES ==================== */
+
+export {
+  isCompressionSupported,
+  compressString,
+  decompressToString,
+  compressToBase64,
+  decompressFromBase64,
+  compressionRatio,
+  compressionSavings,
+  rleEncode,
+  rleDecode,
+  lzCompress,
+  lzDecompress,
+  deltaEncode,
+  deltaDecode,
+  packBytes,
+  unpackBytes,
+  packBooleans,
+  unpackBooleans,
+  compressJSON,
+  decompressJSON,
+  deduplicateStrings,
+  restoreStrings,
+  buildHuffmanTable,
+  huffmanEncode,
+  huffmanDecode,
+  estimateHuffmanRatio,
+} from './compression';
+
+/* ==================== DIFF UTILITIES ==================== */
+
+export {
+  diffChars,
+  diffWords,
+  diffLines,
+  unifiedDiff,
+  diffArrays,
+  applyTextPatch,
+  generateJSONPatch,
+  applyJSONPatch,
+  semanticDiff,
+  diffStats,
+  textsAreEqual,
+  getChangedLines,
+  highlightInlineChanges,
+} from './diff';
+export type {
+  DiffOp,
+  DiffEntry,
+  DiffResult,
+  LineDiffEntry,
+  DiffHunk,
+  ArrayDiffEntry,
+  PatchOp,
+  SemanticDiffOptions,
+} from './diff';
+
+/* ==================== COLLECTIONS UTILITIES ==================== */
+
+export {
+  PriorityQueue,
+  MaxPriorityQueue,
+  LRUCache,
+  LFUCache,
+  CircularBuffer,
+  Deque,
+  BloomFilter,
+  Trie,
+  DisjointSet,
+  IntervalTree,
+  memoizeWithLRU,
+  slidingWindow,
+  createMovingAverage,
+} from './collections';
+export type { PriorityItem, Interval, IntervalData } from './collections';
+
+/* ==================== RESILIENCE UTILITIES ==================== */
+
+export {
+  CircuitBreaker,
+  CircuitBreakerOpenError,
+  withCircuitBreaker,
+  retry as retryAsync,
+  withRetry,
+  RetryError,
+  AbortError,
+  RateLimiter,
+  RateLimitExceededError,
+  withRateLimit,
+  Bulkhead,
+  BulkheadFullError,
+  BulkheadTimeoutError,
+  withBulkhead,
+  withTimeout as withTimeoutAsync,
+  timeout,
+  TimeoutError as TimeoutErrorAsync,
+  withFallback,
+  fallback,
+  hedge,
+  compose as composeResilience,
+  resilient,
+  createHealthCheck,
+} from './resilience';
+export type {
+  CircuitState,
+  CircuitBreakerOptions,
+  RetryOptions,
+  RateLimiterOptions,
+  BulkheadOptions,
+  HealthCheckResult,
+} from './resilience';
+
+/* ==================== I18N UTILITIES ==================== */
+
+export {
+  getBrowserLocale,
+  parseLocale,
+  matchLocale,
+  formatNumber as formatNumberI18n,
+  formatCurrency as formatCurrencyI18n,
+  formatPercent as formatPercentI18n,
+  formatCompact,
+  parseLocalizedNumber,
+  formatDate as formatDateI18n,
+  formatTime as formatTimeI18n,
+  formatRelativeTime as formatRelativeTimeI18n,
+  getDayNames,
+  getMonthNames,
+  getPluralCategory,
+  pluralize as pluralizeI18n,
+  createPluralizer,
+  interpolate,
+  interpolateFormatted,
+  createTranslator,
+  formatList,
+  getLocaleName,
+  getRegionName,
+  getCurrencyName,
+  isRTL,
+  getTextDirection,
+  createCollator,
+  sortLocale,
+  localeEquals,
+  segmentWords,
+  segmentSentences,
+  segmentGraphemes,
+  graphemeCount,
+} from './i18n';
+export type {
+  LocaleCode,
+  PluralCategory,
+  PluralRules,
+  PluralMessage,
+  TranslationDictionary,
+  I18nConfig,
+} from './i18n';
+
 export default utils;

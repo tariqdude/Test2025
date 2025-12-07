@@ -1,16 +1,34 @@
 /**
- * Object utilities
+ * Object manipulation utilities
+ * @module utils/object
+ * @description Utilities for deep operations on objects including
+ * cloning, merging, comparing, and transforming nested structures.
  */
 
 /**
- * Type guard for objects
+ * Type guard for plain objects (not arrays, dates, etc.)
+ * @param value - Value to check
+ * @returns True if value is a plain object
  */
-const isObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+export const isPlainObject = (
+  value: unknown
+): value is Record<string, unknown> => {
+  if (typeof value !== 'object' || value === null) return false;
+  const proto = Object.getPrototypeOf(value);
+  return proto === null || proto === Object.prototype;
 };
+
+// Keep internal alias for backward compatibility within this module
+const isObject = isPlainObject;
 
 /**
  * Deep merge objects with proper type safety
+ * @param target - Target object to merge into (mutated)
+ * @param sources - Source objects to merge from
+ * @returns The merged target object
+ * @warning This mutates the target object. Use with a fresh object if immutability is needed.
+ * @example
+ * const result = deepMerge({}, defaults, userConfig);
  */
 export const deepMerge = <T extends Record<string, unknown>>(
   target: T,

@@ -31,6 +31,11 @@ export function groupBy<T, K extends string | number | symbol>(
 
 /**
  * Sort array by key
+ * @param array - The array to sort
+ * @param key - The property key to sort by
+ * @param direction - Sort direction: 'asc' (default) or 'desc'
+ * @returns A new sorted array (original is not mutated)
+ * @example sortBy([{age: 25}, {age: 20}], 'age') // [{age: 20}, {age: 25}]
  */
 export function sortBy<T>(
   array: T[],
@@ -49,6 +54,9 @@ export function sortBy<T>(
 
 /**
  * Remove duplicates from array using Set
+ * @param array - The array to deduplicate
+ * @returns A new array with unique values (primitives only, objects by reference)
+ * @example unique([1, 2, 2, 3]) // [1, 2, 3]
  */
 export function unique<T>(array: T[]): T[] {
   return Array.from(new Set(array));
@@ -56,9 +64,16 @@ export function unique<T>(array: T[]): T[] {
 
 /**
  * Chunk array into smaller arrays
+ * @param array - The array to chunk
+ * @param size - Size of each chunk (must be positive)
+ * @returns Array of chunks
+ * @throws {Error} If chunk size is not positive
+ * @example chunk([1, 2, 3, 4, 5], 2) // [[1, 2], [3, 4], [5]]
  */
 export function chunk<T>(array: T[], size: number): T[][] {
   if (size <= 0) throw new Error('Chunk size must be positive');
+  if (array.length === 0) return [];
+
   const chunks: T[][] = [];
   for (let i = 0; i < array.length; i += size) {
     chunks.push(array.slice(i, i + size));
@@ -68,6 +83,9 @@ export function chunk<T>(array: T[], size: number): T[][] {
 
 /**
  * Shuffle array using Fisher-Yates algorithm
+ * @param array - The array to shuffle
+ * @returns A new shuffled array (original is not mutated)
+ * @example shuffle([1, 2, 3, 4, 5]) // [3, 1, 5, 2, 4] (random order)
  */
 export function shuffle<T>(array: T[]): T[] {
   const shuffled = [...array];
@@ -80,6 +98,11 @@ export function shuffle<T>(array: T[]): T[] {
 
 /**
  * Flatten nested arrays to specified depth
+ * @param array - The nested array to flatten
+ * @param depth - Maximum depth to flatten (default: 1)
+ * @returns A new flattened array
+ * @example flatten([[1, 2], [3, [4, 5]]]) // [1, 2, 3, [4, 5]]
+ * @example flatten([[1, 2], [3, [4, 5]]], 2) // [1, 2, 3, 4, 5]
  */
 export function flatten<T>(array: unknown[], depth = 1): T[] {
   if (depth <= 0) return array as T[];

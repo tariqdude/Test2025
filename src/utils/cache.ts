@@ -12,20 +12,37 @@ interface CacheEntry<T> {
 interface CacheOptions {
   maxSize?: number;
   defaultTtl?: number;
+  /** Enable hit/miss rate tracking */
+  trackMetrics?: boolean;
+}
+
+interface CacheMetrics {
+  hits: number;
+  misses: number;
+  evictions: number;
 }
 
 /**
  * In-memory cache with TTL support and LRU eviction
+ * @template K - Key type (default: string)
+ * @template V - Value type (default: unknown)
+ * @example
+ * const cache = new MemoryCache<string, User>({ maxSize: 100, defaultTtl: 60000 });
+ * cache.set('user:1', { name: 'John' });
+ * const user = cache.get('user:1');
  */
 export class MemoryCache<K = string, V = unknown> {
   private cache = new Map<K, CacheEntry<V>>();
   private accessOrder: K[] = [];
   private maxSize: number;
   private defaultTtl: number;
+  private trackMetrics: boolean;
+  private metrics: CacheMetrics = { hits: 0, misses: 0, evictions: 0 };
 
   constructor(options: CacheOptions = {}) {
     this.maxSize = options.maxSize ?? 1000;
     this.defaultTtl = options.defaultTtl ?? 5 * 60 * 1000; // 5 minutes default
+    this.trackMetrics = options.trackMetrics ?? false;
   }
 
   /**
@@ -58,15 +75,18 @@ export class MemoryCache<K = string, V = unknown> {
     const entry = this.cache.get(key);
 
     if (!entry) {
+      if (this.trackMetrics) this.metrics.misses++;
       return undefined;
     }
 
     // Check if expired
     if (this.isExpired(entry)) {
       this.delete(key);
+      if (this.trackMetrics) this.metrics.misses++;
       return undefined;
     }
 
+    if (this.trackMetrics) this.metrics.hits++;
     this.updateAccessOrder(key);
     return entry.value;
   }
@@ -124,12 +144,40 @@ export class MemoryCache<K = string, V = unknown> {
 
   /**
    * Get cache statistics
+   * @returns Object with size, maxSize, and optionally hit rate metrics
    */
-  stats(): { size: number; maxSize: number; hitRate?: number } {
-    return {
+  stats(): {
+    size: number;
+    maxSize: number;
+    hitRate?: number;
+    hits?: number;
+    misses?: number;
+    evictions?: number;
+  } {
+    const base = {
       size: this.cache.size,
       maxSize: this.maxSize,
     };
+
+    if (this.trackMetrics) {
+      const total = this.metrics.hits + this.metrics.misses;
+      return {
+        ...base,
+        hitRate: total > 0 ? this.metrics.hits / total : 0,
+        hits: this.metrics.hits,
+        misses: this.metrics.misses,
+        evictions: this.metrics.evictions,
+      };
+    }
+
+    return base;
+  }
+
+  /**
+   * Reset cache metrics
+   */
+  resetMetrics(): void {
+    this.metrics = { hits: 0, misses: 0, evictions: 0 };
   }
 
   /**
@@ -163,6 +211,7 @@ export class MemoryCache<K = string, V = unknown> {
       const lruKey = this.accessOrder.shift();
       if (lruKey !== undefined) {
         this.cache.delete(lruKey);
+        if (this.trackMetrics) this.metrics.evictions++;
       }
     }
   }

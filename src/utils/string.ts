@@ -2,16 +2,19 @@
  * String manipulation utilities
  * @module utils/string
  * @description Comprehensive string manipulation functions for text processing,
- * formatting, validation, and transformation.
+ * formatting, validation, and transformation. All functions handle null/undefined
+ * inputs gracefully and return sensible defaults.
  */
 
 /**
  * Convert string to URL-friendly slug format
  * @param text - The input string to slugify
- * @returns A lowercase, hyphenated string safe for URLs
+ * @returns A lowercase, hyphenated string safe for URLs, or empty string for falsy input
  * @example slugify('Hello World!') // 'hello-world'
+ * @example slugify(null) // ''
  */
-export const slugify = (text: string): string => {
+export const slugify = (text: string | null | undefined): string => {
+  if (!text) return '';
   return text
     .toString()
     .toLowerCase()
@@ -23,12 +26,19 @@ export const slugify = (text: string): string => {
 
 /**
  * Truncate text with proper word boundaries
+ * @param text - The text to truncate
+ * @param maxLength - Maximum length including suffix
+ * @param suffix - Suffix to append when truncated (default: '...')
+ * @returns Truncated text with suffix, or empty string for falsy input
+ * @example truncate('Hello World', 8) // 'Hello...'
  */
 export const truncate = (
-  text: string,
+  text: string | null | undefined,
   maxLength: number,
   suffix = '...'
 ): string => {
+  if (!text) return '';
+  if (maxLength < 1) return suffix;
   if (text.length <= maxLength) return text;
 
   let truncated = text.substring(0, maxLength - suffix.length);
@@ -331,11 +341,18 @@ export const isPalindrome = (str: string): boolean => {
 
 /**
  * Generate a random string of specified length
+ * @param length - Desired length of the output string (must be positive)
+ * @param charset - Characters to use (default: alphanumeric)
+ * @returns Random string of specified length
+ * @throws {RangeError} If length is negative
  */
 export const randomString = (
   length: number,
   charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 ): string => {
+  if (length < 0) throw new RangeError('Length must be non-negative');
+  if (length === 0 || !charset) return '';
+
   let result = '';
   for (let i = 0; i < length; i++) {
     result += charset.charAt(Math.floor(Math.random() * charset.length));
