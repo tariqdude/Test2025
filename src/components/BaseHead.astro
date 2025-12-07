@@ -24,6 +24,8 @@ interface Props {
   type?: 'website' | 'article';
   author?: string;
   publishDate?: Date;
+  keywords?: string[];
+  noIndex?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -35,6 +37,8 @@ const {
   type = 'website',
   author,
   publishDate,
+  keywords,
+  noIndex,
 } = Astro.props;
 
 import { generateMetaTags } from '../utils/seo';
@@ -48,6 +52,8 @@ const metaTags = generateMetaTags({
   type,
   author,
   publishDate,
+  keywords,
+  noIndex,
 });
 ---
 

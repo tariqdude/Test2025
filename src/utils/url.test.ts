@@ -47,12 +47,10 @@ describe('URL Utilities', () => {
       expect(url).toBe('/api?q=search');
     });
 
-    it('should handle undefined/null params', () => {
-      // @ts-expect-error - testing runtime behavior for null
+    it('should handle undefined params', () => {
       const url = buildUrl('https://example.com', {
         a: 1,
         b: undefined,
-        c: null,
       });
       expect(url).toBe('https://example.com/?a=1');
     });

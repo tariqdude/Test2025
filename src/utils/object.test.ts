@@ -4,8 +4,8 @@ import { deepMerge, pick, omit, deepClone } from './object';
 describe('Object Utilities', () => {
   describe('deepMerge', () => {
     it('should merge objects deeply', () => {
-      const target: any = { a: 1, b: { c: 2 } };
-      const source: any = { b: { d: 3 }, e: 4 };
+      const target: Record<string, unknown> = { a: 1, b: { c: 2 } };
+      const source: Record<string, unknown> = { b: { d: 3 }, e: 4 };
       const result = deepMerge(target, source);
       expect(result).toEqual({ a: 1, b: { c: 2, d: 3 }, e: 4 });
     });
@@ -17,9 +17,9 @@ describe('Object Utilities', () => {
     });
 
     it('should handle multiple sources', () => {
-      const target: any = { a: 1 };
-      const source1: any = { b: 2 };
-      const source2: any = { c: 3 };
+      const target: Record<string, unknown> = { a: 1 };
+      const source1: Record<string, unknown> = { b: 2 };
+      const source2: Record<string, unknown> = { c: 3 };
       expect(deepMerge(target, source1, source2)).toEqual({ a: 1, b: 2, c: 3 });
     });
   });

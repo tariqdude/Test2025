@@ -301,3 +301,84 @@ export async function retryWithBackoff<T>(
 
   throw lastError;
 }
+
+/**
+ * Result type for operations that can fail
+ * Similar to Rust's Result<T, E>
+ */
+export type Result<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+/**
+ * Create a successful result
+ */
+export function ok<T>(data: T): Result<T, never> {
+  return { success: true, data };
+}
+
+/**
+ * Create a failed result
+ */
+export function err<E>(error: E): Result<never, E> {
+  return { success: false, error };
+}
+
+/**
+ * Wrap an async function to return a Result instead of throwing
+ */
+export async function tryCatch<T>(
+  fn: () => Promise<T>
+): Promise<Result<T, Error>> {
+  try {
+    const data = await fn();
+    return ok(data);
+  } catch (error) {
+    return err(isError(error) ? error : new Error(getErrorMessage(error)));
+  }
+}
+
+/**
+ * Wrap a sync function to return a Result instead of throwing
+ */
+export function tryCatchSync<T>(fn: () => T): Result<T, Error> {
+  try {
+    const data = fn();
+    return ok(data);
+  } catch (error) {
+    return err(isError(error) ? error : new Error(getErrorMessage(error)));
+  }
+}
+
+/**
+ * Chain multiple Result operations
+ */
+export function mapResult<T, U, E>(
+  result: Result<T, E>,
+  fn: (data: T) => U
+): Result<U, E> {
+  if (result.success) {
+    return ok(fn(result.data));
+  }
+  return result;
+}
+
+/**
+ * Unwrap a Result or throw the error
+ */
+export function unwrapResult<T, E>(result: Result<T, E>): T {
+  if (result.success) {
+    return result.data;
+  }
+  throw result.error;
+}
+
+/**
+ * Unwrap a Result or return a default value
+ */
+export function unwrapOr<T, E>(result: Result<T, E>, defaultValue: T): T {
+  if (result.success) {
+    return result.data;
+  }
+  return defaultValue;
+}

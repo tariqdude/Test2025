@@ -1,9 +1,15 @@
 /**
  * String manipulation utilities
+ * @module utils/string
+ * @description Comprehensive string manipulation functions for text processing,
+ * formatting, validation, and transformation.
  */
 
 /**
- * Convert string to slug format
+ * Convert string to URL-friendly slug format
+ * @param text - The input string to slugify
+ * @returns A lowercase, hyphenated string safe for URLs
+ * @example slugify('Hello World!') // 'hello-world'
  */
 export const slugify = (text: string): string => {
   return text
@@ -420,6 +426,9 @@ export const levenshteinDistance = (a: string, b: string): number => {
 
 /**
  * Calculate similarity percentage between two strings
+ * @param a - First string to compare
+ * @param b - Second string to compare
+ * @returns Similarity percentage (0-100)
  */
 export const stringSimilarity = (a: string, b: string): number => {
   if (!a && !b) return 100;
@@ -430,4 +439,93 @@ export const stringSimilarity = (a: string, b: string): number => {
 
   const distance = levenshteinDistance(a, b);
   return Math.round(((maxLength - distance) / maxLength) * 100);
+};
+
+/**
+ * Convert a number to ordinal form (1st, 2nd, 3rd, etc.)
+ * @param n - The number to convert
+ * @returns The ordinal string representation
+ * @example toOrdinal(1) // '1st'
+ * @example toOrdinal(22) // '22nd'
+ */
+export const toOrdinal = (n: number): string => {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+/**
+ * Highlight search terms in text by wrapping them with a tag
+ * @param text - The source text
+ * @param searchTerms - Terms to highlight (string or array)
+ * @param tag - HTML tag to wrap matches (default: 'mark')
+ * @returns Text with highlighted terms
+ */
+export const highlightTerms = (
+  text: string,
+  searchTerms: string | string[],
+  tag = 'mark'
+): string => {
+  if (!text || !searchTerms) return text;
+
+  const terms = Array.isArray(searchTerms) ? searchTerms : [searchTerms];
+  const escapedTerms = terms
+    .filter(t => t.trim())
+    .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+
+  if (escapedTerms.length === 0) return text;
+
+  const regex = new RegExp(`(${escapedTerms.join('|')})`, 'gi');
+  return text.replace(regex, `<${tag}>$1</${tag}>`);
+};
+
+/**
+ * Convert bytes to human-readable format
+ * @param bytes - Number of bytes
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Human-readable string (e.g., '1.5 MB')
+ */
+export const formatBytes = (bytes: number, decimals = 2): string => {
+  if (bytes === 0) return '0 Bytes';
+  if (bytes < 0) return '-' + formatBytes(-bytes, decimals);
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
+/**
+ * Parse a template string with variables
+ * @param template - Template string with {{variable}} placeholders
+ * @param variables - Object containing variable values
+ * @returns Parsed string with variables replaced
+ * @example parseTemplate('Hello {{name}}!', { name: 'World' }) // 'Hello World!'
+ */
+export const parseTemplate = (
+  template: string,
+  variables: Record<string, string | number | boolean>
+): string => {
+  if (!template) return '';
+
+  return template.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+    return key in variables ? String(variables[key]) : `{{${key}}}`;
+  });
+};
+
+/**
+ * Compress consecutive whitespace and normalize line endings
+ * @param text - Input text
+ * @returns Normalized text
+ */
+export const normalizeText = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 };

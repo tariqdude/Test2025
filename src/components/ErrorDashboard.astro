@@ -4,6 +4,7 @@
 
 import type { CodeIssue, ProjectHealth } from '../types/analysis';
 import ModernButton from './ui/ModernButton.astro';
+import Badge from './ui/Badge.astro';
 
 interface Props {
   className?: string;
@@ -232,12 +233,16 @@ const maxCategoryCount =
               <div class="issue-header">
                 <div class="issue-title">{issue.title}</div>
                 <div class="issue-badges">
-                  <span class="severity-badge critical">
+                  <Badge variant="destructive" size="sm">
                     {issue.severity.level}
-                  </span>
-                  <span class="type-badge">{issue.type}</span>
+                  </Badge>
+                  <Badge variant="secondary" size="sm">
+                    {issue.type}
+                  </Badge>
                   {issue.autoFixable && (
-                    <span class="auto-fix-badge">🔧 Auto-fix</span>
+                    <Badge variant="success" size="sm">
+                      🔧 Auto-fix
+                    </Badge>
                   )}
                 </div>
               </div>
@@ -257,7 +262,15 @@ const maxCategoryCount =
 
   <!-- All Issues Table -->
   <div class="all-issues">
-    <h2>All Issues ({mockIssues.length})</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2>All Issues ({mockIssues.length})</h2>
+      <input
+        type="text"
+        id="issue-filter"
+        placeholder="Filter issues..."
+        class="px-3 py-2 border rounded-md text-sm"
+      />
+    </div>
     <div class="issues-table-container">
       <table class="issues-table">
         <thead>
@@ -888,5 +901,19 @@ const maxCategoryCount =
         })
       );
     }, 30000);
+  }
+
+  // Filter functionality
+  const filterInput = document.getElementById('issue-filter');
+  if (filterInput) {
+    filterInput.addEventListener('input', e => {
+      const target = e.target as HTMLInputElement;
+      const term = target.value.toLowerCase();
+      const rows = document.querySelectorAll('.issue-row');
+      rows.forEach(row => {
+        const text = row.textContent?.toLowerCase() || '';
+        (row as HTMLElement).style.display = text.includes(term) ? '' : 'none';
+      });
+    });
   }
 </script>

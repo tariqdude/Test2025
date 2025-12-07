@@ -1,9 +1,16 @@
 /**
  * Array utility functions
+ * @module utils/array
+ * @description Comprehensive array manipulation utilities for filtering,
+ * transforming, grouping, and analyzing collections.
  */
 
 /**
  * Group array items by a key or function
+ * @param array - The array to group
+ * @param iteratee - Property key or function to determine grouping
+ * @returns Object with grouped items
+ * @example groupBy([{type: 'a'}, {type: 'b'}], 'type')
  */
 export function groupBy<T, K extends string | number | symbol>(
   array: T[],
@@ -295,8 +302,81 @@ export function sample<T>(array: T[], n = 1): T[] {
 }
 
 /**
- * Compact array (remove null/undefined/false values)
+ * Move an item from one index to another
+ * @param array - The source array
+ * @param fromIndex - Index to move from
+ * @param toIndex - Index to move to
+ * @returns New array with item moved
  */
-export function compact<T>(array: (T | null | undefined | false)[]): T[] {
-  return array.filter((item): item is T => Boolean(item));
+export function moveItem<T>(
+  array: T[],
+  fromIndex: number,
+  toIndex: number
+): T[] {
+  if (fromIndex < 0 || fromIndex >= array.length) return [...array];
+  if (toIndex < 0 || toIndex >= array.length) return [...array];
+
+  const result = [...array];
+  const [item] = result.splice(fromIndex, 1);
+  result.splice(toIndex, 0, item);
+  return result;
+}
+
+/**
+ * Insert item at specific index
+ * @param array - The source array
+ * @param index - Index to insert at
+ * @param item - Item to insert
+ * @returns New array with item inserted
+ */
+export function insertAt<T>(array: T[], index: number, item: T): T[] {
+  const result = [...array];
+  result.splice(Math.max(0, Math.min(index, array.length)), 0, item);
+  return result;
+}
+
+/**
+ * Remove item at specific index
+ * @param array - The source array
+ * @param index - Index to remove
+ * @returns New array with item removed
+ */
+export function removeAt<T>(array: T[], index: number): T[] {
+  if (index < 0 || index >= array.length) return [...array];
+  return [...array.slice(0, index), ...array.slice(index + 1)];
+}
+
+/**
+ * Check if array is empty
+ */
+export function isEmpty<T>(array: T[]): boolean {
+  return array.length === 0;
+}
+
+/**
+ * Check if array is not empty
+ */
+export function isNotEmpty<T>(array: T[]): array is [T, ...T[]] {
+  return array.length > 0;
+}
+
+/**
+ * Compact array by removing falsy values
+ */
+export function compact<T>(
+  array: (T | null | undefined | false | 0 | '')[]
+): T[] {
+  return array.filter(Boolean) as T[];
+}
+
+/**
+ * Get frequency map of items in array
+ */
+export function frequency<T extends string | number>(
+  array: T[]
+): Map<T, number> {
+  return array.reduce((map, item) => {
+    map.set(item, (map.get(item) || 0) + 1);
+    return map;
+  }, new Map<T, number>());
 }

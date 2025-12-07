@@ -3,6 +3,12 @@
 // Export analysis cache utility
 export { AnalysisCache } from './analysis-cache';
 
+// Export cache utilities
+export { MemoryCache, createCache, memoizeWithCache } from './cache';
+
+// Export analytics tracker
+export { analytics } from './analytics-tracker';
+
 /* ==================== EVENTS UTILITIES ==================== */
 
 export {
