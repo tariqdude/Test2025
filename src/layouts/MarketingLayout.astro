@@ -8,6 +8,7 @@ import WebVitals from '../components/WebVitals.astro';
 import ErrorTracking from '../components/ErrorTracking.astro';
 import StructuredData from '../components/StructuredData.astro';
 import CommandPalette from '../components/CommandPalette';
+import ToastContainer from '../components/ToastContainer';
 
 interface Props {
   title: string;
@@ -68,6 +69,7 @@ const {
       });
     </script>
     <CommandPalette client:only="preact" />
+    <ToastContainer client:only="preact" />
     <PWARegistration />
     <WebVitals />
     <ErrorTracking />

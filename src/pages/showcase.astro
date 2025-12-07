@@ -3,10 +3,20 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 import { withBasePath } from '../utils/helpers';
 import ModernButton from '../components/ui/ModernButton.astro';
 import ModernCard from '../components/ui/ModernCard.astro';
-import Card from '../components/ui/Card.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
 import Grid from '../components/ui/Grid.astro';
 import Stats from '../components/ui/Stats.astro';
+
+type CardVariant =
+  | 'outline'
+  | 'gradient'
+  | 'neon'
+  | 'glass'
+  | 'bordered'
+  | 'default'
+  | 'minimal'
+  | 'elevated'
+  | undefined;
 
 const buttonVariants = [
   {
@@ -37,7 +47,13 @@ const buttonVariants = [
   },
 ];
 
-const cardShowcase = [
+const cardShowcase: {
+  title: string;
+  variant: CardVariant;
+  badge: string;
+  description: string;
+  points: string[];
+}[] = [
   {
     title: 'Glass metrics',
     variant: 'glass',

@@ -1,7 +1,5 @@
 // Modern utility functions for enhanced development experience
 
-import { logger } from './logger';
-
 // Export analysis cache utility
 export { AnalysisCache } from './analysis-cache';
 

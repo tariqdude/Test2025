@@ -285,6 +285,7 @@ export default function CommandPalette() {
           <input
             ref={inputRef}
             type="text"
+            aria-label="Search commands"
             className="flex-1 bg-transparent text-lg text-white placeholder-zinc-500 focus:outline-none"
             placeholder="Type a command or search..."
             value={query}

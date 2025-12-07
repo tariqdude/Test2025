@@ -143,10 +143,6 @@ export function setupScrollAnimations(selector = '.scroll-animate') {
         const animationType =
           (el.dataset.animation as AnimationType) || 'fade-in-up';
         const delay = parseInt(el.dataset.delay || '0', 10);
-        const duration = parseInt(
-          el.dataset.duration || String(config.duration),
-          10
-        );
 
         setTimeout(() => {
           el.style.cssText += animationStyles[animationType]?.animate || '';

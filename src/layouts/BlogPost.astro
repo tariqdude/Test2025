@@ -11,6 +11,7 @@ import WebVitals from '../components/WebVitals.astro';
 import ErrorTracking from '../components/ErrorTracking.astro';
 import StructuredData from '../components/StructuredData.astro';
 import CommandPalette from '../components/CommandPalette';
+import ToastContainer from '../components/ToastContainer';
 import TableOfContents from '../components/TableOfContents.astro';
 import type { MarkdownHeading } from 'astro';
 
@@ -190,6 +191,7 @@ if (!displayReadingTime && Astro.slots.has('default')) {
     </main>
     <Footer />
     <CommandPalette client:only="preact" />
+    <ToastContainer client:only="preact" />
     <WebVitals />
     <ErrorTracking />
   </body>

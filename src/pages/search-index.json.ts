@@ -5,11 +5,11 @@ export async function GET() {
   const authors = await getCollection('authors');
 
   const blogItems = posts.map(post => ({
-    id: `blog-${post.slug}`,
+    id: `blog-${post.id}`,
     title: post.data.title,
     description: post.data.description,
     category: 'Blog',
-    url: `/blog/${post.slug}`,
+    url: `/blog/${post.id}`,
     date: post.data.pubDate,
     tags: post.data.tags,
   }));

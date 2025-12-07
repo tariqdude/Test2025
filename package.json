@@ -83,6 +83,7 @@
     "@types/node": "^24.2.0",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
+    "@vitest/coverage-v8": "^4.0.14",
     "astro-eslint-parser": "^1.2.2",
     "autoprefixer": "^10.4.21",
     "chokidar": "^4.0.3",

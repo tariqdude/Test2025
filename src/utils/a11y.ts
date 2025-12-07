@@ -119,7 +119,9 @@ export function createAnnouncer(politeness: AriaLive = 'polite'): {
       });
     },
     destroy: () => {
-      document.body.removeChild(announcer);
+      if (announcer.parentNode) {
+        announcer.parentNode.removeChild(announcer);
+      }
     },
   };
 }
@@ -135,10 +137,17 @@ export function announce(
 ): void {
   if (typeof document === 'undefined') return;
 
-  if (
-    !globalAnnouncer ||
-    document.querySelector('[aria-live]') !== document.body.lastChild
-  ) {
+  const existing = document.querySelector('[aria-live]');
+  const isCorrectPoliteness =
+    existing?.getAttribute('aria-live') === politeness;
+  const isLastChild = existing === document.body.lastChild;
+
+  if (!globalAnnouncer || !isLastChild || !isCorrectPoliteness) {
+    if (globalAnnouncer) {
+      globalAnnouncer.destroy();
+    } else if (existing) {
+      document.body.removeChild(existing);
+    }
     globalAnnouncer = createAnnouncer(politeness);
   }
   globalAnnouncer.announce(message);

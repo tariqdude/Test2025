@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import path from 'path';
 import { PerformanceAnalyzer } from '../analysis/performance';
 import { AccessibilityAnalyzer } from '../analysis/accessibility';
 import { DeploymentAnalyzer } from '../analysis/deployment';
@@ -165,7 +164,7 @@ describe('Accessibility Analyzer', () => {
     vi.mocked(glob).mockResolvedValue([filePath]);
 
     // Mock readFile to return our fake content
-    fsMocks.readFile.mockImplementation(async (path: any) => {
+    fsMocks.readFile.mockImplementation(async (path: string) => {
       if (path === filePath) return fileContent;
       return '';
     });
@@ -642,7 +641,7 @@ describe('Security Analyzer', () => {
 
     // Mock readFile for content scanning if needed (though env file detection might just check existence/name)
     // But if it reads content, we provide it.
-    fsMocks.readFile.mockImplementation(async (path: any) => {
+    fsMocks.readFile.mockImplementation(async (path: string) => {
       if (path === envPath) return fileContent;
       return '';
     });
