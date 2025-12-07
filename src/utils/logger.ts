@@ -22,7 +22,7 @@ export interface LogEntry {
 type ErrorWithDetails = Error & { details?: unknown };
 type LogListener = (entry: LogEntry) => void;
 
-class Logger {
+export class Logger {
   private minLevel: LogLevel = LogLevel.INFO;
   private listeners: Set<LogListener> = new Set();
 

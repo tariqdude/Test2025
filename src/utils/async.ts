@@ -80,14 +80,18 @@ export const parallelLimit = async <T, R>(
       results[currentIndex] = result;
     });
 
-    executing.push(promise as unknown as Promise<void>);
+    // Create a wrapper that removes itself from the executing list when done
+    const wrapper = promise.then(() => {
+      const idx = executing.indexOf(wrapper);
+      if (idx > -1) {
+        executing.splice(idx, 1);
+      }
+    }) as Promise<void>;
+
+    executing.push(wrapper);
 
     if (executing.length >= limit) {
       await Promise.race(executing);
-      executing.splice(
-        executing.findIndex(p => p === promise),
-        1
-      );
     }
   }
 
