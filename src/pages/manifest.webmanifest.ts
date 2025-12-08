@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { withBasePath } from '../utils/helpers';
+import { withBasePath } from '../utils/url';
 
 export const prerender = true;
 

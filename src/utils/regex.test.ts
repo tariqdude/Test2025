@@ -21,9 +21,7 @@ import {
 describe('Regex Utilities', () => {
   describe('RegexBuilder', () => {
     it('should build basic pattern', () => {
-      const regex = new RegexBuilder()
-        .literal('hello')
-        .build();
+      const regex = new RegexBuilder().literal('hello').build();
       expect(regex.test('hello world')).toBe(true);
       expect(regex.test('goodbye')).toBe(false);
     });
@@ -39,34 +37,25 @@ describe('Regex Utilities', () => {
     });
 
     it('should add character classes', () => {
-      const regex = new RegexBuilder()
-        .digit()
-        .digit()
-        .digit()
-        .build();
+      const regex = new RegexBuilder().digit().digit().digit().build();
       expect(regex.test('123')).toBe(true);
       expect(regex.test('abc')).toBe(false);
     });
 
     it('should add quantifiers', () => {
-      const regex = new RegexBuilder()
-        .literal('a')
-        .oneOrMore()
-        .build();
+      const regex = new RegexBuilder().literal('a').oneOrMore().build();
       expect(regex.test('aaa')).toBe(true);
       expect(regex.test('b')).toBe(false);
     });
 
     it('should add groups', () => {
-      const regex = new RegexBuilder()
-        .group(b => b.literal('hello'))
-        .build();
+      const regex = new RegexBuilder().group(b => b.literal('hello')).build();
       expect(regex.test('hello')).toBe(true);
     });
 
     it('should add named groups', () => {
       const regex = new RegexBuilder()
-        .namedGroup('word', b => b.word())
+        .namedGroup('word', b => b.word().oneOrMore())
         .build();
       const match = 'hello'.match(regex);
       expect(match?.groups?.word).toBe('hello');
@@ -85,42 +74,30 @@ describe('Regex Utilities', () => {
     });
 
     it('should support character sets', () => {
-      const regex = new RegexBuilder()
-        .charSet('aeiou')
-        .build();
+      const regex = new RegexBuilder().charSet('aeiou').build();
       expect(regex.test('a')).toBe(true);
       expect(regex.test('b')).toBe(false);
     });
 
     it('should support negated character sets', () => {
-      const regex = new RegexBuilder()
-        .charSetNegated('aeiou')
-        .build();
+      const regex = new RegexBuilder().charSetNegated('aeiou').build();
       expect(regex.test('b')).toBe(true);
       expect(regex.test('a')).toBe(false);
     });
 
     it('should support ranges', () => {
-      const regex = new RegexBuilder()
-        .range('a', 'z')
-        .build();
+      const regex = new RegexBuilder().range('a', 'z').build();
       expect(regex.test('m')).toBe(true);
       expect(regex.test('M')).toBe(false);
     });
 
     it('should support exact repetition', () => {
-      const regex = new RegexBuilder()
-        .digit()
-        .exactly(3)
-        .build();
+      const regex = new RegexBuilder().digit().exactly(3).build();
       expect(regex.test('123')).toBe(true);
     });
 
     it('should support range repetition', () => {
-      const regex = new RegexBuilder()
-        .digit()
-        .between(2, 4)
-        .build();
+      const regex = new RegexBuilder().digit().between(2, 4).build();
       expect(regex.test('12')).toBe(true);
       expect(regex.test('1234')).toBe(true);
       expect(regex.test('1')).toBe(false);
@@ -250,11 +227,14 @@ describe('Regex Utilities', () => {
     });
 
     it('should validate UUIDs', () => {
-      expect(patterns.uuid.test('550e8400-e29b-41d4-a716-446655440000')).toBe(true);
+      expect(patterns.uuid.test('550e8400-e29b-41d4-a716-446655440000')).toBe(
+        true
+      );
     });
 
     it('should validate JWT tokens', () => {
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U';
+      const token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U';
       expect(patterns.jwt.test(token)).toBe(true);
     });
 
@@ -311,10 +291,7 @@ describe('Regex Utilities', () => {
     });
 
     it('should extract named groups', () => {
-      const groups = extractGroups(
-        'John: 30',
-        /(?<name>\w+): (?<age>\d+)/
-      );
+      const groups = extractGroups('John: 30', /(?<name>\w+): (?<age>\d+)/);
       expect(groups).toHaveProperty('name', 'John');
       expect(groups).toHaveProperty('age', '30');
     });
@@ -359,24 +336,17 @@ describe('Regex Utilities', () => {
     });
 
     it('should handle unicode', () => {
-      const regex = new RegexBuilder()
-        .literal('こんにちは')
-        .build();
+      const regex = new RegexBuilder().literal('こんにちは').build();
       expect(regex.test('こんにちは世界')).toBe(true);
     });
 
     it('should handle newlines', () => {
-      const regex = new RegexBuilder()
-        .any()
-        .oneOrMore()
-        .build('s');
+      const regex = new RegexBuilder().any().oneOrMore().build('s');
       expect(regex.test('hello\nworld')).toBe(true);
     });
 
     it('should handle special regex characters in literal', () => {
-      const regex = new RegexBuilder()
-        .literal('1+1=2')
-        .build();
+      const regex = new RegexBuilder().literal('1+1=2').build();
       expect(regex.test('1+1=2')).toBe(true);
     });
   });

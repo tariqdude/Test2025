@@ -30,14 +30,6 @@ export {
   onScroll,
   onIdle,
 } from './events';
-import {
-  EventEmitter,
-  eventBus,
-  observable,
-  onKeyboardShortcut,
-  onMediaQueryChange,
-  onVisibilityChange,
-} from './events';
 
 /* ==================== CRYPTO UTILITIES ==================== */
 
@@ -78,15 +70,6 @@ export {
   deobfuscate,
   generateFingerprint,
 } from './crypto';
-import {
-  uuid,
-  shortId,
-  nanoId,
-  sha256,
-  simpleHash,
-  generatePassword,
-  checkPasswordStrength,
-} from './crypto';
 
 /* ==================== HTTP CLIENT UTILITIES ==================== */
 
@@ -112,15 +95,6 @@ export {
   createSSEClient,
   poll,
 } from './http';
-import {
-  request,
-  get,
-  post,
-  createClient,
-  createResource,
-  uploadFile,
-  downloadFile,
-} from './http';
 
 /* ==================== ACCESSIBILITY UTILITIES ==================== */
 
@@ -144,16 +118,6 @@ export {
   prefersColorScheme,
   createAccessibleDialog,
   createLiveRegion,
-  getContrastRatio,
-  checkWcagCompliance,
-} from './a11y';
-import {
-  announce,
-  getFocusableElements,
-  createSkipLink,
-  setAriaAttributes,
-  prefersReducedMotion,
-  prefersColorScheme,
   getContrastRatio,
   checkWcagCompliance,
 } from './a11y';
@@ -196,17 +160,6 @@ export {
   getPixelRatio,
   isHighDPI,
   getImageDPISuffix,
-} from './media';
-import {
-  getCurrentBreakpoint,
-  matchesBreakpoint,
-  mediaQueries,
-  getDeviceInfo,
-  isMobile,
-  getViewportSize,
-  getNetworkInfo,
-  isFullscreen,
-  toggleFullscreen,
 } from './media';
 
 /* ==================== FORMATTING UTILITIES ==================== */
@@ -252,15 +205,8 @@ export {
   toISODateString,
   fromISODateString,
 } from './date';
-import {
-  formatDate,
-  formatRelativeTime,
-  isToday,
-  formatDuration,
-} from './date';
 
 export { formatNumber, formatFileSize } from './format';
-import { formatNumber, formatFileSize } from './format';
 
 /* ==================== STRING UTILITIES ==================== */
 
@@ -298,21 +244,6 @@ export {
   levenshteinDistance,
   stringSimilarity,
 } from './string';
-import {
-  slugify,
-  truncate,
-  titleCase,
-  capitalizeFirst,
-  getInitials,
-  sanitizeInput,
-  escapeHtml,
-  camelCase,
-  snakeCase,
-  kebabCase,
-  maskString,
-  stripHtml,
-  randomString,
-} from './string';
 
 /* ==================== ARRAY UTILITIES ==================== */
 
@@ -344,24 +275,6 @@ export {
   compact,
   sortBy,
 } from './array';
-import {
-  unique,
-  groupBy,
-  chunk,
-  shuffle,
-  flatten,
-  intersection,
-  difference,
-  union,
-  partition,
-  first,
-  last,
-  range,
-  sum,
-  average,
-  sample,
-  compact,
-} from './array';
 
 /* ==================== OBJECT UTILITIES ==================== */
 
@@ -387,42 +300,26 @@ export {
   keys,
   values,
 } from './object';
-import {
-  deepMerge,
-  pick,
-  omit,
-  deepClone,
-  deepEqual,
-  getByPath,
-  setByPath,
-  mapValues,
-  filterObject,
-} from './object';
 
 /* ==================== URL AND QUERY UTILITIES ==================== */
 
 export { buildUrl, parseQuery, withBasePath, resolveHref } from './url';
-import { buildUrl, parseQuery } from './url';
 
 /* ==================== CSS UTILITIES ==================== */
 
 export { cn, cssVariables } from './css';
-import { cn, cssVariables } from './css';
 
 /* ==================== BLOG UTILITIES ==================== */
 
 export { extractExcerpt, filterPosts } from './blog';
-import { extractExcerpt, filterPosts } from './blog';
 
 // Re-export calculateReadingTime from reading-time.ts
 // Note: This changes the return type from number to ReadingTimeResult compared to the old inline version
 export { calculateReadingTime } from './reading-time';
-import { calculateReadingTime } from './reading-time';
 
 /* ==================== THEME UTILITIES ==================== */
 
 export { getPreferredColorScheme, applyColorScheme } from './theme';
-import { getPreferredColorScheme, applyColorScheme } from './theme';
 
 /* ==================== PERFORMANCE/FUNCTION UTILITIES ==================== */
 
@@ -449,19 +346,8 @@ export {
   constant,
   times,
 } from './function';
-import {
-  debounce,
-  throttle,
-  memoize,
-  once,
-  compose,
-  pipe,
-  noop,
-  identity,
-} from './function';
 
 export { measureTime } from './performance-utils';
-import { measureTime } from './performance-utils';
 
 /* ==================== MATH UTILITIES ==================== */
 
@@ -496,17 +382,6 @@ export {
   smoothstep,
   wrap,
 } from './math';
-import {
-  clamp,
-  lerp,
-  roundTo,
-  randomBetween,
-  randomIntBetween,
-  mean,
-  median,
-  distance,
-  easing,
-} from './math';
 
 /* ==================== COLOR UTILITIES ==================== */
 
@@ -538,21 +413,10 @@ export {
   randomColor,
   randomColorInHueRange,
 } from './color';
-import {
-  hexToRgb,
-  rgbToHex,
-  lighten,
-  darken,
-  mixColors,
-  isLight,
-  getContrastTextColor,
-  randomColor,
-} from './color';
 
 /* ==================== VALIDATION UTILITIES ==================== */
 
 export { isValidEmail, isValidUrl, isEmpty, validatePhone } from './validation';
-import { isValidEmail, isValidUrl, isEmpty } from './validation';
 
 /* ==================== ASYNC UTILITIES ==================== */
 
@@ -570,15 +434,6 @@ export {
   raceSuccess,
   backoffStrategies,
   retryWithBackoff,
-} from './async';
-import {
-  sleep,
-  retry,
-  withTimeout,
-  parallelLimit,
-  sequential,
-  waitUntil,
-  PromisePool,
 } from './async';
 
 /* ==================== STORAGE UTILITIES ==================== */
@@ -601,13 +456,6 @@ export {
   cookies,
   createNamespacedStorage,
   SimpleDB,
-} from './storage';
-import {
-  setLocalStorage,
-  getLocalStorage,
-  removeLocalStorage,
-  cookies,
-  createNamespacedStorage,
 } from './storage';
 
 /* ==================== DOM UTILITIES ==================== */
@@ -671,190 +519,6 @@ import {
   copyToClipboard,
   observeIntersection,
 } from './dom';
-
-/* ==================== DEFAULT EXPORT ==================== */
-
-// Export all utilities as a single object for convenience
-const utils = {
-  // Events
-  EventEmitter,
-  eventBus,
-  observable,
-  onKeyboardShortcut,
-  onMediaQueryChange,
-  onVisibilityChange,
-
-  // Crypto
-  uuid,
-  shortId,
-  nanoId,
-  sha256,
-  simpleHash,
-  generatePassword,
-  checkPasswordStrength,
-
-  // HTTP
-  request,
-  get,
-  post,
-  createClient,
-  createResource,
-  uploadFile,
-  downloadFile,
-
-  // Accessibility
-  announce,
-  getFocusableElements,
-  createSkipLink,
-  setAriaAttributes,
-  prefersReducedMotion,
-  prefersColorScheme,
-  getContrastRatio,
-  checkWcagCompliance,
-
-  // Media & Device
-  getCurrentBreakpoint,
-  matchesBreakpoint,
-  mediaQueries,
-  getDeviceInfo,
-  isMobile,
-  getViewportSize,
-  getNetworkInfo,
-  isFullscreen,
-  toggleFullscreen,
-
-  // Formatting
-  formatDate,
-  formatRelativeTime,
-  formatNumber,
-  formatFileSize,
-  formatDuration,
-
-  // Strings
-  slugify,
-  truncate,
-  titleCase,
-  capitalizeFirst,
-  getInitials,
-  sanitizeInput,
-  escapeHtml,
-  camelCase,
-  snakeCase,
-  kebabCase,
-  maskString,
-  stripHtml,
-  randomString,
-
-  // Arrays
-  unique,
-  groupBy,
-  chunk,
-  shuffle,
-  flatten,
-  intersection,
-  difference,
-  union,
-  partition,
-  first,
-  last,
-  range,
-  sum,
-  average,
-  sample,
-  compact,
-
-  // Objects
-  deepMerge,
-  pick,
-  omit,
-  deepClone,
-  deepEqual,
-  getByPath,
-  setByPath,
-  mapValues,
-  filterObject,
-
-  // URLs
-  buildUrl,
-  parseQuery,
-
-  // CSS
-  cn,
-  cssVariables,
-
-  // Blog
-  calculateReadingTime,
-  extractExcerpt,
-  filterPosts,
-
-  // Theme
-  getPreferredColorScheme,
-  applyColorScheme,
-
-  // Performance/Functions
-  debounce,
-  throttle,
-  memoize,
-  once,
-  compose,
-  pipe,
-  measureTime,
-  noop,
-  identity,
-
-  // Math
-  clamp,
-  lerp,
-  roundTo,
-  randomBetween,
-  randomIntBetween,
-  mean,
-  median,
-  distance,
-  easing,
-
-  // Colors
-  hexToRgb,
-  rgbToHex,
-  lighten,
-  darken,
-  mixColors,
-  isLight,
-  getContrastTextColor,
-  randomColor,
-
-  // Validation
-  isValidEmail,
-  isValidUrl,
-  isEmpty,
-  isToday,
-
-  // Async
-  sleep,
-  retry,
-  withTimeout,
-  parallelLimit,
-  sequential,
-  waitUntil,
-  PromisePool,
-
-  // Storage
-  setLocalStorage,
-  getLocalStorage,
-  removeLocalStorage,
-  cookies,
-  createNamespacedStorage,
-
-  // DOM
-  isBrowser,
-  $,
-  $$,
-  on,
-  ready,
-  scrollToTop,
-  copyToClipboard,
-  observeIntersection,
-};
 
 /* ==================== COMPRESSION UTILITIES ==================== */
 
@@ -1014,4 +678,212 @@ export type {
   I18nConfig,
 } from './i18n';
 
-export default utils;
+/* ==================== BINARY UTILITIES ==================== */
+
+export {
+  // String/Buffer conversions
+  toUint8Array,
+  toString,
+  toHex,
+  fromHex,
+  toBase64,
+  fromBase64,
+  toBase64Url,
+  fromBase64Url,
+
+  // Buffer operations
+  concat,
+  slice,
+  compare,
+  equals,
+  fill,
+  indexOf,
+  includes,
+  reverse,
+  xor,
+
+  // Bit operations
+  getBit,
+  setBit,
+  clearBit,
+  toggleBit,
+  countSetBits,
+  isPowerOfTwo,
+  nextPowerOfTwo,
+  rotateLeft,
+  rotateRight,
+
+  // BitSet class
+  BitSet,
+
+  // ByteBuffer class
+  ByteBuffer,
+
+  // Binary search
+  binarySearch,
+  lowerBound,
+  upperBound,
+
+  // Int conversions
+  intToBytes,
+  bytesToInt,
+  floatToBytes,
+  bytesToFloat,
+
+  // Hex utilities
+  isValidHex,
+  hexDump,
+  parseHexDump,
+} from './binary';
+
+/* ==================== GRAPH UTILITIES ==================== */
+
+export {
+  Graph,
+  createDirectedGraph,
+  createUndirectedGraph,
+  fromEdgeList,
+  isTree,
+  isForest,
+} from './graph';
+export type {
+  GraphNode,
+  GraphEdge,
+  GraphOptions,
+  TraversalOptions,
+  PathResult,
+  MSTResult,
+  GraphStats,
+} from './graph';
+
+/* ==================== REGEX UTILITIES ==================== */
+
+export {
+  RegexBuilder,
+  patterns,
+  escape as escapeRegex,
+  isMatch,
+  findAll,
+  replaceAll as replaceAllRegex,
+  extractGroups,
+  split as splitRegex,
+  test as testRegex,
+  createPattern,
+  combine as combinePatterns,
+  createValidator,
+} from './regex';
+
+/* ==================== FUNCTIONAL PROGRAMMING UTILITIES ==================== */
+
+export {
+  // Option monad
+  Option,
+  Some,
+  None,
+  fromNullable,
+  fromPredicate,
+
+  // Result monad
+  Result,
+  Ok,
+  Err,
+  tryCatch as tryOption,
+  tryCatchAsync,
+  fromPromise,
+
+  // Either monad
+  Either,
+  Left,
+  Right,
+
+  // Composition
+  pipe as pipeFn,
+  compose as composeFn,
+  flow,
+
+  // Currying
+  curry as curryFn,
+  partial as partialFn,
+  partialRight,
+
+  // Higher-order functions
+  memoize as memoizeFn,
+  debounce as debounceFn,
+  throttle as throttleFn,
+  once as onceFn,
+
+  // Lazy evaluation
+  lazy,
+
+  // Identity and constant
+  identity as identityFn,
+  constant as constantFn,
+  noop as noopFn,
+
+  // Logic
+  not,
+  both,
+  either as eitherPredicate,
+  allPass,
+  anyPass,
+
+  // Iteration
+  forEach,
+  map as mapFn,
+  filter as filterFn,
+  reduce as reduceFn,
+  flatMap,
+
+  // Predicates
+  isNil,
+  isNotNil,
+  isEmpty as isEmptyFn,
+  isNotEmpty,
+} from './functional';
+
+/* ==================== METRICS UTILITIES ==================== */
+
+export {
+  // Counter
+  Counter,
+  createCounter,
+
+  // Gauge
+  Gauge,
+  createGauge,
+
+  // Histogram
+  Histogram,
+  createHistogram,
+
+  // Summary
+  Summary,
+  createSummary,
+
+  // Registry
+  MetricsRegistry,
+  defaultRegistry,
+
+  // Timing
+  Stopwatch,
+  time as timeMetric,
+  timeAsync as timeAsyncMetric,
+
+  // Labels
+  labeledCounter,
+  labeledGauge,
+  labeledHistogram,
+
+  // Utilities
+  resetAllMetrics,
+  getMetricsSnapshot,
+  exportPrometheus,
+} from './metrics';
+export type {
+  MetricType,
+  MetricSnapshot,
+  BucketEntry,
+  HistogramOptions,
+  SummaryOptions,
+  TimingResult,
+} from './metrics';

@@ -343,7 +343,7 @@ describe('Binary Utilities', () => {
       expect(getBit(n, 1)).toBe(false);
 
       n = toggleBit(n, 2);
-      expect(getBit(n, 2)).toBe(false);
+      expect(getBit(n, 2)).toBe(true);
     });
 
     it('should count population', () => {
@@ -382,8 +382,8 @@ describe('Binary Utilities', () => {
 
     it('should rotate bits', () => {
       const n = 0b10000001;
-      expect(rotateLeft(n, 1) & 0xff).toBe(0b00000011);
-      expect(rotateRight(n, 1) & 0xff).toBe(0b11000000);
+      expect(rotateLeft(n, 1, 8) & 0xff).toBe(0b00000011);
+      expect(rotateRight(n, 1, 8) & 0xff).toBe(0b11000000);
     });
   });
 

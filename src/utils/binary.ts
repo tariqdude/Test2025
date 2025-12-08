@@ -960,15 +960,27 @@ export function reverseBits(n: number): number {
 /**
  * Rotate bits left
  */
-export function rotateLeft(n: number, bits: number): number {
-  return ((n << bits) | (n >>> (32 - bits))) >>> 0;
+export function rotateLeft(
+  n: number,
+  bits: number,
+  width: number = 32
+): number {
+  const mask = width === 32 ? -1 : (1 << width) - 1;
+  n &= mask;
+  return ((n << bits) | (n >>> (width - bits))) & mask;
 }
 
 /**
  * Rotate bits right
  */
-export function rotateRight(n: number, bits: number): number {
-  return ((n >>> bits) | (n << (32 - bits))) >>> 0;
+export function rotateRight(
+  n: number,
+  bits: number,
+  width: number = 32
+): number {
+  const mask = width === 32 ? -1 : (1 << width) - 1;
+  n &= mask;
+  return ((n >>> bits) | (n << (width - bits))) & mask;
 }
 
 // ============================================================================

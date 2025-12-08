@@ -50,8 +50,20 @@ export class Some<T> {
     return this.value;
   }
 
-  match<U>(onSome: (value: T) => U, _onNone: () => U): U {
-    return onSome(this.value);
+  unwrap(): T {
+    return this.value;
+  }
+
+  match<U>(matcher: { some: (value: T) => U; none: () => U }): U;
+  match<U>(onSome: (value: T) => U, onNone: () => U): U;
+  match<U>(
+    arg1: ((value: T) => U) | { some: (value: T) => U; none: () => U },
+    arg2?: () => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.some(this.value);
+    }
+    return arg1(this.value);
   }
 
   tap(fn: (value: T) => void): Option<T> {
@@ -116,8 +128,20 @@ export class None {
     throw error ?? new Error('Called getOrThrow on None');
   }
 
-  match<U>(_onSome: (value: never) => U, onNone: () => U): U {
-    return onNone();
+  unwrap(): never {
+    throw new Error('Called unwrap on None');
+  }
+
+  match<U>(matcher: { some: (value: never) => U; none: () => U }): U;
+  match<U>(onSome: (value: never) => U, onNone: () => U): U;
+  match<U>(
+    arg1: ((value: never) => U) | { some: (value: never) => U; none: () => U },
+    arg2?: () => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.none();
+    }
+    return arg2!();
   }
 
   tap(_fn: (value: never) => void): Option<never> {
@@ -220,8 +244,24 @@ export class Ok<T> {
     return this.value;
   }
 
-  match<U>(onOk: (value: T) => U, _onErr: (error: never) => U): U {
-    return onOk(this.value);
+  unwrap(): T {
+    return this.value;
+  }
+
+  unwrapErr(): never {
+    throw new Error('Called unwrapErr on Ok');
+  }
+
+  match<U>(matcher: { ok: (value: T) => U; err: (error: never) => U }): U;
+  match<U>(onOk: (value: T) => U, onErr: (error: never) => U): U;
+  match<U>(
+    arg1: ((value: T) => U) | { ok: (value: T) => U; err: (error: never) => U },
+    _arg2?: (error: never) => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.ok(this.value);
+    }
+    return arg1(this.value);
   }
 
   tap(fn: (value: T) => void): Result<T, never> {
@@ -278,8 +318,26 @@ export class Err<E> {
     throw errorFn ? errorFn(this.error) : this.error;
   }
 
-  match<U>(_onOk: (value: never) => U, onErr: (error: E) => U): U {
-    return onErr(this.error);
+  unwrap(): never {
+    throw this.error;
+  }
+
+  unwrapErr(): E {
+    return this.error;
+  }
+
+  match<U>(matcher: { ok: (value: never) => U; err: (error: E) => U }): U;
+  match<U>(onOk: (value: never) => U, onErr: (error: E) => U): U;
+  match<U>(
+    arg1:
+      | ((value: never) => U)
+      | { ok: (value: never) => U; err: (error: E) => U },
+    arg2?: (error: E) => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.err(this.error);
+    }
+    return arg2!(this.error);
   }
 
   tap(_fn: (value: never) => void): Result<never, E> {
@@ -375,8 +433,22 @@ export class Left<L> {
     return this as unknown as Either<L, U>;
   }
 
-  match<U>(onLeft: (value: L) => U, _onRight: (value: never) => U): U {
-    return onLeft(this.value);
+  unwrap(): L {
+    return this.value;
+  }
+
+  match<U>(matcher: { left: (value: L) => U; right: (value: never) => U }): U;
+  match<U>(onLeft: (value: L) => U, onRight: (value: never) => U): U;
+  match<U>(
+    arg1:
+      | ((value: L) => U)
+      | { left: (value: L) => U; right: (value: never) => U },
+    _arg2?: (value: never) => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.left(this.value);
+    }
+    return arg1(this.value);
   }
 
   swap(): Either<never, L> {
@@ -416,8 +488,22 @@ export class Right<R> {
     return fn(this.value);
   }
 
-  match<U>(_onLeft: (value: never) => U, onRight: (value: R) => U): U {
-    return onRight(this.value);
+  unwrap(): R {
+    return this.value;
+  }
+
+  match<U>(matcher: { left: (value: never) => U; right: (value: R) => U }): U;
+  match<U>(onLeft: (value: never) => U, onRight: (value: R) => U): U;
+  match<U>(
+    arg1:
+      | ((value: never) => U)
+      | { left: (value: never) => U; right: (value: R) => U },
+    arg2?: (value: R) => U
+  ): U {
+    if (typeof arg1 === 'object') {
+      return arg1.right(this.value);
+    }
+    return arg2!(this.value);
   }
 
   swap(): Either<R, never> {
@@ -637,7 +723,8 @@ export function flip<A, B, R>(fn: (a: A, b: B) => R): (b: B, a: A) => R {
 /**
  * Constant function
  */
-export function constant<T>(value: T): () => T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function constant<T>(value: T): (...args: any[]) => T {
   return () => value;
 }
 
@@ -865,6 +952,233 @@ export function unzip<A, B>(arr: Array<[A, B]>): [A[], B[]] {
   }
 
   return [as, bs];
+}
+
+// ============================================================================
+// Missing Utilities (Added for Test Compatibility)
+// ============================================================================
+
+/**
+ * Throttle a function
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle<T extends (...args: any[]) => any>(
+  fn: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean;
+  let lastFn: ReturnType<typeof setTimeout>;
+  let lastTime: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function (this: any, ...args: Parameters<T>) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      lastTime = Date.now();
+      inThrottle = true;
+    } else {
+      clearTimeout(lastFn);
+      lastFn = setTimeout(
+        () => {
+          if (Date.now() - lastTime >= wait) {
+            fn.apply(this, args);
+            lastTime = Date.now();
+          }
+        },
+        Math.max(wait - (Date.now() - lastTime), 0)
+      );
+    }
+  };
+}
+
+/**
+ * Run a function only once
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function once<T extends (...args: any[]) => any>(
+  fn: T
+): (...args: Parameters<T>) => ReturnType<T> {
+  let called = false;
+  let result: ReturnType<T>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function (this: any, ...args: Parameters<T>) {
+    if (!called) {
+      called = true;
+      result = fn.apply(this, args);
+    }
+    return result;
+  };
+}
+
+/**
+ * Combine two predicates with AND
+ */
+export function both<T>(
+  p1: (a: T) => boolean,
+  p2: (a: T) => boolean
+): (a: T) => boolean {
+  return (a: T) => p1(a) && p2(a);
+}
+
+/**
+ * Combine two predicates with OR
+ */
+export function either<T>(
+  p1: (a: T) => boolean,
+  p2: (a: T) => boolean
+): (a: T) => boolean {
+  return (a: T) => p1(a) || p2(a);
+}
+
+/**
+ * Check if all predicates pass
+ */
+export function allPass<T>(preds: Array<(a: T) => boolean>): (a: T) => boolean {
+  return (a: T) => preds.every(p => p(a));
+}
+
+/**
+ * Check if any predicate passes
+ */
+export function anyPass<T>(preds: Array<(a: T) => boolean>): (a: T) => boolean {
+  return (a: T) => preds.some(p => p(a));
+}
+
+/**
+ * Iterate over array
+ */
+export function forEach<T>(arr: T[], fn: (value: T) => void): void {
+  arr.forEach(fn);
+}
+
+/**
+ * Map array
+ */
+export function map<T, U>(arr: T[], fn: (value: T) => U): U[] {
+  return arr.map(fn);
+}
+
+/**
+ * Filter array
+ */
+export function filter<T>(arr: T[], fn: (value: T) => boolean): T[] {
+  return arr.filter(fn);
+}
+
+/**
+ * Reduce array
+ */
+export function reduce<T, U>(
+  arr: T[],
+  fn: (acc: U, value: T) => U,
+  initial: U
+): U {
+  return arr.reduce(fn, initial);
+}
+
+/**
+ * FlatMap array
+ */
+export function flatMap<T, U>(arr: T[], fn: (value: T) => U[]): U[] {
+  return arr.flatMap(fn);
+}
+
+/**
+ * Check if value is null or undefined
+ */
+export function isNil(value: unknown): value is null | undefined {
+  return value === null || value === undefined;
+}
+
+/**
+ * Check if value is not null or undefined
+ */
+export function isNotNil<T>(value: T | null | undefined): value is T {
+  return value !== null && value !== undefined;
+}
+
+/**
+ * Check if value is empty (string, array, object)
+ */
+export function isEmpty(value: unknown): boolean {
+  if (isNil(value)) return true;
+  if (typeof value === 'string' || Array.isArray(value))
+    return value.length === 0;
+  if (typeof value === 'object')
+    return Object.keys(value as object).length === 0;
+  return false;
+}
+
+/**
+ * Check if value is not empty
+ */
+export function isNotEmpty(value: unknown): boolean {
+  return !isEmpty(value);
+}
+
+/**
+ * Partial application from right
+ */
+export function partialRight<T1, T2, R>(
+  fn: (a: T1, b: T2) => R,
+  b: T2
+): (a: T1) => R {
+  return (a: T1) => fn(a, b);
+}
+
+/**
+ * Memoize a function
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function memoize<T extends (...args: any[]) => any>(fn: T): T {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const cache = new Map<string, any>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function (this: any, ...args: any[]) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  } as T;
+}
+
+/**
+ * Debounce a function
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: any[]) => any>(
+  fn: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
+/**
+ * Flow functions (left to right composition)
+ */
+export function flow<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C {
+  return (a: A) => g(f(a));
+}
+
+/**
+ * Create Result from Promise
+ */
+export async function fromPromise<T, E = Error>(
+  promise: Promise<T>
+): Promise<Result<T, E>> {
+  try {
+    const value = await promise;
+    return ok(value);
+  } catch (e) {
+    return err(e as E);
+  }
 }
 
 // ============================================================================

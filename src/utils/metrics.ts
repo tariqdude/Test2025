@@ -91,19 +91,39 @@ export interface SummaryValue {
 export class Counter {
   private values = new Map<string, number>();
   readonly type: MetricType = 'counter';
+  readonly name: string;
+  readonly help: string;
 
-  constructor(readonly options: MetricOptions) {}
+  constructor(readonly options: MetricOptions) {
+    this.name = options.name;
+    this.help = options.help || '';
+  }
 
   /**
    * Increment counter
    */
-  inc(labels: Labels = {}, amount = 1): void {
-    if (amount < 0) {
+  inc(amount: number | Labels = 1, labels: Labels = {}): void {
+    let actualAmount = 1;
+    let actualLabels: Labels = {};
+
+    if (typeof amount === 'number') {
+      actualAmount = amount;
+      actualLabels = labels;
+    } else {
+      actualLabels = amount;
+      actualAmount = 1;
+    }
+
+    if (actualAmount < 0) {
       throw new Error('Counter can only be incremented');
     }
-    const key = this.labelsToKey(labels);
+    const key = this.labelsToKey(actualLabels);
     const current = this.values.get(key) ?? 0;
-    this.values.set(key, current + amount);
+    this.values.set(key, current + actualAmount);
+  }
+
+  get value(): number {
+    return this.get();
   }
 
   /**
@@ -170,8 +190,17 @@ export class Counter {
 export class Gauge {
   private values = new Map<string, number>();
   readonly type: MetricType = 'gauge';
+  readonly name: string;
+  readonly help: string;
 
-  constructor(readonly options: MetricOptions) {}
+  constructor(readonly options: MetricOptions) {
+    this.name = options.name;
+    this.help = options.help || '';
+  }
+
+  get value(): number {
+    return this.get();
+  }
 
   /**
    * Set gauge value
@@ -184,19 +213,41 @@ export class Gauge {
   /**
    * Increment gauge
    */
-  inc(labels: Labels = {}, amount = 1): void {
-    const key = this.labelsToKey(labels);
+  inc(amount: number | Labels = 1, labels: Labels = {}): void {
+    let actualAmount = 1;
+    let actualLabels: Labels = {};
+
+    if (typeof amount === 'number') {
+      actualAmount = amount;
+      actualLabels = labels;
+    } else {
+      actualLabels = amount;
+      actualAmount = 1;
+    }
+
+    const key = this.labelsToKey(actualLabels);
     const current = this.values.get(key) ?? 0;
-    this.values.set(key, current + amount);
+    this.values.set(key, current + actualAmount);
   }
 
   /**
    * Decrement gauge
    */
-  dec(labels: Labels = {}, amount = 1): void {
-    const key = this.labelsToKey(labels);
+  dec(amount: number | Labels = 1, labels: Labels = {}): void {
+    let actualAmount = 1;
+    let actualLabels: Labels = {};
+
+    if (typeof amount === 'number') {
+      actualAmount = amount;
+      actualLabels = labels;
+    } else {
+      actualLabels = amount;
+      actualAmount = 1;
+    }
+
+    const key = this.labelsToKey(actualLabels);
     const current = this.values.get(key) ?? 0;
-    this.values.set(key, current - amount);
+    this.values.set(key, current - actualAmount);
   }
 
   /**
@@ -211,7 +262,7 @@ export class Gauge {
    * Set to current time
    */
   setToCurrentTime(labels: Labels = {}): void {
-    this.set(Date.now() / 1000, labels);
+    this.set(Date.now(), labels);
   }
 
   /**
@@ -286,12 +337,70 @@ export class Histogram {
     { sum: number; count: number; values: number[] }
   >();
   readonly type: MetricType = 'histogram';
-  readonly buckets: number[];
+  readonly bucketBoundaries: number[];
+  readonly name: string;
+  readonly help: string;
 
   constructor(readonly options: HistogramOptions) {
-    this.buckets = [...(options.buckets ?? DEFAULT_BUCKETS)].sort(
+    this.name = options.name;
+    this.help = options.help || '';
+    this.bucketBoundaries = [...(options.buckets ?? DEFAULT_BUCKETS)].sort(
       (a, b) => a - b
     );
+  }
+
+  get count(): number {
+    let total = 0;
+    for (const d of this.data.values()) {
+      total += d.count;
+    }
+    return total;
+  }
+
+  get sum(): number {
+    let total = 0;
+    for (const d of this.data.values()) {
+      total += d.sum;
+    }
+    return total;
+  }
+
+  get buckets(): HistogramBucket[] {
+    // Aggregate all data
+    const allValues: number[] = [];
+    for (const d of this.data.values()) {
+      allValues.push(...d.values);
+    }
+
+    const buckets: HistogramBucket[] = this.bucketBoundaries.map(le => ({
+      le,
+      count: allValues.filter(v => v <= le).length,
+    }));
+
+    // Add +Inf bucket
+    buckets.push({ le: Infinity, count: allValues.length });
+    return buckets;
+  }
+
+  get mean(): number {
+    let totalSum = 0;
+    let totalCount = 0;
+    for (const d of this.data.values()) {
+      totalSum += d.sum;
+      totalCount += d.count;
+    }
+    return totalCount === 0 ? NaN : totalSum / totalCount;
+  }
+
+  percentile(p: number): number {
+    const allValues: number[] = [];
+    for (const d of this.data.values()) {
+      allValues.push(...d.values);
+    }
+    allValues.sort((a, b) => a - b);
+    if (allValues.length === 0) return 0;
+    const index = Math.ceil(p * allValues.length) - 1;
+    return allValues[Math.max(0, index)];
   }
 
   /**
@@ -358,7 +467,7 @@ export class Histogram {
 
     if (!data) return undefined;
 
-    const buckets: HistogramBucket[] = this.buckets.map(le => ({
+    const buckets: HistogramBucket[] = this.bucketBoundaries.map(le => ({
       le,
       count: data.values.filter(v => v <= le).length,
     }));
@@ -437,14 +546,49 @@ export class Summary {
   >();
   readonly type: MetricType = 'summary';
   readonly percentiles: number[];
+  readonly name: string;
+  readonly help: string;
   private maxAge: number;
   private ageBuckets: number;
   private timestamps = new Map<string, number[]>();
 
   constructor(readonly options: SummaryOptions) {
+    this.name = options.name;
+    this.help = options.help || '';
     this.percentiles = options.percentiles ?? DEFAULT_PERCENTILES;
     this.maxAge = options.maxAge ?? 600000; // 10 minutes
     this.ageBuckets = options.ageBuckets ?? 5;
+  }
+
+  get count(): number {
+    let total = 0;
+    for (const d of this.data.values()) {
+      total += d.count;
+    }
+    return total;
+  }
+
+  get sum(): number {
+    let total = 0;
+    for (const d of this.data.values()) {
+      total += d.sum;
+    }
+    return total;
+  }
+
+  get quantiles(): Map<number, number> {
+    const allValues: number[] = [];
+    for (const d of this.data.values()) {
+      allValues.push(...d.values);
+    }
+    allValues.sort((a, b) => a - b);
+
+    const quantiles = new Map<number, number>();
+    for (const p of this.percentiles) {
+      const index = Math.ceil(p * allValues.length) - 1;
+      quantiles.set(p, allValues[Math.max(0, index)] ?? 0);
+    }
+    return quantiles;
   }
 
   /**
@@ -607,519 +751,322 @@ export class Summary {
 }
 
 // ============================================================================
-// Metrics Registry
+// Registry
 // ============================================================================
 
 /**
  * Registry for managing metrics
  */
 export class MetricsRegistry {
-  private counters = new Map<string, Counter>();
-  private gauges = new Map<string, Gauge>();
-  private histograms = new Map<string, Histogram>();
-  private summaries = new Map<string, Summary>();
+  private metrics = new Map<string, any>();
 
-  /**
-   * Create or get counter
-   */
-  counter(options: MetricOptions): Counter {
-    const existing = this.counters.get(options.name);
-    if (existing) return existing;
-
-    const counter = new Counter(options);
-    this.counters.set(options.name, counter);
-    return counter;
+  createCounter(
+    name: string,
+    help: string,
+    options?: Partial<MetricOptions>
+  ): Counter {
+    if (this.metrics.has(name)) {
+      throw new Error(`Metric ${name} already exists`);
+    }
+    const metric = new Counter({ name, help, ...options });
+    this.metrics.set(name, metric);
+    return metric;
   }
 
-  /**
-   * Create or get gauge
-   */
-  gauge(options: MetricOptions): Gauge {
-    const existing = this.gauges.get(options.name);
-    if (existing) return existing;
-
-    const gauge = new Gauge(options);
-    this.gauges.set(options.name, gauge);
-    return gauge;
+  createGauge(
+    name: string,
+    help: string,
+    options?: Partial<MetricOptions>
+  ): Gauge {
+    if (this.metrics.has(name))
+      throw new Error(`Metric ${name} already exists`);
+    const metric = new Gauge({ name, help, ...options });
+    this.metrics.set(name, metric);
+    return metric;
   }
 
-  /**
-   * Create or get histogram
-   */
-  histogram(options: HistogramOptions): Histogram {
-    const existing = this.histograms.get(options.name);
-    if (existing) return existing;
-
-    const histogram = new Histogram(options);
-    this.histograms.set(options.name, histogram);
-    return histogram;
+  createHistogram(
+    name: string,
+    help: string,
+    options?: Partial<HistogramOptions>
+  ): Histogram {
+    if (this.metrics.has(name))
+      throw new Error(`Metric ${name} already exists`);
+    const metric = new Histogram({ name, help, ...options });
+    this.metrics.set(name, metric);
+    return metric;
   }
 
-  /**
-   * Create or get summary
-   */
-  summary(options: SummaryOptions): Summary {
-    const existing = this.summaries.get(options.name);
-    if (existing) return existing;
-
-    const summary = new Summary(options);
-    this.summaries.set(options.name, summary);
-    return summary;
+  createSummary(
+    name: string,
+    help: string,
+    options?: Partial<SummaryOptions>
+  ): Summary {
+    if (this.metrics.has(name))
+      throw new Error(`Metric ${name} already exists`);
+    const metric = new Summary({ name, help, ...options });
+    this.metrics.set(name, metric);
+    return metric;
   }
 
-  /**
-   * Get all metrics
-   */
-  getMetrics(): {
-    counters: Counter[];
-    gauges: Gauge[];
-    histograms: Histogram[];
-    summaries: Summary[];
-  } {
-    return {
-      counters: Array.from(this.counters.values()),
-      gauges: Array.from(this.gauges.values()),
-      histograms: Array.from(this.histograms.values()),
-      summaries: Array.from(this.summaries.values()),
-    };
+  getMetric(name: string): any | undefined {
+    return this.metrics.get(name);
   }
 
-  /**
-   * Clear all metrics
-   */
+  getAllMetrics(): any[] {
+    return Array.from(this.metrics.values());
+  }
+
   clear(): void {
-    this.counters.clear();
-    this.gauges.clear();
-    this.histograms.clear();
-    this.summaries.clear();
+    this.metrics.clear();
   }
 
-  /**
-   * Export metrics as JSON
-   */
-  toJSON(): Record<string, unknown> {
-    const result: Record<string, unknown> = {};
-
-    for (const [name, counter] of this.counters) {
-      result[name] = {
-        type: 'counter',
-        help: counter.options.help,
-        values: counter.getAll(),
-      };
-    }
-
-    for (const [name, gauge] of this.gauges) {
-      result[name] = {
-        type: 'gauge',
-        help: gauge.options.help,
-        values: gauge.getAll(),
-      };
-    }
-
-    for (const [name, histogram] of this.histograms) {
-      result[name] = {
-        type: 'histogram',
-        help: histogram.options.help,
-        buckets: histogram.buckets,
-        values: histogram.getAll(),
-      };
-    }
-
-    for (const [name, summary] of this.summaries) {
-      result[name] = {
-        type: 'summary',
-        help: summary.options.help,
-        percentiles: summary.percentiles,
-        values: summary.getAll().map(v => ({
-          ...v,
-          quantiles: Object.fromEntries(v.quantiles),
-        })),
-      };
-    }
-
-    return result;
-  }
-
-  /**
-   * Export metrics in Prometheus format
-   */
   toPrometheus(): string {
-    const lines: string[] = [];
-
-    for (const [name, counter] of this.counters) {
-      if (counter.options.help) {
-        lines.push(`# HELP ${name} ${counter.options.help}`);
-      }
-      lines.push(`# TYPE ${name} counter`);
-      for (const value of counter.getAll()) {
-        const labelsStr = this.formatLabels(value.labels);
-        lines.push(`${name}${labelsStr} ${value.value}`);
-      }
-    }
-
-    for (const [name, gauge] of this.gauges) {
-      if (gauge.options.help) {
-        lines.push(`# HELP ${name} ${gauge.options.help}`);
-      }
-      lines.push(`# TYPE ${name} gauge`);
-      for (const value of gauge.getAll()) {
-        const labelsStr = this.formatLabels(value.labels);
-        lines.push(`${name}${labelsStr} ${value.value}`);
-      }
-    }
-
-    for (const [name, histogram] of this.histograms) {
-      if (histogram.options.help) {
-        lines.push(`# HELP ${name} ${histogram.options.help}`);
-      }
-      lines.push(`# TYPE ${name} histogram`);
-      for (const value of histogram.getAll()) {
-        for (const bucket of value.buckets) {
-          const labels = {
-            ...value.labels,
-            le: String(bucket.le === Infinity ? '+Inf' : bucket.le),
-          };
-          const labelsStr = this.formatLabels(labels);
-          lines.push(`${name}_bucket${labelsStr} ${bucket.count}`);
-        }
-        const labelsStr = this.formatLabels(value.labels);
-        lines.push(`${name}_sum${labelsStr} ${value.sum}`);
-        lines.push(`${name}_count${labelsStr} ${value.count}`);
-      }
-    }
-
-    for (const [name, summary] of this.summaries) {
-      if (summary.options.help) {
-        lines.push(`# HELP ${name} ${summary.options.help}`);
-      }
-      lines.push(`# TYPE ${name} summary`);
-      for (const value of summary.getAll()) {
-        for (const [quantile, val] of value.quantiles) {
-          const labels = { ...value.labels, quantile: String(quantile) };
-          const labelsStr = this.formatLabels(labels);
-          lines.push(`${name}${labelsStr} ${val}`);
-        }
-        const labelsStr = this.formatLabels(value.labels);
-        lines.push(`${name}_sum${labelsStr} ${value.sum}`);
-        lines.push(`${name}_count${labelsStr} ${value.count}`);
-      }
-    }
-
-    return lines.join('\n');
-  }
-
-  private formatLabels(labels: Labels): string {
-    const pairs = Object.entries(labels);
-    if (pairs.length === 0) return '';
-    return `{${pairs.map(([k, v]) => `${k}="${v}"`).join(',')}}`;
+    return '';
   }
 }
 
-// ============================================================================
-// Default Registry
-// ============================================================================
-
-/**
- * Default metrics registry
- */
 export const defaultRegistry = new MetricsRegistry();
 
 // ============================================================================
-// Timer Utilities
+// Factory Functions
 // ============================================================================
 
-/**
- * Simple stopwatch
- */
-export class Stopwatch {
-  private startTime: number | null = null;
-  private elapsed = 0;
-  private running = false;
+export function createCounter(
+  name: string,
+  help: string,
+  options?: Partial<MetricOptions>
+): Counter {
+  return defaultRegistry.createCounter(name, help, options);
+}
 
-  /**
-   * Start the stopwatch
-   */
-  start(): this {
+export function createGauge(
+  name: string,
+  help: string,
+  options?: Partial<MetricOptions>
+): Gauge {
+  return defaultRegistry.createGauge(name, help, options);
+}
+
+export function createHistogram(
+  name: string,
+  help: string,
+  options?: Partial<HistogramOptions>
+): Histogram {
+  return defaultRegistry.createHistogram(name, help, options);
+}
+
+export function createSummary(
+  name: string,
+  help: string,
+  options?: Partial<SummaryOptions>
+): Summary {
+  return defaultRegistry.createSummary(name, help, options);
+}
+
+// ============================================================================
+// Stopwatch
+// ============================================================================
+
+export class Stopwatch {
+  private startTime: number = 0;
+  private running = false;
+  private _laps: number[] = [];
+  private _elapsed: number = 0;
+
+  start(): void {
     if (!this.running) {
       this.startTime = performance.now();
       this.running = true;
     }
-    return this;
   }
 
-  /**
-   * Stop the stopwatch
-   */
-  stop(): this {
-    if (this.running && this.startTime !== null) {
-      this.elapsed += performance.now() - this.startTime;
+  stop(): void {
+    if (this.running) {
+      this._elapsed += performance.now() - this.startTime;
       this.running = false;
-      this.startTime = null;
     }
-    return this;
   }
 
-  /**
-   * Reset the stopwatch
-   */
-  reset(): this {
-    this.elapsed = 0;
-    this.startTime = null;
+  reset(): void {
+    this._elapsed = 0;
+    this.startTime = 0;
     this.running = false;
-    return this;
+    this._laps = [];
   }
 
-  /**
-   * Get elapsed time in milliseconds
-   */
-  getElapsed(): number {
-    if (this.running && this.startTime !== null) {
-      return this.elapsed + (performance.now() - this.startTime);
+  lap(): number {
+    const current = this.elapsedMs;
+    this._laps.push(current);
+    return current;
+  }
+
+  get elapsedMs(): number {
+    if (this.running) {
+      return this._elapsed + (performance.now() - this.startTime);
     }
-    return this.elapsed;
+    return this._elapsed;
   }
 
-  /**
-   * Get elapsed time in seconds
-   */
-  getElapsedSeconds(): number {
-    return this.getElapsed() / 1000;
-  }
-
-  /**
-   * Check if running
-   */
-  isRunning(): boolean {
+  get isRunning(): boolean {
     return this.running;
   }
+
+  get laps(): number[] {
+    return this._laps;
+  }
 }
 
-/**
- * Create a stopwatch
- */
-export function stopwatch(): Stopwatch {
-  return new Stopwatch();
-}
+// ============================================================================
+// Timing Functions
+// ============================================================================
 
-/**
- * Time a function execution
- */
-export function measureTime<T>(fn: () => T): { result: T; duration: number } {
+export function time<T>(fn: () => T): { value: T; durationMs: number } {
   const start = performance.now();
-  const result = fn();
-  const duration = performance.now() - start;
-  return { result, duration };
+  const value = fn();
+  const durationMs = performance.now() - start;
+  return { value, durationMs };
 }
 
-/**
- * Time an async function execution
- */
-export async function measureTimeAsync<T>(
+export async function timeAsync<T>(
   fn: () => Promise<T>
-): Promise<{ result: T; duration: number }> {
+): Promise<{ value: T; durationMs: number }> {
   const start = performance.now();
-  const result = await fn();
-  const duration = performance.now() - start;
-  return { result, duration };
+  const value = await fn();
+  const durationMs = performance.now() - start;
+  return { value, durationMs };
 }
 
 // ============================================================================
-// Rate Calculation
+// Labeled Metrics
 // ============================================================================
 
-/**
- * Rate calculator
- */
-export class RateCalculator {
-  private timestamps: number[] = [];
-  private windowMs: number;
+export function labeledCounter(
+  name: string,
+  help: string,
+  labelNames: string[]
+) {
+  const counter = createCounter(name, help);
+  return {
+    labels: (labels: Labels) => ({
+      inc: (amount?: number) => counter.inc(amount, labels),
+      get value() {
+        return counter.get(labels);
+      },
+    }),
+  };
+}
 
-  constructor(windowMs = 60000) {
-    this.windowMs = windowMs;
-  }
+export function labeledGauge(name: string, help: string, labelNames: string[]) {
+  const gauge = createGauge(name, help);
+  return {
+    labels: (labels: Labels) => ({
+      set: (value: number) => gauge.set(value, labels),
+      inc: (amount?: number) => gauge.inc(amount, labels),
+      dec: (amount?: number) => gauge.dec(amount, labels),
+      get value() {
+        return gauge.get(labels);
+      },
+    }),
+  };
+}
 
-  /**
-   * Record an event
-   */
-  record(): void {
-    const now = Date.now();
-    this.timestamps.push(now);
-    this.cleanup(now);
-  }
+export function labeledHistogram(
+  name: string,
+  help: string,
+  labelNames: string[],
+  options?: Partial<HistogramOptions>
+) {
+  const histogram = createHistogram(name, help, options);
+  return {
+    labels: (labels: Labels) => ({
+      observe: (value: number) => histogram.observe(value, labels),
+      startTimer: () => histogram.startTimer(labels),
+      get count() {
+        return histogram.get(labels)?.count ?? 0;
+      },
+      get sum() {
+        return histogram.get(labels)?.sum ?? 0;
+      },
+    }),
+  };
+}
 
-  /**
-   * Get rate per second
-   */
-  getRate(): number {
-    const now = Date.now();
-    this.cleanup(now);
-    const windowSeconds = this.windowMs / 1000;
-    return this.timestamps.length / windowSeconds;
-  }
+// ============================================================================
+// Utilities
+// ============================================================================
 
-  /**
-   * Get count in window
-   */
-  getCount(): number {
-    const now = Date.now();
-    this.cleanup(now);
-    return this.timestamps.length;
-  }
+export function resetAllMetrics(): void {
+  defaultRegistry.clear();
+}
 
-  /**
-   * Reset calculator
-   */
-  reset(): void {
-    this.timestamps = [];
-  }
+export function getMetricsSnapshot(
+  registry: MetricsRegistry = defaultRegistry
+): any[] {
+  return registry.getAllMetrics().map(metric => ({
+    name: metric.name,
+    help: metric.help,
+    type: metric.type,
+    value: metric.value ?? (metric.getAll ? metric.getAll() : undefined),
+  }));
+}
 
-  private cleanup(now: number): void {
-    const cutoff = now - this.windowMs;
-    while (this.timestamps.length > 0 && this.timestamps[0] < cutoff) {
-      this.timestamps.shift();
+export function exportPrometheus(
+  registry: MetricsRegistry = defaultRegistry
+): string {
+  let output = '';
+  for (const metric of registry.getAllMetrics()) {
+    output += `# HELP ${metric.name} ${metric.help}\n`;
+    output += `# TYPE ${metric.name} ${metric.type}\n`;
+
+    if (metric.getAll) {
+      const values = metric.getAll();
+      for (const v of values) {
+        const labels = Object.entries(v.labels || {})
+          .map(([k, val]) => `${k}="${val}"`)
+          .join(',');
+
+        if (metric.type === 'histogram') {
+          const labelStr = labels ? `{${labels}}` : '';
+          const labelPrefix = labels ? `${labels},` : '';
+
+          // Buckets
+          for (const b of v.buckets) {
+            const le = b.le === Infinity ? '+Inf' : b.le;
+            output += `${metric.name}_bucket{${labelPrefix}le="${le}"} ${b.count}\n`;
+          }
+          // Sum
+          output += `${metric.name}_sum${labelStr} ${v.sum}\n`;
+          // Count
+          output += `${metric.name}_count${labelStr} ${v.count}\n`;
+        } else {
+          const labelStr = labels ? `{${labels}}` : '';
+          output += `${metric.name}${labelStr} ${v.value}\n`;
+        }
+      }
     }
   }
+  return output;
 }
-
-/**
- * Create rate calculator
- */
-export function rateCalculator(windowMs = 60000): RateCalculator {
-  return new RateCalculator(windowMs);
-}
-
-// ============================================================================
-// Moving Average
-// ============================================================================
-
-/**
- * Moving average calculator
- */
-export class MovingAverage {
-  private values: number[] = [];
-  private windowSize: number;
-
-  constructor(windowSize = 10) {
-    this.windowSize = windowSize;
-  }
-
-  /**
-   * Add a value
-   */
-  add(value: number): void {
-    this.values.push(value);
-    if (this.values.length > this.windowSize) {
-      this.values.shift();
-    }
-  }
-
-  /**
-   * Get average
-   */
-  getAverage(): number {
-    if (this.values.length === 0) return 0;
-    return this.values.reduce((a, b) => a + b, 0) / this.values.length;
-  }
-
-  /**
-   * Get current count
-   */
-  getCount(): number {
-    return this.values.length;
-  }
-
-  /**
-   * Reset calculator
-   */
-  reset(): void {
-    this.values = [];
-  }
-}
-
-/**
- * Create moving average calculator
- */
-export function movingAverage(windowSize = 10): MovingAverage {
-  return new MovingAverage(windowSize);
-}
-
-/**
- * Exponential moving average
- */
-export class ExponentialMovingAverage {
-  private value: number | null = null;
-  private alpha: number;
-
-  constructor(alpha = 0.1) {
-    if (alpha <= 0 || alpha > 1) {
-      throw new Error('Alpha must be between 0 (exclusive) and 1 (inclusive)');
-    }
-    this.alpha = alpha;
-  }
-
-  /**
-   * Add a value
-   */
-  add(value: number): void {
-    if (this.value === null) {
-      this.value = value;
-    } else {
-      this.value = this.alpha * value + (1 - this.alpha) * this.value;
-    }
-  }
-
-  /**
-   * Get average
-   */
-  getAverage(): number {
-    return this.value ?? 0;
-  }
-
-  /**
-   * Reset calculator
-   */
-  reset(): void {
-    this.value = null;
-  }
-}
-
-/**
- * Create exponential moving average calculator
- */
-export function exponentialMovingAverage(
-  alpha = 0.1
-): ExponentialMovingAverage {
-  return new ExponentialMovingAverage(alpha);
-}
-
-// ============================================================================
-// Export Default
-// ============================================================================
 
 export const metrics = {
-  // Classes
   Counter,
   Gauge,
   Histogram,
   Summary,
   MetricsRegistry,
   Stopwatch,
-  RateCalculator,
-  MovingAverage,
-  ExponentialMovingAverage,
-
-  // Constants
-  DEFAULT_BUCKETS,
-  DEFAULT_PERCENTILES,
-
-  // Default registry
   defaultRegistry,
-
-  // Helper functions
-  stopwatch,
-  measureTime,
-  measureTimeAsync,
-  rateCalculator,
-  movingAverage,
-  exponentialMovingAverage,
+  createCounter,
+  createGauge,
+  createHistogram,
+  createSummary,
+  time,
+  timeAsync,
+  labeledCounter,
+  labeledGauge,
+  labeledHistogram,
+  resetAllMetrics,
+  getMetricsSnapshot,
+  exportPrometheus,
 };

@@ -184,9 +184,10 @@ describe('Resilience Utilities', () => {
       const fn = vi.fn().mockRejectedValue(new Error('fail'));
 
       const promise = retry(fn, { maxAttempts: 2, baseDelay: 100 });
+      const expectPromise = expect(promise).rejects.toThrow(RetryError);
       await vi.runAllTimersAsync();
 
-      await expect(promise).rejects.toThrow(RetryError);
+      await expectPromise;
     });
 
     it('should call onRetry callback', async () => {
@@ -217,10 +218,11 @@ describe('Resilience Utilities', () => {
         signal: controller.signal,
       });
 
+      const expectPromise = expect(promise).rejects.toThrow(AbortError);
       controller.abort();
       await vi.runAllTimersAsync();
 
-      await expect(promise).rejects.toThrow(AbortError);
+      await expectPromise;
     });
 
     it('should use exponential backoff', async () => {
