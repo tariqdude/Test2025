@@ -1078,6 +1078,13 @@ const materialSwatches = [
   </section>
 
   <style>
+    /* Defer rendering of heavy sections until visible */
+    main > section {
+      content-visibility: auto;
+      contain: layout paint style;
+      contain-intrinsic-size: 900px;
+    }
+
     /* Morphing blobs */
     .morphing-blob-1,
     .morphing-blob-2,
@@ -1249,15 +1256,37 @@ const materialSwatches = [
       transform: translateY(-8px) scale(1.02);
       box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .morphing-blob-1,
+      .morphing-blob-2,
+      .morphing-blob-3,
+      .interactive-tile::before,
+      .interactive-demo-card,
+      .particle-generated {
+        animation: none !important;
+        transition: none !important;
+      }
+      .interactive-demo-card:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
   </style>
 
   <script>
-    // Particle system generator
+    // Particle system generator (paused when offscreen or reduced motion)
     function createParticleSystem() {
       const demo = document.querySelector('.particle-demo');
       if (!demo) return;
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      );
+      if (prefersReducedMotion.matches) return;
 
-      setInterval(() => {
+      let intervalId = null;
+
+      const spawnParticle = () => {
         const particle = document.createElement('div');
         particle.className = 'particle-generated';
         particle.style.cssText = `
@@ -1274,54 +1303,88 @@ const materialSwatches = [
         demo.appendChild(particle);
 
         setTimeout(() => particle.remove(), 5000);
-      }, 200);
+      };
+
+      const start = () => {
+        if (intervalId !== null) return;
+        intervalId = window.setInterval(spawnParticle, 220);
+      };
+
+      const stop = () => {
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      };
+
+      // Add keyframe animation for particles
+      const style = document.createElement('style');
+      style.textContent = `
+          @keyframes rise-particle {
+            0% {
+              transform: translateY(0) scale(1);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(-300px) translateX(${Math.random() * 100 - 50}px) scale(0);
+              opacity: 0;
+            }
+          }
+        `;
+      document.head.appendChild(style);
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              start();
+            } else {
+              stop();
+            }
+          });
+        },
+        { rootMargin: '100px' }
+      );
+
+      observer.observe(demo);
+
+      // Clean up on navigation away
+      window.addEventListener('beforeunload', stop);
     }
 
-    // Add keyframe animation for particles
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes rise-particle {
-          0% {
-            transform: translateY(0) scale(1);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-300px) translateX(${Math.random() * 100 - 50}px) scale(0);
-            opacity: 0;
-          }
-        }
-      `;
-    document.head.appendChild(style);
-
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', createParticleSystem);
     } else {
       createParticleSystem();
     }
 
-    // Magnetic effect on buttons
-    document.querySelectorAll('button, .interactive-tile').forEach(el => {
-      el.addEventListener('mousemove', e => {
-        if (!(e instanceof MouseEvent)) return;
-        if (!(el instanceof HTMLElement)) return;
-        const rect = el.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
-        el.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
-      });
+    // Magnetic effect on buttons (skip when reduced motion)
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+    if (!prefersReducedMotion.matches) {
+      document.querySelectorAll('button, .interactive-tile').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          if (!(e instanceof MouseEvent)) return;
+          if (!(el instanceof HTMLElement)) return;
+          const rect = el.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+          const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
+          el.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
+        });
 
-      el.addEventListener('mouseleave', () => {
-        if (!(el instanceof HTMLElement)) return;
-        el.style.transform = '';
+        el.addEventListener('mouseleave', () => {
+          if (!(el instanceof HTMLElement)) return;
+          el.style.transform = '';
+        });
       });
-    });
+    }
 
     // Scroll progress indicator
     const progressBar = document.createElement('div');

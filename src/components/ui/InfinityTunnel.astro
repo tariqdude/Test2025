@@ -1,4 +1,4 @@
----
+﻿---
 /**
  * Infinity Tunnel - 3D recursive tunnel with perspective depth
  * Enhanced with mouse interaction and dynamic speed control
@@ -9,7 +9,7 @@ import ModernButton from './ModernButton.astro';
 <div class="tunnel-wrapper">
   <h2 class="tunnel-title">Infinite 3D Tunnel</h2>
   <p class="tunnel-subtitle">
-    Interactive depth with mouse-controlled perspective • Click to toggle speed
+    Interactive depth with mouse-controlled perspective â€¢ Click to toggle speed
   </p>
 
   <div class="tunnel-controls">
@@ -65,7 +65,7 @@ import ModernButton from './ModernButton.astro';
   </div>
 </div>
 
-<style>
+<style>\n  .tunnel-wrapper {\n    content-visibility: auto;\n    contain: layout paint style;\n    contain-intrinsic-size: 800px;\n  }
   .tunnel-wrapper {
     padding: 6rem 2rem;
     background: radial-gradient(
@@ -317,54 +317,6 @@ import ModernButton from './ModernButton.astro';
       gap: 0.5rem;
     }
   }
-</style>
+  @media (prefers-reduced-motion: reduce) {\n    .tunnel,\n    .tunnel::before,\n    .tunnel::after,\n    .tunnel-ring,\n    .ring-segment,\n    .ring-glow,\n    .energy-beam,\n    .tunnel-vortex,\n    .tunnel-vortex::before {\n      animation: none !important;\n      transition: none !important;\n    }\n    .tunnel-container {\n      perspective: none;\n    }\n    .tunnel {\n      transform: none;\n    }\n  }\n</style>
 
-<script>
-  const tunnelContainer = document.querySelector(
-    '[data-tunnel-interactive]'
-  ) as HTMLElement;
-  const tunnel = document.querySelector(
-    '[data-tunnel-rotation]'
-  ) as HTMLElement;
-  const buttons = document.querySelectorAll('.tunnel-btn');
-
-  if (tunnelContainer && tunnel) {
-    // Mouse interaction for 3D perspective
-    tunnelContainer.addEventListener('mousemove', e => {
-      const rect = tunnelContainer.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-      const rotateX = y * 30;
-      const rotateY = x * 30;
-
-      tunnelContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    tunnelContainer.addEventListener('mouseleave', () => {
-      tunnelContainer.style.transform =
-        'perspective(1000px) rotateX(0) rotateY(0)';
-    });
-
-    // Speed controls
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const speed = btn.getAttribute('data-speed');
-        tunnel.style.animationDuration =
-          speed === 'slow'
-            ? '40s'
-            : speed === 'fast'
-              ? '10s'
-              : speed === 'reverse'
-                ? '20s'
-                : '20s';
-
-        tunnel.style.animationDirection =
-          speed === 'reverse' ? 'reverse' : 'normal';
-      });
-    });
-  }
-</script>
+<script>\n  const prefersReducedMotion = window.matchMedia(\n    "(prefers-reduced-motion: reduce)"\n  );\n\n  const tunnelContainer = document.querySelector(\n    "[data-tunnel-interactive]"\n  ) as HTMLElement | null;\n  const tunnel = document.querySelector(\n    "[data-tunnel-rotation]"\n  ) as HTMLElement | null;\n  const buttons = document.querySelectorAll(".tunnel-btn");\n\n  if (tunnelContainer && tunnel && !prefersReducedMotion.matches) {\n    // Mouse interaction for 3D perspective\n    tunnelContainer.addEventListener("mousemove", e => {\n      const rect = tunnelContainer.getBoundingClientRect();\n      const x = (e.clientX - rect.left) / rect.width - 0.5;\n      const y = (e.clientY - rect.top) / rect.height - 0.5;\n\n      const rotateX = y * 30;\n      const rotateY = x * 30;\n\n      tunnelContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;\n    });\n\n    tunnelContainer.addEventListener("mouseleave", () => {\n      tunnelContainer.style.transform =\n        "perspective(1000px) rotateX(0) rotateY(0)";\n    });\n\n    // Speed controls\n    buttons.forEach(btn => {\n      btn.addEventListener("click", () => {\n        buttons.forEach(b => b.classList.remove("active"));\n        btn.classList.add("active");\n\n        const speed = btn.getAttribute("data-speed");\n        if (!tunnel) return;\n        tunnel.style.animationDuration =\n          speed === "slow"\n            ? "40s"\n            : speed === "fast"\n              ? "10s"\n              : speed === "reverse"\n                ? "20s"\n                : "20s";\n\n        tunnel.style.animationDirection =\n          speed === "reverse" ? "reverse" : "normal";\n      });\n    });\n  }\n</script>

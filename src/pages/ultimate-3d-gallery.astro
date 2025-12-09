@@ -812,4 +812,43 @@ const description =
       transform: scale(0.7);
     }
   }
+
+  /* Respect reduced motion to cut GPU/CPU load */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .galaxy,
+    .galaxy .star,
+    .tesseract,
+    .tesseract .cube,
+    .connector,
+    .wormhole,
+    .wormhole-ring,
+    .nebula,
+    .nebula-layers .layer,
+    .floating-island,
+    .floating-island::before,
+    .floating-island::after,
+    .crystal-structure,
+    .crystal,
+    .energy-beam,
+    .forest,
+    .leaf {
+      animation: none !important;
+      transition: none !important;
+    }
+    .galaxy,
+    .tesseract,
+    .wormhole,
+    .nebula,
+    .crystal-structure {
+      transform: scale(0.85);
+    }
+  }
+
+  /* Defer heavy section rendering until visible to reduce initial paint cost */
+  main > section {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: 900px;
+  }
 </style>

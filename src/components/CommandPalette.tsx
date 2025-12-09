@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
 import { navigate } from 'astro:transitions/client';
 import {
   Search,
@@ -14,19 +14,26 @@ import {
   Layout,
   type LucideIcon,
 } from 'lucide-preact';
-import Fuse from 'fuse.js';
 // Using our new utilities
 import { setTheme } from '../store/index';
 import { onKeyboardShortcut, type KeyboardShortcut } from '../utils/events';
 import { createFocusTrap, announce } from '../utils/a11y';
 import { get as httpGet } from '../utils/http';
 
+type CommandCategory =
+  | 'Navigation'
+  | 'Theme'
+  | 'Actions'
+  | 'Blog'
+  | 'Authors'
+  | 'Page';
+
 interface CommandItem {
   id: string;
   label: string;
   icon: LucideIcon;
   action: () => void;
-  category: 'Navigation' | 'Theme' | 'Actions' | 'Blog' | 'Authors' | 'Page';
+  category: CommandCategory;
   keywords?: string[];
   description?: string;
 }
@@ -41,73 +48,99 @@ interface SearchIndexItem {
   tags: string[];
 }
 
+type SearchableCommand = Pick<
+  CommandItem,
+  'id' | 'label' | 'category' | 'keywords' | 'description'
+>;
+type WorkerRequest =
+  | { type: 'index'; items: SearchableCommand[] }
+  | { type: 'search'; query: string };
+type WorkerResponse = { type: 'results'; query: string; ids: string[] };
+
+type FuseImport = typeof import('fuse.js');
+type FuseInstance = import('fuse.js').default<CommandItem>;
+
+const FUSE_OPTIONS = {
+  keys: ['label', 'category', 'keywords', 'description'],
+  threshold: 0.3,
+};
+
+const BASE_COMMANDS: CommandItem[] = [
+  // Navigation
+  {
+    id: 'nav-home',
+    label: 'Go to Home',
+    icon: Home,
+    action: () => navigate('/'),
+    category: 'Navigation',
+  },
+  {
+    id: 'nav-blog',
+    label: 'Go to Blog',
+    icon: FileText,
+    action: () => navigate('/blog'),
+    category: 'Navigation',
+  },
+  {
+    id: 'nav-showcase',
+    label: 'Go to Showcase',
+    icon: Box,
+    action: () => navigate('/showcase'),
+    category: 'Navigation',
+  },
+  {
+    id: 'nav-components',
+    label: 'Go to Components',
+    icon: Layout,
+    action: () => navigate('/components'),
+    category: 'Navigation',
+  },
+  // Theme
+  {
+    id: 'theme-ops',
+    label: 'Theme: Ops Center',
+    icon: Moon,
+    action: () => setTheme('ops-center'),
+    category: 'Theme',
+    keywords: ['dark', 'neon'],
+  },
+  {
+    id: 'theme-corp',
+    label: 'Theme: Corporate',
+    icon: Sun,
+    action: () => setTheme('corporate'),
+    category: 'Theme',
+    keywords: ['light', 'clean'],
+  },
+  {
+    id: 'theme-term',
+    label: 'Theme: Terminal',
+    icon: Monitor,
+    action: () => setTheme('terminal'),
+    category: 'Theme',
+    keywords: ['hacker', 'green'],
+  },
+];
+
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchItems, setSearchItems] = useState<CommandItem[]>([]);
+  const [filteredCommands, setFilteredCommands] =
+    useState<CommandItem[]>(BASE_COMMANDS);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const focusTrapCleanup = useRef<(() => void) | null>(null);
-
-  // Define commands
-  const commands: CommandItem[] = [
-    // Navigation
-    {
-      id: 'nav-home',
-      label: 'Go to Home',
-      icon: Home,
-      action: () => navigate('/'),
-      category: 'Navigation',
-    },
-    {
-      id: 'nav-blog',
-      label: 'Go to Blog',
-      icon: FileText,
-      action: () => navigate('/blog'),
-      category: 'Navigation',
-    },
-    {
-      id: 'nav-showcase',
-      label: 'Go to Showcase',
-      icon: Box,
-      action: () => navigate('/showcase'),
-      category: 'Navigation',
-    },
-    {
-      id: 'nav-components',
-      label: 'Go to Components',
-      icon: Layout,
-      action: () => navigate('/components'),
-      category: 'Navigation',
-    },
-    // Theme
-    {
-      id: 'theme-ops',
-      label: 'Theme: Ops Center',
-      icon: Moon,
-      action: () => setTheme('ops-center'),
-      category: 'Theme',
-      keywords: ['dark', 'neon'],
-    },
-    {
-      id: 'theme-corp',
-      label: 'Theme: Corporate',
-      icon: Sun,
-      action: () => setTheme('corporate'),
-      category: 'Theme',
-      keywords: ['light', 'clean'],
-    },
-    {
-      id: 'theme-term',
-      label: 'Theme: Terminal',
-      icon: Monitor,
-      action: () => setTheme('terminal'),
-      category: 'Theme',
-      keywords: ['hacker', 'green'],
-    },
-  ];
+  const filteredCommandsRef = useRef<CommandItem[]>([]);
+  const selectedIndexRef = useRef(0);
+  const workerRef = useRef<Worker | null>(null);
+  const latestQueryRef = useRef('');
+  const commandLookupRef = useRef<Map<string, CommandItem>>(new Map());
+  const fuseModulePromise = useRef<Promise<FuseImport> | null>(null);
+  const fuseInstance = useRef<FuseInstance | null>(null);
 
   // Fetch search index using our http utility
   const fetchSearchIndex = useCallback(async () => {
@@ -143,17 +176,154 @@ export default function CommandPalette() {
     }
   }, [isOpen, searchItems.length, fetchSearchIndex]);
 
-  const allCommands = [...commands, ...searchItems];
+  // Debounce input to avoid running fuzzy search on every keystroke
+  useEffect(() => {
+    const handle = setTimeout(() => setDebouncedQuery(query), 120);
+    return () => clearTimeout(handle);
+  }, [query]);
 
-  // Fuzzy search setup
-  const fuse = new Fuse(allCommands, {
-    keys: ['label', 'category', 'keywords', 'description'],
-    threshold: 0.3,
-  });
+  const allCommands = useMemo(
+    () => [...BASE_COMMANDS, ...searchItems],
+    [searchItems]
+  );
+  const searchableCommands = useMemo(
+    () =>
+      allCommands.map(({ id, label, category, keywords, description }) => ({
+        id,
+        label,
+        category,
+        keywords,
+        description,
+      })),
+    [allCommands]
+  );
 
-  const filteredCommands = query
-    ? fuse.search(query).map(result => result.item)
-    : allCommands;
+  const getFuse = useCallback(async () => {
+    if (!fuseModulePromise.current) {
+      fuseModulePromise.current = import('fuse.js');
+    }
+    const { default: Fuse } = await fuseModulePromise.current;
+    if (!fuseInstance.current) {
+      fuseInstance.current = new Fuse(allCommands, FUSE_OPTIONS);
+    } else {
+      fuseInstance.current.setCollection(allCommands);
+    }
+    return fuseInstance.current;
+  }, [allCommands]);
+
+  useEffect(() => {
+    const lookup = commandLookupRef.current;
+    lookup.clear();
+    allCommands.forEach(cmd => lookup.set(cmd.id, cmd));
+
+  }, [allCommands, searchableCommands]);
+
+  // Sync worker index whenever commands change
+  useEffect(() => {
+    if (!workerRef.current) return;
+    const message: WorkerRequest = { type: 'index', items: searchableCommands };
+    workerRef.current.postMessage(message);
+  }, [searchableCommands]);
+
+  // Create worker once to offload fuzzy search from main thread
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const worker = new Worker(
+        new URL('./command-search.worker.ts', import.meta.url),
+        { type: 'module' }
+      );
+      workerRef.current = worker;
+
+      const handleMessage = (event: MessageEvent<WorkerResponse>) => {
+        const data = event.data;
+        if (!data || data.type !== 'results') return;
+        if (data.query !== latestQueryRef.current) return;
+
+        const results = data.ids
+          .map(id => commandLookupRef.current.get(id))
+          .filter((cmd): cmd is CommandItem => Boolean(cmd));
+
+        const fallbackList = Array.from(commandLookupRef.current.values());
+        setFilteredCommands(results.length > 0 ? results : fallbackList);
+      };
+
+      worker.addEventListener('message', handleMessage);
+
+      // Seed worker with current index
+      worker.postMessage({
+        type: 'index',
+        items: Array.from(commandLookupRef.current.values()).map(
+          ({ id, label, category, keywords, description }) => ({
+            id,
+            label,
+            category,
+            keywords,
+            description,
+          })
+        ),
+      } as WorkerRequest);
+
+      return () => {
+        worker.removeEventListener('message', handleMessage);
+        worker.terminate();
+        workerRef.current = null;
+      };
+    } catch (err) {
+      console.warn('Command palette worker unavailable, falling back to main thread', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    const trimmedQuery = debouncedQuery.trim();
+    latestQueryRef.current = trimmedQuery;
+
+    if (!trimmedQuery) {
+      setFilteredCommands(allCommands);
+      return;
+    }
+
+    if (workerRef.current) {
+      const message: WorkerRequest = { type: 'search', query: trimmedQuery };
+      workerRef.current.postMessage(message);
+      return;
+    }
+
+    // Fallback to main-thread Fuse if worker is unavailable
+    let cancelled = false;
+    getFuse()
+      .then(fuse => {
+        if (cancelled) return;
+        setFilteredCommands(
+          fuse.search(trimmedQuery).map(result => result.item)
+        );
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFilteredCommands(allCommands);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [allCommands, getFuse, debouncedQuery]);
+
+  useEffect(() => {
+    filteredCommandsRef.current = filteredCommands;
+  }, [filteredCommands]);
+
+  useEffect(() => {
+    selectedIndexRef.current = selectedIndex;
+  }, [selectedIndex]);
+
+  // Keep selected index within bounds when results change
+  useEffect(() => {
+    if (selectedIndexRef.current >= filteredCommandsRef.current.length) {
+      const nextIndex = Math.max(filteredCommandsRef.current.length - 1, 0);
+      selectedIndexRef.current = nextIndex;
+      setSelectedIndex(nextIndex);
+    }
+  }, [filteredCommands.length]);
 
   // Use our keyboard shortcut utility for global shortcuts
   useEffect(() => {
@@ -229,15 +399,25 @@ export default function CommandPalette() {
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev =>
-          prev < filteredCommands.length - 1 ? prev + 1 : prev
-        );
+        setSelectedIndex(prev => {
+          const next = Math.min(
+            prev + 1,
+            Math.max(filteredCommandsRef.current.length - 1, 0)
+          );
+          selectedIndexRef.current = next;
+          return next;
+        });
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev > 0 ? prev - 1 : prev));
+        setSelectedIndex(prev => {
+          const next = prev > 0 ? prev - 1 : prev;
+          selectedIndexRef.current = next;
+          return next;
+        });
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        const command = filteredCommands[selectedIndex];
+        const command =
+          filteredCommandsRef.current[selectedIndexRef.current];
         if (command) {
           command.action();
           setIsOpen(false);
@@ -247,10 +427,12 @@ export default function CommandPalette() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, filteredCommands, selectedIndex]);
+  }, [isOpen]);
 
   // Scroll selected item into view
   useEffect(() => {
+    if (!isOpen || !listRef.current) return;
+
     if (listRef.current) {
       const selectedElement = listRef.current.children[
         selectedIndex

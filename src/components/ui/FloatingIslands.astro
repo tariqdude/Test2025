@@ -177,6 +177,9 @@ import ModernButton from './ModernButton.astro';
 
 <style>
   .islands-wrapper {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: 900px;
     padding: 8rem 2rem;
     background: linear-gradient(
       180deg,
@@ -687,9 +690,36 @@ import ModernButton from './ModernButton.astro';
       font-size: 0.9rem;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .islands-world,
+    .islands-world::before,
+    .islands-world::after,
+    .island,
+    .island::before,
+    .island::after,
+    .island-top,
+    .island-side-front,
+    .island-side-right,
+    .island-glow,
+    .decoration-item,
+    .island-label,
+    .sky,
+    .sky-particle {
+      animation: none !important;
+      transition: none !important;
+    }
+    .islands-world {
+      transform: rotateX(60deg) rotateZ(-45deg);
+    }
+  }
 </style>
 
 <script>
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  );
+
   const scene = document.querySelector(
     '[data-islands-scene]'
   ) as HTMLElement | null;
@@ -712,7 +742,7 @@ import ModernButton from './ModernButton.astro';
     '[data-selected-island]'
   ) as HTMLElement | null;
 
-  if (scene && world && islands) {
+  if (scene && world && islands && !prefersReducedMotion.matches) {
     let isDragging = false;
     let startX = 0;
     let startY = 0;

@@ -25,6 +25,7 @@ export class ProjectAnalyzer {
   private config: AnalyzerConfig;
   private analysisModules: AnalysisModule[] = [];
   private cache: AnalysisCache | null = null;
+  private readonly MAX_CONCURRENCY = 8;
 
   constructor(initialConfig: Partial<AnalyzerConfig> = {}) {
     // Configuration is loaded and validated asynchronously in the analyze method
@@ -290,10 +291,22 @@ export class ProjectAnalyzer {
         module.canAnalyze(this.config)
       );
 
-      const results = await Promise.allSettled(
-        runnableModules.map(async module => {
+      const concurrency = Math.min(
+        Math.max(this.config.concurrencyLimit ?? 4, 1),
+        this.MAX_CONCURRENCY
+      );
+
+      const results = await this.runWithConcurrency(
+        runnableModules,
+        concurrency,
+        async module => {
+          const start = Date.now();
           try {
             const moduleIssues = await module.analyze(this.config);
+            const duration = Date.now() - start;
+            logger.debug(
+              `Module '${module.name}' completed in ${duration}ms with ${moduleIssues.length} issues`
+            );
             return { module, issues: moduleIssues };
           } catch (error: unknown) {
             const analysisError =
@@ -309,11 +322,11 @@ export class ProjectAnalyzer {
             );
             return { module, issues: [] };
           }
-        })
+        }
       );
 
       results.forEach(result => {
-        if (result.status === 'fulfilled') {
+        if (result.status === 'fulfilled' && result.value) {
           issues.push(...result.value.issues);
 
           if (
@@ -370,6 +383,36 @@ export class ProjectAnalyzer {
       logger.fatal('Overall project analysis failed', analysisError);
       throw analysisError;
     }
+  }
+
+  /**
+   * Run tasks with bounded concurrency to avoid I/O thrash on large repos
+   */
+  private async runWithConcurrency<T, R>(
+    items: T[],
+    limit: number,
+    worker: (item: T) => Promise<R>
+  ): Promise<Array<PromiseSettledResult<R & { module?: AnalysisModule }>>> {
+    const results: Array<PromiseSettledResult<R & { module?: AnalysisModule }>> =
+      Array(items.length);
+    let index = 0;
+
+    const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+      while (true) {
+        const currentIndex = index++;
+        if (currentIndex >= items.length) break;
+
+        try {
+          const value = await worker(items[currentIndex]);
+          results[currentIndex] = { status: 'fulfilled', value };
+        } catch (reason) {
+          results[currentIndex] = { status: 'rejected', reason };
+        }
+      }
+    });
+
+    await Promise.all(runners);
+    return results;
   }
 
   private calculateProjectHealth(issues: CodeIssue[]): ProjectHealth {

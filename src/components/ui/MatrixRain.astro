@@ -43,6 +43,9 @@
 
 <style>
   .matrix-wrapper {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: 800px;
     padding: 8rem 2rem;
     background: radial-gradient(
       ellipse at center,
@@ -255,20 +258,90 @@
       font-size: 1.5rem;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .matrix-wrapper::before,
+    .matrix-column,
+    .matrix-char,
+    .matrix-core {
+      animation: none !important;
+      transition: none !important;
+    }
+    .matrix-container,
+    .matrix-scene {
+      perspective: none;
+      transform: none;
+    }
+    .matrix-column {
+      transform: translateZ(0);
+    }
+    .matrix-char {
+      opacity: 0.8;
+      text-shadow: none;
+    }
+  }
 </style>
 
 <script>
-  // Add random character changes for extra effect
-  setInterval(() => {
-    const chars = document.querySelectorAll('.matrix-char');
-    const characters =
-      'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const characters =
+    'a,?a,a,?a,"a,?a,?a,-a,_a,?a,3a,?a,?a,1a,?a,?a,?a??a?,a?+a?^a?Sa?<a?Oa??a?Za??a?'a?a?~a?>a?za?Ya??a??a??a?a??a?"a?ca??a??a??a?-a?_a??a?30123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    chars.forEach(char => {
-      if (Math.random() > 0.95) {
-        char.textContent =
-          characters[Math.floor(Math.random() * characters.length)];
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  );
+
+  function startMatrixFlicker(target) {
+    let intervalId = null;
+
+    const tick = () => {
+      const chars = target.querySelectorAll('.matrix-char');
+      chars.forEach(char => {
+        if (Math.random() > 0.95) {
+          char.textContent =
+            characters[Math.floor(Math.random() * characters.length)];
+        }
+      });
+    };
+
+    const start = () => {
+      if (intervalId !== null) return;
+      intervalId = window.setInterval(tick, 80);
+    };
+
+    const stop = () => {
+      if (intervalId !== null) {
+        clearInterval(intervalId);
+        intervalId = null;
       }
-    });
-  }, 50);
+    };
+
+    if (!prefersReducedMotion.matches) {
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !prefersReducedMotion.matches) {
+              start();
+            } else {
+              stop();
+            }
+          });
+        },
+        { rootMargin: '200px' }
+      );
+      observer.observe(target);
+    }
+
+    return stop;
+  }
+
+  const matrixWrapper = document.querySelector('.matrix-wrapper');
+  let cleanup = null;
+
+  if (matrixWrapper) {
+    cleanup = startMatrixFlicker(matrixWrapper);
+  }
+
+  window.addEventListener('beforeunload', () => {
+    if (cleanup) cleanup();
+  });
 </script>

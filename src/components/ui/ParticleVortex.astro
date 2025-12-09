@@ -91,6 +91,9 @@ import ModernButton from './ModernButton.astro';
 
 <style>
   .vortex-wrapper {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: 800px;
     padding: 8rem 2rem;
     background: radial-gradient(
       ellipse at center,
@@ -376,9 +379,33 @@ import ModernButton from './ModernButton.astro';
       gap: 0.5rem;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vortex,
+    .vortex::before,
+    .vortex::after,
+    .vortex-container,
+    .vortex-particle,
+    .particle-glow,
+    .particle-trail,
+    .vortex-core,
+    .core-ring,
+    .energy-field,
+    .vortex-wrapper::before {
+      animation: none !important;
+      transition: none !important;
+    }
+    .vortex {
+      transform: none;
+    }
+  }
 </style>
 
 <script>
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  );
+
   const vortexContainer = document.querySelector(
     '[data-vortex-interactive]'
   ) as HTMLElement;
@@ -390,7 +417,7 @@ import ModernButton from './ModernButton.astro';
   ) as NodeListOf<HTMLElement>;
   const buttons = document.querySelectorAll('.vortex-btn');
 
-  if (vortexContainer && vortexSystem) {
+  if (vortexContainer && vortexSystem && !prefersReducedMotion.matches) {
     // Mouse attraction effect
     vortexContainer.addEventListener('mousemove', e => {
       const rect = vortexContainer.getBoundingClientRect();

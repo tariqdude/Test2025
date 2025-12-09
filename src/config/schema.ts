@@ -28,6 +28,7 @@ export const AnalyzerConfigSchema = z.object({
   outputFormat: z
     .enum(['json', 'markdown', 'html', 'terminal'])
     .default('terminal'),
+  concurrencyLimit: z.number().min(1).max(8).default(4),
   githubIntegration: z.boolean().default(true),
   deploymentChecks: z.boolean().default(true),
   autoFix: z.boolean().default(false),
